@@ -1,0 +1,19 @@
+{
+  "$id": "pet-summary",
+  "type": "object",
+  "description": "Summarized pet entity returned in list views.",
+  "properties": {
+    "id":        { "type": "integer" },
+    "name":      { "type": "string" },
+    "status":    { "type": "string" },
+    "animal":    { "type": "string" },
+    "breed":     { "type": "string" },
+    "age":       { "type": "string" },
+    "sex":       { "type": "string" },
+    "size":      { "type": "string" },
+    "image":     { "type": "string" },
+    "url":       { "type": "string" },
+    "favorited": { "type": "boolean" },
+    "is_new":    { "type": "boolean" }
+  }
+}

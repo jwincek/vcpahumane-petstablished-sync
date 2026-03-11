@@ -1,0 +1,31 @@
+{
+  "$id": "taxonomy-filters",
+  "type": "object",
+  "description": "Taxonomy filter parameters shared across list/filter abilities.",
+  "properties": {
+    "status": {
+      "type": "string",
+      "description": "Pet status slug (e.g. 'available')."
+    },
+    "animal": {
+      "type": "string",
+      "description": "Animal type slug (e.g. 'dog', 'cat')."
+    },
+    "breed": {
+      "type": "string",
+      "description": "Breed slug."
+    },
+    "age": {
+      "type": "string",
+      "description": "Age group slug (e.g. 'puppy', 'adult', 'senior')."
+    },
+    "sex": {
+      "type": "string",
+      "description": "Sex slug (e.g. 'male', 'female')."
+    },
+    "size": {
+      "type": "string",
+      "description": "Size slug (e.g. 'small', 'medium', 'large')."
+    }
+  }
+}

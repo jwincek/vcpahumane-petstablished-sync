@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-favorites-modal",
+	"version": "4.2.0",
+	"title": "Pet Favorites Modal",
+	"category": "theme",
+	"description": "Floating heart button that opens a modal showing all favorited pets. Visible on any page via the router's attachTo feature.",
+	"keywords": ["pet", "favorites", "heart", "modal"],
+	"textdomain": "petstablished-sync",
+	"attributes": {
+		"position": {
+			"type": "string",
+			"default": "bottom-right",
+			"enum": ["bottom-right", "bottom-left"]
+		},
+		"showCompare": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"interactivity": true
+	},
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

@@ -1,0 +1,113 @@
+/**
+ * Pet Compatibility Block Styles
+ */
+
+/* Placeholder (editor) */
+.pet-compat--placeholder {
+	min-height: 48px;
+}
+
+.pet-compat__placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 16px;
+	background: #f0f0f0;
+	border: 1px dashed #ccc;
+	border-radius: 4px;
+	text-align: center;
+	color: #666;
+}
+
+.pet-compat__placeholder p {
+	margin: 0;
+	font-weight: 600;
+	font-size: 0.875rem;
+}
+
+.pet-compat__placeholder small {
+	color: #888;
+	font-size: 0.75rem;
+}
+
+/* Chip list */
+.pet-compat {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.625rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pet-compat__item {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	padding: 0.625rem 1rem;
+	border-radius: var(--wp--custom--border-radius, 8px);
+	font-size: 0.875rem;
+	border: 1px solid transparent;
+}
+
+/* Yes — green */
+.pet-compat__item--yes {
+	background: #ecfdf5;
+	border-color: #a7f3d0;
+	color: #065f46;
+}
+
+/* No — red */
+.pet-compat__item--no {
+	background: #fef2f2;
+	border-color: #fecaca;
+	color: #991b1b;
+}
+
+/* Unknown — neutral */
+.pet-compat__item--unknown {
+	background: var(--wp--preset--color--base-2, #f5f5f5);
+	border-color: var(--wp--preset--color--border, #e0e0e0);
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+/* Animal/child icon */
+.pet-compat__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.pet-compat__icon svg {
+	width: 20px;
+	height: 20px;
+}
+
+/* Label */
+.pet-compat__label {
+	font-weight: 500;
+	flex: 1;
+}
+
+/* Status indicator (check/x/minus) */
+.pet-compat__status {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+}
+
+.pet-compat__item--yes .pet-compat__status {
+	color: #10b981;
+}
+
+.pet-compat__item--no .pet-compat__status {
+	color: #ef4444;
+}
+
+.pet-compat__item--unknown .pet-compat__status {
+	color: var(--wp--preset--color--contrast-2, #999);
+}

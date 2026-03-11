@@ -1,0 +1,179 @@
+/**
+ * Petstablished Editor Styles
+ * 
+ * @package Petstablished_Sync
+ * @since 2.0.0
+ */
+
+/* Editor Placeholder for blocks without SSR preview */
+.petstablished-editor-placeholder {
+	background: #f0f0f0;
+	border: 2px dashed #ccc;
+	border-radius: 4px;
+	padding: 20px;
+	text-align: center;
+}
+
+.petstablished-editor-placeholder p {
+	margin: 0 0 4px;
+	font-weight: 600;
+}
+
+.petstablished-editor-placeholder small {
+	color: #666;
+}
+
+/* === Child Block Editor Previews === */
+
+.pet-gallery-editor,
+.pet-actions-editor,
+.pet-attributes-editor,
+.pet-compatibility-editor,
+.pet-health-editor,
+.pet-adoption-cta-editor {
+	min-height: 60px;
+}
+
+/* Pet Gallery Editor */
+.pet-gallery-editor .pet-gallery--placeholder {
+	min-height: 150px;
+}
+
+.pet-gallery-editor .pet-gallery__placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 24px;
+	background: #f5f5f5;
+	border: 1px dashed #ccc;
+	border-radius: 8px;
+	text-align: center;
+}
+
+.pet-gallery-editor .pet-gallery__placeholder p {
+	margin: 0;
+	font-weight: 600;
+	color: #333;
+}
+
+.pet-gallery-editor .pet-gallery__placeholder small {
+	color: #666;
+	font-size: 12px;
+}
+
+/* Pet Actions Preview */
+.pet-actions-preview .components-placeholder {
+	padding: 12px 16px;
+}
+
+.pet-actions-preview .components-placeholder__label {
+	justify-content: center;
+}
+
+/* Pet Attributes Preview */
+.pet-attributes-preview {
+	margin-top: 8px;
+}
+
+/* Pet Compatibility Preview */
+.pet-compatibility-preview {
+	margin-top: 8px;
+}
+
+/* Pet Health Preview */
+.pet-health-preview {
+	margin-top: 8px;
+}
+
+/* Pet Adoption CTA Preview */
+.pet-adoption-cta-preview {
+	margin-top: 8px;
+}
+
+/* === Pet Details InnerBlocks Editor === */
+
+.wp-block-petstablished-pet-details {
+	position: relative;
+}
+
+.wp-block-petstablished-pet-details .block-editor-inner-blocks {
+	padding: 1rem;
+}
+
+/* Highlight bound blocks in editor */
+.wp-block-petstablished-pet-details [data-type^="core/"] {
+	position: relative;
+}
+
+/* Pet blocks category icon color */
+.block-editor-block-types-list__item[data-type^="petstablished/"] .block-editor-block-types-list__item-icon {
+	color: #2271b1;
+}
+
+/* Binding Helper Sidebar */
+.pet-binding-search {
+	margin-bottom: 12px;
+}
+
+.pet-binding-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pet-binding-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px;
+	border-bottom: 1px solid #ddd;
+	gap: 8px;
+}
+
+.pet-binding-item:last-child {
+	border-bottom: none;
+}
+
+.pet-binding-info {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	flex: 1;
+	min-width: 0;
+}
+
+.pet-binding-key {
+	font-family: monospace;
+	font-size: 12px;
+	background: #f0f0f0;
+	padding: 2px 4px;
+	border-radius: 2px;
+}
+
+.pet-binding-type {
+	font-size: 10px;
+	text-transform: uppercase;
+	padding: 1px 4px;
+	border-radius: 2px;
+	width: fit-content;
+}
+
+.pet-binding-type--taxonomy { background: #d4edda; color: #155724; }
+.pet-binding-type--meta { background: #cce5ff; color: #004085; }
+.pet-binding-type--computed { background: #fff3cd; color: #856404; }
+
+.pet-binding-desc {
+	font-size: 11px;
+	color: #666;
+}
+
+.pet-binding-instructions {
+	font-size: 12px;
+	padding-left: 20px;
+}
+
+.pet-binding-instructions li {
+	margin-bottom: 4px;
+}

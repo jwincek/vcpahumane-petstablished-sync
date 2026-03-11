@@ -1,0 +1,17 @@
+{
+  "post_types": {
+    "pet": {
+      "labels": {
+        "singular": "Pet",
+        "plural": "Pets",
+        "menu_name": "Pets"
+      },
+      "public": true,
+      "has_archive": true,
+      "show_in_rest": true,
+      "rewrite": { "slug": "adopt/pets" },
+      "menu_icon": "dashicons-pets",
+      "supports": [ "title", "editor", "thumbnail", "excerpt", "custom-fields" ]
+    }
+  }
+}

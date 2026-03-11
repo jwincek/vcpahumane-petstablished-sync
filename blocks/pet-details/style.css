@@ -1,0 +1,537 @@
+/**
+ * Pet Details Block Styles
+ * InnerBlocks + Block Bindings architecture
+ * Mobile-first responsive design
+ */
+
+.pet-details {
+	--pet-details-radius: 12px;
+	--pet-details-gap: 2rem;
+}
+
+/* Backward compatibility alias */
+.pet-single { 
+	--pet-single-radius: var(--pet-details-radius); 
+	--pet-single-gap: var(--pet-details-gap); 
+}
+
+/* Editor Preview Placeholder */
+.pet-details--preview {
+	min-height: 200px;
+}
+
+.pet-details__placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem 2rem;
+	text-align: center;
+	background: var(--wp--preset--color--contrast-3, #f5f5f5);
+	border: 1px dashed var(--wp--preset--color--contrast-2, #ccc);
+	border-radius: var(--pet-details-radius);
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+}
+
+.pet-details__placeholder-icon { opacity: 0.5; }
+.pet-details__placeholder-title { margin: 0.75rem 0 0.25rem; font-weight: 600; }
+.pet-details__placeholder-text { margin: 0; opacity: 0.7; font-size: 0.875em; }
+.pet-details__placeholder-hint { margin: 0.5rem 0 0; font-size: 0.75em; opacity: 0.5; }
+.pet-details__placeholder-hint code { background: rgba(0,0,0,0.06); padding: 0.125em 0.375em; border-radius: 3px; }
+
+/* Main Content Grid - Two Column Layout */
+.pet-details__content {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--pet-details-gap);
+}
+
+/* Navigation */
+.pet-details__nav { margin-bottom: 1.5rem; }
+
+.pet-details__back {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: var(--wp--preset--color--primary, #2271b1);
+	text-decoration: none;
+	font-size: 0.9375rem;
+	font-weight: 500;
+}
+
+.pet-details__back:hover { text-decoration: underline; }
+
+/* Legacy grid class alias */
+.pet-details__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--pet-single-gap);
+}
+
+/* Gallery */
+.pet-details__gallery {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.pet-details__main-image-wrap {
+	position: relative;
+	border-radius: var(--pet-single-radius);
+	overflow: hidden;
+	background: var(--wp--preset--color--base-2, #f5f5f5);
+}
+
+.pet-details__main-image {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	cursor: zoom-in;
+	transition: transform 0.2s ease;
+}
+
+.pet-details__main-image:hover { transform: scale(1.02); }
+
+.pet-details__status {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	padding: 0.375rem 0.875rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	border-radius: 2rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.pet-details__status--available { background: #10b981; color: #fff; }
+.pet-details__status--pending { background: #f59e0b; color: #fff; }
+.pet-details__status--adopted { background: #6366f1; color: #fff; }
+
+.pet-details__actions {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.pet-details__action-btn {
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.95);
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+	transition: all 0.15s ease;
+}
+
+.pet-details__action-btn:hover { background: #fff; transform: scale(1.05); }
+.pet-details__action-btn--favorite.is-active { color: #ef4444; background: #fef2f2; }
+.pet-details__action-btn--compare.is-active { color: var(--wp--preset--color--primary, #2271b1); background: #eff6ff; }
+
+.pet-details__image-counter {
+	position: absolute;
+	bottom: 1rem;
+	left: 1rem;
+	padding: 0.375rem 0.75rem;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	background: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	border-radius: 1rem;
+}
+
+.pet-details__image-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.9);
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.pet-details__main-image-wrap:hover .pet-details__image-nav { opacity: 1; }
+.pet-details__image-nav--prev { left: 1rem; }
+.pet-details__image-nav--next { right: 1rem; }
+
+.pet-details__thumbnails {
+	display: flex;
+	gap: 0.5rem;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.pet-details__thumb {
+	flex-shrink: 0;
+	width: 64px;
+	height: 64px;
+	padding: 0;
+	border: 2px solid transparent;
+	border-radius: 8px;
+	overflow: hidden;
+	cursor: pointer;
+	background: none;
+}
+
+.pet-details__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pet-details__thumb.is-active { border-color: var(--wp--preset--color--primary, #2271b1); }
+
+.pet-details__no-image {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 3rem;
+	background: var(--wp--preset--color--base-2, #f5f5f5);
+	border-radius: var(--pet-single-radius);
+	color: var(--wp--preset--color--contrast-2, #666);
+	aspect-ratio: 4 / 3;
+}
+
+/* Info Section */
+.pet-details__info {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.pet-details__header {
+	padding-bottom: 1rem;
+	border-bottom: 1px solid var(--wp--preset--color--border, #e0e0e0);
+}
+
+.pet-details__name {
+	margin: 0 0 0.25rem;
+	font-size: 1.75rem;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.pet-details__tagline {
+	margin: 0;
+	font-size: 1rem;
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+.pet-details__section { padding-top: 0.5rem; }
+
+.pet-details__section-title {
+	margin: 0 0 0.875rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+/* Full Width: Story */
+.pet-details__story-section {
+	margin-top: var(--pet-single-gap);
+	padding: 2rem 0;
+	border-top: 1px solid var(--wp--preset--color--border, #e0e0e0);
+}
+
+.pet-details__story-title {
+	margin: 0 0 1.25rem;
+	font-size: 1.375rem;
+	font-weight: 700;
+}
+
+.pet-details__story {
+	font-size: 1rem;
+	line-height: 1.8;
+	max-width: 75ch;
+}
+
+.pet-details__story p:first-child { margin-top: 0; }
+.pet-details__story p:last-child { margin-bottom: 0; }
+
+/* Lightbox: owned by pet-gallery block (see blocks/pet-gallery/style.css) */
+
+/* RESPONSIVE */
+@media (min-width: 768px) {
+	.pet-details__content {
+		grid-template-columns: 1fr 1fr;
+		align-items: start;
+	}
+
+	.pet-details__grid {
+		grid-template-columns: 1fr 1fr;
+		align-items: start;
+	}
+
+	.pet-details__name { font-size: 2rem; }
+	.pet-details__thumb { width: 72px; height: 72px; }
+}
+
+@media (min-width: 1024px) {
+	.pet-details { --pet-details-gap: 3rem; }
+	.pet-details__content { grid-template-columns: 1.2fr 1fr; }
+	.pet-details__grid { grid-template-columns: 1.2fr 1fr; }
+
+	/*
+	 * Sticky gallery column — stays in view while the user scrolls
+	 * through the (usually longer) info column on the right.
+	 *
+	 * align-self: start is critical: without it, the flex/grid child
+	 * stretches to the full row height and has no room to "stick".
+	 *
+	 * --sticky-offset accounts for the WP admin bar (32px when present)
+	 * and any fixed site header. Themes can override via custom property.
+	 */
+	.pet-details__gallery-col {
+		position: sticky;
+		top: var(--sticky-offset, 2rem);
+		align-self: start;
+	}
+
+	.pet-details__thumb { width: 80px; height: 80px; }
+}
+
+/* Admin bar offset — WP adds .admin-bar to <body> when logged in */
+@media (min-width: 1024px) {
+	.admin-bar .pet-details__gallery-col {
+		--sticky-offset: calc(32px + 1rem);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pet-details__main-image,
+	.pet-details__action-btn,
+	.pet-details__adopt-btn { transition: none; }
+}
+
+/* Loading State for Router Navigation */
+.pet-details[data-wp-interactive] {
+	position: relative;
+}
+
+.pet-details.is-loading::before {
+	content: '';
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--wp--preset--color--primary, #2271b1) 0%, #60a5fa 50%, var(--wp--preset--color--primary, #2271b1) 100%);
+	background-size: 200% 100%;
+	animation: loading-bar 1.5s ease-in-out infinite;
+	z-index: 10001;
+}
+
+@keyframes loading-bar {
+	0% { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+
+/* === Section Styling === */
+.pet-details__section {
+	margin-top: 1.5rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--wp--preset--color--border, #e0e0e0);
+}
+
+.pet-details__section:first-child {
+	margin-top: 0;
+	padding-top: 0;
+	border-top: none;
+}
+
+.pet-details__section-title {
+	margin: 0 0 1rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+/* === InnerBlocks Support ===
+ * These styles ensure core blocks with bindings render properly.
+ * Uses low-specificity selectors to allow theme overrides.
+ */
+
+/* Reset margins for direct child blocks */
+.pet-details > .wp-block-group,
+.pet-details > .wp-block-columns,
+.pet-details > .wp-block-heading,
+.pet-details > .wp-block-paragraph {
+	margin-top: 0;
+}
+
+/* Subsequent blocks get proper spacing */
+.pet-details > * + .wp-block-group,
+.pet-details > * + .wp-block-columns,
+.pet-details > * + .wp-block-heading,
+.pet-details > * + .wp-block-paragraph {
+	margin-top: var(--pet-details-gap, 2rem);
+}
+
+/* Bound paragraphs used as status badges */
+.pet-details .pet-status-badge,
+.pet-details .wp-block-paragraph.pet-status-badge {
+	display: inline-block;
+	padding: 0.375rem 0.875rem;
+	margin: 0;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	border-radius: 2rem;
+	background: #10b981;
+	color: #fff;
+}
+
+/* Bound headings - pet name styling */
+.pet-details .pet-name,
+.pet-details .wp-block-heading.pet-name {
+	margin: 0;
+	font-size: clamp(1.5rem, 4vw, 2.25rem);
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+/* Bound paragraphs - tagline styling */
+.pet-details .pet-tagline,
+.pet-details .wp-block-paragraph.pet-tagline {
+	margin: 0.5rem 0 0;
+	font-size: 1rem;
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+/* Bound paragraphs - description styling */
+.pet-details .pet-description,
+.pet-details .wp-block-paragraph.pet-description {
+	font-size: 1rem;
+	line-height: 1.8;
+	max-width: 75ch;
+}
+
+/* Quick facts inline display */
+.pet-details .pet-quick-facts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1rem;
+	margin: 0.75rem 0 0;
+}
+
+.pet-details .pet-fact {
+	margin: 0;
+	padding: 0;
+	font-size: 0.9375rem;
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+.pet-details .pet-fact:not(:last-child)::after {
+	content: '·';
+	margin-left: 1rem;
+	color: var(--wp--preset--color--contrast-3, #ccc);
+}
+
+/* Bound images */
+.pet-details .pet-photo,
+.pet-details .wp-block-image.pet-photo {
+	margin: 0;
+}
+
+.pet-details .pet-photo img {
+	border-radius: var(--pet-details-radius, 12px);
+	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+}
+
+/* Bound buttons */
+.pet-details .pet-adopt-button .wp-block-button__link,
+.pet-details .wp-block-button.pet-adopt-button .wp-block-button__link {
+	background: linear-gradient(135deg, #2271b1 0%, #135e96 100%);
+	color: #fff;
+	padding: 0.875rem 1.5rem;
+	font-weight: 600;
+	border-radius: 8px;
+}
+
+.pet-details .pet-details-button .wp-block-button__link,
+.pet-details .wp-block-button.pet-details-button .wp-block-button__link {
+	background: transparent;
+	color: var(--wp--preset--color--primary, #2271b1);
+	border: 2px solid currentColor;
+	padding: 0.75rem 1.25rem;
+	font-weight: 500;
+}
+
+/* Pet card content group */
+.pet-details .pet-card-content {
+	padding: 1rem;
+}
+
+.pet-details .pet-card-content .wp-block-heading {
+	margin: 0 0 0.25rem;
+	font-size: 1.125rem;
+}
+
+.pet-details .pet-card-content .wp-block-paragraph {
+	margin: 0 0 0.75rem;
+	font-size: 0.875rem;
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+/* === Status Badge in Header (legacy) === */
+.pet-details__header {
+	margin-bottom: 1.5rem;
+}
+
+.pet-details__status {
+	display: inline-block;
+	padding: 0.375rem 0.875rem;
+	margin-bottom: 0.75rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	border-radius: 2rem;
+}
+
+.pet-details__status--available { background: #10b981; color: #fff; }
+.pet-details__status--pending { background: #f59e0b; color: #fff; }
+.pet-details__status--adopted { background: #6366f1; color: #fff; }
+
+/* === Story Section === */
+.pet-details__story {
+	margin-top: var(--pet-details-gap);
+}
+
+.pet-details__story-title {
+	margin: 0 0 1.25rem;
+	font-size: 1.375rem;
+	font-weight: 700;
+}
+
+.pet-details__story-content {
+	font-size: 1rem;
+	line-height: 1.8;
+	max-width: 75ch;
+}
+
+.pet-details__story-content p:first-child { margin-top: 0; }
+.pet-details__story-content p:last-child { margin-bottom: 0; }

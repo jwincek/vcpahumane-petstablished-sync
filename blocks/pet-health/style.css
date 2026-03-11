@@ -1,0 +1,79 @@
+/**
+ * Pet Health Block Styles
+ */
+
+/* Placeholder (editor) */
+.pet-health--placeholder {
+	min-height: 48px;
+}
+
+.pet-health__placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 16px;
+	background: #f0f0f0;
+	border: 1px dashed #ccc;
+	border-radius: 4px;
+	text-align: center;
+	color: #666;
+}
+
+.pet-health__placeholder p {
+	margin: 0;
+	font-weight: 600;
+	font-size: 0.875rem;
+}
+
+.pet-health__placeholder small {
+	color: #888;
+	font-size: 0.75rem;
+}
+
+/* Tag list */
+.pet-health {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.625rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pet-health__item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 0.875rem;
+	background: var(--wp--preset--color--base-2, #f9f9f9);
+	border-radius: calc(var(--wp--custom--border-radius, 8px) - 2px);
+	font-size: 0.875rem;
+}
+
+/* Icon */
+.pet-health__icon {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+/* Yes — green icon */
+.pet-health__item--yes .pet-health__icon {
+	color: #10b981;
+}
+
+/* No — red icon */
+.pet-health__item--no .pet-health__icon {
+	color: #ef4444;
+}
+
+/* Unknown — blue icon */
+.pet-health__item--unknown .pet-health__icon {
+	color: #3b82f6;
+}
+
+/* Label */
+.pet-health__label {
+	font-weight: 500;
+}

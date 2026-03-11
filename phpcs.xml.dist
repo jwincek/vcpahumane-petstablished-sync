@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<ruleset name="Petstablished Sync">
+	<description>WordPress coding standards for Petstablished Sync plugin.</description>
+
+	<!-- What to scan -->
+	<file>.</file>
+
+	<!-- Exclude paths -->
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<!-- PHP compatibility -->
+	<config name="testVersion" value="8.1-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- WordPress standards -->
+	<config name="minimum_supported_wp_version" value="6.9"/>
+	<rule ref="WordPress">
+		<!-- Allow short array syntax -->
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+		<!-- Allow short closures and arrow functions -->
+		<exclude name="Universal.FunctionDeclarations.NoLongClosures"/>
+	</rule>
+
+	<!-- Plugin text domain -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="petstablished-sync"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Prefixes for global functions, classes, hooks -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="petstablished"/>
+				<element value="Petstablished"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

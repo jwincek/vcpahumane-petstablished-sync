@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-compatibility",
+	"version": "3.0.0",
+	"title": "Pet Compatibility",
+	"category": "petstablished",
+	"description": "Display pet compatibility with dogs, cats, and children.",
+	"keywords": ["pet", "compatibility", "dogs", "cats", "kids", "good with"],
+	"ancestor": ["petstablished/pet-details"],
+	"textdomain": "petstablished-sync",
+	"usesContext": ["postId", "postType"],
+	"attributes": {
+		"showDogs": { "type": "boolean", "default": true },
+		"showCats": { "type": "boolean", "default": true },
+		"showKids": { "type": "boolean", "default": true }
+	},
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"interactivity": true
+	},
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

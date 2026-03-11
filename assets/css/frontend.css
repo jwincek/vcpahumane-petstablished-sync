@@ -1,0 +1,86 @@
+/**
+ * Petstablished Frontend Styles
+ *
+ * Global utilities and styles for elements NOT owned by a specific block.
+ * Block-specific styles live in each block's style.css and are loaded
+ * automatically by WordPress when the block is rendered.
+ *
+ * @package Petstablished_Sync
+ * @since 2.0.0
+ */
+
+/* === Screen Reader Text === */
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	width: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+}
+
+/* === Favorite Button (pet-card block) === */
+.pet-favorite-btn {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: var(--wp--preset--spacing--10, 0.25rem);
+	color: inherit;
+	transition: transform 0.15s ease;
+}
+
+.pet-favorite-btn:hover {
+	transform: scale(1.1);
+}
+
+.pet-favorite-btn[aria-pressed="true"] {
+	color: var(--wp--preset--color--vivid-red, #d63638);
+}
+
+.pet-favorite-btn:focus-visible {
+	outline: 2px solid var(--wp--preset--color--primary, currentColor);
+	outline-offset: 2px;
+}
+
+/* === Compare Button (pet-card block) === */
+.pet-compare-btn {
+	background: var(--wp--preset--color--base, #fff);
+	border: 1px solid var(--wp--preset--color--contrast, currentColor);
+	border-radius: var(--wp--custom--border-radius, 4px);
+	padding: var(--wp--preset--spacing--10, 0.25rem) var(--wp--preset--spacing--20, 0.5rem);
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+	cursor: pointer;
+}
+
+.pet-compare-btn:hover {
+	background: var(--wp--preset--color--contrast, #000);
+	color: var(--wp--preset--color--base, #fff);
+}
+
+.pet-compare-btn[aria-pressed="true"] {
+	background: var(--wp--preset--color--primary, #007cba);
+	border-color: var(--wp--preset--color--primary, #007cba);
+	color: #fff;
+}
+
+.pet-compare-btn:focus-visible {
+	outline: 2px solid var(--wp--preset--color--primary, currentColor);
+	outline-offset: 2px;
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+	.pet-favorite-btn {
+		transition: none;
+	}
+}
+
+/* === Focus Visible (for browsers that support it) === */
+@supports selector(:focus-visible) {
+	.pet-favorite-btn:focus:not(:focus-visible),
+	.pet-compare-btn:focus:not(:focus-visible) {
+		outline: none;
+	}
+}

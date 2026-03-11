@@ -1,0 +1,34 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-attributes",
+	"version": "3.0.0",
+	"title": "Pet Attributes",
+	"category": "petstablished",
+	"description": "Display pet attributes like breed, age, sex, size in a definition list.",
+	"keywords": ["pet", "attributes", "breed", "age", "sex", "size"],
+	"ancestor": ["petstablished/pet-details"],
+	"textdomain": "petstablished-sync",
+	"usesContext": ["postId", "postType"],
+	"attributes": {
+		"showBreed": { "type": "boolean", "default": true },
+		"showAge": { "type": "boolean", "default": true },
+		"showSex": { "type": "boolean", "default": true },
+		"showSize": { "type": "boolean", "default": true },
+		"showColor": { "type": "boolean", "default": true },
+		"showCoat": { "type": "boolean", "default": true },
+		"showCoatPattern": { "type": "boolean", "default": true },
+		"showWeight": { "type": "boolean", "default": true }
+	},
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"interactivity": true
+	},
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

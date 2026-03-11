@@ -1,0 +1,146 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-slider",
+	"version": "2.1.0",
+	"title": "Pet Slider",
+	"category": "widgets",
+	"description": "A carousel slider showcasing available pets. Perfect for home pages, 404 pages, or anywhere you want to highlight adoptable pets.",
+	"keywords": ["pet", "slider", "carousel", "adoptable", "featured", "hero", "404", "similar"],
+	"textdomain": "petstablished-sync",
+	"usesContext": ["postId", "postType"],
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Meet Our Pets"
+		},
+		"showTitle": {
+			"type": "boolean",
+			"default": true
+		},
+		"count": {
+			"type": "number",
+			"default": 8
+		},
+		"orderBy": {
+			"type": "string",
+			"default": "random",
+			"enum": ["random", "newest", "name"]
+		},
+		"autoplay": {
+			"type": "boolean",
+			"default": false
+		},
+		"autoplaySpeed": {
+			"type": "number",
+			"default": 5000
+		},
+		"showNavigation": {
+			"type": "boolean",
+			"default": true
+		},
+		"showDots": {
+			"type": "boolean",
+			"default": true
+		},
+		"cardStyle": {
+			"type": "string",
+			"default": "default",
+			"enum": ["default", "minimal", "overlay"]
+		},
+		"displayMode": {
+			"type": "string",
+			"default": "carousel",
+			"enum": ["carousel", "hero", "grid"]
+		},
+		"showQuickActions": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBadges": {
+			"type": "boolean",
+			"default": true
+		},
+		"badgePosition": {
+			"type": "string",
+			"default": "image-top",
+			"enum": ["image-top", "overlay-bottom", "above-name"]
+		},
+		"ctaText": {
+			"type": "string",
+			"default": "Find Your New Best Friend"
+		},
+		"showCta": {
+			"type": "boolean",
+			"default": false
+		},
+		"linkToArchive": {
+			"type": "boolean",
+			"default": true
+		},
+		"archiveLinkText": {
+			"type": "string",
+			"default": "View All Pets"
+		},
+		"cardBorderRadius": {
+			"type": "number",
+			"default": 12
+		},
+		"cardGap": {
+			"type": "number",
+			"default": 16
+		},
+		"nameFontSize": {
+			"type": "string",
+			"default": ""
+		},
+		"nameFontFamily": {
+			"type": "string",
+			"default": ""
+		},
+		"metaFontSize": {
+			"type": "string",
+			"default": ""
+		},
+		"metaFontFamily": {
+			"type": "string",
+			"default": ""
+		},
+		"similarPetsMode": {
+			"type": "boolean",
+			"default": false
+		},
+		"filterAnimal": {
+			"type": "string",
+			"default": ""
+		},
+		"filterAge": {
+			"type": "string",
+			"default": ""
+		},
+		"excludePostId": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"typography": {
+			"fontSize": true,
+			"fontFamily": true
+		},
+		"interactivity": true
+	},
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

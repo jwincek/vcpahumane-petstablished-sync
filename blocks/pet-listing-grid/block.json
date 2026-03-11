@@ -1,0 +1,105 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-listing-grid",
+	"version": "2.1.0",
+	"title": "Pet Listing Grid",
+	"category": "widgets",
+	"description": "Display a filterable grid of adoptable pets with instant client-side filtering.",
+	"keywords": ["pet", "listing", "grid", "archive", "adoption"],
+	"textdomain": "petstablished-sync",
+	"attributes": {
+		"columns": {
+			"type": "integer",
+			"default": 3
+		},
+		"showFilters": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSearch": {
+			"type": "boolean",
+			"default": true
+		},
+		"showResultsCount": {
+			"type": "boolean",
+			"default": true
+		},
+		"badgeType": {
+			"type": "string",
+			"default": "animal",
+			"enum": ["animal", "age", "new", "none"]
+		},
+		"filterAnimal": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterBreed": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterAge": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterSex": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterSize": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCompatibilityFilters": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterGoodWithDogs": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterGoodWithCats": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterGoodWithKids": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterShotsCurrent": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterSpayedNeutered": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterHousebroken": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterSpecialNeeds": {
+			"type": "boolean",
+			"default": false
+		},
+		"compatibilityStyle": {
+			"type": "string",
+			"default": "chips",
+			"enum": ["checkboxes", "chips"]
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"interactivity": {
+			"clientNavigation": true
+		}
+	},
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-compare-bar",
+	"version": "2.1.0",
+	"title": "Pet Compare Bar",
+	"category": "theme",
+	"description": "Sticky bar showing pets selected for comparison.",
+	"keywords": ["pet", "compare", "adoption"],
+	"textdomain": "petstablished-sync",
+	"attributes": {
+		"position": {
+			"type": "string",
+			"default": "bottom",
+			"enum": ["bottom", "top"]
+		}
+	},
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"interactivity": true
+	},
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

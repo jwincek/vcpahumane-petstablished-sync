@@ -1,0 +1,298 @@
+/**
+ * Pet Gallery Block Styles
+ */
+
+/* Placeholder (editor) */
+.pet-gallery--placeholder {
+	min-height: 150px;
+}
+
+.pet-gallery__placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 24px;
+	background: #f0f0f0;
+	border: 1px dashed #ccc;
+	border-radius: 4px;
+	text-align: center;
+	color: #666;
+}
+
+.pet-gallery__placeholder p {
+	margin: 0;
+	font-weight: 600;
+}
+
+.pet-gallery__placeholder small {
+	color: #888;
+}
+
+.pet-gallery__placeholder svg {
+	opacity: 0.5;
+}
+
+/* Featured image hero */
+.pet-gallery__featured {
+	position: relative;
+	margin: 0 0 var(--wp--preset--spacing--20, 0.5rem);
+	border-radius: var(--wp--custom--border-radius, 4px);
+	overflow: hidden;
+}
+
+.pet-gallery__featured-image {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+}
+
+/* Grid */
+.pet-gallery__grid {
+	display: grid;
+	grid-template-columns: repeat(var(--pet-gallery-columns, 3), 1fr);
+	gap: var(--wp--preset--spacing--20, 0.5rem);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pet-gallery__item {
+	aspect-ratio: 1;
+	overflow: hidden;
+	border-radius: var(--wp--custom--border-radius, 4px);
+}
+
+.pet-gallery__trigger {
+	display: block;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	border: none;
+	background: none;
+	cursor: pointer;
+}
+
+.pet-gallery__trigger img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.pet-gallery__trigger:hover img {
+	transform: scale(1.05);
+}
+
+.pet-gallery__trigger:focus-visible {
+	outline: 3px solid var(--wp--preset--color--primary, #007cba);
+	outline-offset: 2px;
+}
+
+/* Badges — overlaid on featured image, top-left corner */
+.pet-gallery__badges {
+	position: absolute;
+	top: var(--wp--preset--spacing--20, 0.5rem);
+	left: var(--wp--preset--spacing--20, 0.5rem);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.pet-gallery__badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: var(--wp--custom--border-radius, 4px);
+	font-size: var(--wp--preset--font-size--small, 0.75rem);
+	font-weight: 600;
+	line-height: 1.4;
+	white-space: nowrap;
+	background: rgba(0, 0, 0, 0.7);
+	color: #fff;
+}
+
+.pet-gallery__badge--new {
+	background: var(--wp--preset--color--vivid-green-cyan, #00d084);
+	color: #fff;
+}
+
+.pet-gallery__badge--bonded {
+	background: var(--wp--preset--color--vivid-purple, #9b51e0);
+	color: #fff;
+}
+
+.pet-gallery__badge--special-needs {
+	background: var(--wp--preset--color--luminous-vivid-amber, #fcb900);
+	color: #1e1e1e;
+}
+
+.pet-gallery__badge--status-available {
+	background: var(--wp--preset--color--vivid-green-cyan, #00d084);
+	color: #fff;
+}
+
+.pet-gallery__badge--status-pending {
+	background: var(--wp--preset--color--luminous-vivid-orange, #ff6900);
+	color: #fff;
+}
+
+.pet-gallery__badge--status-adopted {
+	background: var(--wp--preset--color--vivid-cyan-blue, #0693e3);
+	color: #fff;
+}
+
+.pet-gallery__badge--age {
+	background: rgba(0, 0, 0, 0.6);
+	color: #fff;
+}
+
+/* Videos */
+.pet-gallery__videos {
+	margin-top: var(--wp--preset--spacing--30, 1rem);
+}
+
+.pet-gallery__videos-heading {
+	margin: 0 0 var(--wp--preset--spacing--20, 0.5rem);
+	font-size: var(--wp--preset--font-size--medium, 1rem);
+	font-weight: 600;
+}
+
+.pet-gallery__videos-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: var(--wp--preset--spacing--20, 0.5rem);
+}
+
+.pet-gallery__video-wrapper {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	border-radius: var(--wp--custom--border-radius, 4px);
+	overflow: hidden;
+	background: #000;
+}
+
+.pet-gallery__video-iframe {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+/* Lightbox */
+.pet-gallery__lightbox {
+	position: fixed;
+	inset: 0;
+	z-index: 10000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pet-gallery__lightbox[hidden] {
+	display: none;
+}
+
+.pet-gallery__lightbox-backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.9);
+}
+
+.pet-gallery__lightbox-content {
+	position: relative;
+	z-index: 1;
+	max-width: 90vw;
+	max-height: 90vh;
+	margin: 0;
+}
+
+.pet-gallery__lightbox-image {
+	max-width: 100%;
+	max-height: 90vh;
+	object-fit: contain;
+}
+
+.pet-gallery__lightbox-nav,
+.pet-gallery__lightbox-close {
+	position: absolute;
+	z-index: 2;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.9);
+	color: #000;
+	font-size: 24px;
+	cursor: pointer;
+}
+
+.pet-gallery__lightbox-nav:hover,
+.pet-gallery__lightbox-close:hover {
+	background: #fff;
+}
+
+.pet-gallery__lightbox-nav:focus-visible,
+.pet-gallery__lightbox-close:focus-visible {
+	outline: 3px solid var(--wp--preset--color--primary, #007cba);
+	outline-offset: 2px;
+}
+
+.pet-gallery__lightbox-nav--prev {
+	left: var(--wp--preset--spacing--40, 1.5rem);
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.pet-gallery__lightbox-nav--next {
+	right: var(--wp--preset--spacing--40, 1.5rem);
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.pet-gallery__lightbox-close {
+	top: var(--wp--preset--spacing--40, 1.5rem);
+	right: var(--wp--preset--spacing--40, 1.5rem);
+}
+
+.pet-gallery__lightbox-counter {
+	position: absolute;
+	bottom: var(--wp--preset--spacing--40, 1.5rem);
+	left: 50%;
+	transform: translateX(-50%);
+	padding: var(--wp--preset--spacing--10, 0.25rem) var(--wp--preset--spacing--20, 0.5rem);
+	background: rgba(0, 0, 0, 0.7);
+	color: #fff;
+	border-radius: var(--wp--custom--border-radius, 4px);
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+}
+
+@media (max-width: 600px) {
+	.pet-gallery__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	
+	.pet-gallery__lightbox-nav--prev {
+		left: var(--wp--preset--spacing--20, 0.5rem);
+	}
+	
+	.pet-gallery__lightbox-nav--next {
+		right: var(--wp--preset--spacing--20, 0.5rem);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pet-gallery__trigger img {
+		transition: none;
+	}
+	
+	.pet-gallery__trigger:hover img {
+		transform: none;
+	}
+}

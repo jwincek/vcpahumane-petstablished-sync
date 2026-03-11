@@ -1,0 +1,34 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-actions",
+	"version": "3.0.0",
+	"title": "Pet Actions",
+	"category": "petstablished",
+	"description": "Quick action buttons for favorite, compare, and share.",
+	"keywords": ["pet", "actions", "favorite", "compare", "share"],
+	"ancestor": ["petstablished/pet-details"],
+	"textdomain": "petstablished-sync",
+	"usesContext": ["postId", "postType"],
+	"attributes": {
+		"showFavorite": { "type": "boolean", "default": true },
+		"showCompare": { "type": "boolean", "default": true },
+		"showShare": { "type": "boolean", "default": true },
+		"labelDisplay": {
+			"type": "string",
+			"default": "icon-and-text",
+			"enum": ["icon-and-text", "icon-only", "text-only"]
+		}
+	},
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"interactivity": true
+	},
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

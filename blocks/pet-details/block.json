@@ -1,0 +1,62 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-details",
+	"version": "3.0.0",
+	"title": "Pet Details",
+	"category": "petstablished",
+	"description": "Display comprehensive pet information using customizable inner blocks with pet data bindings.",
+	"keywords": ["pet", "details", "profile", "adoption"],
+	"textdomain": "petstablished-sync",
+	"attributes": {
+		"layout": {
+			"type": "string",
+			"default": "sidebar",
+			"enum": ["sidebar", "stacked"]
+		}
+	},
+	"usesContext": ["postId", "postType"],
+	"providesContext": {
+		"petstablished/petId": "petId"
+	},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"interactivity": true,
+		"layout": {
+			"default": {
+				"type": "constrained"
+			}
+		}
+	},
+	"allowedBlocks": [
+		"core/group",
+		"core/columns",
+		"core/column",
+		"core/heading",
+		"core/paragraph",
+		"core/image",
+		"core/button",
+		"core/buttons",
+		"core/list",
+		"core/separator",
+		"core/spacer",
+		"petstablished/pet-gallery",
+		"petstablished/pet-actions",
+		"petstablished/pet-attributes",
+		"petstablished/pet-compatibility",
+		"petstablished/pet-health",
+		"petstablished/pet-adoption-cta"
+	],
+	"editorScript": "file:./editor.js",
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

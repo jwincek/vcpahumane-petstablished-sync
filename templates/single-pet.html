@@ -1,0 +1,111 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","metadata":{"name":"Single Pet Main"},"layout":{"type":"constrained","contentSize":"1200px"}} -->
+<main class="wp-block-group" data-wp-interactive="petstablished" data-wp-router-region="single-pet">
+
+	<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--50)">
+
+		<!-- wp:petstablished/pet-details {"layout":"sidebar"} -->
+
+			<!-- wp:group {"metadata":{"name":"Breadcrumb"},"className":"pet-details__breadcrumb","layout":{"type":"flex","flexWrap":"nowrap"}} -->
+			<div class="wp-block-group pet-details__breadcrumb">
+				<!-- wp:paragraph {"className":"pet-details__back-link"} -->
+				<p class="pet-details__back-link"><a href="#pet-archive">← Back to All Pets</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+
+			<!-- wp:columns {"className":"pet-details__columns"} -->
+			<div class="wp-block-columns pet-details__columns">
+
+				<!-- wp:column {"width":"50%","className":"pet-details__gallery-col"} -->
+				<div class="wp-block-column pet-details__gallery-col" style="flex-basis:50%">
+
+					<!-- wp:petstablished/pet-gallery /-->
+
+					<!-- wp:petstablished/pet-actions /-->
+
+				</div>
+				<!-- /wp:column -->
+
+				<!-- wp:column {"width":"50%","className":"pet-details__info-col"} -->
+				<div class="wp-block-column pet-details__info-col" style="flex-basis:50%">
+
+					<!-- wp:group {"metadata":{"name":"Pet Header"},"className":"pet-details__header","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+					<div class="wp-block-group pet-details__header">
+						<!-- wp:heading {"level":1,"className":"pet-details__name","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"name"}}}}} -->
+						<h1 class="wp-block-heading pet-details__name">Pet Name</h1>
+						<!-- /wp:heading -->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:paragraph {"className":"pet-details__tagline","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"tagline"}}}}} -->
+					<p class="pet-details__tagline">Dog · Labrador · Young · Male · Medium</p>
+					<!-- /wp:paragraph -->
+
+					<!-- wp:group {"metadata":{"name":"About Section"},"className":"pet-details__section pet-details__about"} -->
+					<div class="wp-block-group pet-details__section pet-details__about">
+						<!-- wp:heading {"level":2} -->
+						<h2 class="wp-block-heading">About</h2>
+						<!-- /wp:heading -->
+
+						<!-- wp:petstablished/pet-attributes /-->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:group {"metadata":{"name":"Compatibility Section"},"className":"pet-details__section pet-details__compat"} -->
+					<div class="wp-block-group pet-details__section pet-details__compat">
+						<!-- wp:heading {"level":2} -->
+						<h2 class="wp-block-heading">Good With</h2>
+						<!-- /wp:heading -->
+
+						<!-- wp:petstablished/pet-compatibility /-->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:group {"metadata":{"name":"Health Section"},"className":"pet-details__section pet-details__health-section"} -->
+					<div class="wp-block-group pet-details__section pet-details__health-section">
+						<!-- wp:heading {"level":2} -->
+						<h2 class="wp-block-heading">Health</h2>
+						<!-- /wp:heading -->
+
+						<!-- wp:petstablished/pet-health /-->
+					</div>
+					<!-- /wp:group -->
+
+				</div>
+				<!-- /wp:column -->
+
+			</div>
+			<!-- /wp:columns -->
+
+			<!-- wp:group {"metadata":{"name":"Story Section"},"className":"pet-details__section pet-details__story"} -->
+			<div class="wp-block-group pet-details__section pet-details__story">
+				<!-- wp:heading {"level":2,"metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"story_title"}}}}} -->
+				<h2 class="wp-block-heading">Meet Pet Name</h2>
+				<!-- /wp:heading -->
+
+				<!-- wp:paragraph {"className":"pet-details__description","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"description"}}}}} -->
+				<p class="pet-details__description">Pet description will appear here.</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+
+			<!-- wp:petstablished/pet-adoption-cta /-->
+
+		<!-- /wp:petstablished/pet-details -->
+
+		<!-- wp:petstablished/pet-slider {"title":"Similar Pets","similarPetsMode":true,"count":8,"orderBy":"random","showQuickActions":true,"linkToArchive":true,"archiveLinkText":"View All Pets","cardStyle":"default"} /-->
+
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:petstablished/pet-compare-bar {"position":"bottom"} /-->
+
+	<!-- wp:petstablished/pet-favorites-modal {"position":"bottom-right"} /-->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

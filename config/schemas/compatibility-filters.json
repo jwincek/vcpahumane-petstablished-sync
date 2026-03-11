@@ -1,0 +1,16 @@
+{
+  "$id": "compatibility-filters",
+  "type": "object",
+  "description": "Boolean compatibility filter parameters.",
+  "properties": {
+    "goodWithDogs":   { "type": "boolean", "description": "Filter for pets good with dogs." },
+    "goodWithCats":   { "type": "boolean", "description": "Filter for pets good with cats." },
+    "goodWithKids":   { "type": "boolean", "description": "Filter for pets good with kids." },
+    "shotsCurrent":   { "type": "boolean", "description": "Filter for pets with current shots." },
+    "spayedNeutered": { "type": "boolean", "description": "Filter for spayed/neutered pets." },
+    "housebroken":    { "type": "boolean", "description": "Filter for housebroken pets." },
+    "specialNeeds":   { "type": "boolean", "description": "Filter for pets with special needs." },
+    "hypoallergenic": { "type": "boolean", "description": "Filter for hypoallergenic pets." },
+    "declawed":       { "type": "boolean", "description": "Filter for declawed pets." }
+  }
+}

@@ -1,0 +1,67 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-gallery",
+	"version": "3.0.0",
+	"title": "Pet Gallery",
+	"category": "petstablished",
+	"description": "Display pet photos with lightbox functionality.",
+	"keywords": ["pet", "gallery", "photos", "images"],
+	"textdomain": "petstablished-sync",
+	"ancestor": ["petstablished/pet-details"],
+	"attributes": {
+		"columns": {
+			"type": "integer",
+			"default": 3
+		},
+		"thumbnailSize": {
+			"type": "string",
+			"default": "medium"
+		},
+		"showThumbnails": {
+			"type": "boolean",
+			"default": true
+		},
+		"showLightbox": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBadgeNew": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBadgeBondedPair": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBadgeSpecialNeeds": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBadgeStatus": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBadgeAge": {
+			"type": "boolean",
+			"default": true
+		},
+		"showVideos": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"usesContext": ["postId", "postType"],
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"interactivity": true
+	},
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

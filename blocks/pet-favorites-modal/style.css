@@ -1,0 +1,571 @@
+/**
+ * Pet Favorites Modal
+ *
+ * Floating trigger button + modal overlay with pet card grid.
+ * @since 4.2.0
+ */
+
+/*
+ * The Interactivity API uses the hidden attribute for data-wp-bind--hidden.
+ * CSS display rules (flex, grid, block) override the hidden attribute's
+ * default display:none. This ensures hidden always wins.
+ */
+.pet-favorites-modal [hidden] {
+	display: none !important;
+}
+
+/* === Trigger Button === */
+
+.pet-favorites-modal__trigger {
+	position: fixed;
+	z-index: 999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 52px;
+	height: 52px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: var(--wp--preset--color--contrast, #1e1e1e);
+	color: #fff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pet-favorites-modal--bottom-right .pet-favorites-modal__trigger {
+	bottom: 24px;
+	right: 24px;
+}
+
+.pet-favorites-modal--bottom-left .pet-favorites-modal__trigger {
+	bottom: 24px;
+	left: 24px;
+}
+
+/* Shift up when compare bar is visible */
+.pet-compare-bar.is-visible ~ .pet-favorites-modal .pet-favorites-modal__trigger,
+.pet-favorites-modal:has(~ .pet-compare-bar.is-visible) .pet-favorites-modal__trigger {
+	bottom: 84px;
+}
+
+.pet-favorites-modal__trigger:hover {
+	transform: scale(1.08);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.pet-favorites-modal__trigger:active {
+	transform: scale(0.96);
+}
+
+.pet-favorites-modal__trigger-icon {
+	width: 22px;
+	height: 22px;
+	transition: fill 0.2s ease;
+}
+
+.pet-favorites-modal__trigger-count {
+	position: absolute;
+	top: -4px;
+	right: -4px;
+	min-width: 20px;
+	height: 20px;
+	padding: 1px;
+	border-radius: 10px;
+	background: var(--wp--preset--color--vivid-red, #cf2e2e);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 20px;
+	text-align: center;
+}
+
+
+/* === Overlay === */
+
+.pet-favorites-modal__overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 10000;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(2px);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.pet-favorites-modal__overlay.is-open {
+	opacity: 1;
+	visibility: visible;
+}
+
+@media (min-width: 782px) {
+	.pet-favorites-modal__overlay {
+		align-items: center;
+	}
+}
+
+
+/* === Panel === */
+
+.pet-favorites-modal__panel {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 720px;
+	max-height: 85vh;
+	background: var(--wp--preset--color--base, #fff);
+	border-radius: 16px 16px 0 0;
+	box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+	overflow: hidden;
+	transform: translateY(100%);
+	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pet-favorites-modal__overlay.is-open .pet-favorites-modal__panel {
+	transform: translateY(0);
+}
+
+@media (min-width: 782px) {
+	.pet-favorites-modal__panel {
+		max-height: 75vh;
+		border-radius: 16px;
+		transform: translateY(20px) scale(0.96);
+	}
+
+	.pet-favorites-modal__overlay.is-open .pet-favorites-modal__panel {
+		transform: translateY(0) scale(1);
+	}
+}
+
+
+/* === Header === */
+
+.pet-favorites-modal__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 20px;
+	border-bottom: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+	flex-shrink: 0;
+}
+
+.pet-favorites-modal__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+}
+
+.pet-favorites-modal__title svg {
+	color: var(--wp--preset--color--vivid-red, #cf2e2e);
+	flex-shrink: 0;
+}
+
+.pet-favorites-modal__count {
+	font-weight: 400;
+	color: var(--wp--preset--color--cyan-bluish-gray, #888);
+	font-size: 14px;
+}
+
+.pet-favorites-modal__close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--wp--preset--color--cyan-bluish-gray, #888);
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.pet-favorites-modal__close:hover {
+	background: rgba(0, 0, 0, 0.06);
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+}
+
+
+/* === Content === */
+
+.pet-favorites-modal__content {
+	flex: 1;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: 16px 20px;
+}
+
+
+/* === Empty State === */
+
+.pet-favorites-modal__empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 20px;
+	text-align: center;
+	color: var(--wp--preset--color--cyan-bluish-gray, #888);
+}
+
+.pet-favorites-modal__empty svg {
+	margin-bottom: 16px;
+	opacity: 0.4;
+}
+
+.pet-favorites-modal__empty p {
+	margin: 0 0 4px;
+	font-size: 16px;
+	font-weight: 500;
+}
+
+.pet-favorites-modal__empty-hint {
+	font-size: 14px;
+	font-weight: 400 !important;
+	opacity: 0.8;
+}
+
+
+/* === Card Grid === */
+
+.pet-favorites-modal__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 12px;
+}
+
+@media (min-width: 480px) {
+	.pet-favorites-modal__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+
+/* === Card (matches pet-card styling) === */
+
+.pet-favorites-modal__card {
+	display: flex;
+	flex-direction: row;
+	background: var(--wp--preset--color--base, #fff);
+	border: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+	border-radius: 10px;
+	overflow: visible;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pet-favorites-modal__card:hover {
+	border-color: var(--wp--preset--color--contrast, #1e1e1e);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.pet-favorites-modal__card-link {
+	display: block;
+	flex-shrink: 0;
+	width: 100px;
+	text-decoration: none;
+}
+
+.pet-favorites-modal__card-image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	min-height: 100px;
+	object-fit: cover;
+	border-radius: 10px 0 0 10px;
+}
+
+.pet-favorites-modal__card-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	min-height: 100px;
+	background: var(--wp--preset--color--cyan-bluish-gray, #f0f0f0);
+	color: var(--wp--preset--color--cyan-bluish-gray, #aaa);
+}
+
+.pet-favorites-modal__card-content {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	padding: 10px 12px;
+	min-width: 0;
+}
+
+.pet-favorites-modal__card-name {
+	margin: 0 0 2px;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.pet-favorites-modal__card-name a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.pet-favorites-modal__card-name a:hover {
+	text-decoration: underline;
+}
+
+.pet-favorites-modal__card-meta {
+	margin: 0 0 4px;
+	font-size: 12px;
+	color: var(--wp--preset--color--contrast-2, #636363);
+	line-height: 1.4;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pet-favorites-modal__card-detail {
+	margin: 0 0 6px;
+	font-size: 11px;
+	color: var(--wp--preset--color--contrast-2, #636363);
+	line-height: 1.3;
+}
+
+.pet-favorites-modal__card-badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-bottom: 6px;
+}
+
+.pet-favorites-modal__card-badges:empty {
+	display: none;
+}
+
+.pet-favorites-modal__badge {
+	display: inline-flex;
+	padding: 1px 6px;
+	border-radius: 4px;
+	font-size: 10px;
+	font-weight: 600;
+	line-height: 1.6;
+	letter-spacing: 0.02em;
+	white-space: nowrap;
+}
+
+.pet-favorites-modal__badge[hidden] {
+	display: none !important;
+}
+
+.pet-favorites-modal__badge--new {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.pet-favorites-modal__badge--special {
+	background: #fff3e0;
+	color: #e65100;
+}
+
+.pet-favorites-modal__badge--bonded {
+	background: #e3f2fd;
+	color: #1565c0;
+	cursor: pointer;
+	border: none;
+	transition: background-color 0.15s ease;
+}
+
+.pet-favorites-modal__badge--bonded:hover,
+.pet-favorites-modal__badge--bonded:focus-visible {
+	background: #bbdefb;
+	outline: none;
+}
+
+.pet-favorites-modal__badge--bonded.is-expanded {
+	background: #bbdefb;
+}
+
+.pet-favorites-modal__badge--bonded svg {
+	flex-shrink: 0;
+}
+
+.pet-favorites-modal__badge-popover-anchor {
+	position: relative;
+	display: inline-flex;
+}
+
+.pet-favorites-modal__badge-popover-anchor[hidden] {
+	display: none !important;
+}
+
+.pet-favorites-modal__bonded-popover {
+	position: absolute;
+	bottom: calc(100% + 8px);
+	left: 0;
+	z-index: 100;
+	min-width: 160px;
+	max-width: 220px;
+	padding: 8px 10px;
+	background: #fff;
+	border: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+	animation: petModalPopoverReveal 0.12s ease-out;
+}
+
+.pet-favorites-modal__bonded-popover[hidden] {
+	display: none !important;
+}
+
+.pet-favorites-modal__bonded-popover-arrow {
+	position: absolute;
+	bottom: -6px;
+	left: 16px;
+	transform: rotate(45deg);
+	width: 10px;
+	height: 10px;
+	background: #fff;
+	border-right: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+	border-bottom: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+}
+
+.pet-favorites-modal__bonded-popover-label {
+	margin: 0 0 4px;
+	font-size: 11px;
+	color: var(--wp--preset--color--contrast-2, #636363);
+}
+
+.pet-favorites-modal__bonded-popover-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pet-favorites-modal__bonded-popover-list li {
+	padding: 3px 0;
+}
+
+.pet-favorites-modal__bonded-popover-list li + li {
+	border-top: 1px solid #f0f0f0;
+}
+
+.pet-favorites-modal__bonded-popover-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1565c0;
+	text-decoration: none;
+	transition: color 0.1s ease;
+}
+
+.pet-favorites-modal__bonded-popover-link:hover,
+.pet-favorites-modal__bonded-popover-link:focus-visible {
+	color: #0d47a1;
+	text-decoration: underline;
+}
+
+.pet-favorites-modal__bonded-popover-list span {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+}
+
+@keyframes petModalPopoverReveal {
+	from { opacity: 0; transform: translateY(4px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* === Card Actions === */
+
+.pet-favorites-modal__card-actions {
+	display: flex;
+	gap: 6px;
+	margin-top: auto;
+}
+
+.pet-favorites-modal__card-unfavorite {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+	border-radius: 6px;
+	background: transparent;
+	color: var(--wp--preset--color--vivid-red, #cf2e2e);
+	cursor: pointer;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.pet-favorites-modal__card-unfavorite:hover {
+	background: rgba(207, 46, 46, 0.08);
+	border-color: var(--wp--preset--color--vivid-red, #cf2e2e);
+}
+
+.pet-favorites-modal__card-compare {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	height: 28px;
+	padding: 0 8px;
+	border: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+	border-radius: 6px;
+	background: transparent;
+	font-size: 11px;
+	font-weight: 500;
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+	cursor: pointer;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.pet-favorites-modal__card-compare:hover {
+	background: rgba(0, 0, 0, 0.04);
+}
+
+.pet-favorites-modal__card-compare.is-active {
+	background: var(--wp--preset--color--contrast, #1e1e1e);
+	border-color: var(--wp--preset--color--contrast, #1e1e1e);
+	color: #fff;
+}
+
+.pet-favorites-modal__card-compare:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+
+/* === Footer === */
+
+.pet-favorites-modal__footer {
+	display: flex;
+	justify-content: center;
+	padding: 12px 20px;
+	border-top: 1px solid var(--wp--preset--color--cyan-bluish-gray, #e0e0e0);
+	flex-shrink: 0;
+}
+
+.pet-favorites-modal__clear-btn {
+	padding: 6px 16px;
+	border: none;
+	border-radius: 6px;
+	background: transparent;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--wp--preset--color--vivid-red, #cf2e2e);
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.pet-favorites-modal__clear-btn:hover {
+	background: rgba(207, 46, 46, 0.08);
+}

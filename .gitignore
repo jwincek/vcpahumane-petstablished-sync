@@ -1,0 +1,29 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build artifacts
+*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# WordPress local environment
+/wp-env-home/
+
+# Logs
+*.log
+debug.log
+
+# Local environment overrides
+.env
+.env.local

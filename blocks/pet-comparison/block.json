@@ -1,0 +1,61 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-comparison",
+	"version": "2.0.0",
+	"title": "Pet Comparison",
+	"category": "widgets",
+	"description": "Display a side-by-side comparison of selected pets. Automatically shows when ?compare= URL parameter is present.",
+	"keywords": [
+		"pet",
+		"compare",
+		"comparison",
+		"side by side"
+	],
+	"textdomain": "petstablished-sync",
+	"attributes": {
+		"showImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBreed": {
+			"type": "boolean",
+			"default": true
+		},
+		"showAge": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSex": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSize": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCompatibility": {
+			"type": "boolean",
+			"default": true
+		},
+		"showAdoptionFee": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [
+			"wide",
+			"full"
+		],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"interactivity": true
+	},
+	"render": "file:./render.php",
+	"viewScriptModule": "file:./view.js",
+	"style": "file:./style.css"
+}

@@ -1,0 +1,20 @@
+{
+	"name": "petstablished-sync",
+	"version": "3.1.0",
+	"description": "Sync adoptable pets from Petstablished into WordPress.",
+	"private": true,
+	"scripts": {
+		"wp-env": "wp-env",
+		"start": "wp-env start",
+		"stop": "wp-env stop",
+		"lint:js": "wp-scripts lint-js assets/js/",
+		"lint:css": "wp-scripts lint-style assets/css/ blocks/"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^10.0.0",
+		"@wordpress/scripts": "^30.0.0"
+	},
+	"engines": {
+		"node": ">=20"
+	}
+}

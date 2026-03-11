@@ -1,0 +1,37 @@
+/**
+ * Petstablished Admin Styles
+ */
+
+/* Sync status card */
+.wrap .card {
+	padding: 20px;
+}
+
+.wrap .card h2 {
+	margin-top: 0;
+}
+
+/* Spinning icon for sync in progress */
+.dashicons.spin {
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+/* Settings form improvements */
+.form-table th {
+	width: 200px;
+}
+
+.form-table input[type="password"],
+.form-table input[type="text"] {
+	width: 100%;
+	max-width: 400px;
+}
+
+.form-table .description {
+	margin-top: 4px;
+}

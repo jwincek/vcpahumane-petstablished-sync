@@ -1,0 +1,434 @@
+<?php
+/**
+ * Petstablished Blocks - Block Bindings + Interactivity API
+ *
+ * Handles block bindings source registration, interactivity state,
+ * and no-build block registration.
+ *
+ * Architecture (v2.1.0):
+ * - Global store (petstablished): Favorites, comparison, pets cache
+ * - Block stores (petstablished/gallery, etc.): Block-specific UI state
+ * - viewScriptModule in block.json: Automatic loading when block renders
+ *
+ * @package Petstablished_Sync
+ * @since 2.0.0
+ */
+
+declare( strict_types = 1 );
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class Petstablished_Blocks {
+
+	public const NAMESPACE = 'petstablished';
+
+	private const BLOCKS = array(
+		'pet-card',
+		'pet-listing-grid',
+		'pet-details',
+		'pet-gallery',
+		'pet-compare-bar',
+		'pet-comparison',
+		'pet-slider',
+		'pet-filters',
+		'pet-favorites-toggle',
+		'pet-favorites-modal',
+		// Inner blocks for pet-details (InnerBlocks + Block Bindings)
+		'pet-actions',
+		'pet-attributes',
+		'pet-compatibility',
+		'pet-health',
+		'pet-adoption-cta',
+	);
+
+	public function __construct() {
+		add_action( 'init', array( $this, 'register_block_bindings' ) );
+		add_action( 'init', array( $this, 'register_blocks' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_interactivity' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
+	}
+
+	// === Block Bindings ===
+
+	public function register_block_bindings(): void {
+		// Pet entity data — reads from hydrated pet fields.
+		register_block_bindings_source(
+			'petstablished/pet-data',
+			array(
+				'label'              => __( 'Pet Data', 'petstablished-sync' ),
+				'get_value_callback' => array( $this, 'get_binding_value' ),
+				'uses_context'       => array( 'postId', 'postType' ),
+			)
+		);
+
+		// Adoption statistics — aggregate data for archive/landing pages.
+		register_block_bindings_source(
+			'petstablished/adoption-stats',
+			array(
+				'label'              => __( 'Adoption Statistics', 'petstablished-sync' ),
+				'get_value_callback' => array( $this, 'get_stats_binding_value' ),
+				'uses_context'       => array(),
+			)
+		);
+	}
+
+	public function get_binding_value( array $args, WP_Block $block ): ?string {
+		$post_id = $block->context['postId'] ?? get_the_ID();
+
+		if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
+			return $this->get_placeholder( $args['key'] ?? '' );
+		}
+
+		$key = $args['key'] ?? '';
+
+		// Route through the get-pet ability so bindings and REST share
+		// the same code path, respecting permission callbacks and hooks.
+		// The ability uses Pet_Hydrator internally with per-request caching,
+		// so repeated calls for the same post ID are effectively free.
+		$ability = function_exists( 'wp_get_ability' )
+			? wp_get_ability( 'petstablished/get-pet' )
+			: null;
+
+		if ( $ability ) {
+			$pet = $ability->execute( [ 'id' => (int) $post_id ] );
+
+			if ( is_wp_error( $pet ) ) {
+				return $this->get_placeholder( $key );
+			}
+		} else {
+			// Fallback if Abilities API not available (e.g. WP < 6.9).
+			$pet = \Petstablished\Core\Pet_Hydrator::get( $post_id );
+			if ( ! $pet ) {
+				return $this->get_placeholder( $key );
+			}
+		}
+
+		// Direct field lookup from hydrated entity.
+		$value = $pet[ $key ] ?? null;
+
+		// Format for display.
+		if ( is_bool( $value ) ) {
+			return $value ? __( 'Yes', 'petstablished-sync' ) : __( 'No', 'petstablished-sync' );
+		}
+
+		return is_scalar( $value ) ? (string) $value : null;
+	}
+
+	private function get_placeholder( string $key ): string {
+		$placeholders = array(
+			'status' => __( '[Status]', 'petstablished-sync' ),
+			'animal' => __( '[Animal]', 'petstablished-sync' ),
+			'breed'  => __( '[Breed]', 'petstablished-sync' ),
+			'age'    => __( '[Age]', 'petstablished-sync' ),
+			'sex'    => __( '[Sex]', 'petstablished-sync' ),
+			'size'   => __( '[Size]', 'petstablished-sync' ),
+		);
+		return $placeholders[ $key ] ?? '[' . ucfirst( str_replace( '_', ' ', $key ) ) . ']';
+	}
+
+	/**
+	 * Get adoption stats value for block bindings.
+	 *
+	 * Routes through the Abilities API so bindings and REST share
+	 * the same code path, following the shelter plugin pattern.
+	 *
+	 * Supports keys:
+	 *   available_count, available_by_species, species_count,
+	 *   newest_pet_name, total_pets, last_sync
+	 *
+	 * @param array    $args  Binding args including 'key'.
+	 * @param WP_Block $block Block instance.
+	 * @return string|null
+	 */
+	public function get_stats_binding_value( array $args, WP_Block $block ): ?string {
+		$key    = $args['key'] ?? '';
+		$status = $args['status'] ?? 'available';
+
+		if ( ! $key ) {
+			return null;
+		}
+
+		// Route through Abilities API if available.
+		$ability = wp_get_ability( 'petstablished/get-adoption-stats' );
+		if ( $ability ) {
+			// Cache the stats result per-request to avoid duplicate calls
+			// when multiple stats bindings are on the same page.
+			static $stats_cache = [];
+			$cache_key = $status;
+
+			if ( ! isset( $stats_cache[ $cache_key ] ) ) {
+				$result = $ability->execute( [ 'status' => $status ] );
+				$stats_cache[ $cache_key ] = is_wp_error( $result ) ? [] : $result;
+			}
+
+			$stats = $stats_cache[ $cache_key ];
+
+			if ( isset( $stats[ $key ] ) ) {
+				$value = $stats[ $key ];
+
+				// Format arrays/objects for display.
+				if ( 'species_counts' === $key && is_array( $value ) ) {
+					// For a specific species, check for 'species' arg.
+					$species = $args['species'] ?? null;
+					if ( $species ) {
+						return isset( $value[ $species ] ) ? (string) $value[ $species ] : '0';
+					}
+					// Otherwise format as "Dogs: 23, Cats: 8".
+					$parts = [];
+					foreach ( $value as $name => $count ) {
+						$parts[] = $name . ': ' . $count;
+					}
+					return implode( ', ', $parts );
+				}
+
+				return is_scalar( $value ) ? (string) $value : null;
+			}
+		}
+
+		// Placeholder for editor preview.
+		$placeholders = [
+			'available_count'      => '42',
+			'available_by_species' => '23 Dogs, 12 Cats, 7 Rabbits',
+			'species_counts'       => '23',
+			'newest_pet_name'      => 'Buddy',
+			'total_pets'           => '58',
+			'last_sync'            => '',
+		];
+		return $placeholders[ $key ] ?? '[' . ucfirst( str_replace( '_', ' ', $key ) ) . ']';
+	}
+
+	// === Block Registration ===
+
+	public function register_blocks(): void {
+		$blocks_dir = PETSTABLISHED_SYNC_DIR . 'blocks/';
+
+		foreach ( self::BLOCKS as $block_name ) {
+			$block_path = $blocks_dir . $block_name;
+
+			if ( ! file_exists( $block_path . '/block.json' ) ) {
+				continue;
+			}
+
+			// Register with render callback for server-side rendering.
+			register_block_type( $block_path );
+		}
+	}
+
+	// === Interactivity API ===
+
+	public function enqueue_interactivity(): void {
+		if ( ! $this->should_enqueue() ) {
+			return;
+		}
+
+		// Load centralized store registration.
+		require_once PETSTABLISHED_SYNC_DIR . 'includes/blocks/register-stores.php';
+
+		\Petstablished\Blocks\register_script_modules();
+		\Petstablished\Blocks\register_stores();
+
+		// Enqueue minimal styles.
+		wp_enqueue_style(
+			self::NAMESPACE . '-frontend',
+			PETSTABLISHED_SYNC_URL . 'assets/css/frontend.css',
+			array(),
+			PETSTABLISHED_SYNC_VERSION
+		);
+	}
+
+	private function should_enqueue(): bool {
+		// Always enqueue on pet-related archives/singles.
+		if ( is_singular( 'pet' ) || is_post_type_archive( 'pet' ) ) {
+			return true;
+		}
+
+		// Check pet taxonomy archives.
+		foreach ( Petstablished_Helpers::TAXONOMIES as $taxonomy ) {
+			if ( is_tax( $taxonomy ) ) {
+				return true;
+			}
+		}
+
+		// Check if viewing a comparison URL.
+		if ( isset( $_GET['compare'] ) ) {
+			return true;
+		}
+
+		// Check for pet blocks in current post content.
+		$post = get_post();
+		if ( $post && has_block( 'petstablished/', $post ) ) {
+			return true;
+		}
+
+		// For FSE themes: check if any registered pet block will render.
+		// This hooks earlier than template rendering, so we check broadly.
+		if ( wp_is_block_theme() ) {
+			// On front page, home, or any page that might have our blocks in templates.
+			if ( is_front_page() || is_home() || is_page() ) {
+				return true;
+			}
+		}
+
+		// Fallback: check if this is the front page (static or otherwise).
+		if ( is_front_page() ) {
+			return true;
+		}
+
+		// 404 pages may have pet blocks in the template (e.g. slider).
+		if ( is_404() ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	// === Editor Assets ===
+
+	public function enqueue_editor_assets(): void {
+		// Main blocks registration script.
+		wp_enqueue_script(
+			self::NAMESPACE . '-blocks-editor',
+			PETSTABLISHED_SYNC_URL . 'assets/js/blocks-editor.js',
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
+			PETSTABLISHED_SYNC_VERSION,
+			true
+		);
+
+		// Slider block editor controls.
+		wp_enqueue_script(
+			self::NAMESPACE . '-slider-editor',
+			PETSTABLISHED_SYNC_URL . 'blocks/pet-slider/editor.js',
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-hooks', 'wp-compose', 'wp-data' ),
+			PETSTABLISHED_SYNC_VERSION,
+			true
+		);
+
+		// Listing grid block editor controls.
+		wp_enqueue_script(
+			self::NAMESPACE . '-listing-grid-editor',
+			PETSTABLISHED_SYNC_URL . 'blocks/pet-listing-grid/editor.js',
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-hooks', 'wp-compose' ),
+			PETSTABLISHED_SYNC_VERSION,
+			true
+		);
+
+		// Editor styles.
+		wp_enqueue_style(
+			self::NAMESPACE . '-editor',
+			PETSTABLISHED_SYNC_URL . 'assets/css/editor.css',
+			array(),
+			PETSTABLISHED_SYNC_VERSION
+		);
+
+		// Binding helper sidebar script.
+		wp_enqueue_script(
+			self::NAMESPACE . '-binding-helper',
+			PETSTABLISHED_SYNC_URL . 'assets/js/editor.js',
+			array( 'wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data' ),
+			PETSTABLISHED_SYNC_VERSION,
+			true
+		);
+
+		wp_localize_script( self::NAMESPACE . '-binding-helper', 'petstablishedEditor', array(
+			'bindingKeys' => $this->get_binding_keys(),
+		) );
+	}
+
+	private function get_binding_keys(): array {
+		$keys = array();
+
+		// Taxonomy keys.
+		foreach ( array_keys( Petstablished_Helpers::TAXONOMIES ) as $key ) {
+			$keys[] = array(
+				'key'    => $key,
+				'type'   => 'taxonomy',
+				'source' => 'petstablished/pet-data',
+				'desc'   => sprintf( __( 'Pet %s', 'petstablished-sync' ), ucfirst( $key ) ),
+			);
+		}
+
+		// API-sourced display fields (read from stored JSON).
+		$api_fields = array(
+			'weight'              => 'Weight',
+			'adoption_fee'        => 'Adoption Fee (raw)',
+			'numerical_age'       => 'Age (human readable)',
+			'youtube_url'         => 'YouTube URL',
+			'adoption_form_url'   => 'Adoption Application URL',
+			'microchip_id'        => 'Microchip ID',
+			'special_needs_detail' => 'Special Needs Description',
+			'coat_pattern'        => 'Coat Pattern',
+			'secondary_color'     => 'Secondary Color',
+			'tertiary_color'      => 'Tertiary Color',
+			'ok_with_dogs'        => 'Good with Dogs (tristate)',
+			'ok_with_cats'        => 'Good with Cats (tristate)',
+			'ok_with_kids'        => 'Good with Kids (tristate)',
+			'shots_current'       => 'Shots Current (tristate)',
+			'spayed_neutered'     => 'Spayed/Neutered (tristate)',
+			'housebroken'         => 'Housebroken (tristate)',
+			'special_needs'       => 'Has Special Needs (tristate)',
+			'hypoallergenic'      => 'Hypoallergenic (tristate)',
+			'declawed'            => 'Declawed (tristate)',
+		);
+
+		foreach ( $api_fields as $key => $desc ) {
+			$keys[] = array(
+				'key'    => $key,
+				'type'   => 'api_field',
+				'source' => 'petstablished/pet-data',
+				'desc'   => $desc,
+			);
+		}
+
+		// Computed keys.
+		$computed = array(
+			'name'                   => 'Pet Name',
+			'image'                  => 'Pet Photo URL',
+			'url'                    => 'Pet Details URL',
+			'tagline'                => 'Quick Facts Tagline',
+			'compatibility'          => 'Compatibility Summary',
+			'description'            => 'Pet Description/Story',
+			'story_title'            => '"Meet [Name]" Title',
+			'adoption_title'         => '"Adopt [Name]" Title',
+			'adoption_fee_formatted' => 'Formatted Adoption Fee',
+			'has_adoption_info'      => 'Has Adoption Info (boolean)',
+			'gallery_count'          => 'Gallery Photo Count',
+			'is_new'                 => 'New Pet Badge (last 7 days)',
+			'favorited'              => 'Is Favorited (boolean)',
+			'is_bonded_pair'         => 'Is Bonded Pair (boolean)',
+			'bonded_pair_names'      => 'Bonded Pair Partner Names',
+			'special_needs_summary'  => 'Special Needs Summary Label',
+		);
+		
+		foreach ( $computed as $key => $desc ) {
+			$keys[] = array(
+				'key'    => $key,
+				'type'   => 'computed',
+				'source' => 'petstablished/pet-data',
+				'desc'   => $desc,
+			);
+		}
+
+		// Adoption stats keys (petstablished/adoption-stats source).
+		$stats = array(
+			'available_count'      => 'Total Available Pets',
+			'available_by_species' => 'Available by Species (formatted)',
+			'species_counts'       => 'Species Count (use with species arg)',
+			'newest_pet_name'      => 'Newest Pet Name',
+			'total_pets'           => 'Total Pets (all statuses)',
+			'last_sync'            => 'Last Sync Timestamp',
+		);
+
+		foreach ( $stats as $key => $desc ) {
+			$keys[] = array(
+				'key'    => $key,
+				'type'   => 'stats',
+				'source' => 'petstablished/adoption-stats',
+				'desc'   => $desc,
+			);
+		}
+
+		return $keys;
+	}
+}

@@ -1,0 +1,198 @@
+{
+  "entities": {
+    "pet": {
+      "post_type": "pet",
+      "meta_prefix": "_pet_",
+
+      "taxonomies": {
+        "status": { "taxonomy": "pet_status",    "show_in_summary": true  },
+        "animal": { "taxonomy": "pet_animal",    "show_in_summary": true  },
+        "breed":  { "taxonomy": "pet_breed",     "show_in_summary": true  },
+        "age":    { "taxonomy": "pet_age",       "show_in_summary": true  },
+        "sex":    { "taxonomy": "pet_sex",       "show_in_summary": true  },
+        "size":   { "taxonomy": "pet_size",      "show_in_summary": true  },
+        "color":  { "taxonomy": "pet_color",     "show_in_summary": false },
+        "coat":   { "taxonomy": "pet_coat",      "show_in_summary": false }
+      },
+
+      "fields": {
+        "ps_id": {
+          "type": "string",
+          "default": "",
+          "description": "Petstablished numeric ID. Primary lookup key for sync."
+        },
+        "api_response": {
+          "type": "string",
+          "default": "",
+          "show_in_rest": false,
+          "description": "Full JSON snapshot of the Petstablished API response for this pet."
+        },
+        "api_hash": {
+          "type": "string",
+          "default": "",
+          "show_in_rest": false,
+          "description": "SHA-256 hash of the API response for change detection."
+        }
+      },
+
+      "api_fields": {
+        "weight":               { "api_key": "weight",              "type": "string",  "default": "" },
+        "adoption_fee":         { "api_key": "adoption_fee",        "type": "string",  "default": "" },
+        "numerical_age":        { "api_key": "numerical_age",       "type": "string",  "default": "" },
+        "youtube_url":          { "api_key": "youtube_url",         "type": "string",  "default": "" },
+        "youtube_urls":         { "api_key": "youtube_urls",        "type": "array",   "default": [] },
+        "adoption_form_url":    { "api_key": "public_url",          "type": "string",  "default": "" },
+        "microchip_id":         { "api_key": "microchip_id",        "type": "string",  "default": "" },
+        "special_needs_detail": { "api_key": "special_needs",       "type": "string",  "default": "" },
+        "coat_pattern":         { "api_key": "coat_pattern",        "type": "string",  "default": "" },
+        "secondary_color":      { "api_key": "secondary_color",     "type": "string",  "default": "" },
+        "tertiary_color":       { "api_key": "tertiary_color",      "type": "string",  "default": "" },
+        "bonded_group_id":      { "api_key": "group_id",            "type": "string",  "default": "" },
+        "bonded_pet_ids":       { "api_key": "grouped_pet_ids",     "type": "array",   "default": [] },
+        "siblings_names":       { "api_key": "siblings_names",      "type": "string",  "default": "" },
+        "ok_with_dogs":         { "api_key": "is_ok_with_other_dogs", "type": "tristate", "default": "" },
+        "ok_with_cats":         { "api_key": "is_ok_with_other_cats", "type": "tristate", "default": "" },
+        "ok_with_kids":         { "api_key": "is_ok_with_other_kids", "type": "tristate", "default": "" },
+        "shots_current":        { "api_key": "shots_up_to_date",    "type": "tristate", "default": "" },
+        "spayed_neutered":      { "api_key": "is_spayed",           "type": "tristate", "default": "" },
+        "housebroken":          { "api_key": "is_housebroken",      "type": "tristate", "default": "" },
+        "special_needs":        { "api_key": "has_special_need",    "type": "tristate", "default": "" },
+        "hypoallergenic":       { "api_key": "is_hypoallergenic",   "type": "tristate", "default": "" },
+        "declawed":             { "api_key": "declawed",            "type": "tristate", "default": "" }
+      },
+
+      "attribute_taxonomy": "pet_attribute",
+      "attribute_map": {
+        "is_ok_with_other_dogs": "good-with-dogs",
+        "is_ok_with_other_cats": "good-with-cats",
+        "is_ok_with_other_kids": "good-with-kids",
+        "shots_up_to_date":      "shots-current",
+        "is_spayed":             "spayed-neutered",
+        "is_housebroken":        "housebroken",
+        "has_special_need":      "special-needs",
+        "is_hypoallergenic":     "hypoallergenic",
+        "declawed":              "declawed"
+      },
+      "attribute_truthy_values": ["yes", "Yes", "1", "true"],
+
+      "computed": {
+        "image": {
+          "function": "get_image",
+          "args": ["_self"],
+          "description": "Primary image URL (featured image with fallback)."
+        },
+        "thumb": {
+          "function": "get_thumb",
+          "args": ["_self"],
+          "description": "Thumbnail image URL (150x150)."
+        },
+        "url": {
+          "function": "get_permalink",
+          "args": ["_self"],
+          "description": "Pet detail page URL."
+        },
+        "tagline": {
+          "function": "get_tagline",
+          "args": ["_self"],
+          "description": "Quick facts: Animal · Breed · Age · Sex · Size."
+        },
+        "compatibility": {
+          "function": "get_compatibility_summary",
+          "args": ["_self"],
+          "description": "Human-readable compatibility summary."
+        },
+        "story_title": {
+          "function": "get_story_title",
+          "args": ["_self"],
+          "description": "'Meet [Name]' formatted heading."
+        },
+        "adoption_title": {
+          "function": "get_adoption_title",
+          "args": ["_self"],
+          "description": "'Adopt [Name]' formatted heading."
+        },
+        "adoption_fee_formatted": {
+          "function": "get_formatted_fee",
+          "args": ["adoption_fee"],
+          "description": "Formatted adoption fee (e.g. '$250')."
+        },
+        "has_adoption_info": {
+          "function": "has_adoption_info",
+          "args": ["adoption_fee", "adoption_form_url"],
+          "description": "Whether fee or form URL is present."
+        },
+        "gallery": {
+          "function": "get_gallery",
+          "args": ["_self"],
+          "description": "Parsed gallery image URL array."
+        },
+        "gallery_count": {
+          "function": "get_gallery_count",
+          "args": ["_self"],
+          "description": "Number of gallery images."
+        },
+        "is_new": {
+          "function": "is_new_pet",
+          "args": ["_post"],
+          "description": "Whether the pet was added within the last 7 days."
+        },
+        "favorited": {
+          "function": "is_favorited",
+          "args": ["_self"],
+          "description": "Whether the current user has favorited this pet."
+        },
+        "is_bonded_pair": {
+          "function": "is_bonded_pair",
+          "args": ["_self"],
+          "description": "Whether this pet is part of a bonded pair/group."
+        },
+        "bonded_pair_names": {
+          "function": "get_bonded_pair_names",
+          "args": ["_self"],
+          "description": "Names of bonded pair partners (resolved from local posts when possible)."
+        },
+        "special_needs_summary": {
+          "function": "get_special_needs_summary",
+          "args": ["_self"],
+          "description": "Formatted special needs label with detail (e.g. 'Special Needs: FeLV+')."
+        },
+        "description": {
+          "function": "get_description",
+          "args": ["_post"],
+          "description": "Formatted pet description with wpautop."
+        },
+        "videos": {
+          "function": "get_videos",
+          "args": ["_self"],
+          "description": "Parsed YouTube video ID array from youtube_url and youtube_urls fields."
+        }
+      },
+
+      "summary_fields": [
+        "id", "name", "status", "animal", "breed", "age", "sex", "size",
+        "image", "thumb", "url", "favorited", "is_new",
+        "is_bonded_pair", "bonded_pair_names", "special_needs"
+      ],
+
+      "grid_fields": [
+        "id", "name", "status", "animal", "breed", "age", "sex", "size",
+        "image", "url", "favorited", "is_new",
+        "ok_with_dogs", "ok_with_cats", "ok_with_kids",
+        "shots_current", "spayed_neutered", "housebroken",
+        "special_needs", "special_needs_detail",
+        "is_bonded_pair", "bonded_pair_names",
+        "hypoallergenic", "declawed"
+      ],
+
+      "comparison_fields": [
+        "id", "name", "status", "animal", "breed", "age", "sex", "size",
+        "image", "url", "favorited",
+        "ok_with_dogs", "ok_with_cats", "ok_with_kids",
+        "compatibility", "adoption_fee", "adoption_fee_formatted",
+        "special_needs", "special_needs_detail",
+        "shots_current", "spayed_neutered", "housebroken",
+        "hypoallergenic", "declawed", "coat_length", "shedding"
+      ]
+    }
+  }
+}

@@ -1,0 +1,108 @@
+/**
+ * Pet Card Block Styles
+ * Uses WordPress core CSS custom properties.
+ */
+
+.pet-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	border-radius: var(--wp--custom--border-radius, 8px);
+	overflow: hidden;
+	background: var(--wp--preset--color--base, #fff);
+	box-shadow: var(--wp--custom--shadow--small, 0 1px 3px rgba(0,0,0,0.1));
+	transition: box-shadow 0.2s ease;
+}
+
+.pet-card:hover {
+	box-shadow: var(--wp--custom--shadow--medium, 0 4px 12px rgba(0,0,0,0.15));
+}
+
+.pet-card__link {
+	display: block;
+	position: relative;
+	aspect-ratio: 4/3;
+	overflow: hidden;
+}
+
+.pet-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.pet-card:hover .pet-card__image {
+	transform: scale(1.05);
+}
+
+.pet-card__status {
+	position: absolute;
+	top: var(--wp--preset--spacing--20, 0.5rem);
+	left: var(--wp--preset--spacing--20, 0.5rem);
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: var(--wp--preset--font-size--small, 0.75rem);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.pet-card__status--available {
+	background: var(--wp--preset--color--vivid-green-cyan, #00a32a);
+	color: #fff;
+}
+
+.pet-card__status--pending {
+	background: var(--wp--preset--color--luminous-vivid-amber, #f0b849);
+	color: #000;
+}
+
+.pet-card__status--adopted {
+	background: var(--wp--preset--color--vivid-cyan-blue, #0693e3);
+	color: #fff;
+}
+
+.pet-card__content {
+	padding: var(--wp--preset--spacing--30, 1rem);
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--10, 0.25rem);
+}
+
+.pet-card__name {
+	margin: 0;
+	font-size: var(--wp--preset--font-size--medium, 1.125rem);
+}
+
+.pet-card__name a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.pet-card__name a:hover {
+	text-decoration: underline;
+}
+
+.pet-card__meta {
+	margin: 0;
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+.pet-card__actions {
+	display: flex;
+	gap: var(--wp--preset--spacing--20, 0.5rem);
+	margin-top: var(--wp--preset--spacing--20, 0.5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pet-card,
+	.pet-card__image {
+		transition: none;
+	}
+	
+	.pet-card:hover .pet-card__image {
+		transform: none;
+	}
+}
