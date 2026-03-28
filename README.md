@@ -70,13 +70,6 @@ Business logic lives in **abilities** — thin, testable operations with JSON Sc
 - **Block Bindings** to connect block attributes to pet post meta.
 - **Taxonomy filtering** (species, breed, age, size, gender, color) with URL-driven compatibility meta filters.
 
-## Known Issues
-
-These items are tracked as GitHub Issues. If you encounter them, please comment on the relevant issue.
-
-- **Pet Details block** renders a redundant "Available" status paragraph (`<p class="pet-details__status ...">Available</p>`) that should be removed.
-- **Compare Bar toast** should be hidden on initial load. The `pet-compare-bar__toast` div needs `hidden` set by default before the Interactivity store initializes.
-
 ## Contributing
 
 1. Fork the repository and create a feature branch from `main`.
