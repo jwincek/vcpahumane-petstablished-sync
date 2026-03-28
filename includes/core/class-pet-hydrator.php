@@ -185,11 +185,46 @@ class Pet_Hydrator {
 		$type = $config['type'] ?? 'string';
 
 		return match ( $type ) {
-			'tristate' => is_string( $raw ) ? $raw : (string) ( $raw ?? '' ),
+			'tristate' => self::resolve_tristate( $raw ),
 			'array'    => is_array( $raw ) ? $raw : [],
 			'images'   => self::cast_images( $raw ),
 			default    => is_string( $raw ) ? $raw : (string) ( $raw ?? $config['default'] ?? '' ),
 		};
+	}
+
+	/**
+	 * Normalize a tristate value to a canonical string.
+	 *
+	 * Petstablished sends these as mixed types — 'Yes', 'No', 'Not Sure',
+	 * booleans, numeric strings. This normalizes them to exactly one of:
+	 *   - 'yes'     — confirmed positive
+	 *   - 'no'      — confirmed negative
+	 *   - 'unknown' — data exists but is inconclusive (e.g. 'Not Sure')
+	 *   - ''        — no data recorded (empty/null)
+	 *
+	 * Blocks can rely on this canonical shape without re-implementing
+	 * normalization logic.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param mixed $value Raw tristate value from API or meta.
+	 * @return string One of 'yes', 'no', 'unknown', or '' (no data).
+	 */
+	public static function resolve_tristate( mixed $value ): string {
+		if ( $value === '' || $value === null ) {
+			return '';
+		}
+		if ( is_bool( $value ) ) {
+			return $value ? 'yes' : 'no';
+		}
+		$lower = strtolower( trim( (string) $value ) );
+		if ( in_array( $lower, [ 'yes', 'true', '1' ], true ) ) {
+			return 'yes';
+		}
+		if ( in_array( $lower, [ 'no', 'false', '0' ], true ) ) {
+			return 'no';
+		}
+		return 'unknown';
 	}
 
 	/**

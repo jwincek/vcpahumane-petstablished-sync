@@ -234,7 +234,7 @@ class Petstablished_Icons {
 		'x-circle' => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
-				'M12 12a10 10 0 1 0 0-20 10 10 0 0 0 0 20z', // circle
+				'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', // circle centered at 12,12 r=10
 			),
 			'lines'   => array(
 				array( 'x1' => '15', 'y1' => '9', 'x2' => '9', 'y2' => '15' ),
@@ -252,11 +252,22 @@ class Petstablished_Icons {
 		'info' => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
-				'M12 12a10 10 0 1 0 0-20 10 10 0 0 0 0 20z', // circle
+				'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', // circle centered at 12,12 r=10
 			),
 			'lines'   => array(
 				array( 'x1' => '12', 'y1' => '16', 'x2' => '12', 'y2' => '12' ),
 				array( 'x1' => '12', 'y1' => '8', 'x2' => '12.01', 'y2' => '8' ),
+			),
+		),
+
+		'help-circle' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', // circle centered at 12,12 r=10
+				'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3', // question mark curve
+			),
+			'lines'   => array(
+				array( 'x1' => '12', 'y1' => '17', 'x2' => '12.01', 'y2' => '17' ), // dot
 			),
 		),
 

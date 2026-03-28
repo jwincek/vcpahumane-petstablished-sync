@@ -1,5 +1,8 @@
 /**
  * Pet Health Block Styles
+ *
+ * @since 3.0.0
+ * @updated 3.2.0 — added .pet-health__status styles
  */
 
 /* Placeholder (editor) */
@@ -68,12 +71,32 @@
 	color: #ef4444;
 }
 
-/* Unknown — blue icon */
+/* Unknown — mid-slate icon (visible on light #f9f9f9 and dark surfaces) */
 .pet-health__item--unknown .pet-health__icon {
-	color: #3b82f6;
+	color: #6b7280;
 }
 
 /* Label */
 .pet-health__label {
 	font-weight: 500;
+}
+
+/* Status text (visible alongside icon for clarity) */
+.pet-health__status {
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.025em;
+}
+
+.pet-health__item--yes .pet-health__status {
+	color: #059669;
+}
+
+.pet-health__item--no .pet-health__status {
+	color: #dc2626;
+}
+
+.pet-health__item--unknown .pet-health__status {
+	color: #4b5563;
 }

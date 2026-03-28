@@ -1,8 +1,17 @@
 <?php
 /**
- * Pet Health Block — Vaccinations, spay/neuter, housebroken, special needs
+ * Pet Health Block — Vaccinations, spay/neuter, housebroken, special needs,
+ * hypoallergenic, declawed.
  *
  * Displays tristate health/care indicators with check/x/info icons.
+ *
+ * Changes in 3.2.0:
+ * - Uses petstablished_get_pet() shared helper (eliminates ability-fetch boilerplate).
+ * - Relies on Hydrator-normalized tristate values ('yes'|'no'|'unknown'|'').
+ * - Adds displayMode attribute: 'all', 'known' (default), 'positive'.
+ * - Adds hypoallergenic and declawed fields.
+ * - Declawed is suppressed for non-cat animals regardless of toggle.
+ * - Improved accessibility: each item gets a complete aria-label.
  *
  * @package Petstablished_Sync
  * @since 3.0.0
@@ -32,61 +41,86 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 	return;
 }
 
-// Load pet data via Abilities API.
-$pet = null;
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
-if ( $ability ) {
-	$result = $ability->execute( [ 'id' => (int) $post_id ] );
-	if ( ! is_wp_error( $result ) ) {
-		$pet = $result;
-	}
-}
-if ( ! $pet ) {
-	$pet = \Petstablished\Core\Pet_Hydrator::get( $post_id );
-}
+// Shared helper: Abilities API → Hydrator fallback.
+$pet = petstablished_get_pet( (int) $post_id );
 if ( ! $pet ) {
 	return;
 }
 
-// Health items — uses entity field names (not raw API keys).
-$health_defs = array(
-	array( 'toggle' => 'showSpayedNeutered', 'label' => __( 'Spayed/Neutered', 'petstablished-sync' ),   'key' => 'spayed_neutered' ),
-	array( 'toggle' => 'showVaccinations',   'label' => __( 'Vaccinations Current', 'petstablished-sync' ), 'key' => 'shots_current' ),
-	array( 'toggle' => 'showHousebroken',    'label' => __( 'House Trained', 'petstablished-sync' ),      'key' => 'housebroken' ),
-	array( 'toggle' => 'showSpecialNeeds',   'label' => __( 'Special Needs', 'petstablished-sync' ),      'key' => 'special_needs' ),
-);
+// Display mode: 'all' | 'known' (default) | 'positive'.
+$display_mode = $attributes['displayMode'] ?? 'known';
 
-/**
- * Normalize a tristate value to 'yes', 'no', or 'unknown'.
- */
-$resolve_tristate = function ( $value ): ?string {
-	if ( $value === '' || $value === null ) {
-		return null;
-	}
-	if ( is_bool( $value ) ) {
-		return $value ? 'yes' : 'no';
-	}
-	$lower = strtolower( (string) $value );
-	if ( $lower === 'yes' || $lower === 'true' || $lower === '1' ) {
-		return 'yes';
-	}
-	if ( $lower === 'no' || $lower === 'false' || $lower === '0' ) {
-		return 'no';
-	}
-	return 'unknown';
-};
+// Determine animal type for conditional fields.
+$animal_slug = strtolower( $pet['animalSlug'] ?? $pet['animal'] ?? '' );
+$is_cat      = ( $animal_slug === 'cat' );
+
+// Health field definitions.
+// Each entry maps a block toggle attribute to an entity field key.
+// 'cat_only' fields are suppressed for non-cat animals.
+$health_defs = array(
+	array(
+		'toggle'   => 'showSpayedNeutered',
+		'label'    => __( 'Spayed/Neutered', 'petstablished-sync' ),
+		'key'      => 'spayed_neutered',
+	),
+	array(
+		'toggle'   => 'showVaccinations',
+		'label'    => __( 'Vaccinations Current', 'petstablished-sync' ),
+		'key'      => 'shots_current',
+	),
+	array(
+		'toggle'   => 'showHousebroken',
+		'label'    => __( 'House Trained', 'petstablished-sync' ),
+		'key'      => 'housebroken',
+	),
+	array(
+		'toggle'   => 'showSpecialNeeds',
+		'label'    => __( 'Special Needs', 'petstablished-sync' ),
+		'key'      => 'special_needs',
+	),
+	array(
+		'toggle'   => 'showHypoallergenic',
+		'label'    => __( 'Hypoallergenic', 'petstablished-sync' ),
+		'key'      => 'hypoallergenic',
+	),
+	array(
+		'toggle'   => 'showDeclawed',
+		'label'    => __( 'Declawed', 'petstablished-sync' ),
+		'key'      => 'declawed',
+		'cat_only' => true,
+	),
+);
 
 $items = array();
 foreach ( $health_defs as $def ) {
+	// Respect the editor toggle.
 	if ( ! ( $attributes[ $def['toggle'] ] ?? true ) ) {
 		continue;
 	}
-	$status = $resolve_tristate( $pet[ $def['key'] ] ?? '' );
-	if ( $status === null ) {
+
+	// Skip cat-only fields for non-cat animals.
+	if ( ! empty( $def['cat_only'] ) && ! $is_cat ) {
 		continue;
 	}
 
-	// For special needs, append detail text if available.
+	// Tristate values are pre-normalized by the Hydrator to
+	// 'yes', 'no', 'unknown', or '' (no data).
+	$status = $pet[ $def['key'] ] ?? '';
+
+	// No data recorded — always skip.
+	if ( $status === '' ) {
+		continue;
+	}
+
+	// Apply display mode filter.
+	if ( $display_mode === 'positive' && $status !== 'yes' ) {
+		continue;
+	}
+	if ( $display_mode === 'known' && $status === 'unknown' ) {
+		continue;
+	}
+
+	// For special needs, append detail text when positive.
 	$label = $def['label'];
 	if ( $def['key'] === 'special_needs' && $status === 'yes' ) {
 		$detail = trim( $pet['special_needs_detail'] ?? '' );
@@ -110,11 +144,11 @@ if ( empty( $items ) ) {
 	return;
 }
 
-// Status icons — different from compatibility (uses filled circle variants).
+// Status icons — filled circle variants for health indicators.
 $status_icons = array(
 	'yes'     => array( 'name' => 'check-circle', 'attrs' => array( 'width' => 18, 'height' => 18, 'stroke-width' => 2.5 ) ),
 	'no'      => array( 'name' => 'x-circle',     'attrs' => array( 'width' => 18, 'height' => 18, 'stroke-width' => 2.5 ) ),
-	'unknown' => array( 'name' => 'info',          'attrs' => array( 'width' => 18, 'height' => 18, 'stroke-width' => 2.5 ) ),
+	'unknown' => array( 'name' => 'help-circle', 'attrs' => array( 'width' => 18, 'height' => 18, 'stroke-width' => 2.5 ) ),
 );
 
 $status_labels = array(
@@ -129,7 +163,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ?>
 <ul <?php echo $wrapper_attributes; ?> role="list">
 	<?php foreach ( $items as $item ) : ?>
-		<li class="pet-health__item pet-health__item--<?php echo esc_attr( $item['status'] ); ?>">
+		<li
+			class="pet-health__item pet-health__item--<?php echo esc_attr( $item['status'] ); ?>"
+			aria-label="<?php echo esc_attr( $item['label'] . ': ' . $status_labels[ $item['status'] ] ); ?>"
+		>
 			<span class="pet-health__icon" aria-hidden="true">
 				<?php
 				$icon = $status_icons[ $item['status'] ];
@@ -137,7 +174,9 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				?>
 			</span>
 			<span class="pet-health__label"><?php echo esc_html( $item['label'] ); ?></span>
-			<span class="screen-reader-text"><?php echo esc_html( $status_labels[ $item['status'] ] ); ?></span>
+			<span class="pet-health__status" aria-hidden="true">
+				<?php echo esc_html( $status_labels[ $item['status'] ] ); ?>
+			</span>
 		</li>
 	<?php endforeach; ?>
 </ul>

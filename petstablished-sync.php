@@ -141,6 +141,9 @@ function petstablished_sync_init(): void {
 		}
 	} );
 
+	// Template helpers — shared functions for block render callbacks.
+	require_once PETSTABLISHED_SYNC_DIR . 'includes/template-helpers.php';
+
 	// Core functionality.
 	new Petstablished_Blocks();
 	new Petstablished_Variations();

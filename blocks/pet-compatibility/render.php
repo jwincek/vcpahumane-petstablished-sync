@@ -33,18 +33,8 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 	return;
 }
 
-// Load pet data via Abilities API.
-$pet = null;
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
-if ( $ability ) {
-	$result = $ability->execute( [ 'id' => (int) $post_id ] );
-	if ( ! is_wp_error( $result ) ) {
-		$pet = $result;
-	}
-}
-if ( ! $pet ) {
-	$pet = \Petstablished\Core\Pet_Hydrator::get( $post_id );
-}
+// Shared helper: Abilities API → Hydrator fallback.
+$pet = petstablished_get_pet( (int) $post_id );
 if ( ! $pet ) {
 	return;
 }
@@ -56,33 +46,15 @@ $compat_defs = array(
 	array( 'toggle' => 'showKids', 'label' => __( 'Children', 'petstablished-sync' ), 'key' => 'ok_with_kids', 'icon' => 'child' ),
 );
 
-/**
- * Normalize a tristate value to 'yes', 'no', or 'unknown'.
- */
-$resolve_tristate = function ( $value ): ?string {
-	if ( $value === '' || $value === null ) {
-		return null; // No data — skip entirely.
-	}
-	if ( is_bool( $value ) ) {
-		return $value ? 'yes' : 'no';
-	}
-	$lower = strtolower( (string) $value );
-	if ( $lower === 'yes' || $lower === 'true' || $lower === '1' ) {
-		return 'yes';
-	}
-	if ( $lower === 'no' || $lower === 'false' || $lower === '0' ) {
-		return 'no';
-	}
-	return 'unknown';
-};
-
 $items = array();
 foreach ( $compat_defs as $def ) {
 	if ( ! ( $attributes[ $def['toggle'] ] ?? true ) ) {
 		continue;
 	}
-	$status = $resolve_tristate( $pet[ $def['key'] ] ?? '' );
-	if ( $status === null ) {
+	// Tristate values are pre-normalized by the Hydrator to
+	// 'yes', 'no', 'unknown', or '' (no data).
+	$status = $pet[ $def['key'] ] ?? '';
+	if ( $status === '' ) {
 		continue; // No data for this field.
 	}
 	$items[] = array(
