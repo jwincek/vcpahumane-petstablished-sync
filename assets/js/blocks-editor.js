@@ -9,8 +9,8 @@
 
 ( function( wp ) {
 	const { registerBlockType } = wp.blocks;
-	const { useBlockProps, InspectorControls } = wp.blockEditor;
-	const { PanelBody, ToggleControl, SelectControl, RangeControl } = wp.components;
+	const { useBlockProps, InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
+	const { PanelBody, ToggleControl, SelectControl, RangeControl, TextControl, Button } = wp.components;
 	const { createElement: el } = wp.element;
 	const { __ } = wp.i18n;
 	const ServerSideRender = wp.serverSideRender;
@@ -1049,66 +1049,109 @@
 	// Pet Adoption CTA
 	registerBlockType( 'petstablished/pet-adoption-cta', {
 		title: __( 'Pet Adoption CTA', 'petstablished-sync' ),
-		description: __( 'Display adoption fee and application button.', 'petstablished-sync' ),
+		description: __( 'Display adoption fee and application link or downloadable PDF form.', 'petstablished-sync' ),
 		category: 'petstablished',
 		icon: 'heart',
-		keywords: [ 'pet', 'adoption', 'cta', 'apply', 'fee' ],
+		keywords: [ 'pet', 'adoption', 'cta', 'apply', 'fee', 'pdf' ],
 		parent: [ 'petstablished/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
+			formMode: { type: 'string', default: 'petstablished', enum: [ 'petstablished', 'pdf' ] },
+			pdfAttachmentId: { type: 'integer', default: 0 },
+			pdfButtonText: { type: 'string', default: 'Download Adoption Application' },
 			showFee: { type: 'boolean', default: true },
-			showButton: { type: 'boolean', default: true },
 			showNote: { type: 'boolean', default: true },
+			noteText: { type: 'string', default: 'The adoption fee helps cover vaccinations, spay/neuter surgery, microchip, and initial veterinary care.' },
 			buttonText: { type: 'string', default: 'Start Adoption Application' },
 		},
 		edit: function( props ) {
 			const { attributes, setAttributes } = props;
 			const blockProps = useBlockProps( { className: 'pet-adoption-cta-editor' } );
+			const isPdf = attributes.formMode === 'pdf';
 
 			return el( 'div', blockProps,
 				el( InspectorControls, {},
-					el( PanelBody, { title: __( 'Adoption CTA Settings', 'petstablished-sync' ) },
+					el( PanelBody, { title: __( 'Application Mode', 'petstablished-sync' ) },
+						el( SelectControl, {
+							label: __( 'Form Mode', 'petstablished-sync' ),
+							value: attributes.formMode,
+							options: [
+								{ label: __( 'Petstablished (link to adoption form)', 'petstablished-sync' ), value: 'petstablished' },
+								{ label: __( 'PDF Download', 'petstablished-sync' ), value: 'pdf' },
+							],
+							onChange: ( val ) => setAttributes( { formMode: val } ),
+						} ),
+						! isPdf && el( TextControl, {
+							label: __( 'Button Text', 'petstablished-sync' ),
+							value: attributes.buttonText,
+							onChange: ( val ) => setAttributes( { buttonText: val } ),
+						} ),
+						isPdf && el( 'div', {},
+							el( MediaUploadCheck, {},
+								el( MediaUpload, {
+									onSelect: ( media ) => setAttributes( { pdfAttachmentId: media.id } ),
+									allowedTypes: [ 'application/pdf' ],
+									value: attributes.pdfAttachmentId,
+									render: ( { open } ) => el( Button, {
+										onClick: open,
+										variant: 'secondary',
+										style: { marginBottom: '12px', width: '100%', justifyContent: 'center' },
+									},
+										attributes.pdfAttachmentId
+											? __( 'Replace PDF', 'petstablished-sync' )
+											: __( 'Select PDF from Media Library', 'petstablished-sync' )
+									),
+								} )
+							),
+							el( TextControl, {
+								label: __( 'PDF Button Text', 'petstablished-sync' ),
+								value: attributes.pdfButtonText,
+								onChange: ( val ) => setAttributes( { pdfButtonText: val } ),
+							} ),
+						),
+					),
+					el( PanelBody, { title: __( 'Display', 'petstablished-sync' ), initialOpen: false },
 						el( ToggleControl, {
 							label: __( 'Show Adoption Fee', 'petstablished-sync' ),
 							checked: attributes.showFee,
 							onChange: ( val ) => setAttributes( { showFee: val } ),
-						}),
-						el( ToggleControl, {
-							label: __( 'Show Apply Button', 'petstablished-sync' ),
-							checked: attributes.showButton,
-							onChange: ( val ) => setAttributes( { showButton: val } ),
-						}),
+						} ),
 						el( ToggleControl, {
 							label: __( 'Show Fee Note', 'petstablished-sync' ),
 							checked: attributes.showNote,
 							onChange: ( val ) => setAttributes( { showNote: val } ),
-						}),
-						attributes.showButton && el( 'div', { style: { marginTop: '12px' } },
-							el( 'label', { style: { display: 'block', marginBottom: '8px' } }, __( 'Button Text', 'petstablished-sync' ) ),
-							el( 'input', {
-								type: 'text',
-								value: attributes.buttonText,
-								onChange: ( e ) => setAttributes( { buttonText: e.target.value } ),
-								style: { width: '100%' },
-							})
-						)
-					)
+						} ),
+						attributes.showNote && el( TextControl, {
+							label: __( 'Note Text', 'petstablished-sync' ),
+							value: attributes.noteText,
+							onChange: ( val ) => setAttributes( { noteText: val } ),
+							help: __( 'Shown below the adoption fee.', 'petstablished-sync' ),
+						} ),
+					),
 				),
-				el( 'div', { className: 'pet-adoption-cta-preview', style: { padding: '20px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '8px', color: 'white' } },
-					el( 'h3', { style: { margin: '0 0 8px 0', fontSize: '18px' } }, __( 'Adopt [Pet Name]', 'petstablished-sync' ) ),
-					attributes.showFee && el( 'p', { style: { margin: '0 0 12px 0' } }, __( 'Adoption Fee:', 'petstablished-sync' ), ' ', el( 'strong', null, '$[Fee]' ) ),
-					attributes.showButton && el( 'button', { 
-						style: { 
-							background: 'white', 
-							color: '#764ba2', 
-							border: 'none', 
-							padding: '10px 20px', 
-							borderRadius: '4px', 
-							cursor: 'pointer',
-							fontWeight: 'bold',
-						} 
-					}, attributes.buttonText )
+				el( 'div', { className: 'pet-adoption-cta-preview' },
+					el( 'div', { className: 'pet-adoption-cta__card' },
+						el( 'span', { className: 'pet-adoption-cta-preview__mode-badge pet-adoption-cta-preview__mode-badge--' + attributes.formMode },
+							isPdf ? __( 'PDF', 'petstablished-sync' ) : __( 'Petstablished', 'petstablished-sync' )
+						),
+						el( 'div', { className: 'pet-adoption-cta__content' },
+							el( 'h2', { className: 'pet-adoption-cta__title' }, __( 'Adopt [Pet Name]', 'petstablished-sync' ) ),
+							attributes.showFee && el( 'p', { className: 'pet-adoption-cta__fee' },
+								__( 'Adoption Fee:', 'petstablished-sync' ), ' ', el( 'strong', null, '$[Fee]' )
+							),
+							attributes.showNote && el( 'p', { className: 'pet-adoption-cta__note' }, attributes.noteText ),
+						),
+						el( 'div', { className: 'pet-adoption-cta__actions' },
+							isPdf && ! attributes.pdfAttachmentId
+								? el( 'div', { className: 'pet-adoption-cta-preview__empty-state' },
+									el( 'p', {}, __( 'No PDF selected — choose a file in the Application Mode panel.', 'petstablished-sync' ) )
+								)
+								: el( 'button', { className: 'pet-adoption-cta__action-btn', disabled: true },
+									isPdf ? attributes.pdfButtonText : attributes.buttonText
+								)
+						),
+					)
 				)
 			);
 		},
