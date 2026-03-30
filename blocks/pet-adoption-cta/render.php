@@ -34,18 +34,8 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 	return;
 }
 
-// Load pet data via Abilities API.
-$pet = null;
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
-if ( $ability ) {
-	$result = $ability->execute( [ 'id' => (int) $post_id ] );
-	if ( ! is_wp_error( $result ) ) {
-		$pet = $result;
-	}
-}
-if ( ! $pet ) {
-	$pet = \Petstablished\Core\Pet_Hydrator::get( $post_id );
-}
+// Shared helper: Abilities API → Hydrator fallback (per-request cached).
+$pet = petstablished_get_pet( (int) $post_id );
 if ( ! $pet ) {
 	return;
 }

@@ -50,17 +50,8 @@ if ( ! $has_valid_pet ) {
 	return;
 }
 
-// Load pet data via Abilities API.
-$pet = null;
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
-if ( $ability ) {
-	$result = $ability->execute( [ 'id' => (int) $post_id ] );
-	if ( ! is_wp_error( $result ) ) {
-		$pet = $result;
-	}
-} else {
-	$pet = \Petstablished\Core\Pet_Hydrator::get( $post_id );
-}
+// Shared helper: Abilities API → Hydrator fallback (per-request cached).
+$pet = petstablished_get_pet( (int) $post_id );
 
 if ( ! $pet ) {
 	return;
@@ -86,18 +77,6 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'data-pets-archive-url'     => esc_url( $archive_url ),
 ) );
 
-// Inject the archive URL into breadcrumb links within InnerBlocks content.
-// The template uses href="#pet-archive" as a placeholder that we resolve
-// to the real archive URL here, since block bindings cannot target the
-// href of child anchor elements inside a core/paragraph block.
-$rendered_content = $content;
-if ( ! empty( $rendered_content ) && $archive_url ) {
-	$rendered_content = str_replace(
-		'href="#pet-archive"',
-		'href="' . esc_url( $archive_url ) . '"',
-		$rendered_content
-	);
-}
 ?>
 <article <?php echo $wrapper_attributes; ?>>
 	<?php
@@ -105,6 +84,10 @@ if ( ! empty( $rendered_content ) && $archive_url ) {
 	// automatically resolve pet data via the petstablished/pet-data source.
 	// Plugin sub-blocks (pet-gallery, pet-actions, pet-attributes, etc.)
 	// render via their own render.php, reading postId from block context.
-	echo $rendered_content;
+	//
+	// The breadcrumb link now uses a Block Binding on the core/paragraph
+	// 'url' attribute (source: petstablished/pet-data, key: archive_url)
+	// instead of the previous href="#pet-archive" str_replace approach.
+	echo $content;
 	?>
 </article>

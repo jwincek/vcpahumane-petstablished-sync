@@ -42,20 +42,8 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 	return;
 }
 
-// Load pet data via Abilities API — shares the per-request cache with
-// pet-details, pet-attributes, and every other block on the page.
-$pet = null;
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
-if ( $ability ) {
-	$result = $ability->execute( [ 'id' => (int) $post_id ] );
-	if ( ! is_wp_error( $result ) ) {
-		$pet = $result;
-	}
-}
-if ( ! $pet ) {
-	// Fallback if Abilities API not available (WP < 6.9).
-	$pet = \Petstablished\Core\Pet_Hydrator::get( $post_id );
-}
+// Shared helper: Abilities API → Hydrator fallback (per-request cached).
+$pet = petstablished_get_pet( (int) $post_id );
 
 if ( ! $pet ) {
 	return;
@@ -196,22 +184,38 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 <div <?php echo $wrapper_attributes; ?>>
 
 	<?php if ( $has_featured ) : ?>
-	<!-- Featured image hero with badge overlays -->
+	<!-- Featured image hero — clicking opens the lightbox at index 0 -->
 	<figure class="pet-gallery__featured">
-		<img
-			class="pet-gallery__featured-image"
-			src="<?php echo esc_url( $featured_url ); ?>"
-			alt="<?php echo esc_attr( $featured_alt ); ?>"
-			loading="eager"
+		<?php if ( ! $is_editor && $has_lightbox ) : ?>
+		<button
+			type="button"
+			class="pet-gallery__featured-trigger"
+			data-wp-on--click="actions.open"
+			data-index="0"
+			aria-label="<?php echo esc_attr( sprintf(
+				/* translators: %s: pet name */
+				__( 'View photos of %s', 'petstablished-sync' ),
+				$pet_name
+			) ); ?>"
 		>
-		<?php if ( ! empty( $badges ) ) : ?>
-			<div class="pet-gallery__badges" aria-hidden="true">
-				<?php foreach ( $badges as $badge ) : ?>
-					<span class="pet-gallery__badge <?php echo esc_attr( $badge['class'] ); ?>">
-						<?php echo esc_html( $badge['label'] ); ?>
-					</span>
-				<?php endforeach; ?>
-			</div>
+		<?php endif; ?>
+			<img
+				class="pet-gallery__featured-image"
+				src="<?php echo esc_url( $featured_url ); ?>"
+				alt="<?php echo esc_attr( $featured_alt ); ?>"
+				loading="eager"
+			>
+			<?php if ( ! empty( $badges ) ) : ?>
+				<div class="pet-gallery__badges" aria-hidden="true">
+					<?php foreach ( $badges as $badge ) : ?>
+						<span class="pet-gallery__badge <?php echo esc_attr( $badge['class'] ); ?>">
+							<?php echo esc_html( $badge['label'] ); ?>
+						</span>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+		<?php if ( ! $is_editor && $has_lightbox ) : ?>
+		</button>
 		<?php endif; ?>
 	</figure>
 	<?php endif; ?>

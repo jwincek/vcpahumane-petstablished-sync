@@ -393,6 +393,7 @@ class Petstablished_Blocks {
 			'adoption_title'         => '"Adopt [Name]" Title',
 			'adoption_fee_formatted' => 'Formatted Adoption Fee',
 			'has_adoption_info'      => 'Has Adoption Info (boolean)',
+			'archive_url'            => 'Pet Archive URL',
 			'gallery_count'          => 'Gallery Photo Count',
 			'is_new'                 => 'New Pet Badge (last 7 days)',
 			'favorited'              => 'Is Favorited (boolean)',

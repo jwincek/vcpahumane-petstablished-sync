@@ -56,6 +56,9 @@ const { state, actions } = store( 'petstablished/gallery', {
 			ctx.currentIndex = clickedIndex;
 			ctx.isOpen = true;
 
+			// Remember the trigger so close() can return focus to it.
+			ctx._triggerElement = ref;
+
 			// Prevent body scroll while lightbox is open.
 			document.body.style.overflow = 'hidden';
 
@@ -70,8 +73,15 @@ const { state, actions } = store( 'petstablished/gallery', {
 
 		close() {
 			const ctx = getContext();
+			const trigger = ctx._triggerElement;
 			ctx.isOpen = false;
+			ctx._triggerElement = null;
 			document.body.style.overflow = '';
+
+			// Return focus to the element that opened the lightbox.
+			if ( trigger ) {
+				requestAnimationFrame( () => trigger.focus() );
+			}
 		},
 
 		next() {

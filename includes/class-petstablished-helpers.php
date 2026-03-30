@@ -436,6 +436,9 @@ class Petstablished_Helpers {
 				$post = get_post( $post_id );
 				return $post ? wp_kses_post( wpautop( $post->post_content ) ) : '';
 				
+			case 'archive_url':
+				return get_post_type_archive_link( 'pet' ) ?: home_url( '/pets/' );
+
 			case 'adoption_title':
 				$name = get_the_title( $post_id );
 				return sprintf( __( 'Adopt %s', 'petstablished-sync' ), $name );

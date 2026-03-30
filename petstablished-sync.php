@@ -5,7 +5,7 @@
  * Version: 3.1.0
  * Requires at least: 6.9
  * Requires PHP: 8.1
- * Author: Your Organization
+ * Author: Jerome Wincek / Claude
  * Text Domain: petstablished-sync
  *
  * @package Petstablished_Sync

@@ -296,3 +296,19 @@
 		transform: none;
 	}
 }
+/* Featured image as lightbox trigger — reset button chrome, full coverage */
+.pet-gallery__featured-trigger {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: zoom-in;
+	text-align: left;
+}
+
+.pet-gallery__featured-trigger:focus-visible {
+	outline: 3px solid var(--wp--preset--color--primary, #2271b1);
+	outline-offset: 2px;
+	border-radius: var(--pet-gallery-radius, 12px);
+}
