@@ -287,28 +287,30 @@
 	.pet-details { --pet-details-gap: 3rem; }
 	.pet-details__content { grid-template-columns: 1.2fr 1fr; }
 	.pet-details__grid { grid-template-columns: 1.2fr 1fr; }
-
-	/*
-	 * Sticky gallery column — stays in view while the user scrolls
-	 * through the (usually longer) info column on the right.
-	 *
-	 * align-self: start is critical: without it, the flex/grid child
-	 * stretches to the full row height and has no room to "stick".
-	 *
-	 * --sticky-offset accounts for the WP admin bar (32px when present)
-	 * and any fixed site header. Themes can override via custom property.
-	 */
-	.pet-details__gallery-col {
-		position: sticky;
-		top: var(--sticky-offset, 2rem);
-		align-self: start;
-	}
-
 	.pet-details__thumb { width: 80px; height: 80px; }
 }
 
+/*
+ * Sticky gallery column — matches the WP columns collapse breakpoint (782px)
+ * so sticky is active whenever the two columns are actually side-by-side.
+ *
+ * align-self: flex-start is critical: without it, the flex child stretches
+ * to the full row height and has no room to stick.
+ *
+ * --sticky-offset accounts for the WP admin bar (32px when present)
+ * and any fixed site header. Themes can override via custom property.
+ */
+@media (min-width: 782px) {
+	.pet-details__gallery-col {
+		position: -webkit-sticky;
+		position: sticky;
+		top: var(--sticky-offset, 2rem);
+		align-self: flex-start;
+	}
+}
+
 /* Admin bar offset — WP adds .admin-bar to <body> when logged in */
-@media (min-width: 1024px) {
+@media (min-width: 782px) {
 	.admin-bar .pet-details__gallery-col {
 		--sticky-offset: calc(32px + 1rem);
 	}
