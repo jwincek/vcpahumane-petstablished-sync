@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/adoption-fee",
+	"version": "1.0.0",
+	"title": "Pet Adoption Fee",
+	"category": "petstablished",
+	"description": "Displays the adoption fee. Renders nothing automatically if no fee is set for the pet.",
+	"keywords": ["pet", "adoption", "fee", "price"],
+	"ancestor": ["petstablished/pet-adoption-cta"],
+	"textdomain": "petstablished-sync",
+	"usesContext": ["postId", "postType"],
+	"attributes": {},
+	"supports": {
+		"html": false,
+		"reusable": false
+	},
+	"render": "file:./render.php"
+}

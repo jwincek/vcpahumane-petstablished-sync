@@ -9,7 +9,7 @@
 
 ( function( wp ) {
 	const { registerBlockType } = wp.blocks;
-	const { useBlockProps, InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
+	const { useBlockProps, InspectorControls, InnerBlocks, MediaUpload, MediaUploadCheck } = wp.blockEditor;
 	const { PanelBody, ToggleControl, SelectControl, RangeControl, TextControl, Button } = wp.components;
 	const { createElement: el } = wp.element;
 	const { __ } = wp.i18n;
@@ -798,7 +798,7 @@
 			showShare: { type: 'boolean', default: true },
 		},
 		edit: function( props ) {
-			const { attributes, setAttributes, context } = props;
+			const { attributes, setAttributes } = props;
 			const blockProps = useBlockProps( { className: 'pet-actions-editor' } );
 
 			return el( 'div', blockProps,
@@ -1046,7 +1046,9 @@
 		save: () => null,
 	});
 
-	// Pet Adoption CTA
+	// Pet Adoption CTA — card container with InnerBlocks.
+	// Content (heading, fee row, note, action button) is composed from native
+	// core blocks with Block Bindings + the petstablished/adoption-action child block.
 	registerBlockType( 'petstablished/pet-adoption-cta', {
 		title: __( 'Pet Adoption CTA', 'petstablished-sync' ),
 		description: __( 'Display adoption fee and application link or downloadable PDF form.', 'petstablished-sync' ),
@@ -1055,19 +1057,137 @@
 		keywords: [ 'pet', 'adoption', 'cta', 'apply', 'fee', 'pdf' ],
 		parent: [ 'petstablished/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
+		supports: { html: false, reusable: false, spacing: { margin: true, padding: true } },
+		attributes: {},
+		edit: function() {
+			const blockProps = useBlockProps( { className: 'pet-adoption-cta-editor' } );
+
+			// Default InnerBlocks template:
+			//   core/group (card — navy gradient, white text)
+			//     core/group (content column — vertical flex)
+			//       core/heading (bound to adoption_title)
+			//       core/group (fee row — horizontal flex)
+			//         core/paragraph (static label)
+			//         core/paragraph (bound to adoption_fee_formatted)
+			//       core/paragraph (note — freeform)
+			//     petstablished/adoption-action (button)
+			const TEMPLATE = [
+				[ 'core/group', {
+					className: 'pet-adoption-cta__card',
+					style: {
+						color: {
+							gradient: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%)',
+							text: '#ffffff',
+						},
+					},
+				}, [
+					[ 'core/group', {
+						className: 'pet-adoption-cta__content',
+						layout: { type: 'flex', orientation: 'vertical', flexWrap: 'nowrap' },
+					}, [
+						[ 'core/heading', {
+							level: 2,
+							className: 'pet-adoption-cta__title',
+							metadata: {
+								bindings: {
+									content: {
+										source: 'petstablished/pet-data',
+										args: { key: 'adoption_title' },
+									},
+								},
+							},
+						} ],
+						[ 'core/group', {
+							className: 'pet-adoption-cta__fee-row',
+							layout: { type: 'flex', flexWrap: 'nowrap', verticalAlignment: 'center' },
+						}, [
+							[ 'core/paragraph', {
+								content: __( 'Adoption Fee:', 'petstablished-sync' ),
+								className: 'pet-adoption-cta__fee-label',
+							} ],
+							[ 'core/paragraph', {
+								className: 'pet-adoption-cta__fee-amount',
+								metadata: {
+									bindings: {
+										content: {
+											source: 'petstablished/pet-data',
+											args: { key: 'adoption_fee_formatted' },
+										},
+									},
+								},
+							} ],
+						] ],
+						[ 'core/paragraph', {
+							content: __( 'The adoption fee helps cover vaccinations, spay/neuter surgery, microchip, and initial veterinary care.', 'petstablished-sync' ),
+							className: 'pet-adoption-cta__note',
+						} ],
+					] ],
+					[ 'petstablished/adoption-action', {} ],
+				] ],
+			];
+
+			return el( 'div', blockProps,
+				el( InnerBlocks, {
+					template: TEMPLATE,
+					templateLock: false,
+					allowedBlocks: [
+						'core/group',
+						'core/heading',
+						'core/paragraph',
+						'core/spacer',
+						'petstablished/adoption-action',
+					],
+				} )
+			);
+		},
+		save: () => null,
+	} );
+
+	// Pet Adoption Fee — SSR fee row, auto-hidden when no fee is set.
+	registerBlockType( 'petstablished/adoption-fee', {
+		title: __( 'Pet Adoption Fee', 'petstablished-sync' ),
+		description: __( 'Displays the adoption fee. Hidden automatically if no fee is set.', 'petstablished-sync' ),
+		category: 'petstablished',
+		icon: 'tag',
+		keywords: [ 'pet', 'adoption', 'fee', 'price' ],
+		ancestor: [ 'petstablished/pet-adoption-cta' ],
+		usesContext: [ 'postId', 'postType' ],
+		supports: { html: false, reusable: false },
+		attributes: {},
+		edit: function() {
+			const blockProps = useBlockProps( { className: 'pet-adoption-fee-editor' } );
+			return el( 'div', blockProps,
+				el( 'span', { className: 'pet-adoption-cta__fee-label' },
+					__( 'Adoption Fee:', 'petstablished-sync' )
+				),
+				el( 'span', { className: 'pet-adoption-cta__fee-amount' },
+					' $[Fee]'
+				)
+			);
+		},
+		save: () => null,
+	} );
+
+	// Pet Adoption Action — application button (Petstablished link or PDF download).
+	// Lives inside petstablished/pet-adoption-cta as a child block.
+	registerBlockType( 'petstablished/adoption-action', {
+		title: __( 'Pet Adoption Action', 'petstablished-sync' ),
+		description: __( 'Adoption application button — links to Petstablished form or provides a PDF download.', 'petstablished-sync' ),
+		category: 'petstablished',
+		icon: 'download',
+		keywords: [ 'pet', 'adoption', 'button', 'apply', 'pdf' ],
+		ancestor: [ 'petstablished/pet-adoption-cta' ],
+		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
 			formMode: { type: 'string', default: 'petstablished', enum: [ 'petstablished', 'pdf' ] },
 			pdfAttachmentId: { type: 'integer', default: 0 },
 			pdfButtonText: { type: 'string', default: 'Download Adoption Application' },
-			showFee: { type: 'boolean', default: true },
-			showNote: { type: 'boolean', default: true },
-			noteText: { type: 'string', default: 'The adoption fee helps cover vaccinations, spay/neuter surgery, microchip, and initial veterinary care.' },
 			buttonText: { type: 'string', default: 'Start Adoption Application' },
 		},
 		edit: function( props ) {
 			const { attributes, setAttributes } = props;
-			const blockProps = useBlockProps( { className: 'pet-adoption-cta-editor' } );
+			const blockProps = useBlockProps( { className: 'pet-adoption-action-editor' } );
 			const isPdf = attributes.formMode === 'pdf';
 
 			return el( 'div', blockProps,
@@ -1111,52 +1231,18 @@
 							} ),
 						),
 					),
-					el( PanelBody, { title: __( 'Display', 'petstablished-sync' ), initialOpen: false },
-						el( ToggleControl, {
-							label: __( 'Show Adoption Fee', 'petstablished-sync' ),
-							checked: attributes.showFee,
-							onChange: ( val ) => setAttributes( { showFee: val } ),
-						} ),
-						el( ToggleControl, {
-							label: __( 'Show Fee Note', 'petstablished-sync' ),
-							checked: attributes.showNote,
-							onChange: ( val ) => setAttributes( { showNote: val } ),
-						} ),
-						attributes.showNote && el( TextControl, {
-							label: __( 'Note Text', 'petstablished-sync' ),
-							value: attributes.noteText,
-							onChange: ( val ) => setAttributes( { noteText: val } ),
-							help: __( 'Shown below the adoption fee.', 'petstablished-sync' ),
-						} ),
-					),
 				),
-				el( 'div', { className: 'pet-adoption-cta-preview' },
-					el( 'div', { className: 'pet-adoption-cta__card' },
-						el( 'span', { className: 'pet-adoption-cta-preview__mode-badge pet-adoption-cta-preview__mode-badge--' + attributes.formMode },
-							isPdf ? __( 'PDF', 'petstablished-sync' ) : __( 'Petstablished', 'petstablished-sync' )
-						),
-						el( 'div', { className: 'pet-adoption-cta__content' },
-							el( 'h2', { className: 'pet-adoption-cta__title' }, __( 'Adopt [Pet Name]', 'petstablished-sync' ) ),
-							attributes.showFee && el( 'p', { className: 'pet-adoption-cta__fee' },
-								__( 'Adoption Fee:', 'petstablished-sync' ), ' ', el( 'strong', null, '$[Fee]' )
-							),
-							attributes.showNote && el( 'p', { className: 'pet-adoption-cta__note' }, attributes.noteText ),
-						),
-						el( 'div', { className: 'pet-adoption-cta__actions' },
-							isPdf && ! attributes.pdfAttachmentId
-								? el( 'div', { className: 'pet-adoption-cta-preview__empty-state' },
-									el( 'p', {}, __( 'No PDF selected — choose a file in the Application Mode panel.', 'petstablished-sync' ) )
-								)
-								: el( 'button', { className: 'pet-adoption-cta__action-btn', disabled: true },
-									isPdf ? attributes.pdfButtonText : attributes.buttonText
-								)
-						),
-					)
-				)
+				isPdf && ! attributes.pdfAttachmentId
+					? el( 'div', { className: 'pet-adoption-cta-preview__empty-state' },
+						el( 'p', {}, __( 'No PDF selected — choose a file in the Application Mode panel.', 'petstablished-sync' ) )
+					  )
+					: el( 'button', { className: 'pet-adoption-cta__action-btn', disabled: true },
+						isPdf ? attributes.pdfButtonText : attributes.buttonText
+					  )
 			);
 		},
 		save: () => null,
-	});
+	} );
 
 	// === Pet Favorites Modal ===
 	registerBlockType( 'petstablished/pet-favorites-modal', {

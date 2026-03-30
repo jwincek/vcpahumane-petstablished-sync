@@ -1,0 +1,49 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/adoption-action",
+	"version": "1.0.0",
+	"title": "Pet Adoption Action",
+	"category": "petstablished",
+	"description": "Adoption application button — links to Petstablished form or provides a PDF download.",
+	"keywords": ["pet", "adoption", "button", "apply", "pdf", "form"],
+	"ancestor": ["petstablished/pet-adoption-cta"],
+	"textdomain": "petstablished-sync",
+	"usesContext": ["postId", "postType"],
+	"attributes": {
+		"formMode": {
+			"type": "string",
+			"default": "petstablished",
+			"enum": ["petstablished", "pdf"]
+		},
+		"pdfAttachmentId": {
+			"type": "integer",
+			"default": 0
+		},
+		"pdfButtonText": {
+			"type": "string",
+			"default": "Download Adoption Application"
+		},
+		"buttonText": {
+			"type": "string",
+			"default": "Start Adoption Application"
+		}
+	},
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"color": {
+			"text": true,
+			"background": true
+		},
+		"typography": {
+			"fontSize": true,
+			"fontWeight": true
+		},
+		"spacing": {
+			"padding": true
+		}
+	},
+	"render": "file:./render.php",
+	"style": "file:./style.css"
+}

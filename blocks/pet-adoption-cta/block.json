@@ -2,39 +2,15 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "petstablished/pet-adoption-cta",
-	"version": "3.0.0",
+	"version": "4.0.0",
 	"title": "Pet Adoption CTA",
 	"category": "petstablished",
 	"description": "Display adoption fee and application link or downloadable PDF form.",
 	"keywords": ["pet", "adoption", "cta", "fee", "apply", "pdf", "form"],
-	"ancestor": ["petstablished/pet-details"],
+	"parent": ["petstablished/pet-details"],
 	"textdomain": "petstablished-sync",
 	"usesContext": ["postId", "postType"],
-	"attributes": {
-		"formMode": {
-			"type": "string",
-			"default": "petstablished",
-			"enum": ["petstablished", "pdf"]
-		},
-		"pdfAttachmentId": {
-			"type": "integer",
-			"default": 0
-		},
-		"pdfButtonText": {
-			"type": "string",
-			"default": "Download Adoption Application"
-		},
-		"showFee": { "type": "boolean", "default": true },
-		"showNote": { "type": "boolean", "default": true },
-		"noteText": {
-			"type": "string",
-			"default": "The adoption fee helps cover vaccinations, spay/neuter surgery, microchip, and initial veterinary care."
-		},
-		"buttonText": {
-			"type": "string",
-			"default": "Start Adoption Application"
-		}
-	},
+	"attributes": {},
 	"supports": {
 		"html": false,
 		"reusable": false,

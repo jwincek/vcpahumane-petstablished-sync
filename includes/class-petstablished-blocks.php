@@ -41,6 +41,8 @@ class Petstablished_Blocks {
 		'pet-compatibility',
 		'pet-health',
 		'pet-adoption-cta',
+		'adoption-action',
+		'adoption-fee',
 	);
 
 	public function __construct() {
