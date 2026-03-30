@@ -13,7 +13,20 @@
 	"attributes": {
 		"showDogs": { "type": "boolean", "default": true },
 		"showCats": { "type": "boolean", "default": true },
-		"showKids": { "type": "boolean", "default": true }
+		"showKids": { "type": "boolean", "default": true },
+		"displayStyle": {
+			"type": "string",
+			"default": "cards",
+			"enum": ["cards", "stacked", "pills"]
+		},
+		"headingText": {
+			"type": "string",
+			"default": "Good with"
+		},
+		"positiveHeadingText": {
+			"type": "string",
+			"default": "Plays nicely with"
+		}
 	},
 	"supports": {
 		"html": false,

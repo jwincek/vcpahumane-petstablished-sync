@@ -10,9 +10,9 @@
 
 			<!-- wp:group {"metadata":{"name":"Breadcrumb"},"className":"pet-details__breadcrumb","layout":{"type":"flex","flexWrap":"nowrap"}} -->
 			<div class="wp-block-group pet-details__breadcrumb">
-				<!-- wp:paragraph {"className":"pet-details__back-link","metadata":{"bindings":{"url":{"source":"petstablished/pet-data","args":{"key":"archive_url"}}}}} -->
-				<p class="pet-details__back-link"><a href="/pets/">← Back to All Pets</a></p>
-				<!-- /wp:paragraph -->
+				<!-- wp:button {"className":"pet-details__back-link is-style-outline","metadata":{"bindings":{"url":{"source":"petstablished/pet-data","args":{"key":"archive_url"}}}}} -->
+				<div class="wp-block-button pet-details__back-link is-style-outline"><a class="wp-block-button__link" href="/adopt/pets/">← Back to All Pets</a></div>
+				<!-- /wp:button -->
 			</div>
 			<!-- /wp:group -->
 
@@ -24,7 +24,9 @@
 
 					<!-- wp:petstablished/pet-gallery /-->
 
-					<!-- wp:petstablished/pet-actions /-->
+					<!-- wp:petstablished/pet-actions {"displayMode":"overlay"} /-->
+
+					<!-- wp:petstablished/pet-compatibility {"displayStyle":"pills"} /-->
 
 				</div>
 				<!-- /wp:column -->
@@ -51,16 +53,6 @@
 						<!-- /wp:heading -->
 
 						<!-- wp:petstablished/pet-attributes /-->
-					</div>
-					<!-- /wp:group -->
-
-					<!-- wp:group {"metadata":{"name":"Compatibility Section"},"className":"pet-details__section pet-details__compat"} -->
-					<div class="wp-block-group pet-details__section pet-details__compat">
-						<!-- wp:heading {"level":2} -->
-						<h2 class="wp-block-heading">Good With</h2>
-						<!-- /wp:heading -->
-
-						<!-- wp:petstablished/pet-compatibility /-->
 					</div>
 					<!-- /wp:group -->
 

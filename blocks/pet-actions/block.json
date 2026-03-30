@@ -18,6 +18,11 @@
 			"type": "string",
 			"default": "icon-and-text",
 			"enum": ["icon-and-text", "icon-only", "text-only"]
+		},
+		"displayMode": {
+			"type": "string",
+			"default": "inline",
+			"enum": ["inline", "overlay"]
 		}
 	},
 	"supports": {

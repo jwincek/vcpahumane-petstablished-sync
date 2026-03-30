@@ -31,10 +31,10 @@
 	font-size: 0.75rem;
 }
 
-/* Definition list grid — mobile: 2 columns */
+/* Definition list grid — fluid columns, min 140px each */
 .pet-attributes {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
 	gap: 0.75rem;
 	margin: 0;
 }
@@ -45,7 +45,11 @@
 	border-radius: var(--wp--custom--border-radius, 8px);
 }
 
+/* Label row — icon + text inline */
 .pet-attributes__label {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
 	font-size: 0.6875rem;
 	font-weight: 500;
 	color: var(--wp--preset--color--contrast-2, #666);
@@ -54,15 +58,40 @@
 	letter-spacing: 0.03em;
 }
 
+/* Icon in label */
+.pet-attributes__icon {
+	flex-shrink: 0;
+	opacity: 0.6;
+}
+
+/* Value */
 .pet-attributes__value {
 	margin: 0;
 	font-size: 0.9375rem;
 	font-weight: 600;
 }
 
-/* Desktop: 3 columns */
-@media (min-width: 600px) {
-	.pet-attributes {
-		grid-template-columns: repeat(3, 1fr);
+/* Taxonomy archive link — subtle, becomes obvious on hover */
+.pet-attributes__link {
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.15s ease;
+}
+
+.pet-attributes__link:hover {
+	color: var(--wp--preset--color--primary, #2271b1);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.pet-attributes__link:focus-visible {
+	outline: 2px solid var(--wp--preset--color--primary, #2271b1);
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pet-attributes__link {
+		transition: none;
 	}
 }

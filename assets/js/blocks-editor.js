@@ -796,10 +796,13 @@
 			showFavorite: { type: 'boolean', default: true },
 			showCompare: { type: 'boolean', default: true },
 			showShare: { type: 'boolean', default: true },
+			labelDisplay: { type: 'string', default: 'icon-and-text', enum: [ 'icon-and-text', 'icon-only', 'text-only' ] },
+			displayMode: { type: 'string', default: 'inline', enum: [ 'inline', 'overlay' ] },
 		},
 		edit: function( props ) {
 			const { attributes, setAttributes } = props;
-			const blockProps = useBlockProps( { className: 'pet-actions-editor' } );
+			const isOverlay = attributes.displayMode === 'overlay';
+			const blockProps = useBlockProps( { className: 'pet-actions-editor' + ( isOverlay ? ' pet-actions-editor--overlay' : '' ) } );
 
 			return el( 'div', blockProps,
 				el( InspectorControls, {},
@@ -818,6 +821,31 @@
 							label: __( 'Show Share Button', 'petstablished-sync' ),
 							checked: attributes.showShare,
 							onChange: ( val ) => setAttributes( { showShare: val } ),
+						})
+					),
+					el( PanelBody, { title: __( 'Display', 'petstablished-sync' ), initialOpen: false },
+						el( SelectControl, {
+							label: __( 'Display Mode', 'petstablished-sync' ),
+							value: attributes.displayMode,
+							options: [
+								{ label: __( 'Inline (segmented bar)', 'petstablished-sync' ), value: 'inline' },
+								{ label: __( 'Overlay (floating on gallery)', 'petstablished-sync' ), value: 'overlay' },
+							],
+							onChange: ( val ) => setAttributes( { displayMode: val } ),
+							help: isOverlay
+								? __( 'Circular icon buttons positioned over the gallery image.', 'petstablished-sync' )
+								: __( 'Segmented button bar below the gallery.', 'petstablished-sync' ),
+						}),
+						! isOverlay && el( SelectControl, {
+							label: __( 'Desktop Label Style', 'petstablished-sync' ),
+							value: attributes.labelDisplay,
+							options: [
+								{ label: __( 'Icon & Text', 'petstablished-sync' ), value: 'icon-and-text' },
+								{ label: __( 'Icon Only', 'petstablished-sync' ), value: 'icon-only' },
+								{ label: __( 'Text Only', 'petstablished-sync' ), value: 'text-only' },
+							],
+							onChange: ( val ) => setAttributes( { labelDisplay: val } ),
+							help: __( 'Mobile always shows icons only.', 'petstablished-sync' ),
 						})
 					)
 				),
@@ -936,7 +964,9 @@
 			showDogs: { type: 'boolean', default: true },
 			showCats: { type: 'boolean', default: true },
 			showKids: { type: 'boolean', default: true },
-			displayStyle: { type: 'string', default: 'icons' },
+			displayStyle: { type: 'string', default: 'cards', enum: [ 'cards', 'stacked', 'pills' ] },
+			headingText: { type: 'string', default: 'Good with' },
+			positiveHeadingText: { type: 'string', default: 'Plays nicely with' },
 		},
 		edit: function( props ) {
 			const { attributes, setAttributes } = props;
@@ -949,8 +979,9 @@
 							label: __( 'Display Style', 'petstablished-sync' ),
 							value: attributes.displayStyle,
 							options: [
-								{ label: __( 'Icons with Labels', 'petstablished-sync' ), value: 'icons' },
-								{ label: __( 'List', 'petstablished-sync' ), value: 'list' },
+								{ label: __( 'Cards (grid)', 'petstablished-sync' ), value: 'cards' },
+								{ label: __( 'Stacked (vertical cards)', 'petstablished-sync' ), value: 'stacked' },
+								{ label: __( 'Pills (compact strip)', 'petstablished-sync' ), value: 'pills' },
 							],
 							onChange: ( val ) => setAttributes( { displayStyle: val } ),
 						}),
@@ -968,6 +999,20 @@
 							label: __( 'Show Kids', 'petstablished-sync' ),
 							checked: attributes.showKids,
 							onChange: ( val ) => setAttributes( { showKids: val } ),
+						})
+					),
+					el( PanelBody, { title: __( 'Heading', 'petstablished-sync' ), initialOpen: false },
+						el( TextControl, {
+							label: __( 'All-Positive Heading', 'petstablished-sync' ),
+							value: attributes.positiveHeadingText,
+							onChange: ( val ) => setAttributes( { positiveHeadingText: val } ),
+							help: __( 'Shown when all visible items are "yes".', 'petstablished-sync' ),
+						}),
+						el( TextControl, {
+							label: __( 'Mixed/General Heading', 'petstablished-sync' ),
+							value: attributes.headingText,
+							onChange: ( val ) => setAttributes( { headingText: val } ),
+							help: __( 'Shown when any item is "no" or "unknown".', 'petstablished-sync' ),
 						})
 					)
 				),

@@ -72,12 +72,17 @@ $share_links = array(
 	'email'    => 'mailto:?subject=' . $share_title . '&body=' . $share_url,
 );
 
+// Display mode: "inline" (segmented bar) or "overlay" (floating icons on gallery).
+$display_mode = $attributes['displayMode'] ?? 'inline';
+
 // Label display CSS modifier.
 // Mobile always shows icon-only regardless of attribute (handled via CSS).
+// Overlay mode always uses icon-only (handled via CSS).
 $display_class = 'pet-actions--display-' . $label_display;
+$mode_class    = 'pet-actions--' . $display_mode;
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'               => 'pet-actions ' . $display_class,
+	'class'               => 'pet-actions ' . $display_class . ' ' . $mode_class,
 	'data-wp-interactive' => 'petstablished',
 ) );
 ?>

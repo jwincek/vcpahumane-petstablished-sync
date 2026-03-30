@@ -68,6 +68,11 @@
 	gap: var(--pet-single-gap);
 }
 
+/* Gallery column — positioning context for overlay action buttons */
+.pet-details__gallery-col {
+	position: relative;
+}
+
 /* Gallery */
 .pet-details__gallery {
 	display: flex;

@@ -1,5 +1,13 @@
 /**
  * Pet Compatibility Block Styles
+ *
+ * Three display modes controlled by the displayStyle attribute:
+ *   - cards:   Grid of neutral cards (matches pet-attributes)
+ *   - stacked: Vertical cards — icon top, label, status badge bottom
+ *   - pills:   Compact inline pill strip (matches gallery badges)
+ *
+ * A heading auto-switches between "Plays nicely with" (all positive)
+ * and "Good with" (mixed) based on the pet's compatibility data.
  */
 
 /* Placeholder (editor) */
@@ -31,45 +39,38 @@
 	font-size: 0.75rem;
 }
 
-/* Chip list */
-.pet-compat {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.625rem;
+/* === Heading — shown in all modes === */
+.pet-compat__heading {
+	margin: 0 0 0.5rem;
+	font-size: 0.6875rem;
+	font-weight: 500;
+	color: var(--wp--preset--color--contrast-2, #666);
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+/* === Shared list base === */
+.pet-compat__list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-.pet-compat__item {
-	display: flex;
-	align-items: center;
-	gap: 0.625rem;
-	padding: 0.625rem 1rem;
-	border-radius: var(--wp--custom--border-radius, 8px);
-	font-size: 0.875rem;
-	border: 1px solid transparent;
+/* Link — shared across all modes */
+.pet-compat__link {
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.15s ease;
 }
 
-/* Yes — green */
-.pet-compat__item--yes {
-	background: #ecfdf5;
-	border-color: #a7f3d0;
-	color: #065f46;
+.pet-compat__link:hover {
+	color: var(--wp--preset--color--primary, #2271b1);
 }
 
-/* No — red */
-.pet-compat__item--no {
-	background: #fef2f2;
-	border-color: #fecaca;
-	color: #991b1b;
-}
-
-/* Unknown — neutral */
-.pet-compat__item--unknown {
-	background: var(--wp--preset--color--base-2, #f5f5f5);
-	border-color: var(--wp--preset--color--border, #e0e0e0);
-	color: var(--wp--preset--color--contrast-2, #666);
+.pet-compat__link:focus-visible {
+	outline: 2px solid var(--wp--preset--color--primary, #2271b1);
+	outline-offset: 2px;
+	border-radius: 2px;
 }
 
 /* Animal/child icon */
@@ -78,6 +79,7 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
+	color: var(--wp--preset--color--contrast-2, #666);
 }
 
 .pet-compat__icon svg {
@@ -85,29 +87,232 @@
 	height: 20px;
 }
 
-/* Label */
-.pet-compat__label {
-	font-weight: 500;
-	flex: 1;
+/* Status badge — small pill with icon + text */
+.pet-compat__status-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.2rem;
+	padding: 0.125rem 0.5rem;
+	border-radius: 999px;
+	font-size: 0.6875rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	white-space: nowrap;
 }
 
-/* Status indicator (check/x/minus) */
-.pet-compat__status {
+.pet-compat__status-badge svg {
+	width: 12px;
+	height: 12px;
+	flex-shrink: 0;
+}
+
+/* Status badge colors — shared across all modes */
+.pet-compat__item--yes .pet-compat__status-badge {
+	background: #ecfdf5;
+	color: #065f46;
+}
+
+.pet-compat__item--no .pet-compat__status-badge {
+	background: #fef2f2;
+	color: #991b1b;
+}
+
+.pet-compat__item--unknown .pet-compat__status-badge {
+	background: var(--wp--preset--color--base-2, #f0f0f0);
+	color: var(--wp--preset--color--contrast-2, #666);
+	border: 1px solid var(--wp--preset--color--border, #e0e0e0);
+}
+
+
+/* =============================================================
+ * CARDS — Grid of neutral cards matching pet-attributes
+ * ============================================================= */
+.pet-compat--cards .pet-compat__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	gap: 0.75rem;
+}
+
+.pet-compat--cards .pet-compat__item {
+	padding: 0.625rem 0.875rem;
+	background: var(--wp--preset--color--base-2, #f9f9f9);
+	border-radius: var(--wp--custom--border-radius, 8px);
+}
+
+.pet-compat--cards .pet-compat__link {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	width: 20px;
-	height: 20px;
+	gap: 0.5rem;
 }
 
-.pet-compat__item--yes .pet-compat__status {
+.pet-compat--cards .pet-compat__item:not(:has(.pet-compat__link)) {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.pet-compat--cards .pet-compat__label {
+	flex: 1;
+	font-size: 0.9375rem;
+	font-weight: 600;
+}
+
+.pet-compat--cards .pet-compat__item:has(.pet-compat__link):hover {
+	background: var(--wp--preset--color--base, #fff);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =============================================================
+ * STACKED — Vertical cards, icon on top, label, status below
+ * ============================================================= */
+.pet-compat--stacked .pet-compat__list {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.75rem;
+}
+
+.pet-compat--stacked .pet-compat__item {
+	padding: 1rem 0.75rem;
+	background: var(--wp--preset--color--base-2, #f9f9f9);
+	border-radius: var(--wp--custom--border-radius, 8px);
+	text-align: center;
+}
+
+.pet-compat--stacked .pet-compat__link {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.375rem;
+}
+
+.pet-compat--stacked .pet-compat__item:not(:has(.pet-compat__link)) {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.375rem;
+}
+
+.pet-compat--stacked .pet-compat__icon svg {
+	width: 28px;
+	height: 28px;
+}
+
+.pet-compat--stacked .pet-compat__label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+}
+
+.pet-compat--stacked .pet-compat__item:has(.pet-compat__link):hover {
+	background: var(--wp--preset--color--base, #fff);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =============================================================
+ * PILLS — Compact inline strip matching gallery badge style
+ * ============================================================= */
+.pet-compat--pills .pet-compat__heading {
+	margin-bottom: 0.375rem;
+}
+
+.pet-compat--pills .pet-compat__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.pet-compat--pills .pet-compat__item {
+	display: flex;
+}
+
+.pet-compat--pills .pet-compat__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	padding: 4px 12px;
+	border-radius: 999px;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+
+.pet-compat--pills .pet-compat__item:not(:has(.pet-compat__link)) {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	padding: 4px 12px;
+	border-radius: 999px;
+}
+
+/* Pill backgrounds — tinted by status */
+.pet-compat--pills .pet-compat__item--yes .pet-compat__link,
+.pet-compat--pills .pet-compat__item--yes:not(:has(.pet-compat__link)) {
+	background: rgba(16, 185, 129, 0.12);
+	color: #065f46;
+}
+
+.pet-compat--pills .pet-compat__item--no .pet-compat__link,
+.pet-compat--pills .pet-compat__item--no:not(:has(.pet-compat__link)) {
+	background: rgba(239, 68, 68, 0.1);
+	color: #991b1b;
+}
+
+.pet-compat--pills .pet-compat__item--unknown .pet-compat__link,
+.pet-compat--pills .pet-compat__item--unknown:not(:has(.pet-compat__link)) {
+	background: var(--wp--preset--color--base-2, #f0f0f0);
+	color: var(--wp--preset--color--contrast-2, #666);
+}
+
+.pet-compat--pills .pet-compat__icon svg {
+	width: 16px;
+	height: 16px;
+}
+
+.pet-compat--pills .pet-compat__label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+}
+
+/* In pills mode, collapse the status badge to just the icon */
+.pet-compat--pills .pet-compat__status-badge {
+	padding: 0;
+	background: none;
+	border: none;
+}
+
+.pet-compat--pills .pet-compat__status-text {
+	display: none;
+}
+
+.pet-compat--pills .pet-compat__status-badge svg {
+	width: 14px;
+	height: 14px;
+}
+
+/* Pill status icon colors */
+.pet-compat--pills .pet-compat__item--yes .pet-compat__status-badge {
 	color: #10b981;
 }
 
-.pet-compat__item--no .pet-compat__status {
+.pet-compat--pills .pet-compat__item--no .pet-compat__status-badge {
 	color: #ef4444;
 }
 
-.pet-compat__item--unknown .pet-compat__status {
+.pet-compat--pills .pet-compat__item--unknown .pet-compat__status-badge {
 	color: var(--wp--preset--color--contrast-2, #999);
+}
+
+/* Pill hover */
+.pet-compat--pills .pet-compat__link:hover {
+	color: inherit;
+	filter: brightness(0.95);
+}
+
+
+/* === Reduced motion === */
+@media (prefers-reduced-motion: reduce) {
+	.pet-compat__link {
+		transition: none;
+	}
 }

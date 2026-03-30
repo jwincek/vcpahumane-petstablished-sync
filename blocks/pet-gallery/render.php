@@ -117,46 +117,46 @@ if ( ! $has_featured && ! $has_thumbnails ) {
 }
 
 // === Badges ===
-// Overlaid on the featured image, top-left corner.
-$badges = array();
+// Split into two groups:
+//   - Overlay: status badge only (stays on the featured image, top-left)
+//   - Below:   everything else (rendered as a pill strip beneath the image)
+$overlay_badges = array();
+$below_badges   = array();
+
+$status = $pet['status'] ?? '';
+if ( ( $attributes['showBadgeStatus'] ?? true ) && $status ) {
+	$status_slug = sanitize_title( $status );
+	$overlay_badges[] = array(
+		'label' => esc_html( $status ),
+		'class' => 'pet-gallery__badge--status pet-gallery__badge--status-' . $status_slug,
+	);
+}
 
 if ( ( $attributes['showBadgeNew'] ?? true ) && ! empty( $pet['is_new'] ) ) {
-	$badges[] = array(
+	$below_badges[] = array(
 		'label' => __( 'New', 'petstablished-sync' ),
 		'class' => 'pet-gallery__badge--new',
 	);
 }
 
 if ( ( $attributes['showBadgeBondedPair'] ?? true ) && ! empty( $pet['is_bonded_pair'] ) ) {
-	$badges[] = array(
+	$below_badges[] = array(
 		'label' => __( 'Bonded Pair', 'petstablished-sync' ),
 		'class' => 'pet-gallery__badge--bonded',
 	);
 }
 
 if ( ( $attributes['showBadgeSpecialNeeds'] ?? true ) && ! empty( $pet['special_needs'] ) && 'no' !== strtolower( (string) $pet['special_needs'] ) ) {
-	$badges[] = array(
+	$below_badges[] = array(
 		'label' => __( 'Special Needs', 'petstablished-sync' ),
 		'class' => 'pet-gallery__badge--special-needs',
 	);
 }
 
-$status = $pet['status'] ?? '';
-if ( ( $attributes['showBadgeStatus'] ?? true ) && $status ) {
-	$status_slug = sanitize_title( $status );
-	$badges[] = array(
-		'label' => esc_html( $status ),
-		'class' => 'pet-gallery__badge--status pet-gallery__badge--status-' . $status_slug,
-	);
-}
-
-$age = $pet['age'] ?? '';
-if ( ( $attributes['showBadgeAge'] ?? true ) && $age ) {
-	$badges[] = array(
-		'label' => esc_html( $age ),
-		'class' => 'pet-gallery__badge--age',
-	);
-}
+// Age badge omitted from below-badges — already displayed in the
+// pet-attributes block and the tagline. The showBadgeAge attribute
+// remains in block.json for backward compatibility but is no longer
+// rendered in the default single-pet template.
 
 // === Interactivity context ===
 // The lightbox gets the complete gallery so every image is navigable.
@@ -205,9 +205,9 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 				alt="<?php echo esc_attr( $featured_alt ); ?>"
 				loading="eager"
 			>
-			<?php if ( ! empty( $badges ) ) : ?>
+			<?php if ( ! empty( $overlay_badges ) ) : ?>
 				<div class="pet-gallery__badges" aria-hidden="true">
-					<?php foreach ( $badges as $badge ) : ?>
+					<?php foreach ( $overlay_badges as $badge ) : ?>
 						<span class="pet-gallery__badge <?php echo esc_attr( $badge['class'] ); ?>">
 							<?php echo esc_html( $badge['label'] ); ?>
 						</span>
@@ -261,6 +261,16 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 			</li>
 		<?php endforeach; ?>
 	</ul>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $below_badges ) ) : ?>
+	<div class="pet-gallery__badges-below" aria-hidden="true">
+		<?php foreach ( $below_badges as $badge ) : ?>
+			<span class="pet-gallery__badge <?php echo esc_attr( $badge['class'] ); ?>">
+				<?php echo esc_html( $badge['label'] ); ?>
+			</span>
+		<?php endforeach; ?>
+	</div>
 	<?php endif; ?>
 
 	<?php

@@ -92,63 +92,72 @@
 	outline-offset: 2px;
 }
 
-/* Badges — overlaid on featured image, top-left corner */
+/* Badges — translucent glass pills overlaid on featured image, top-left.
+ * Matches the semi-transparent treatment of the pet-actions overlay buttons
+ * (top-right) so both corners share the same visual language. */
 .pet-gallery__badges {
 	position: absolute;
 	top: var(--wp--preset--spacing--20, 0.5rem);
 	left: var(--wp--preset--spacing--20, 0.5rem);
 	display: flex;
 	flex-wrap: wrap;
-	gap: 4px;
+	gap: 6px;
 	z-index: 1;
 	pointer-events: none;
 }
 
 .pet-gallery__badge {
 	display: inline-block;
-	padding: 2px 8px;
-	border-radius: var(--wp--custom--border-radius, 4px);
-	font-size: var(--wp--preset--font-size--small, 0.75rem);
+	padding: 4px 12px;
+	border-radius: 999px;
+	font-size: var(--wp--preset--font-size--small, 0.8125rem);
 	font-weight: 600;
 	line-height: 1.4;
 	white-space: nowrap;
-	background: rgba(0, 0, 0, 0.7);
 	color: #fff;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
 }
 
+/* "New" — white-on-dark translucent, distinct from "Available" green */
 .pet-gallery__badge--new {
-	background: var(--wp--preset--color--vivid-green-cyan, #00d084);
-	color: #fff;
+	background: rgba(255, 255, 255, 0.85);
+	color: #1e1e1e;
 }
 
 .pet-gallery__badge--bonded {
-	background: var(--wp--preset--color--vivid-purple, #9b51e0);
-	color: #fff;
+	background: rgba(155, 81, 224, 0.75);
 }
 
 .pet-gallery__badge--special-needs {
-	background: var(--wp--preset--color--luminous-vivid-amber, #fcb900);
+	background: rgba(252, 185, 0, 0.8);
 	color: #1e1e1e;
 }
 
 .pet-gallery__badge--status-available {
-	background: var(--wp--preset--color--vivid-green-cyan, #00d084);
-	color: #fff;
+	background: rgba(0, 208, 132, 0.75);
 }
 
 .pet-gallery__badge--status-pending {
-	background: var(--wp--preset--color--luminous-vivid-orange, #ff6900);
-	color: #fff;
+	background: rgba(255, 105, 0, 0.8);
 }
 
 .pet-gallery__badge--status-adopted {
-	background: var(--wp--preset--color--vivid-cyan-blue, #0693e3);
-	color: #fff;
+	background: rgba(6, 147, 227, 0.75);
 }
 
 .pet-gallery__badge--age {
-	background: rgba(0, 0, 0, 0.6);
-	color: #fff;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+/* Below-image badge strip — secondary badges (new, bonded, special needs, age)
+ * rendered as pills beneath the featured image, keeping the photo clean. */
+.pet-gallery__badges-below {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: var(--wp--preset--spacing--20, 0.5rem);
 }
 
 /* Videos */

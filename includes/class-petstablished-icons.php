@@ -56,20 +56,18 @@ class Petstablished_Icons {
 			),
 		),
 
+		// Seated toddler — large head, small body sitting down.
+		// Universally recognized as "child" from signage (changing rooms, car seats).
 		'child' => array(
 			'viewBox' => '0 0 24 24',
-			'paths'   => array(
-				'M12 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z', // head — centered in viewBox
-				'M12 10v5m-3 7 3-5 3 5M9 12h6', // body + legs + arms
+			'circles' => array(
+				array( 'cx' => 12, 'cy' => 4, 'r' => 3 ), // head — proportionally large
 			),
-		),
-
-		// Alternative child icon (standing figure).
-		'child-alt' => array(
-			'viewBox' => '0 0 24 24',
 			'paths'   => array(
-				'M12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z', // head
-				'M12 8v6m-3 8 3-5 3 5M9 12h6', // body
+				'M12 9c-2 0-3.5 1.5-3.5 3.5V15h7v-2.5C15.5 10.5 14 9 12 9z', // torso sitting
+				'M8.5 15v4.5a1.5 1.5 0 0 0 3 0V17', // left leg tucked
+				'M12.5 17v2.5a1.5 1.5 0 0 0 3 0V15', // right leg extended
+				'M8 11.5l-2.5 2M16 11.5l2.5 2', // arms reaching out
 			),
 		),
 
@@ -356,6 +354,69 @@ class Petstablished_Icons {
 			'paths'   => array(
 				'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71',
 				'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
+			),
+		),
+
+		// === Pet Attribute Icons ===
+
+		'clock' => array(
+			'viewBox' => '0 0 24 24',
+			'circles' => array(
+				array( 'cx' => 12, 'cy' => 12, 'r' => 10 ),
+			),
+			'paths'   => array(
+				'M12 6v6l4 2',
+			),
+		),
+
+		'user' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2',
+			),
+			'circles' => array(
+				array( 'cx' => 12, 'cy' => 7, 'r' => 4 ),
+			),
+		),
+
+		'maximize' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7',
+			),
+		),
+
+		'droplet' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z',
+			),
+		),
+
+		'wind' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2',
+				'M9.6 4.6A2 2 0 1 1 11 8H2',
+				'M12.6 19.4A2 2 0 1 0 14 16H2',
+			),
+		),
+
+		'layers' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M12 2L2 7l10 5 10-5-10-5z',
+				'M2 17l10 5 10-5',
+				'M2 12l10 5 10-5',
+			),
+		),
+
+		'scale' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z',
+				'M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z',
+				'M7 21h10M12 3v18M12 3a8 8 0 0 0-4 1M12 3a8 8 0 0 1 4 1',
 			),
 		),
 

@@ -3,7 +3,10 @@
  * Pet Attributes Block — Definition list of pet characteristics
  *
  * Displays breed, age, sex, size, color, coat, coat pattern, and weight
- * in a responsive grid of label/value pairs.
+ * in a responsive grid of label/value pairs, each with an icon.
+ *
+ * Values with corresponding taxonomies link to the pet archive filtered
+ * by that term (e.g., clicking "Labrador" → /adopt/pets/?filter_breed=labrador).
  *
  * @package Petstablished_Sync
  * @since 3.0.0
@@ -34,26 +37,46 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 }
 
 // Load pet data via Abilities API.
-$pet = null;
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
-if ( $ability ) {
-	$result = $ability->execute( [ 'id' => (int) $post_id ] );
-	if ( ! is_wp_error( $result ) ) {
-		$pet = $result;
-	}
-}
-if ( ! $pet ) {
-	$pet = \Petstablished\Core\Pet_Hydrator::get( $post_id );
-}
+$pet = petstablished_get_pet( (int) $post_id );
 if ( ! $pet ) {
 	return;
 }
+
+// Taxonomy key → WordPress taxonomy slug mapping (for archive links).
+$taxonomy_map = Petstablished_Helpers::TAXONOMIES;
+
+// Pet archive base URL for filter links.
+$archive_url = get_post_type_archive_link( 'pet' );
+
+// Icon mapping — attribute key → icon name in Petstablished_Icons.
+$icon_map = array(
+	'breed'        => 'paw',
+	'age'          => 'clock',
+	'sex'          => 'user',
+	'size'         => 'maximize',
+	'color'        => 'droplet',
+	'coat'         => 'wind',
+	'coat_pattern' => 'layers',
+	'weight'       => 'scale',
+);
+
+// The filter URL parameter key for each attribute.
+// Most map directly; age uses the 'age' taxonomy key but the entity
+// field is 'numerical_age'. The filter param matches the taxonomy key.
+$filter_key_map = array(
+	'breed'   => 'breed',
+	'age'     => 'age',
+	'sex'     => 'sex',
+	'size'    => 'size',
+	'color'   => 'color',
+	'coat'    => 'coat',
+);
 
 // Build attribute list — each entry references an entity field key.
 // Only attributes whose toggle is enabled are included.
 $attr_defs = array(
 	array( 'toggle' => 'showBreed',       'label' => __( 'Breed', 'petstablished-sync' ),        'key' => 'breed' ),
-	array( 'toggle' => 'showAge',         'label' => __( 'Age', 'petstablished-sync' ),          'key' => 'numerical_age', 'fallback' => 'age' ),
+	array( 'toggle' => 'showAge',         'label' => __( 'Age', 'petstablished-sync' ),          'key' => 'numerical_age', 'fallback' => 'age', 'taxonomy_key' => 'age' ),
 	array( 'toggle' => 'showSex',         'label' => __( 'Sex', 'petstablished-sync' ),          'key' => 'sex' ),
 	array( 'toggle' => 'showSize',        'label' => __( 'Size', 'petstablished-sync' ),         'key' => 'size' ),
 	array( 'toggle' => 'showColor',       'label' => __( 'Color', 'petstablished-sync' ),        'key' => 'color' ),
@@ -71,12 +94,32 @@ foreach ( $attr_defs as $def ) {
 	if ( empty( $value ) && ! empty( $def['fallback'] ) ) {
 		$value = $pet[ $def['fallback'] ] ?? '';
 	}
-	if ( ! empty( $value ) ) {
-		$items[] = array(
-			'label' => $def['label'],
-			'value' => $value,
-		);
+	if ( empty( $value ) ) {
+		continue;
 	}
+
+	// Determine the taxonomy key for this attribute (used for icon + link lookup).
+	$attr_key = $def['taxonomy_key'] ?? $def['key'];
+
+	// Build taxonomy archive link if a taxonomy exists for this attribute.
+	$link = '';
+	$taxonomy_slug = $taxonomy_map[ $attr_key ] ?? '';
+	$filter_key    = $filter_key_map[ $attr_key ] ?? '';
+
+	if ( $taxonomy_slug && $filter_key && $archive_url ) {
+		$terms = get_the_terms( $post_id, $taxonomy_slug );
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			$link = add_query_arg( 'filter_' . $filter_key, $terms[0]->slug, $archive_url );
+		}
+	}
+
+	$items[] = array(
+		'label'    => $def['label'],
+		'value'    => $value,
+		'icon'     => $icon_map[ $attr_key ] ?? '',
+		'link'     => $link,
+		'attr_key' => $attr_key,
+	);
 }
 
 if ( empty( $items ) ) {
@@ -90,8 +133,21 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 <dl <?php echo $wrapper_attributes; ?>>
 	<?php foreach ( $items as $item ) : ?>
 		<div class="pet-attributes__item">
-			<dt class="pet-attributes__label"><?php echo esc_html( $item['label'] ); ?></dt>
-			<dd class="pet-attributes__value"><?php echo esc_html( $item['value'] ); ?></dd>
+			<dt class="pet-attributes__label">
+				<?php if ( $item['icon'] ) : ?>
+					<?php Petstablished_Icons::render( $item['icon'], array( 'width' => 14, 'height' => 14, 'stroke-width' => 2, 'class' => 'pet-attributes__icon' ) ); ?>
+				<?php endif; ?>
+				<?php echo esc_html( $item['label'] ); ?>
+			</dt>
+			<dd class="pet-attributes__value">
+				<?php if ( $item['link'] ) : ?>
+					<a href="<?php echo esc_url( $item['link'] ); ?>" class="pet-attributes__link">
+						<?php echo esc_html( $item['value'] ); ?>
+					</a>
+				<?php else : ?>
+					<?php echo esc_html( $item['value'] ); ?>
+				<?php endif; ?>
+			</dd>
 		</div>
 	<?php endforeach; ?>
 </dl>
