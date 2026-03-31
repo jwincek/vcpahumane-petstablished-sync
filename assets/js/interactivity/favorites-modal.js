@@ -24,7 +24,32 @@ import { announce, storage, executeAbility } from '../utils.js';
 const getGlobalState = () => store( 'petstablished' ).state;
 const getGlobalActions = () => store( 'petstablished' ).actions;
 
-let triggerRef = null;
+/* ─── Body overflow lock counter ───
+ * Shared between the favorites modal, gallery lightbox, and any future
+ * overlays. Each lock() call increments; each unlock() decrements.
+ * Body overflow is only restored when the count reaches zero. */
+const overflowLock = {
+	_count: 0,
+	lock() {
+		this._count++;
+		if ( this._count === 1 ) {
+			document.body.style.overflow = 'hidden';
+		}
+	},
+	unlock() {
+		this._count = Math.max( 0, this._count - 1 );
+		if ( this._count === 0 ) {
+			document.body.style.overflow = '';
+		}
+	},
+};
+
+// Export so the gallery lightbox can share the same counter.
+export { overflowLock };
+
+/* ─── Refresh guard ───
+ * Prevents refreshFavorites from overwriting optimistic toggles. */
+let isRefreshing = false;
 
 /* ─── Card HTML builder ─── */
 
@@ -89,13 +114,28 @@ function buildCardHtml( pet ) {
 	</article>`;
 }
 
-/* ─── Event delegation (attached once to the grid container) ─── */
+/* ─── Event delegation (re-bound when grid element changes) ─── */
 
-let delegationBound = false;
+let boundGrid = null;
+
+/* Track active popover close listeners so we can clean them up
+ * when the modal closes (prevents orphaned document listeners). */
+let activePopoverCleanup = null;
+
+function cleanupPopover() {
+	if ( activePopoverCleanup ) {
+		activePopoverCleanup();
+		activePopoverCleanup = null;
+	}
+}
+
+/* Track in-flight unfavorite requests to prevent double-tap. */
+const inFlightUnfavorites = new Set();
 
 function bindGridDelegation( grid ) {
-	if ( delegationBound ) return;
-	delegationBound = true;
+	// Re-bind if the grid element changed (e.g. after router navigation).
+	if ( boundGrid === grid ) return;
+	boundGrid = grid;
 
 	grid.addEventListener( 'click', ( e ) => {
 		// ── Unfavorite button ──
@@ -104,18 +144,43 @@ function bindGridDelegation( grid ) {
 			e.preventDefault();
 			const petId = Number( unfavBtn.dataset.petId );
 			const petName = unfavBtn.dataset.petName || '';
-			if ( petId ) {
-				// Drive the doToggleFavorite generator manually.
-				const gen = doToggleFavorite( petId, petName );
-				const step = ( result ) => {
-					if ( result.done ) return;
-					Promise.resolve( result.value ).then(
-						v => step( gen.next( v ) ),
-						err => step( gen.throw( err ) )
-					);
-				};
-				step( gen.next() );
-			}
+
+			// Prevent double-tap while async operation is in flight.
+			if ( ! petId || inFlightUnfavorites.has( petId ) ) return;
+			inFlightUnfavorites.add( petId );
+			unfavBtn.disabled = true;
+
+			// Remember adjacent cards for focus management after removal.
+			const card = unfavBtn.closest( '.pet-favorites-modal__card' );
+			const nextCard = card?.nextElementSibling;
+			const prevCard = card?.previousElementSibling;
+
+			// Drive the doToggleFavorite generator manually.
+			const gen = doToggleFavorite( petId, petName );
+			const step = ( result ) => {
+				if ( result.done ) {
+					inFlightUnfavorites.delete( petId );
+					// Move focus to next card, previous card, or close button.
+					const nextBtn = nextCard?.querySelector( '.js-unfavorite' )
+						|| prevCard?.querySelector( '.js-unfavorite' );
+					if ( nextBtn ) {
+						nextBtn.focus();
+					} else {
+						const closeBtn = document.querySelector( '.pet-favorites-modal__close' );
+						if ( closeBtn ) closeBtn.focus();
+					}
+					return;
+				}
+				Promise.resolve( result.value ).then(
+					v => step( gen.next( v ) ),
+					err => {
+						inFlightUnfavorites.delete( petId );
+						unfavBtn.disabled = false;
+						step( gen.throw( err ) );
+					}
+				);
+			};
+			step( gen.next() );
 			return;
 		}
 
@@ -132,8 +197,10 @@ function bindGridDelegation( grid ) {
 			toggle.setAttribute( 'aria-expanded', String( ! wasOpen ) );
 			toggle.classList.toggle( 'is-expanded', ! wasOpen );
 
+			// Clean up any previously open popover listener.
+			cleanupPopover();
+
 			if ( ! wasOpen ) {
-				// Scroll the popover into view within the modal content area.
 				requestAnimationFrame( () => {
 					popover.scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 				} );
@@ -142,7 +209,9 @@ function bindGridDelegation( grid ) {
 					toggle.setAttribute( 'aria-expanded', 'false' );
 					toggle.classList.remove( 'is-expanded' );
 					document.removeEventListener( 'click', close, true );
+					activePopoverCleanup = null;
 				};
+				activePopoverCleanup = close;
 				requestAnimationFrame( () => {
 					document.addEventListener( 'click', close, true );
 				} );
@@ -155,7 +224,7 @@ function bindGridDelegation( grid ) {
 		if ( nav ) {
 			const ctx = getContext();
 			ctx.isOpen = false;
-			document.body.style.overflow = '';
+			overflowLock.unlock();
 			return;
 		}
 
@@ -164,9 +233,27 @@ function bindGridDelegation( grid ) {
 		if ( bondedLink ) {
 			const ctx = getContext();
 			ctx.isOpen = false;
-			document.body.style.overflow = '';
+			overflowLock.unlock();
 		}
 	} );
+}
+
+/* ─── Modal cleanup helpers ─── */
+
+function resetModalState() {
+	// Clean up confirm button state.
+	const btn = document.querySelector( '.pet-favorites-modal__clear-btn' );
+	if ( btn ) {
+		clearTimeout( btn._confirmTimer );
+		if ( btn.dataset.confirming === 'true' ) {
+			delete btn.dataset.confirming;
+			btn.classList.remove( 'is-confirming' );
+			btn.textContent = btn.dataset.defaultText || btn.textContent;
+		}
+	}
+
+	// Clean up any open popover's document listener.
+	cleanupPopover();
 }
 
 /* ─── Store ─── */
@@ -184,29 +271,36 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 			ctx.isOpen = ! ctx.isOpen;
 
 			if ( ctx.isOpen ) {
-				document.body.style.overflow = 'hidden';
+				overflowLock.lock();
 				actions.refreshFavorites();
 				requestAnimationFrame( () => {
 					const close = document.querySelector( '.pet-favorites-modal__close' );
 					if ( close ) close.focus();
 				} );
 			} else {
-				document.body.style.overflow = '';
-				if ( triggerRef ) triggerRef.focus();
+				overflowLock.unlock();
+				resetModalState();
+				// Re-query trigger to avoid stale references after navigation.
+				const trigger = document.querySelector( '.pet-favorites-modal__trigger' );
+				if ( trigger ) trigger.focus();
 			}
 		},
 
 		closeModal() {
 			const ctx = getContext();
 			ctx.isOpen = false;
-			document.body.style.overflow = '';
-			if ( triggerRef ) triggerRef.focus();
+			overflowLock.unlock();
+			resetModalState();
+			// Re-query trigger to avoid stale references after navigation.
+			const trigger = document.querySelector( '.pet-favorites-modal__trigger' );
+			if ( trigger ) trigger.focus();
 		},
 
 		closeAndNavigate() {
 			const ctx = getContext();
 			ctx.isOpen = false;
-			document.body.style.overflow = '';
+			overflowLock.unlock();
+			resetModalState();
 		},
 
 		handleOverlayClick( event ) {
@@ -222,17 +316,45 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 		},
 
 		*refreshFavorites() {
+			if ( isRefreshing ) return;
+			isRefreshing = true;
+
 			try {
+				// Snapshot favorites before the server call so we can detect
+				// optimistic changes that happened while we were waiting.
+				const before = [ ...getGlobalState().favorites ];
+
 				const result = yield executeAbility(
 					'petstablished/get-favorites', null, { method: 'GET' }
 				);
-				getGlobalState().favorites = result.favorites;
-				storage.set( 'favorites', getGlobalState().favorites );
+
+				// Only overwrite state if no optimistic toggle happened
+				// during the yield. If the array changed, the user acted
+				// while we were waiting — their optimistic state wins.
+				const current = getGlobalState().favorites;
+				const unchanged = before.length === current.length
+					&& before.every( ( id, i ) => current[ i ] === id );
+
+				if ( unchanged ) {
+					getGlobalState().favorites = result.favorites;
+				}
+
 				if ( result.pets?.length ) {
 					getGlobalActions().cachePets( result.pets );
 				}
+
+				// Filter out any favorite IDs that don't have cached pet data.
+				// This prevents the badge count from exceeding the visible card count.
+				const gs = getGlobalState();
+				const validFavorites = gs.favorites.filter( id => !! gs.pets[ id ] );
+				if ( validFavorites.length !== gs.favorites.length ) {
+					gs.favorites = validFavorites;
+				}
+				storage.set( 'favorites', gs.favorites );
 			} catch ( error ) {
 				console.error( 'Failed to refresh favorites:', error );
+			} finally {
+				isRefreshing = false;
 			}
 		},
 
@@ -240,27 +362,27 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 			const btn = document.querySelector( '.pet-favorites-modal__clear-btn' );
 			if ( ! btn ) return;
 
+			// Store default text on first interaction for later restoration.
+			if ( ! btn.dataset.defaultText ) {
+				btn.dataset.defaultText = btn.textContent;
+			}
+
 			// If already in confirm state, execute the clear.
 			if ( btn.dataset.confirming === 'true' ) {
-				delete btn.dataset.confirming;
-				btn.classList.remove( 'is-confirming' );
-				// Text is restored by the generator after clearing.
-				const { actions } = store( 'petstablished/favorites-modal' );
-				actions.clearAllFavorites();
+				resetModalState();
+				const { actions: modalActions } = store( 'petstablished/favorites-modal' );
+				modalActions.clearAllFavorites();
 				return;
 			}
 
 			// Enter confirm state — revert after 3 seconds if not tapped again.
-			const originalText = btn.textContent;
 			btn.dataset.confirming = 'true';
 			btn.classList.add( 'is-confirming' );
 			btn.textContent = btn.dataset.confirmText || 'Tap again to confirm';
 
 			clearTimeout( btn._confirmTimer );
 			btn._confirmTimer = setTimeout( () => {
-				delete btn.dataset.confirming;
-				btn.classList.remove( 'is-confirming' );
-				btn.textContent = originalText;
+				resetModalState();
 			}, 3000 );
 		},
 
@@ -289,6 +411,7 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 						getGlobalState().pets[ id ].favorited = true;
 					}
 				} );
+				storage.set( 'favorites', oldFavorites );
 				announce( 'Failed to clear favorites' );
 			}
 		},
@@ -296,7 +419,6 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 
 	callbacks: {
 		init() {
-			triggerRef = document.querySelector( '.pet-favorites-modal__trigger' );
 			storage.set( 'favorites', getGlobalState().favorites );
 		},
 
@@ -350,7 +472,7 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 			const favoriteIds = [ ...gs.favorites ];
 			const petsCache = gs.pets;
 
-			// Bind event delegation once.
+			// Bind event delegation (re-binds if ref changed after navigation).
 			bindGridDelegation( ref );
 
 			// Build desired pet list (only pets that exist in the cache).

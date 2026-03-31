@@ -281,6 +281,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					type="button"
 					class="pet-favorites-modal__clear-btn"
 					data-wp-on--click="actions.handleClearClick"
+					data-default-text="<?php esc_attr_e( 'Clear all favorites', 'petstablished-sync' ); ?>"
 					data-confirm-text="<?php esc_attr_e( 'Tap again to confirm', 'petstablished-sync' ); ?>"
 				>
 					<?php esc_html_e( 'Clear all favorites', 'petstablished-sync' ); ?>

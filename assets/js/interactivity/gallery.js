@@ -17,6 +17,7 @@
  */
 
 import { store, getContext, getElement } from '@wordpress/interactivity';
+import { overflowLock } from './favorites-modal.js';
 
 const { state, actions } = store( 'petstablished/gallery', {
 	state: {
@@ -60,7 +61,7 @@ const { state, actions } = store( 'petstablished/gallery', {
 			ctx._triggerElement = ref;
 
 			// Prevent body scroll while lightbox is open.
-			document.body.style.overflow = 'hidden';
+			overflowLock.lock();
 
 			// Focus the lightbox so keyboard events reach its keydown handler.
 			requestAnimationFrame( () => {
@@ -76,7 +77,7 @@ const { state, actions } = store( 'petstablished/gallery', {
 			const trigger = ctx._triggerElement;
 			ctx.isOpen = false;
 			ctx._triggerElement = null;
-			document.body.style.overflow = '';
+			overflowLock.unlock();
 
 			// Return focus to the element that opened the lightbox.
 			if ( trigger ) {

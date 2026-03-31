@@ -113,11 +113,12 @@ function* doToggleFavorite( petId, petName ) {
 		s.favorites = result.favorites;
 		storage.set( 'favorites', s.favorites );
 	} catch ( error ) {
-		// Rollback.
+		// Rollback state and localStorage.
 		s.favorites = wasIn
 			? [ ...s.favorites, petId ]
 			: s.favorites.filter( id => id !== petId );
 		if ( s.pets[ petId ] ) s.pets[ petId ].favorited = wasIn;
+		storage.set( 'favorites', s.favorites );
 		console.error( 'Failed to toggle favorite:', error );
 		announce( config.i18n?.error || 'Failed to update favorites' );
 	}
