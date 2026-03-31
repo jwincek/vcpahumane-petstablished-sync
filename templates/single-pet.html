@@ -8,13 +8,13 @@
 
 		<!-- wp:petstablished/pet-details {"layout":"sidebar"} -->
 
-			<!-- wp:group {"metadata":{"name":"Breadcrumb"},"className":"pet-details__breadcrumb","layout":{"type":"flex","flexWrap":"nowrap"}} -->
-			<div class="wp-block-group pet-details__breadcrumb">
-				<!-- wp:button {"className":"pet-details__back-link is-style-outline","metadata":{"bindings":{"url":{"source":"petstablished/pet-data","args":{"key":"archive_url"}}}}} -->
-				<div class="wp-block-button pet-details__back-link is-style-outline"><a class="wp-block-button__link" href="/adopt/pets/">← Back to All Pets</a></div>
-				<!-- /wp:button -->
-			</div>
-			<!-- /wp:group -->
+			<!-- wp:petstablished/pet-breadcrumb /-->
+
+			<!-- wp:heading {"level":1,"className":"pet-details__name","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"name"}}}}} -->
+			<h1 class="wp-block-heading pet-details__name">Pet Name</h1>
+			<!-- /wp:heading -->
+
+			<!-- wp:petstablished/pet-tagline /-->
 
 			<!-- wp:columns {"className":"pet-details__columns"} -->
 			<div class="wp-block-columns pet-details__columns">
@@ -33,18 +33,6 @@
 
 				<!-- wp:column {"width":"50%","className":"pet-details__info-col"} -->
 				<div class="wp-block-column pet-details__info-col" style="flex-basis:50%">
-
-					<!-- wp:group {"metadata":{"name":"Pet Header"},"className":"pet-details__header","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
-					<div class="wp-block-group pet-details__header">
-						<!-- wp:heading {"level":1,"className":"pet-details__name","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"name"}}}}} -->
-						<h1 class="wp-block-heading pet-details__name">Pet Name</h1>
-						<!-- /wp:heading -->
-					</div>
-					<!-- /wp:group -->
-
-					<!-- wp:paragraph {"className":"pet-details__tagline","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"tagline"}}}}} -->
-					<p class="pet-details__tagline">Dog · Labrador · Young · Male · Medium</p>
-					<!-- /wp:paragraph -->
 
 					<!-- wp:group {"metadata":{"name":"About Section"},"className":"pet-details__section pet-details__about"} -->
 					<div class="wp-block-group pet-details__section pet-details__about">

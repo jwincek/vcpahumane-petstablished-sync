@@ -1188,6 +1188,56 @@
 		save: () => null,
 	} );
 
+	// Pet Breadcrumb — SSR breadcrumb trail: Home › Adoptable Pets › Pet Name.
+	registerBlockType( 'petstablished/pet-breadcrumb', {
+		title: __( 'Pet Breadcrumb', 'petstablished-sync' ),
+		description: __( 'Breadcrumb trail: Home › Adoptable Pets › Pet Name.', 'petstablished-sync' ),
+		category: 'petstablished',
+		icon: 'arrow-left-alt',
+		keywords: [ 'pet', 'breadcrumb', 'navigation', 'back' ],
+		ancestor: [ 'petstablished/pet-details' ],
+		usesContext: [ 'postId', 'postType' ],
+		supports: { html: false, reusable: false },
+		attributes: {
+			homeLabel: { type: 'string', default: 'Home' },
+			archiveLabel: { type: 'string', default: 'Adoptable Pets' },
+			separator: { type: 'string', default: '›' },
+		},
+		edit: function() {
+			const blockProps = useBlockProps( { className: 'pet-breadcrumb-editor' } );
+			return el( 'div', blockProps,
+				el( 'p', { style: { margin: 0, color: '#666', fontSize: '0.8125rem' } },
+					__( 'Home › Adoptable Pets › [Pet Name]', 'petstablished-sync' )
+				)
+			);
+		},
+		save: () => null,
+	} );
+
+	// Pet Tagline — quick-facts summary with taxonomy filter links.
+	registerBlockType( 'petstablished/pet-tagline', {
+		title: __( 'Pet Tagline', 'petstablished-sync' ),
+		description: __( 'Quick-facts tagline with taxonomy filter links.', 'petstablished-sync' ),
+		category: 'petstablished',
+		icon: 'tag',
+		keywords: [ 'pet', 'tagline', 'quick', 'facts' ],
+		ancestor: [ 'petstablished/pet-details' ],
+		usesContext: [ 'postId', 'postType' ],
+		supports: { html: false, reusable: false },
+		attributes: {
+			separator: { type: 'string', default: ' · ' },
+		},
+		edit: function() {
+			const blockProps = useBlockProps( { className: 'pet-tagline-editor' } );
+			return el( 'div', blockProps,
+				el( 'p', { style: { margin: 0, color: '#666', fontSize: '1rem' } },
+					__( 'Dog · Labrador · Young · Male · Medium', 'petstablished-sync' )
+				)
+			);
+		},
+		save: () => null,
+	} );
+
 	// Pet Adoption Fee — SSR fee row, auto-hidden when no fee is set.
 	registerBlockType( 'petstablished/adoption-fee', {
 		title: __( 'Pet Adoption Fee', 'petstablished-sync' ),

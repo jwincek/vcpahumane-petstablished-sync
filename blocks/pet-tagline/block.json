@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/pet-tagline",
+	"version": "1.0.0",
+	"title": "Pet Tagline",
+	"category": "petstablished",
+	"description": "Quick-facts tagline with taxonomy filter links (e.g. Dog · Labrador · Young · Male · Medium).",
+	"keywords": ["pet", "tagline", "quick", "facts", "summary"],
+	"ancestor": ["petstablished/pet-details"],
+	"textdomain": "petstablished-sync",
+	"usesContext": ["postId", "postType"],
+	"attributes": {
+		"separator": {
+			"type": "string",
+			"default": " · "
+		}
+	},
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"spacing": {
+			"margin": true
+		}
+	},
+	"render": "file:./render.php"
+}
