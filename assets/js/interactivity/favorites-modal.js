@@ -65,7 +65,7 @@ function buildCardHtml( pet ) {
 	const meta = [ pet.breed, pet.age, pet.sex ].filter( Boolean ).join( ' \u00b7 ' );
 	const partners = pet.bonded_pair_names || pet.bondedPartners || [];
 	const isNew = pet.is_new || pet.isNew || false;
-	const specialNeeds = pet.special_needs || pet.specialNeeds || false;
+	const specialNeeds = pet.special_needs === 'yes' || pet.specialNeeds === true;
 	const isBondedPair = pet.is_bonded_pair || pet.isBondedPair || false;
 	const name = pet.name || '';
 	const url = pet.url || '#';
