@@ -182,6 +182,12 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					</svg>
 					<p><?php esc_html_e( 'No favorites yet.', 'petstablished-sync' ); ?></p>
 					<p class="pet-favorites-modal__empty-hint"><?php esc_html_e( 'Tap the heart on any pet to save them here.', 'petstablished-sync' ); ?></p>
+					<a
+						href="<?php echo esc_url( get_post_type_archive_link( 'pet' ) ); ?>"
+						class="pet-favorites-modal__empty-cta js-card-nav"
+					>
+						<?php esc_html_e( 'Browse Adoptable Pets', 'petstablished-sync' ); ?>
+					</a>
 				</div>
 
 				<!-- Pet cards grid (imperatively managed by callbacks.syncCards) -->
@@ -274,7 +280,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				<button
 					type="button"
 					class="pet-favorites-modal__clear-btn"
-					data-wp-on--click="actions.clearAllFavorites"
+					data-wp-on--click="actions.handleClearClick"
+					data-confirm-text="<?php esc_attr_e( 'Tap again to confirm', 'petstablished-sync' ); ?>"
 				>
 					<?php esc_html_e( 'Clear all favorites', 'petstablished-sync' ); ?>
 				</button>

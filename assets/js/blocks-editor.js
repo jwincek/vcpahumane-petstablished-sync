@@ -474,14 +474,14 @@
 		save: () => null,
 	});
 
-	// === Pet Favorites Toggle ===
+	// === Pet Favorites Toggle (deprecated — use pet-favorites-modal) ===
 	registerBlockType( 'petstablished/pet-favorites-toggle', {
-		title: __( 'Favorites Toggle', 'petstablished-sync' ),
-		description: __( 'Button to show only favorited pets.', 'petstablished-sync' ),
+		title: __( 'Favorites Toggle (deprecated)', 'petstablished-sync' ),
+		description: __( 'Deprecated — use Pet Favorites Modal instead.', 'petstablished-sync' ),
 		category: 'widgets',
 		icon: 'heart',
-		keywords: [ 'pet', 'favorites', 'filter' ],
-		supports: { html: false },
+		keywords: [],
+		supports: { html: false, inserter: false },
 		attributes: {
 			showCount: { type: 'boolean', default: true },
 		},

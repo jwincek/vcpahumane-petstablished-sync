@@ -236,6 +236,34 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 			}
 		},
 
+		handleClearClick() {
+			const btn = document.querySelector( '.pet-favorites-modal__clear-btn' );
+			if ( ! btn ) return;
+
+			// If already in confirm state, execute the clear.
+			if ( btn.dataset.confirming === 'true' ) {
+				delete btn.dataset.confirming;
+				btn.classList.remove( 'is-confirming' );
+				// Text is restored by the generator after clearing.
+				const { actions } = store( 'petstablished/favorites-modal' );
+				actions.clearAllFavorites();
+				return;
+			}
+
+			// Enter confirm state — revert after 3 seconds if not tapped again.
+			const originalText = btn.textContent;
+			btn.dataset.confirming = 'true';
+			btn.classList.add( 'is-confirming' );
+			btn.textContent = btn.dataset.confirmText || 'Tap again to confirm';
+
+			clearTimeout( btn._confirmTimer );
+			btn._confirmTimer = setTimeout( () => {
+				delete btn.dataset.confirming;
+				btn.classList.remove( 'is-confirming' );
+				btn.textContent = originalText;
+			}, 3000 );
+		},
+
 		*clearAllFavorites() {
 			const oldFavorites = [ ...getGlobalState().favorites ];
 			if ( ! oldFavorites.length ) return;
