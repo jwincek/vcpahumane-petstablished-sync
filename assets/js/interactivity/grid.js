@@ -146,6 +146,7 @@ const { state, actions, callbacks } = store( 'petstablished/grid', {
 		isNavigating: false,
 		compatFiltersExpanded: true,
 		filterDrawerOpen: false,
+		showFavoritesOnly: false,
 
 		// === Pet-Level Derived State ===
 
@@ -239,6 +240,12 @@ const { state, actions, callbacks } = store( 'petstablished/grid', {
 		},
 
 		get resultsText() {
+			if ( state.showFavoritesOnly ) {
+				const inView = state.favoritesInViewCount;
+				if ( inView === 0 ) return 'No favorites match your current filters';
+				return inView === 1 ? 'Showing 1 favorite' : `Showing ${ inView } favorites`;
+			}
+
 			const count = state.visibleCount;
 
 			if ( state.hasActiveFilters ) {
@@ -249,15 +256,65 @@ const { state, actions, callbacks } = store( 'petstablished/grid', {
 		},
 
 		get isPetVisible() {
-			// All filtering (taxonomy, compat, favorites, search) is
-			// handled server-side via doNavigate. Every pet in the
-			// rendered HTML is visible.
+			// Server-side filters (taxonomy, compat, search) are handled
+			// via doNavigate. The favorites toggle is client-side only.
+			if ( state.showFavoritesOnly ) {
+				const ctx = getContext();
+				return ctx.petId ? getGlobalState().favorites.includes( ctx.petId ) : true;
+			}
 			return true;
+		},
+
+		/**
+		 * Count of favourited pets in the current server-rendered result set.
+		 * If the user filtered by "Cats", this only counts favourited cats.
+		 */
+		get favoritesInViewCount() {
+			const ctx = getContext();
+			const allFavs = getGlobalState().favorites;
+			const viewIds = ctx.petIds?.map( p => p.id ?? p ) ?? [];
+			if ( ! viewIds.length ) return allFavs.length;
+			return allFavs.filter( id => viewIds.includes( id ) ).length;
+		},
+
+		get favoritesFilterText() {
+			const inView = state.favoritesInViewCount;
+			const total = getGlobalState().favorites.length;
+
+			if ( state.showFavoritesOnly ) {
+				if ( inView === 0 ) return 'No favorites match filters';
+				return inView === 1 ? 'Showing 1 favorite' : `Showing ${ inView } favorites`;
+			}
+
+			if ( total === 0 ) return '♥ Favorites';
+
+			// Show "2 of 5 saved" when filters reduce the visible set,
+			// or just "5 saved" when viewing all pets.
+			if ( inView < total ) {
+				return `♥ ${ inView } of ${ total } saved`;
+			}
+			return `♥ ${ total } saved`;
 		},
 
 	},
 
 	actions: {
+		// === Favorites Filter ===
+
+		toggleFavoritesFilter() {
+			state.showFavoritesOnly = ! state.showFavoritesOnly;
+			if ( state.showFavoritesOnly ) {
+				const inView = state.favoritesInViewCount;
+				if ( inView === 0 ) {
+					announce( 'No favorites match your current filters' );
+				} else {
+					announce( inView === 1 ? 'Showing 1 favorite' : `Showing ${ inView } favorites` );
+				}
+			} else {
+				announce( 'Showing all pets' );
+			}
+		},
+
 		// === Favorites & Comparison ===
 		//
 		// The grid's pet cards set petId in the petstablished/grid context.

@@ -311,6 +311,24 @@ $archive_url = get_post_type_archive_link( 'pet' );
 					<?php esc_html_e( 'Reset', 'petstablished-sync' ); ?>
 				</a>
 			<?php endif; ?>
+
+		</div>
+
+		<div class="pet-filters__favorites" data-wp-interactive="petstablished/grid">
+			<button
+				type="button"
+				class="pet-filters__favorites-toggle"
+				data-wp-on--click="actions.toggleFavoritesFilter"
+				data-wp-class--is-active="state.showFavoritesOnly"
+				data-wp-text="state.favoritesFilterText"
+				aria-pressed="false"
+				data-wp-bind--aria-pressed="state.showFavoritesOnly"
+			>
+				<?php
+				/* translators: default label before JS hydrates */
+				esc_html_e( "\u{2665} Favorites", 'petstablished-sync' );
+				?>
+			</button>
 		</div>
 
 		<?php

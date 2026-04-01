@@ -40,6 +40,7 @@ $per_page              = $attributes['perPage'] ?? 100; // Still loads all for s
 $show_filters          = $attributes['showFilters'] ?? true;
 $show_search           = $attributes['showSearch'] ?? true;
 $show_results_count    = $attributes['showResultsCount'] ?? true;
+$show_favorites_toggle = true; // Always show — client-side toggle, no attribute needed.
 $badge_type            = $attributes['badgeType'] ?? 'animal';
 
 // Filter visibility settings.
@@ -173,9 +174,14 @@ if ( $ability ) {
 $pet_ids = array();
 foreach ( $pets as $pet ) {
 	$pet_ids[] = array(
-		'id'   => $pet['id'],
-		'name' => $pet['name'],
-		'url'  => $pet['url'] ?? '',
+		'id'    => $pet['id'],
+		'name'  => $pet['name'],
+		'url'   => $pet['url'] ?? '',
+		'image' => $pet['image'] ?? '',
+		'breed' => $pet['breed'] ?? '',
+		'age'   => $pet['age'] ?? '',
+		'sex'   => $pet['sex'] ?? '',
+		'size'  => $pet['size'] ?? '',
 	);
 }
 
@@ -443,6 +449,19 @@ $filter_config = array(
 						<?php endforeach; ?>
 					</select>
 				</div>
+
+				<!-- Favorites filter toggle — client-side, no server round-trip -->
+				<button
+					type="button"
+					class="pet-listing-grid__favorites-toggle"
+					data-wp-on--click="actions.toggleFavoritesFilter"
+					data-wp-class--is-active="state.showFavoritesOnly"
+					data-wp-text="state.favoritesFilterText"
+					aria-pressed="false"
+					data-wp-bind--aria-pressed="state.showFavoritesOnly"
+				>
+					<?php esc_html_e( "\u{2665} Favorites", 'petstablished-sync' ); ?>
+				</button>
 			</div>
 
 			<?php if ( $show_filters ) : ?>

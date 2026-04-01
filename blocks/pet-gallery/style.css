@@ -92,18 +92,22 @@
 	outline-offset: 2px;
 }
 
-/* Badges — translucent glass pills overlaid on featured image, top-left.
- * Matches the semi-transparent treatment of the pet-actions overlay buttons
- * (top-right) so both corners share the same visual language. */
-.pet-gallery__badges {
-	position: absolute;
-	top: var(--wp--preset--spacing--20, 0.5rem);
-	left: var(--wp--preset--spacing--20, 0.5rem);
+/* Status bar — rendered above the featured image, not overlaid on it.
+ * Keeps the photo clean while giving the status badge clear visibility.
+ * Sets --pet-gallery-status-offset for sibling blocks (pet-actions overlay)
+ * that need to position below the status bar. */
+.pet-gallery__status-bar {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 6px;
-	z-index: 1;
-	pointer-events: none;
+	margin-bottom: var(--wp--preset--spacing--10, 0.375rem);
+}
+
+/* When a status bar is present, offset the sibling pet-actions overlay
+ * so the buttons land on the image, not above it. The offset is set on
+ * the column (shared parent) via :has() so it cascades to the actions. */
+.pet-details__gallery-col:has(.pet-gallery__status-bar) {
+	--pet-actions-top-offset: 2.25rem;
 }
 
 .pet-gallery__badge {

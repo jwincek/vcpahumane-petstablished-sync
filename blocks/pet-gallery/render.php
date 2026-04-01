@@ -183,6 +183,16 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 
 <div <?php echo $wrapper_attributes; ?>>
 
+	<?php if ( ! empty( $overlay_badges ) ) : ?>
+		<div class="pet-gallery__status-bar">
+			<?php foreach ( $overlay_badges as $badge ) : ?>
+				<span class="pet-gallery__badge <?php echo esc_attr( $badge['class'] ); ?>">
+					<?php echo esc_html( $badge['label'] ); ?>
+				</span>
+			<?php endforeach; ?>
+		</div>
+	<?php endif; ?>
+
 	<?php if ( $has_featured ) : ?>
 	<!-- Featured image hero — clicking opens the lightbox at index 0 -->
 	<figure class="pet-gallery__featured">
@@ -205,15 +215,6 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 				alt="<?php echo esc_attr( $featured_alt ); ?>"
 				loading="eager"
 			>
-			<?php if ( ! empty( $overlay_badges ) ) : ?>
-				<div class="pet-gallery__badges" aria-hidden="true">
-					<?php foreach ( $overlay_badges as $badge ) : ?>
-						<span class="pet-gallery__badge <?php echo esc_attr( $badge['class'] ); ?>">
-							<?php echo esc_html( $badge['label'] ); ?>
-						</span>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
 		<?php if ( ! $is_editor && $has_lightbox ) : ?>
 		</button>
 		<?php endif; ?>

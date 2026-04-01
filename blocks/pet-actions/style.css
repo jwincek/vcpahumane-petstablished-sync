@@ -316,7 +316,7 @@
  * ===================================================== */
 .pet-actions--overlay {
 	position: absolute;
-	top: var(--wp--preset--spacing--20, 0.5rem);
+	top: calc(var(--pet-actions-top-offset, 0px) + var(--wp--preset--spacing--20, 0.5rem));
 	right: var(--wp--preset--spacing--20, 0.5rem);
 	z-index: 2;
 	flex-direction: column;

@@ -306,6 +306,45 @@
 	text-decoration: underline;
 }
 
+/* Favorites toggle — pill button that filters the grid client-side */
+.pet-filters__favorites {
+	display: flex;
+	align-items: center;
+}
+
+.pet-filters__favorites-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	padding: 0.375rem 0.875rem;
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+	font-weight: 500;
+	font-family: inherit;
+	color: var(--wp--preset--color--contrast-2, #666);
+	background: var(--wp--preset--color--base-2, #f5f5f5);
+	border: 1px solid var(--wp--preset--color--border, #e0e0e0);
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+	white-space: nowrap;
+}
+
+.pet-filters__favorites-toggle:hover {
+	border-color: var(--wp--preset--color--vivid-red, #d63638);
+	color: var(--wp--preset--color--vivid-red, #d63638);
+}
+
+.pet-filters__favorites-toggle.is-active {
+	background: var(--wp--preset--color--vivid-red, #d63638);
+	border-color: var(--wp--preset--color--vivid-red, #d63638);
+	color: #fff;
+}
+
+.pet-filters__favorites-toggle:focus-visible {
+	outline: 2px solid var(--wp--preset--color--primary, #007cba);
+	outline-offset: 2px;
+}
+
 /* ============================================
    Responsive
    ============================================ */

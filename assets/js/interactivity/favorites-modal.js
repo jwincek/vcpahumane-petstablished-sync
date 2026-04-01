@@ -346,7 +346,7 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 				// Filter out any favorite IDs that don't have cached pet data.
 				// This prevents the badge count from exceeding the visible card count.
 				const gs = getGlobalState();
-				const validFavorites = gs.favorites.filter( id => !! gs.pets[ id ] );
+				const validFavorites = gs.favorites.filter( id => !! ( gs.pets[ id ] || gs.pets[ String( id ) ] ) );
 				if ( validFavorites.length !== gs.favorites.length ) {
 					gs.favorites = validFavorites;
 				}
@@ -390,28 +390,32 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 			const oldFavorites = [ ...getGlobalState().favorites ];
 			if ( ! oldFavorites.length ) return;
 
+			// Optimistic update + immediate localStorage persist.
 			getGlobalState().favorites = [];
+			storage.set( 'favorites', [] );
 			oldFavorites.forEach( id => {
-				if ( getGlobalState().pets[ id ] ) {
-					getGlobalState().pets[ id ].favorited = false;
-				}
+				const pet = getGlobalState().pets[ id ] || getGlobalState().pets[ String( id ) ];
+				if ( pet ) pet.favorited = false;
 			} );
 			announce( 'All favorites cleared' );
 
+			// Close the modal — nothing left to show.
+			actions.closeModal();
+
 			try {
-				for ( const id of oldFavorites ) {
-					yield executeAbility( 'petstablished/toggle-favorite', { id } );
-				}
-				storage.set( 'favorites', [] );
+				// Fire all toggle calls in parallel — single yield, minimal
+				// interruption window if user navigates away.
+				yield Promise.all(
+					oldFavorites.map( id => executeAbility( 'petstablished/toggle-favorite', { id } ) )
+				);
 			} catch ( error ) {
 				console.error( 'Failed to clear favorites:', error );
 				getGlobalState().favorites = oldFavorites;
-				oldFavorites.forEach( id => {
-					if ( getGlobalState().pets[ id ] ) {
-						getGlobalState().pets[ id ].favorited = true;
-					}
-				} );
 				storage.set( 'favorites', oldFavorites );
+				oldFavorites.forEach( id => {
+					const pet = getGlobalState().pets[ id ] || getGlobalState().pets[ String( id ) ];
+					if ( pet ) pet.favorited = true;
+				} );
 				announce( 'Failed to clear favorites' );
 			}
 		},
@@ -476,48 +480,22 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 			bindGridDelegation( ref );
 
 			// Build desired pet list (only pets that exist in the cache).
+			// Try both numeric and string keys — PHP state uses string keys,
+			// but favorites array and cachePet may use numbers.
 			const desiredPets = favoriteIds
-				.map( id => petsCache[ id ] )
+				.map( id => petsCache[ id ] || petsCache[ String( id ) ] )
 				.filter( Boolean );
 
-			// Index current cards by data-pet-id.
-			const currentCards = new Map();
-			ref.querySelectorAll( '.pet-favorites-modal__card[data-pet-id]' ).forEach( el => {
-				currentCards.set( Number( el.dataset.petId ), el );
-			} );
+			// Clear all existing cards and rebuild from current data.
+			// Favourites lists are small (typically < 20 pets), so the
+			// performance cost of a full rebuild is negligible and eliminates
+			// all stale-data issues (missing images, wrong badges, etc.).
+			ref.innerHTML = '';
 
-			// Desired IDs set.
-			const desiredIds = new Set( desiredPets.map( p => p.id ) );
-
-			// Remove cards no longer in favorites.
-			for ( const [ id, el ] of currentCards ) {
-				if ( ! desiredIds.has( id ) ) {
-					el.remove();
-					currentCards.delete( id );
-				}
-			}
-
-			// Add missing cards and ensure correct order.
-			let prevNode = null;
 			for ( const pet of desiredPets ) {
-				let card = currentCards.get( pet.id );
-				if ( ! card ) {
-					const wrapper = document.createElement( 'div' );
-					wrapper.innerHTML = buildCardHtml( pet );
-					card = wrapper.firstElementChild;
-				}
-
-				// Ensure correct position.
-				const expectedNext = prevNode ? prevNode.nextElementSibling : ref.firstElementChild;
-				if ( card !== expectedNext ) {
-					if ( prevNode ) {
-						prevNode.after( card );
-					} else {
-						ref.prepend( card );
-					}
-				}
-
-				prevNode = card;
+				const wrapper = document.createElement( 'div' );
+				wrapper.innerHTML = buildCardHtml( pet );
+				ref.appendChild( wrapper.firstElementChild );
 			}
 		},
 	},

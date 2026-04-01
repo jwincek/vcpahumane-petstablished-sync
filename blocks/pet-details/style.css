@@ -132,7 +132,7 @@ a.pet-details__breadcrumb-item:hover {
 	gap: var(--pet-single-gap);
 }
 
-/* Gallery column — positioning context for overlay action buttons */
+/* Gallery column */
 .pet-details__gallery-col {
 	position: relative;
 }
