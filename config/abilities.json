@@ -314,6 +314,32 @@
       }
     },
 
+    "petstablished/clear-favorites": {
+      "label": "Clear All Favorites",
+      "description": "Removes all pets from the current user's favorites list in a single operation.",
+      "category": "pets",
+      "permission": "public_with_session",
+      "meta": {
+        "annotations": {
+          "readonly": false,
+          "destructive": true,
+          "idempotent": true
+        },
+        "show_in_rest": true
+      },
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["favorites"],
+        "properties": {
+          "favorites": { "type": "array", "items": { "type": "integer" }, "description": "Empty favorites list." }
+        }
+      }
+    },
+
     "petstablished/update-comparison": {
       "label": "Update Comparison",
       "description": "Manages the pet comparison list: add, remove, clear, or set pets.",

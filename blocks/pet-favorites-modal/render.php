@@ -233,7 +233,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 									<?php if ( ! empty( $pet['is_new'] ) ) : ?>
 										<span class="pet-favorites-modal__badge pet-favorites-modal__badge--new"><?php esc_html_e( 'New', 'petstablished-sync' ); ?></span>
 									<?php endif; ?>
-									<?php if ( ! empty( $pet['special_needs'] ) && 'no' !== strtolower( (string) $pet['special_needs'] ) ) : ?>
+									<?php if ( isset( $pet['special_needs'] ) && 'yes' === strtolower( (string) $pet['special_needs'] ) ) : ?>
 										<span class="pet-favorites-modal__badge pet-favorites-modal__badge--special"><?php esc_html_e( 'Special Needs', 'petstablished-sync' ); ?></span>
 									<?php endif; ?>
 									<?php if ( ! empty( $pet['is_bonded_pair'] ) && ! empty( $partners ) ) : ?>
@@ -282,6 +282,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					type="button"
 					class="pet-favorites-modal__clear-btn"
 					data-wp-on--click="actions.handleClearClick"
+					data-wp-text="state.clearButtonText"
+					data-wp-class--is-confirming="state.clearConfirming"
 					data-default-text="<?php esc_attr_e( 'Clear all favorites', 'petstablished-sync' ); ?>"
 					data-confirm-text="<?php esc_attr_e( 'Tap again to confirm', 'petstablished-sync' ); ?>"
 				>

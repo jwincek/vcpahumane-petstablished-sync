@@ -37,6 +37,7 @@ class Petstablished_REST {
 	private const CLIENT_ABILITIES = [
 		'petstablished/toggle-favorite',
 		'petstablished/get-favorites',
+		'petstablished/clear-favorites',
 		'petstablished/update-comparison',
 		'petstablished/get-comparison',
 	];

@@ -146,7 +146,7 @@ if ( ( $attributes['showBadgeBondedPair'] ?? true ) && ! empty( $pet['is_bonded_
 	);
 }
 
-if ( ( $attributes['showBadgeSpecialNeeds'] ?? true ) && ! empty( $pet['special_needs'] ) && 'no' !== strtolower( (string) $pet['special_needs'] ) ) {
+if ( ( $attributes['showBadgeSpecialNeeds'] ?? true ) && isset( $pet['special_needs'] ) && 'yes' === strtolower( (string) $pet['special_needs'] ) ) {
 	$below_badges[] = array(
 		'label' => __( 'Special Needs', 'petstablished-sync' ),
 		'class' => 'pet-gallery__badge--special-needs',

@@ -49,6 +49,25 @@ function toggle( array $input ): array {
 }
 
 /**
+ * Clear all favorites in one operation.
+ *
+ * @param array $input { ids: int[] } — the IDs to clear (for verification).
+ * @return array
+ */
+function clear_all( array $input = [] ): array {
+	\Petstablished_Helpers::save_favorites( [] );
+
+	/**
+	 * Fires after all favorites are cleared.
+	 *
+	 * @since 4.3.0
+	 */
+	do_action( 'petstablished_favorites_cleared' );
+
+	return [ 'favorites' => [] ];
+}
+
+/**
  * Get current user's favorites with hydrated pet data.
  *
  * @return array

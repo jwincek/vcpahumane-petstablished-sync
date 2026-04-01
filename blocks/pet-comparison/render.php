@@ -75,7 +75,7 @@ $show_adoption_fee  = $attributes['showAdoptionFee'] ?? true;
 foreach ( $pets as &$pet ) {
 	$pet['compatibility_display'] = $pet['compatibility'] ?: '—';
 	$pet['fee_display']           = $pet['adoption_fee_formatted'] ?: '—';
-	$pet['special_needs_display'] = ! empty( $pet['special_needs'] )
+	$pet['special_needs_display'] = ( isset( $pet['special_needs'] ) && 'yes' === strtolower( (string) $pet['special_needs'] ) )
 		? ( $pet['special_needs_detail'] ?: __( 'Yes', 'petstablished-sync' ) )
 		: __( 'None', 'petstablished-sync' );
 	$pet['shots_display']         = ! empty( $pet['shots_current'] ) ? __( 'Current', 'petstablished-sync' ) : '—';

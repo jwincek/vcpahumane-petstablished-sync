@@ -557,8 +557,8 @@ class Pet_Hydrator {
 	 * Returns empty string if the pet has no special needs.
 	 */
 	private static function compute_special_needs_summary( array $entity ): string {
-		$has_special = $entity['special_needs'] ?? false;
-		if ( ! $has_special ) {
+		$has_special = $entity['special_needs'] ?? '';
+		if ( 'yes' !== strtolower( (string) $has_special ) ) {
 			return '';
 		}
 

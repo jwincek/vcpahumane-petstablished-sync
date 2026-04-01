@@ -52,6 +52,7 @@ class Provider {
 		'petstablished/get-adoption-stats' => 'stats',
 		'petstablished/toggle-favorite'    => 'favorites',
 		'petstablished/get-favorites'      => 'favorites',
+		'petstablished/clear-favorites'    => 'favorites',
 		'petstablished/update-comparison'  => 'comparison',
 		'petstablished/get-comparison'     => 'comparison',
 	];
@@ -155,6 +156,7 @@ class Provider {
 			'petstablished/get-adoption-stats' => 'Petstablished\\Abilities\\Stats\\get_adoption_stats',
 			'petstablished/toggle-favorite'    => 'Petstablished\\Abilities\\Favorites\\toggle',
 			'petstablished/get-favorites'      => 'Petstablished\\Abilities\\Favorites\\get_favorites',
+			'petstablished/clear-favorites'    => 'Petstablished\\Abilities\\Favorites\\clear_all',
 			'petstablished/update-comparison'  => 'Petstablished\\Abilities\\Comparison\\update',
 			'petstablished/get-comparison'     => 'Petstablished\\Abilities\\Comparison\\get_comparison',
 		];

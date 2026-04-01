@@ -174,14 +174,18 @@ if ( $ability ) {
 $pet_ids = array();
 foreach ( $pets as $pet ) {
 	$pet_ids[] = array(
-		'id'    => $pet['id'],
-		'name'  => $pet['name'],
-		'url'   => $pet['url'] ?? '',
-		'image' => $pet['image'] ?? '',
-		'breed' => $pet['breed'] ?? '',
-		'age'   => $pet['age'] ?? '',
-		'sex'   => $pet['sex'] ?? '',
-		'size'  => $pet['size'] ?? '',
+		'id'              => $pet['id'],
+		'name'            => $pet['name'],
+		'url'             => $pet['url'] ?? '',
+		'image'           => $pet['image'] ?? '',
+		'breed'           => $pet['breed'] ?? '',
+		'age'             => $pet['age'] ?? '',
+		'sex'             => $pet['sex'] ?? '',
+		'size'            => $pet['size'] ?? '',
+		'special_needs'   => $pet['special_needs'] ?? '',
+		'is_new'          => $pet['is_new'] ?? false,
+		'is_bonded_pair'  => $pet['is_bonded_pair'] ?? false,
+		'bonded_pair_names' => $pet['bonded_pair_names'] ?? array(),
 	);
 }
 
@@ -674,7 +678,7 @@ $filter_config = array(
 
 						<?php
 						$has_badges = ( $pet['is_new'] ?? false )
-							|| ! empty( $pet['special_needs'] ) && strtolower( $pet['special_needs'] ) !== 'no'
+							|| ( isset( $pet['special_needs'] ) && strtolower( (string) $pet['special_needs'] ) === 'yes' )
 							|| ( $pet['is_bonded_pair'] ?? false );
 						if ( $has_badges ) :
 						?>
@@ -683,7 +687,7 @@ $filter_config = array(
 									<span class="pet-listing-grid__badge pet-listing-grid__badge--new"><?php esc_html_e( 'New', 'petstablished-sync' ); ?></span>
 								<?php endif; ?>
 
-								<?php if ( ! empty( $pet['special_needs'] ) && strtolower( $pet['special_needs'] ) !== 'no' ) : ?>
+								<?php if ( isset( $pet['special_needs'] ) && strtolower( (string) $pet['special_needs'] ) === 'yes' ) : ?>
 									<span class="pet-listing-grid__badge pet-listing-grid__badge--special"><?php esc_html_e( 'Special Needs', 'petstablished-sync' ); ?></span>
 								<?php endif; ?>
 
