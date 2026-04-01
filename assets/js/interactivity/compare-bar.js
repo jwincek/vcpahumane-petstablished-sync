@@ -104,7 +104,7 @@ const { state, actions, callbacks } = store( 'petstablished/compare-bar', {
 		},
 
 		*clearComparison() {
-			yield* store( 'petstablished' ).actions.clearComparison();
+			yield store( 'petstablished' ).actions.clearComparison();
 		},
 
 		/**
@@ -136,7 +136,7 @@ const { state, actions, callbacks } = store( 'petstablished/compare-bar', {
 		},
 
 		*shareComparison() {
-			yield* store( 'petstablished' ).actions.shareComparison();
+			yield store( 'petstablished' ).actions.shareComparison();
 		},
 
 		/**

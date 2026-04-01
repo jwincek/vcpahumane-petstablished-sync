@@ -88,7 +88,7 @@ const { state, actions, callbacks } = store( 'petstablished/comparison', {
 		 */
 		*clearAndRedirect() {
 			try {
-				yield* getGlobalActions().clearComparison();
+				yield getGlobalActions().clearComparison();
 			} catch { /* continue to redirect */ }
 
 			// Hard reload — the comparison block is outside the grid's

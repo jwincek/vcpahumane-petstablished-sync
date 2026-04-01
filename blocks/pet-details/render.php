@@ -60,6 +60,29 @@ if ( ! $pet ) {
 $layout      = $attributes['layout'] ?? 'sidebar';
 $archive_url = get_post_type_archive_link( 'pet' );
 
+// Cache the current pet into the global pets store so the compare bar
+// and favorites modal have access to image, breed, etc. without needing
+// a separate server fetch. On archive pages the grid's petIds handles
+// this; on single pages the pet-details block is the only data source.
+wp_interactivity_state( 'petstablished', array(
+	'pets' => array(
+		(string) $pet['id'] => array(
+			'id'                => $pet['id'],
+			'name'              => $pet['name'],
+			'url'               => $pet['url'] ?? '',
+			'image'             => $pet['image'] ?? '',
+			'breed'             => $pet['breed'] ?? '',
+			'age'               => $pet['age'] ?? '',
+			'sex'               => $pet['sex'] ?? '',
+			'size'              => $pet['size'] ?? '',
+			'special_needs'     => $pet['special_needs'] ?? '',
+			'is_new'            => $pet['is_new'] ?? false,
+			'is_bonded_pair'    => $pet['is_bonded_pair'] ?? false,
+			'bonded_pair_names' => $pet['bonded_pair_names'] ?? array(),
+		),
+	),
+) );
+
 // Interactivity context — provides reactive state to inner blocks.
 // Pet-gallery, pet-actions, and other child blocks read petId from this context.
 $context = array(
