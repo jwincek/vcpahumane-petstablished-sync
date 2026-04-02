@@ -5,7 +5,7 @@
  * Pure functions for pet data retrieval abilities.
  * Each function receives validated input and returns data or WP_Error.
  *
- * v3.1.0 changes:
+ * v3.2.0 changes:
  * - Refactored to use Query Builder (eliminates inline WP_Query construction)
  * - Added do_action hooks for extensibility
  *
@@ -54,7 +54,7 @@ function get( array $input ): array|WP_Error {
 	/**
 	 * Fires after a single pet is retrieved via the get-pet ability.
 	 *
-	 * @since 3.1.0
+	 * @since 3.2.0
 	 *
 	 * @param array    $pet  Hydrated pet data.
 	 * @param \WP_Post $post The post object.
@@ -131,7 +131,7 @@ function list_pets( array $input = [] ): array {
 	/**
 	 * Fires after a paginated pet list is retrieved.
 	 *
-	 * @since 3.1.0
+	 * @since 3.2.0
 	 *
 	 * @param array $result Paginated result with items, total, total_pages, page.
 	 * @param array $input  The filter input.
@@ -207,7 +207,7 @@ function filter_pets( array $input = [] ): array {
 	/**
 	 * Fires after filtered pets are retrieved.
 	 *
-	 * @since 3.1.0
+	 * @since 3.2.0
 	 *
 	 * @param int   $total Total matching pets.
 	 * @param array $input The filter input.

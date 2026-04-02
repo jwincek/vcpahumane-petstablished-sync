@@ -1,6 +1,6 @@
 {
 	"name": "petstablished-sync",
-	"version": "3.1.0",
+	"version": "3.2.0",
 	"description": "Sync adoptable pets from Petstablished into WordPress.",
 	"private": true,
 	"scripts": {

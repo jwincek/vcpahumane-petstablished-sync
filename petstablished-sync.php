@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'PETSTABLISHED_SYNC_VERSION', '3.1.0' );
+define( 'PETSTABLISHED_SYNC_VERSION', '3.2.0' );
 define( 'PETSTABLISHED_SYNC_FILE', __FILE__ );
 define( 'PETSTABLISHED_SYNC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PETSTABLISHED_SYNC_URL', plugin_dir_url( __FILE__ ) );

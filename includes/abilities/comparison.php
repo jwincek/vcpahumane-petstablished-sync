@@ -46,7 +46,7 @@ function update( array $input ): array {
 	/**
 	 * Fires after the comparison list is updated.
 	 *
-	 * @since 3.1.0
+	 * @since 3.2.0
 	 *
 	 * @param string $action   The action performed (add, remove, clear, set).
 	 * @param int[]  $ids      Updated comparison IDs.

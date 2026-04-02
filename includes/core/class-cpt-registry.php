@@ -9,7 +9,7 @@
  * This replaces the hardcoded Petstablished_CPT class.
  *
  * @package Petstablished_Sync
- * @since   3.1.0
+ * @since   3.2.0
  */
 
 declare( strict_types = 1 );

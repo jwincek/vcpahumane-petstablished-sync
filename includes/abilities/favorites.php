@@ -37,7 +37,7 @@ function toggle( array $input ): array {
 	/**
 	 * Fires after a pet is toggled in/out of favorites.
 	 *
-	 * @since 3.1.0
+	 * @since 3.2.0
 	 *
 	 * @param int   $id        Pet post ID.
 	 * @param bool  $favorited Whether the pet was added (true) or removed (false).

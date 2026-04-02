@@ -18,7 +18,7 @@
  *   $slide_directives   (string) Extra data-wp-* attributes for the <article>.
  *
  * @package Petstablished_Sync
- * @since 3.1.0
+ * @since 3.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
