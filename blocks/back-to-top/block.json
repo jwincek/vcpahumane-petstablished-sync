@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "petstablished/back-to-top",
+	"version": "1.0.0",
+	"title": "Back to Top",
+	"category": "petstablished",
+	"description": "Floating button that scrolls back to the top of the page. Appears after scrolling down.",
+	"keywords": ["back", "top", "scroll", "navigation"],
+	"textdomain": "petstablished-sync",
+	"attributes": {
+		"position": {
+			"type": "string",
+			"default": "bottom-left",
+			"enum": ["bottom-left", "bottom-right"]
+		},
+		"threshold": {
+			"type": "integer",
+			"default": 400
+		}
+	},
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"interactivity": true
+	},
+	"render": "file:./render.php",
+	"style": "file:./style.css",
+	"viewScriptModule": "file:./view.js"
+}

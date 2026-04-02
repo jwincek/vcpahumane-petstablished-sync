@@ -174,7 +174,14 @@ class Petstablished_Icons {
 		'chevron-down' => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
-				'M6 9l6 6 6-6', // polyline
+				'M6 9l6 6 6-6',
+			),
+		),
+
+		'chevron-up' => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M18 15l-6-6-6 6',
 			),
 		),
 

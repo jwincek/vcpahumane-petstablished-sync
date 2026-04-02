@@ -454,18 +454,6 @@ $filter_config = array(
 					</select>
 				</div>
 
-				<!-- Favorites filter toggle — client-side, no server round-trip -->
-				<button
-					type="button"
-					class="pet-listing-grid__favorites-toggle"
-					data-wp-on--click="actions.toggleFavoritesFilter"
-					data-wp-class--is-active="state.showFavoritesOnly"
-					data-wp-text="state.favoritesFilterText"
-					aria-pressed="false"
-					data-wp-bind--aria-pressed="state.showFavoritesOnly"
-				>
-					<?php esc_html_e( "\u{2665} Favorites", 'petstablished-sync' ); ?>
-				</button>
 			</div>
 
 			<?php if ( $show_filters ) : ?>
@@ -475,6 +463,9 @@ $filter_config = array(
 					id="pet-filter-drawer"
 					data-wp-class--is-open="state.filterDrawerOpen"
 				>
+				<!-- Single inner wrapper ensures overflow:hidden clips everything
+				     (taxonomy selects + compat details) when the drawer collapses. -->
+				<div class="pet-listing-grid__filter-drawer-inner">
 					<div class="pet-listing-grid__filters" role="group" aria-label="<?php esc_attr_e( 'Filter pets', 'petstablished-sync' ); ?>">
 						<?php
 						foreach ( $filter_config as $key => $config ) :
@@ -517,44 +508,67 @@ $filter_config = array(
 					</div>
 
 					<?php if ( $has_compat_filters ) : ?>
-						<div class="pet-listing-grid__compat-filters pet-listing-grid__compat-filters--<?php echo esc_attr( $compat_style ); ?>" role="group" aria-label="<?php esc_attr_e( 'Compatibility filters', 'petstablished-sync' ); ?>">
-							<?php foreach ( $compat_filters_config as $key => $filter ) : ?>
+						<?php
+						$active_compat_count = count( array_filter( $url_compat ) );
+						$visible_compat_count = count( array_filter( array_column( $compat_filters_config, 'show' ) ) );
+						// Always open in HTML — visible on desktop immediately.
+						// On mobile, the grid's init callback closes it unless
+						// compat filters are active.
+						?>
+						<details class="pet-listing-grid__compat-details" open data-has-active="<?php echo $active_compat_count > 0 ? '1' : '0'; ?>">
+							<summary class="pet-listing-grid__compat-summary">
 								<?php
-								if ( ! $filter['show'] ) continue;
-								$count = $compat_counts[ $key ] ?? 0;
-								if ( $count === 0 ) continue;
+								printf(
+									/* translators: %d: number of additional filter options */
+									esc_html__( 'More Filters (%d)', 'petstablished-sync' ),
+									$visible_compat_count
+								);
 								?>
-								<?php if ( $compat_style === 'chips' ) : ?>
-									<button
-										type="button"
-										class="pet-listing-grid__compat-chip"
-										data-wp-on--click="actions.toggleCompatFilter"
-										data-wp-class--is-active="context.compatFilters.<?php echo esc_attr( $key ); ?>"
-										data-compat-key="<?php echo esc_attr( $key ); ?>"
-										aria-pressed="<?php echo $url_compat[ $key ] ? 'true' : 'false'; ?>"
-										data-wp-bind--aria-pressed="context.compatFilters.<?php echo esc_attr( $key ); ?>"
-									>
-										<span class="pet-listing-grid__compat-chip-icon" aria-hidden="true"><?php echo $filter['icon']; ?></span>
-										<span class="pet-listing-grid__compat-chip-label"><?php echo esc_html( $filter['label'] ); ?></span>
-										<span class="pet-listing-grid__compat-chip-count">(<?php echo esc_html( $count ); ?>)</span>
-									</button>
-								<?php else : ?>
-									<label class="pet-listing-grid__compat-checkbox">
-										<input
-											type="checkbox"
-											data-wp-on--change="actions.toggleCompatFilter"
-											data-wp-bind--checked="context.compatFilters.<?php echo esc_attr( $key ); ?>"
-											data-compat-key="<?php echo esc_attr( $key ); ?>"
-											<?php checked( $url_compat[ $key ] ); ?>
-										>
-										<span class="pet-listing-grid__compat-checkbox-icon" aria-hidden="true"><?php echo $filter['icon']; ?></span>
-										<span class="pet-listing-grid__compat-checkbox-label"><?php echo esc_html( $filter['label'] ); ?></span>
-										<span class="pet-listing-grid__compat-checkbox-count">(<?php echo esc_html( $count ); ?>)</span>
-									</label>
+								<?php if ( $active_compat_count > 0 ) : ?>
+									<span class="pet-listing-grid__compat-summary-count"><?php echo esc_html( $active_compat_count ); ?></span>
 								<?php endif; ?>
-							<?php endforeach; ?>
-						</div>
+								<?php Petstablished_Icons::render( 'chevron-down', array( 'width' => 16, 'height' => 16, 'class' => 'pet-listing-grid__compat-summary-icon' ) ); ?>
+							</summary>
+							<div class="pet-listing-grid__compat-filters pet-listing-grid__compat-filters--<?php echo esc_attr( $compat_style ); ?>" role="group" aria-label="<?php esc_attr_e( 'Compatibility filters', 'petstablished-sync' ); ?>">
+								<?php foreach ( $compat_filters_config as $key => $filter ) : ?>
+									<?php
+									if ( ! $filter['show'] ) continue;
+									$count = $compat_counts[ $key ] ?? 0;
+									if ( $count === 0 ) continue;
+									?>
+									<?php if ( $compat_style === 'chips' ) : ?>
+										<button
+											type="button"
+											class="pet-listing-grid__compat-chip"
+											data-wp-on--click="actions.toggleCompatFilter"
+											data-wp-class--is-active="context.compatFilters.<?php echo esc_attr( $key ); ?>"
+											data-compat-key="<?php echo esc_attr( $key ); ?>"
+											aria-pressed="<?php echo $url_compat[ $key ] ? 'true' : 'false'; ?>"
+											data-wp-bind--aria-pressed="context.compatFilters.<?php echo esc_attr( $key ); ?>"
+										>
+											<span class="pet-listing-grid__compat-chip-icon" aria-hidden="true"><?php echo $filter['icon']; ?></span>
+											<span class="pet-listing-grid__compat-chip-label"><?php echo esc_html( $filter['label'] ); ?></span>
+											<span class="pet-listing-grid__compat-chip-count">(<?php echo esc_html( $count ); ?>)</span>
+										</button>
+									<?php else : ?>
+										<label class="pet-listing-grid__compat-checkbox">
+											<input
+												type="checkbox"
+												data-wp-on--change="actions.toggleCompatFilter"
+												data-wp-bind--checked="context.compatFilters.<?php echo esc_attr( $key ); ?>"
+												data-compat-key="<?php echo esc_attr( $key ); ?>"
+												<?php checked( $url_compat[ $key ] ); ?>
+											>
+											<span class="pet-listing-grid__compat-checkbox-icon" aria-hidden="true"><?php echo $filter['icon']; ?></span>
+											<span class="pet-listing-grid__compat-checkbox-label"><?php echo esc_html( $filter['label'] ); ?></span>
+											<span class="pet-listing-grid__compat-checkbox-count">(<?php echo esc_html( $count ); ?>)</span>
+										</label>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
+						</details>
 					<?php endif; ?>
+				</div><!-- .pet-listing-grid__filter-drawer-inner -->
 				</div>
 			<?php endif; ?>
 
@@ -573,23 +587,123 @@ $filter_config = array(
 		</span>
 	</div>
 
-	<?php if ( $show_results_count ) : ?>
-		<div class="pet-listing-grid__results-info" role="status" aria-live="polite">
-			<?php
-			if ( $search_query ) {
-				printf(
-					/* translators: 1: count, 2: search query */
-					esc_html( _n( '%1$d result for &ldquo;%2$s&rdquo;', '%1$d results for &ldquo;%2$s&rdquo;', $total, 'petstablished-sync' ) ),
-					$total,
-					esc_html( $search_query )
-				);
-			} else {
-				printf(
-					esc_html( _n( '%d pet', '%d pets', $total, 'petstablished-sync' ) ),
-					$total
-				);
-			}
-			?>
+	<div class="pet-listing-grid__results-bar">
+		<!-- Favorites toggle — view mode, not a query filter -->
+		<div data-wp-interactive="petstablished/grid">
+			<button
+				type="button"
+				class="pet-listing-grid__favorites-toggle"
+				data-wp-on--click="actions.toggleFavoritesFilter"
+				data-wp-class--is-active="state.showFavoritesOnly"
+				data-wp-text="state.favoritesFilterText"
+				aria-pressed="false"
+				data-wp-bind--aria-pressed="state.showFavoritesOnly"
+			>
+				<?php esc_html_e( "\u{2665} Favorites", 'petstablished-sync' ); ?>
+			</button>
+		</div>
+
+		<?php if ( $show_results_count ) : ?>
+			<div class="pet-listing-grid__results-info" role="status" aria-live="polite">
+				<?php
+				if ( $search_query ) {
+					printf(
+						/* translators: 1: count, 2: search query */
+						esc_html( _n( '%1$d result for &ldquo;%2$s&rdquo;', '%1$d results for &ldquo;%2$s&rdquo;', $total, 'petstablished-sync' ) ),
+						$total,
+						esc_html( $search_query )
+					);
+				} else {
+					printf(
+						esc_html( _n( '%d pet', '%d pets', $total, 'petstablished-sync' ) ),
+						$total
+					);
+				}
+				?>
+			</div>
+		<?php endif; ?>
+	</div>
+
+	<?php
+	// === Active Filter Chips ===
+	// Show a scannable summary of active filters with individual removal.
+	$active_chips = array();
+
+	// Taxonomy filters — display the human-readable value (slug → label).
+	$filter_labels = array(
+		'animal' => __( 'Animal', 'petstablished-sync' ),
+		'breed'  => __( 'Breed', 'petstablished-sync' ),
+		'age'    => __( 'Age', 'petstablished-sync' ),
+		'sex'    => __( 'Sex', 'petstablished-sync' ),
+		'size'   => __( 'Size', 'petstablished-sync' ),
+	);
+	foreach ( $url_filters as $key => $value ) {
+		if ( $value ) {
+			$active_chips[] = array(
+				'type'  => 'filter',
+				'key'   => $key,
+				'label' => ( $filter_labels[ $key ] ?? ucfirst( $key ) ) . ': ' . ucfirst( str_replace( '-', ' ', $value ) ),
+			);
+		}
+	}
+
+	// Compatibility filters.
+	$compat_labels = array(
+		'goodWithDogs'   => __( 'Good with dogs', 'petstablished-sync' ),
+		'goodWithCats'   => __( 'Good with cats', 'petstablished-sync' ),
+		'goodWithKids'   => __( 'Good with kids', 'petstablished-sync' ),
+		'shotsCurrent'   => __( 'Shots current', 'petstablished-sync' ),
+		'spayedNeutered' => __( 'Spayed/Neutered', 'petstablished-sync' ),
+		'housebroken'    => __( 'Housebroken', 'petstablished-sync' ),
+		'specialNeeds'   => __( 'Special needs', 'petstablished-sync' ),
+	);
+	foreach ( $url_compat as $key => $active ) {
+		if ( $active ) {
+			$active_chips[] = array(
+				'type'  => 'compat',
+				'key'   => $key,
+				'label' => $compat_labels[ $key ] ?? $key,
+			);
+		}
+	}
+
+	// Search query chip.
+	if ( $search_query ) {
+		$active_chips[] = array(
+			'type'  => 'search',
+			'key'   => 'search',
+			'label' => sprintf( __( 'Search: "%s"', 'petstablished-sync' ), $search_query ),
+		);
+	}
+
+	if ( ! empty( $active_chips ) ) :
+	?>
+		<div class="pet-listing-grid__active-filters" role="list" aria-label="<?php esc_attr_e( 'Active filters', 'petstablished-sync' ); ?>">
+			<?php foreach ( $active_chips as $chip ) : ?>
+				<button
+					type="button"
+					class="pet-listing-grid__filter-chip"
+					data-filter-type="<?php echo esc_attr( $chip['type'] ); ?>"
+					data-filter-key="<?php echo esc_attr( $chip['key'] ); ?>"
+					data-wp-on--click="actions.removeFilter"
+					role="listitem"
+					aria-label="<?php echo esc_attr( sprintf( __( 'Remove filter: %s', 'petstablished-sync' ), $chip['label'] ) ); ?>"
+				>
+					<span class="pet-listing-grid__filter-chip-label"><?php echo esc_html( $chip['label'] ); ?></span>
+					<span class="pet-listing-grid__filter-chip-remove" aria-hidden="true">&times;</span>
+				</button>
+			<?php endforeach; ?>
+
+			<?php if ( count( $active_chips ) > 1 ) : ?>
+				<button
+					type="button"
+					class="pet-listing-grid__filter-chip pet-listing-grid__filter-chip--clear"
+					data-wp-on--click="actions.resetFilters"
+					aria-label="<?php esc_attr_e( 'Clear all filters', 'petstablished-sync' ); ?>"
+				>
+					<?php esc_html_e( 'Clear all', 'petstablished-sync' ); ?>
+				</button>
+			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 

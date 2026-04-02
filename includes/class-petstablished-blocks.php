@@ -45,6 +45,7 @@ class Petstablished_Blocks {
 		'adoption-fee',
 		'pet-tagline',
 		'pet-breadcrumb',
+		'back-to-top',
 	);
 
 	public function __construct() {

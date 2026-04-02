@@ -8,14 +8,18 @@
 	gap: var(--wp--preset--spacing--30, 1rem);
 }
 
-/* Toolbar */
+/* Toolbar — contains search/sort row + filter drawer */
 .pet-listing-grid__toolbar {
 	display: flex;
 	flex-direction: column;
 	gap: var(--wp--preset--spacing--20, 0.5rem);
+	padding: var(--wp--preset--spacing--20, 0.75rem);
+	background: var(--wp--preset--color--base-2, #f9f9f9);
+	border: 1px solid var(--wp--preset--color--border, #e0e0e0);
+	border-radius: var(--wp--custom--border-radius, 8px);
 }
 
-/* Top row: search + filter toggle + sort — always visible */
+/* Top row: search + sort — always visible */
 .pet-listing-grid__toolbar-row {
 	display: flex;
 	flex-wrap: wrap;
@@ -26,7 +30,7 @@
 /* Search */
 .pet-listing-grid__search {
 	flex: 1 1 200px;
-	max-width: 320px;
+	max-width: 360px;
 	min-width: 200px;
 }
 
@@ -183,6 +187,68 @@
 
 .pet-listing-grid__filter-reset[hidden] {
 	display: none;
+}
+
+/* Compatibility Collapsible — open on desktop, collapsed on mobile.
+ * HTML has open attribute only when compat filters are active (for mobile).
+ * Desktop CSS forces content visible regardless. */
+.pet-listing-grid__compat-details {
+	margin-top: var(--wp--preset--spacing--20, 0.5rem);
+	border-top: 1px solid var(--wp--preset--color--border, #e0e0e0);
+	padding-top: var(--wp--preset--spacing--20, 0.5rem);
+}
+
+.pet-listing-grid__compat-summary {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.375rem 0;
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
+	font-weight: 500;
+	color: var(--wp--preset--color--contrast-2, #666);
+	cursor: pointer;
+	list-style: none;
+	user-select: none;
+}
+
+.pet-listing-grid__compat-summary::-webkit-details-marker {
+	display: none;
+}
+
+.pet-listing-grid__compat-summary-icon {
+	transition: transform 0.2s ease;
+}
+
+.pet-listing-grid__compat-details[open] .pet-listing-grid__compat-summary-icon {
+	transform: rotate(180deg);
+}
+
+.pet-listing-grid__compat-summary-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 5px;
+	background: var(--wp--preset--color--primary, #007cba);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	border-radius: 10px;
+}
+
+/* Desktop: details is always open (HTML attribute), hide the summary
+ * since the toggle is unnecessary when there's room to show everything. */
+@media (min-width: 601px) {
+	.pet-listing-grid__compat-details {
+		border-top: 1px solid var(--wp--preset--color--border, #e0e0e0);
+		padding-top: var(--wp--preset--spacing--10, 0.375rem);
+		margin-top: var(--wp--preset--spacing--10, 0.375rem);
+	}
+
+	.pet-listing-grid__compat-summary {
+		display: none;
+	}
 }
 
 /* Compatibility Filters */
@@ -425,12 +491,22 @@
 	outline-offset: 2px;
 }
 
+/* Results Bar — favorites toggle (left) + results count (right) */
+.pet-listing-grid__results-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--wp--preset--spacing--20, 0.5rem);
+}
+
+
 /* Results Info */
 .pet-listing-grid__results-info {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35em;
-	margin: 0.5em 0;
+	margin: 0;
 	padding: 0.45em 1em;
 	font-size: var(--wp--preset--font-size--small, 0.875rem);
 	font-weight: 500;
@@ -438,6 +514,77 @@
 	background: var(--wp--preset--color--contrast-4, #f0f0f0);
 	border-radius: 2em;
 	letter-spacing: 0.01em;
+}
+
+/* Active Filter Chips — scannable summary of applied filters */
+.pet-listing-grid__active-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: var(--wp--preset--spacing--20, 0.5rem);
+}
+
+.pet-listing-grid__filter-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.25rem 0.625rem;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	font-family: inherit;
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+	background: var(--wp--preset--color--base-2, #f5f5f5);
+	border: 1px solid var(--wp--preset--color--border, #e0e0e0);
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+	white-space: nowrap;
+}
+
+.pet-listing-grid__filter-chip:hover {
+	background: var(--wp--preset--color--base, #fff);
+	border-color: var(--wp--preset--color--contrast-2, #999);
+}
+
+.pet-listing-grid__filter-chip:focus-visible {
+	outline: 2px solid var(--wp--preset--color--primary, #007cba);
+	outline-offset: 2px;
+}
+
+.pet-listing-grid__filter-chip-label {
+	pointer-events: none;
+}
+
+.pet-listing-grid__filter-chip-remove {
+	font-size: 1rem;
+	line-height: 1;
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.pet-listing-grid__filter-chip:hover .pet-listing-grid__filter-chip-remove {
+	opacity: 1;
+}
+
+/* "Clear all" chip — text-only, no border */
+.pet-listing-grid__filter-chip--clear {
+	background: transparent;
+	border-color: transparent;
+	color: var(--wp--preset--color--contrast-2, #666);
+	font-weight: 400;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.pet-listing-grid__filter-chip--clear:hover {
+	background: transparent;
+	color: var(--wp--preset--color--contrast, #1e1e1e);
+}
+
+/* Bottom padding — ensure grid content isn't obscured by floating UI
+ * (favorites modal trigger + compare bar). */
+.pet-listing-grid {
+	padding-bottom: var(--pet-floating-ui-height, 80px);
 }
 
 /* Grid */
@@ -816,9 +963,9 @@
 	cursor: pointer;
 }
 
-/* Sort Control */
+/* Sort Control — sits right after search, not pushed to far edge */
 .pet-listing-grid__sort {
-	margin-left: auto;
+	margin-left: 0;
 }
 
 .pet-listing-grid__sort-select {
@@ -985,6 +1132,23 @@
 }
 
 @media (max-width: 600px) {
+	/* Tighter vertical spacing on mobile — get to pet cards faster */
+	.pet-listing-grid {
+		gap: var(--wp--preset--spacing--20, 0.5rem);
+	}
+
+	.pet-listing-grid__toolbar {
+		gap: var(--wp--preset--spacing--10, 0.375rem);
+		padding: 0;
+		background: none;
+		border: none;
+		border-radius: 0;
+	}
+
+	.pet-listing-grid__results-bar {
+		margin-bottom: var(--wp--preset--spacing--10, 0.25rem);
+	}
+
 	/* Top row stacks items horizontally, search takes full width */
 	.pet-listing-grid__toolbar-row {
 		flex-wrap: wrap;
@@ -1048,15 +1212,16 @@
 		display: none;
 	}
 
-	/* Filter drawer — collapsible on mobile */
+	/* Filter drawer — collapsible on mobile.
+	 * Uses grid-template-rows: 0fr with a single inner wrapper to ensure
+	 * ALL content (selects + compat details/summary) is fully clipped. */
 	.pet-listing-grid__filter-drawer {
 		display: grid;
 		grid-template-rows: 0fr;
 		transition: grid-template-rows 0.25s ease;
-		overflow: hidden;
 	}
 
-	.pet-listing-grid__filter-drawer > * {
+	.pet-listing-grid__filter-drawer-inner {
 		overflow: hidden;
 	}
 

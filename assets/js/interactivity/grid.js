@@ -491,6 +491,28 @@ const { state, actions, callbacks } = store( 'petstablished/grid', {
 			yield* doNavigate( ctx, null, 1 );
 		},
 
+		// === Individual Filter Removal (from active filter chips) ===
+
+		*removeFilter() {
+			const { ref } = getElement();
+			const ctx = getContext();
+			const type = ref.dataset.filterType;
+			const key = ref.dataset.filterKey;
+
+			if ( type === 'filter' && ctx.filters ) {
+				ctx.filters[ key ] = '';
+			} else if ( type === 'compat' && ctx.compatFilters ) {
+				ctx.compatFilters[ key ] = false;
+			} else if ( type === 'search' ) {
+				ctx.searchQuery = '';
+				const searchInput = document.getElementById( 'pet-search' );
+				if ( searchInput ) searchInput.value = '';
+			}
+
+			announce( 'Filter removed' );
+			yield* doNavigate( ctx, null, 1 );
+		},
+
 		// === Reset ===
 
 		*resetFilters() {
@@ -563,6 +585,16 @@ const { state, actions, callbacks } = store( 'petstablished/grid', {
 			// Auto-open filter drawer if filters are active on page load.
 			if ( state.activeFilterCount > 0 ) {
 				state.filterDrawerOpen = true;
+			}
+
+			// On mobile, close the compat details section unless compat
+			// filters are active. The HTML has open for desktop; we remove
+			// it here for mobile to keep the filter area compact.
+			if ( window.innerWidth <= 600 ) {
+				const compat = document.querySelector( '.pet-listing-grid__compat-details' );
+				if ( compat && compat.dataset.hasActive !== '1' ) {
+					compat.removeAttribute( 'open' );
+				}
 			}
 		},
 	},

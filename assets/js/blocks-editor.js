@@ -404,14 +404,14 @@
 		save: () => null,
 	});
 
-	// === Pet Filters ===
+	// === Pet Filters (deprecated — use pet-listing-grid's built-in toolbar) ===
 	registerBlockType( 'petstablished/pet-filters', {
-		title: __( 'Pet Filters', 'petstablished-sync' ),
-		description: __( 'Filter form for pet listings.', 'petstablished-sync' ),
+		title: __( 'Pet Filters (deprecated)', 'petstablished-sync' ),
+		description: __( 'Deprecated — use the pet listing grid\'s built-in filter toolbar instead.', 'petstablished-sync' ),
 		category: 'widgets',
 		icon: 'filter',
-		keywords: [ 'pet', 'filter', 'search' ],
-		supports: { html: false, align: [ 'wide', 'full' ] },
+		keywords: [],
+		supports: { html: false, inserter: false, align: [ 'wide', 'full' ] },
 		attributes: {
 			showAnimal: { type: 'boolean', default: true },
 			showBreed: { type: 'boolean', default: true },
@@ -886,7 +886,7 @@
 			showWeight: { type: 'boolean', default: true },
 		},
 		edit: function( props ) {
-			const { attributes, setAttributes, context } = props;
+			const { attributes, setAttributes } = props;
 			const blockProps = useBlockProps( { className: 'pet-attributes-editor' } );
 
 			return el( 'div', blockProps,
@@ -1183,6 +1183,51 @@
 						'petstablished/adoption-action',
 					],
 				} )
+			);
+		},
+		save: () => null,
+	} );
+
+	// Back to Top — floating scroll-to-top button.
+	registerBlockType( 'petstablished/back-to-top', {
+		title: __( 'Back to Top', 'petstablished-sync' ),
+		description: __( 'Floating button that scrolls back to the top of the page.', 'petstablished-sync' ),
+		category: 'petstablished',
+		icon: 'arrow-up-alt',
+		keywords: [ 'back', 'top', 'scroll' ],
+		supports: { html: false, multiple: false },
+		attributes: {
+			position: { type: 'string', default: 'bottom-left', enum: [ 'bottom-left', 'bottom-right' ] },
+			threshold: { type: 'integer', default: 400 },
+		},
+		edit: function( props ) {
+			const { attributes, setAttributes } = props;
+			const blockProps = useBlockProps();
+			return el( 'div', blockProps,
+				el( InspectorControls, {},
+					el( PanelBody, { title: __( 'Settings', 'petstablished-sync' ) },
+						el( SelectControl, {
+							label: __( 'Position', 'petstablished-sync' ),
+							value: attributes.position,
+							options: [
+								{ label: __( 'Bottom Left', 'petstablished-sync' ), value: 'bottom-left' },
+								{ label: __( 'Bottom Right', 'petstablished-sync' ), value: 'bottom-right' },
+							],
+							onChange: ( val ) => setAttributes( { position: val } ),
+						}),
+						el( RangeControl, {
+							label: __( 'Show after scrolling (px)', 'petstablished-sync' ),
+							value: attributes.threshold,
+							onChange: ( val ) => setAttributes( { threshold: val } ),
+							min: 100,
+							max: 1000,
+							step: 50,
+						})
+					)
+				),
+				el( 'div', { style: { padding: '12px', background: '#f0f0f0', borderRadius: '4px', textAlign: 'center', fontSize: '13px', color: '#666' } },
+					__( '↑ Back to Top button (visible after scrolling)', 'petstablished-sync' )
+				)
 			);
 		},
 		save: () => null,
