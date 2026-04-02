@@ -215,6 +215,10 @@
 	display: none;
 }
 
+.pet-listing-grid__compat-summary::marker {
+	content: '';
+}
+
 .pet-listing-grid__compat-summary-icon {
 	transition: transform 0.2s ease;
 }

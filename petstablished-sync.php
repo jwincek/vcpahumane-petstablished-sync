@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Petstablished Sync
  * Description: Sync adoptable pets from Petstablished with WordPress 6.9 Abilities API, Block Bindings, and Interactivity API.
- * Version: 3.1.0
+ * Version: 3.2.0
  * Requires at least: 6.9
  * Requires PHP: 8.1
  * Author: Jerome Wincek / Claude
