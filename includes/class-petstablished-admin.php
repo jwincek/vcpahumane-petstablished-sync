@@ -76,13 +76,26 @@ class Petstablished_Admin {
 		add_settings_field( 'batch_size', __( 'Batch Size', 'petstablished-sync' ), array( $this, 'render_batch_size_field' ), self::PAGE_SLUG, 'sync_settings' );
 	}
 
+	public const SCHEDULE_6PM_SKIP_SUNDAY = 'daily_6pm_skip_sunday';
+
 	public static function get_defaults(): array {
 		return array(
 			'public_key'    => '',
 			'auto_sync'     => true,
-			'sync_interval' => 'hourly',
+			'sync_interval' => self::SCHEDULE_6PM_SKIP_SUNDAY,
 			'batch_size'    => 10,
 		);
+	}
+
+	/**
+	 * Allowed values for the sync_interval setting.
+	 *
+	 * The legacy WP-Cron recurrences (hourly/twicedaily/daily) are kept as
+	 * fallbacks. SCHEDULE_6PM_SKIP_SUNDAY is also implemented on top of the
+	 * 'daily' recurrence — the Sunday skip and the 18:00 anchor live in code.
+	 */
+	private static function allowed_intervals(): array {
+		return array( self::SCHEDULE_6PM_SKIP_SUNDAY, 'hourly', 'twicedaily', 'daily' );
 	}
 
 	public static function get_settings(): array {
@@ -93,21 +106,55 @@ class Petstablished_Admin {
 		$sanitized = array();
 		$sanitized['public_key']    = sanitize_text_field( $input['public_key'] ?? '' );
 		$sanitized['auto_sync']     = ! empty( $input['auto_sync'] );
-		$sanitized['sync_interval'] = in_array( $input['sync_interval'] ?? '', array( 'hourly', 'twicedaily', 'daily' ), true )
-			? $input['sync_interval'] : 'hourly';
+		$sanitized['sync_interval'] = in_array( $input['sync_interval'] ?? '', self::allowed_intervals(), true )
+			? $input['sync_interval'] : self::SCHEDULE_6PM_SKIP_SUNDAY;
 		$sanitized['batch_size']    = absint( $input['batch_size'] ?? 10 );
 		$sanitized['batch_size']    = max( 1, min( 50, $sanitized['batch_size'] ) );
 
-		// Reschedule cron if auto_sync changed.
+		// Reschedule cron if auto_sync or interval changed.
 		$old = self::get_settings();
 		if ( $sanitized['auto_sync'] !== $old['auto_sync'] || $sanitized['sync_interval'] !== $old['sync_interval'] ) {
-			wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
-			if ( $sanitized['auto_sync'] ) {
-				wp_schedule_event( time(), $sanitized['sync_interval'], 'petstablished_scheduled_sync' );
-			}
+			self::reschedule_cron( $sanitized['auto_sync'], $sanitized['sync_interval'] );
 		}
 
 		return $sanitized;
+	}
+
+	/**
+	 * Clear any existing scheduled sync and (if enabled) re-register one.
+	 *
+	 * Centralized so activation and settings-save use the same logic. The
+	 * SCHEDULE_6PM_SKIP_SUNDAY pseudo-interval is implemented on top of WP's
+	 * built-in 'daily' recurrence — anchored to 18:00 in the site timezone,
+	 * with the Sunday short-circuit handled by Petstablished_Sync::run_sync().
+	 */
+	public static function reschedule_cron( bool $auto_sync, string $interval ): void {
+		wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
+		if ( ! $auto_sync ) {
+			return;
+		}
+
+		if ( $interval === self::SCHEDULE_6PM_SKIP_SUNDAY ) {
+			wp_schedule_event( self::next_6pm_timestamp(), 'daily', 'petstablished_scheduled_sync' );
+		} else {
+			wp_schedule_event( time(), $interval, 'petstablished_scheduled_sync' );
+		}
+	}
+
+	/**
+	 * UTC timestamp of the next 18:00 in the site timezone.
+	 *
+	 * Uses wall-clock math (DateTimeImmutable::setTime) so DST transitions
+	 * shift the gap to 23h/25h without breaking the next-day anchor.
+	 */
+	public static function next_6pm_timestamp(): int {
+		$tz  = wp_timezone();
+		$now = new \DateTimeImmutable( 'now', $tz );
+		$six = $now->setTime( 18, 0, 0 );
+		if ( $six <= $now ) {
+			$six = $six->modify( '+1 day' );
+		}
+		return $six->getTimestamp();
 	}
 
 	// Field Renderers.
@@ -136,9 +183,10 @@ class Petstablished_Admin {
 	public function render_sync_interval_field(): void {
 		$settings = self::get_settings();
 		$intervals = array(
-			'hourly'     => __( 'Hourly', 'petstablished-sync' ),
-			'twicedaily' => __( 'Twice Daily', 'petstablished-sync' ),
-			'daily'      => __( 'Daily', 'petstablished-sync' ),
+			self::SCHEDULE_6PM_SKIP_SUNDAY => __( 'Daily at 6pm (skip Sundays)', 'petstablished-sync' ),
+			'hourly'                       => __( 'Hourly', 'petstablished-sync' ),
+			'twicedaily'                   => __( 'Twice Daily', 'petstablished-sync' ),
+			'daily'                        => __( 'Daily', 'petstablished-sync' ),
 		);
 		echo '<select name="' . esc_attr( self::OPTION_NAME ) . '[sync_interval]">';
 		foreach ( $intervals as $value => $label ) {
@@ -167,6 +215,7 @@ class Petstablished_Admin {
 		$last_sync  = get_option( 'petstablished_last_sync' );
 		$sync_stats = get_option( 'petstablished_last_sync_stats', array() );
 		$is_syncing = get_transient( 'petstablished_sync_in_progress' );
+		$next_cron  = $settings['auto_sync'] ? wp_next_scheduled( 'petstablished_scheduled_sync' ) : false;
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Petstablished Sync', 'petstablished-sync' ); ?></h1>
@@ -185,6 +234,16 @@ class Petstablished_Admin {
 						</p>
 					<?php else : ?>
 						<p><?php esc_html_e( 'No sync has been performed yet.', 'petstablished-sync' ); ?></p>
+					<?php endif; ?>
+
+					<?php if ( $next_cron ) : ?>
+						<p>
+							<strong><?php esc_html_e( 'Next scheduled run:', 'petstablished-sync' ); ?></strong>
+							<?php echo esc_html( wp_date( 'F j, Y g:i a', $next_cron ) ); ?>
+							<?php if ( $settings['sync_interval'] === self::SCHEDULE_6PM_SKIP_SUNDAY ) : ?>
+								<br><small><?php esc_html_e( 'Sundays are skipped.', 'petstablished-sync' ); ?></small>
+							<?php endif; ?>
+						</p>
 					<?php endif; ?>
 				</div>
 

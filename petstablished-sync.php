@@ -67,10 +67,11 @@ register_activation_hook( __FILE__, function(): void {
 	// Flush rewrite rules so /pets/ and taxonomy archives work immediately.
 	flush_rewrite_rules();
 
-	// Schedule cron sync.
+	// Schedule cron sync. Route through the shared helper so the 6pm-anchor
+	// and Sunday-skip semantics apply identically at activation and settings save.
 	$settings = Petstablished_Admin::get_settings();
-	if ( $settings['auto_sync'] && ! wp_next_scheduled( 'petstablished_scheduled_sync' ) ) {
-		wp_schedule_event( time(), $settings['sync_interval'], 'petstablished_scheduled_sync' );
+	if ( ! wp_next_scheduled( 'petstablished_scheduled_sync' ) ) {
+		Petstablished_Admin::reschedule_cron( $settings['auto_sync'], $settings['sync_interval'] );
 	}
 } );
 
