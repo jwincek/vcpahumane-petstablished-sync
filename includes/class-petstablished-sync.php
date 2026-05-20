@@ -18,6 +18,8 @@ class Petstablished_Sync {
 
 	private const API_BASE = 'https://petstablished.com/api/v2/public/pets';
 
+	private const SESSION_TRANSIENT = 'petstablished_sync_session';
+
 	private array $stats = array(
 		'created'   => 0,
 		'updated'   => 0,
@@ -27,7 +29,9 @@ class Petstablished_Sync {
 	);
 
 	public function __construct() {
-		add_action( 'petstablished_scheduled_sync', array( $this, 'run_sync' ) );
+		// Register with accepted_args=0 so do_action's default empty-string arg
+		// doesn't override our $trigger default of 'cron'.
+		add_action( 'petstablished_scheduled_sync', array( $this, 'run_sync' ), 10, 0 );
 		add_action( 'wp_ajax_petstablished_start_sync', array( $this, 'ajax_start_sync' ) );
 		add_action( 'wp_ajax_petstablished_process_batch', array( $this, 'ajax_process_batch' ) );
 		add_action( 'wp_ajax_petstablished_finish_sync', array( $this, 'ajax_finish_sync' ) );
@@ -45,6 +49,7 @@ class Petstablished_Sync {
 		$settings = Petstablished_Admin::get_settings();
 
 		if ( empty( $settings['public_key'] ) ) {
+			$this->record_error_run( 'manual', 'Public key not configured' );
 			wp_send_json_error( 'Public key not configured' );
 		}
 
@@ -52,12 +57,23 @@ class Petstablished_Sync {
 		$pets = $this->fetch_pets( $settings['public_key'] );
 
 		if ( is_wp_error( $pets ) ) {
+			$this->record_error_run( 'manual', $pets->get_error_message() );
 			wp_send_json_error( $pets->get_error_message() );
 		}
 
 		// Store pets in transient for batch processing.
 		set_transient( 'petstablished_sync_pets', $pets, HOUR_IN_SECONDS );
 		set_transient( 'petstablished_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
+
+		// Initialize the server-side session aggregator. Stats accumulate here
+		// across batch calls so the final log entry doesn't depend on the
+		// browser POSTing back honest numbers.
+		set_transient( self::SESSION_TRANSIENT, array(
+			'started'       => time(),
+			'trigger'       => 'manual',
+			'running_stats' => array( 'created' => 0, 'updated' => 0, 'unchanged' => 0, 'errors' => 0 ),
+			'errors'        => array(),
+		), HOUR_IN_SECONDS );
 
 		wp_send_json_success( array(
 			'total'     => count( $pets ),
@@ -82,11 +98,28 @@ class Petstablished_Sync {
 		}
 
 		$batch = array_slice( $pets, $offset, $limit );
-		$stats = array( 'created' => 0, 'updated' => 0, 'unchanged' => 0, 'errors' => array() );
+		$stats = array( 'created' => 0, 'updated' => 0, 'unchanged' => 0, 'errors' => 0 );
+		$batch_errors = array();
 
 		foreach ( $batch as $pet_data ) {
 			$result = $this->process_single_pet( $pet_data );
-			$stats[ $result ]++;
+			if ( $result === 'errors' ) {
+				$stats['errors']++;
+				$batch_errors[] = 'Pet ID ' . ( $pet_data['id'] ?? 'unknown' );
+			} else {
+				$stats[ $result ]++;
+			}
+		}
+
+		// Accumulate into the session aggregator so ajax_finish_sync can
+		// build the audit log entry from server-side state.
+		$session = get_transient( self::SESSION_TRANSIENT );
+		if ( is_array( $session ) ) {
+			foreach ( $stats as $key => $count ) {
+				$session['running_stats'][ $key ] = ( $session['running_stats'][ $key ] ?? 0 ) + $count;
+			}
+			$session['errors'] = array_merge( $session['errors'] ?? array(), $batch_errors );
+			set_transient( self::SESSION_TRANSIENT, $session, HOUR_IN_SECONDS );
 		}
 
 		wp_send_json_success( array(
@@ -102,54 +135,159 @@ class Petstablished_Sync {
 			wp_send_json_error( 'Unauthorized' );
 		}
 
-		$pets = get_transient( 'petstablished_sync_pets' );
+		$pets    = get_transient( 'petstablished_sync_pets' );
+		$removed = 0;
 
 		if ( $pets ) {
-			// Remove stale pets.
 			$removed = $this->remove_stale_pets( $pets );
+		}
+
+		// Build the log entry from the server-side session aggregator.
+		$session = get_transient( self::SESSION_TRANSIENT );
+		if ( is_array( $session ) ) {
+			$running = $session['running_stats'] ?? array();
+			$errors  = $session['errors'] ?? array();
+			$stats   = array(
+				'created'   => (int) ( $running['created'] ?? 0 ),
+				'updated'   => (int) ( $running['updated'] ?? 0 ),
+				'unchanged' => (int) ( $running['unchanged'] ?? 0 ),
+				'removed'   => $removed,
+				'errors'    => (int) ( $running['errors'] ?? 0 ),
+			);
+			$outcome = $stats['errors'] > 0 ? 'partial' : 'success';
+			$started = (int) ( $session['started'] ?? time() );
+			$ended   = time();
+
+			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
+				$started,
+				$ended,
+				'manual',
+				$outcome,
+				$stats,
+				$errors
+			) );
+
+			// Preserve back-compat: keep writing last_sync_stats in its legacy shape.
+			update_option( 'petstablished_last_sync_stats', array(
+				'created'   => $stats['created'],
+				'updated'   => $stats['updated'],
+				'unchanged' => $stats['unchanged'],
+				'removed'   => $stats['removed'],
+				'errors'    => $errors,
+			) );
 		}
 
 		// Clean up.
 		delete_transient( 'petstablished_sync_pets' );
 		delete_transient( 'petstablished_sync_in_progress' );
+		delete_transient( self::SESSION_TRANSIENT );
 
-		// Save sync timestamp.
 		update_option( 'petstablished_last_sync', time() );
 
 		wp_send_json_success( array(
-			'removed' => $removed ?? 0,
+			'removed' => $removed,
+		) );
+	}
+
+	/**
+	 * Record an immediate error-outcome entry for sync attempts that fail before
+	 * any pets are processed (missing key, API fetch error, fatal exception).
+	 */
+	private function record_error_run( string $trigger, string $message, ?int $started = null ): void {
+		$ended   = time();
+		$started = $started ?? $ended;
+		Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
+			$started,
+			$ended,
+			$trigger,
+			'error',
+			array(),
+			array( $message )
 		) );
 	}
 
 	// === Background sync for cron ===
 
-	public function run_sync(): bool {
+	public function run_sync( string $trigger = 'cron' ): bool {
+		$started  = time();
 		$settings = Petstablished_Admin::get_settings();
 
+		// Sunday skip: when the user has chosen the 6pm-skip-Sunday schedule
+		// and this cron run lands on a Sunday in the site timezone, record
+		// the skip and bail. Recording it is intentional — proves to the
+		// user that cron fired and made a deliberate decision.
+		if ( $trigger === 'cron'
+			&& $settings['sync_interval'] === Petstablished_Admin::SCHEDULE_6PM_SKIP_SUNDAY
+			&& wp_date( 'w' ) === '0'
+		) {
+			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
+				$started,
+				time(),
+				$trigger,
+				'success',
+				array(),
+				array(),
+				'Skipped: Sunday'
+			) );
+			return true;
+		}
+
 		if ( empty( $settings['public_key'] ) ) {
+			$this->record_error_run( $trigger, 'Public key not configured' );
 			return false;
 		}
 
 		set_transient( 'petstablished_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
 
-		$pets = $this->fetch_pets( $settings['public_key'] );
+		try {
+			$pets = $this->fetch_pets( $settings['public_key'] );
 
-		if ( is_wp_error( $pets ) ) {
+			if ( is_wp_error( $pets ) ) {
+				$message = $pets->get_error_message();
+				delete_transient( 'petstablished_sync_in_progress' );
+				$this->record_error_run( $trigger, $message, $started );
+				return false;
+			}
+
+			foreach ( $pets as $pet_data ) {
+				$result = $this->process_single_pet( $pet_data );
+				if ( $result === 'errors' ) {
+					$this->stats['errors'][] = 'Pet ID ' . ( $pet_data['id'] ?? 'unknown' );
+				} else {
+					$this->stats[ $result ]++;
+				}
+			}
+
+			$this->stats['removed'] = $this->remove_stale_pets( $pets );
+
+			$ended   = time();
+			$outcome = empty( $this->stats['errors'] ) ? 'success' : 'partial';
+
+			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
+				$started,
+				$ended,
+				$trigger,
+				$outcome,
+				array(
+					'created'   => $this->stats['created'],
+					'updated'   => $this->stats['updated'],
+					'unchanged' => $this->stats['unchanged'],
+					'removed'   => $this->stats['removed'],
+					'errors'    => count( $this->stats['errors'] ),
+				),
+				$this->stats['errors']
+			) );
+
+			update_option( 'petstablished_last_sync', $ended );
+			update_option( 'petstablished_last_sync_stats', $this->stats );
 			delete_transient( 'petstablished_sync_in_progress' );
+
+			return true;
+		} catch ( \Throwable $e ) {
+			delete_transient( 'petstablished_sync_in_progress' );
+			$this->record_error_run( $trigger, 'Fatal: ' . $e->getMessage(), $started );
 			return false;
 		}
-
-		foreach ( $pets as $pet_data ) {
-			$this->process_single_pet( $pet_data );
-		}
-
-		$this->remove_stale_pets( $pets );
-
-		update_option( 'petstablished_last_sync', time() );
-		update_option( 'petstablished_last_sync_stats', $this->stats );
-		delete_transient( 'petstablished_sync_in_progress' );
-
-		return true;
 	}
 
 	// === Core Methods ===

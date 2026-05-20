@@ -14,8 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Petstablished_Admin {
 
-	public const OPTION_NAME = 'petstablished_sync_settings';
-	public const PAGE_SLUG   = 'petstablished-sync';
+	public const OPTION_NAME   = 'petstablished_sync_settings';
+	public const PAGE_SLUG     = 'petstablished-sync';
+	public const LOG_PAGE_SLUG = 'petstablished-sync-log';
 
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
@@ -33,6 +34,15 @@ class Petstablished_Admin {
 			'manage_options',
 			self::PAGE_SLUG,
 			array( $this, 'render_settings_page' )
+		);
+
+		add_submenu_page(
+			'edit.php?post_type=pet',
+			__( 'Petstablished Sync Log', 'petstablished-sync' ),
+			__( 'Sync Log', 'petstablished-sync' ),
+			'manage_options',
+			self::LOG_PAGE_SLUG,
+			array( $this, 'render_sync_log_page' )
 		);
 	}
 
@@ -66,13 +76,26 @@ class Petstablished_Admin {
 		add_settings_field( 'batch_size', __( 'Batch Size', 'petstablished-sync' ), array( $this, 'render_batch_size_field' ), self::PAGE_SLUG, 'sync_settings' );
 	}
 
+	public const SCHEDULE_6PM_SKIP_SUNDAY = 'daily_6pm_skip_sunday';
+
 	public static function get_defaults(): array {
 		return array(
 			'public_key'    => '',
 			'auto_sync'     => true,
-			'sync_interval' => 'hourly',
+			'sync_interval' => self::SCHEDULE_6PM_SKIP_SUNDAY,
 			'batch_size'    => 10,
 		);
+	}
+
+	/**
+	 * Allowed values for the sync_interval setting.
+	 *
+	 * The legacy WP-Cron recurrences (hourly/twicedaily/daily) are kept as
+	 * fallbacks. SCHEDULE_6PM_SKIP_SUNDAY is also implemented on top of the
+	 * 'daily' recurrence — the Sunday skip and the 18:00 anchor live in code.
+	 */
+	private static function allowed_intervals(): array {
+		return array( self::SCHEDULE_6PM_SKIP_SUNDAY, 'hourly', 'twicedaily', 'daily' );
 	}
 
 	public static function get_settings(): array {
@@ -83,21 +106,55 @@ class Petstablished_Admin {
 		$sanitized = array();
 		$sanitized['public_key']    = sanitize_text_field( $input['public_key'] ?? '' );
 		$sanitized['auto_sync']     = ! empty( $input['auto_sync'] );
-		$sanitized['sync_interval'] = in_array( $input['sync_interval'] ?? '', array( 'hourly', 'twicedaily', 'daily' ), true )
-			? $input['sync_interval'] : 'hourly';
+		$sanitized['sync_interval'] = in_array( $input['sync_interval'] ?? '', self::allowed_intervals(), true )
+			? $input['sync_interval'] : self::SCHEDULE_6PM_SKIP_SUNDAY;
 		$sanitized['batch_size']    = absint( $input['batch_size'] ?? 10 );
 		$sanitized['batch_size']    = max( 1, min( 50, $sanitized['batch_size'] ) );
 
-		// Reschedule cron if auto_sync changed.
+		// Reschedule cron if auto_sync or interval changed.
 		$old = self::get_settings();
 		if ( $sanitized['auto_sync'] !== $old['auto_sync'] || $sanitized['sync_interval'] !== $old['sync_interval'] ) {
-			wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
-			if ( $sanitized['auto_sync'] ) {
-				wp_schedule_event( time(), $sanitized['sync_interval'], 'petstablished_scheduled_sync' );
-			}
+			self::reschedule_cron( $sanitized['auto_sync'], $sanitized['sync_interval'] );
 		}
 
 		return $sanitized;
+	}
+
+	/**
+	 * Clear any existing scheduled sync and (if enabled) re-register one.
+	 *
+	 * Centralized so activation and settings-save use the same logic. The
+	 * SCHEDULE_6PM_SKIP_SUNDAY pseudo-interval is implemented on top of WP's
+	 * built-in 'daily' recurrence — anchored to 18:00 in the site timezone,
+	 * with the Sunday short-circuit handled by Petstablished_Sync::run_sync().
+	 */
+	public static function reschedule_cron( bool $auto_sync, string $interval ): void {
+		wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
+		if ( ! $auto_sync ) {
+			return;
+		}
+
+		if ( $interval === self::SCHEDULE_6PM_SKIP_SUNDAY ) {
+			wp_schedule_event( self::next_6pm_timestamp(), 'daily', 'petstablished_scheduled_sync' );
+		} else {
+			wp_schedule_event( time(), $interval, 'petstablished_scheduled_sync' );
+		}
+	}
+
+	/**
+	 * UTC timestamp of the next 18:00 in the site timezone.
+	 *
+	 * Uses wall-clock math (DateTimeImmutable::setTime) so DST transitions
+	 * shift the gap to 23h/25h without breaking the next-day anchor.
+	 */
+	public static function next_6pm_timestamp(): int {
+		$tz  = wp_timezone();
+		$now = new \DateTimeImmutable( 'now', $tz );
+		$six = $now->setTime( 18, 0, 0 );
+		if ( $six <= $now ) {
+			$six = $six->modify( '+1 day' );
+		}
+		return $six->getTimestamp();
 	}
 
 	// Field Renderers.
@@ -126,9 +183,10 @@ class Petstablished_Admin {
 	public function render_sync_interval_field(): void {
 		$settings = self::get_settings();
 		$intervals = array(
-			'hourly'     => __( 'Hourly', 'petstablished-sync' ),
-			'twicedaily' => __( 'Twice Daily', 'petstablished-sync' ),
-			'daily'      => __( 'Daily', 'petstablished-sync' ),
+			self::SCHEDULE_6PM_SKIP_SUNDAY => __( 'Daily at 6pm (skip Sundays)', 'petstablished-sync' ),
+			'hourly'                       => __( 'Hourly', 'petstablished-sync' ),
+			'twicedaily'                   => __( 'Twice Daily', 'petstablished-sync' ),
+			'daily'                        => __( 'Daily', 'petstablished-sync' ),
 		);
 		echo '<select name="' . esc_attr( self::OPTION_NAME ) . '[sync_interval]">';
 		foreach ( $intervals as $value => $label ) {
@@ -157,6 +215,7 @@ class Petstablished_Admin {
 		$last_sync  = get_option( 'petstablished_last_sync' );
 		$sync_stats = get_option( 'petstablished_last_sync_stats', array() );
 		$is_syncing = get_transient( 'petstablished_sync_in_progress' );
+		$next_cron  = $settings['auto_sync'] ? wp_next_scheduled( 'petstablished_scheduled_sync' ) : false;
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Petstablished Sync', 'petstablished-sync' ); ?></h1>
@@ -175,6 +234,16 @@ class Petstablished_Admin {
 						</p>
 					<?php else : ?>
 						<p><?php esc_html_e( 'No sync has been performed yet.', 'petstablished-sync' ); ?></p>
+					<?php endif; ?>
+
+					<?php if ( $next_cron ) : ?>
+						<p>
+							<strong><?php esc_html_e( 'Next scheduled run:', 'petstablished-sync' ); ?></strong>
+							<?php echo esc_html( wp_date( 'F j, Y g:i a', $next_cron ) ); ?>
+							<?php if ( $settings['sync_interval'] === self::SCHEDULE_6PM_SKIP_SUNDAY ) : ?>
+								<br><small><?php esc_html_e( 'Sundays are skipped.', 'petstablished-sync' ); ?></small>
+							<?php endif; ?>
+						</p>
 					<?php endif; ?>
 				</div>
 
@@ -341,6 +410,206 @@ class Petstablished_Admin {
 			}
 		})();
 		</script>
+		<?php
+	}
+
+	public function render_sync_log_page(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$entries = Petstablished_Sync_Log::all();
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Sync Log', 'petstablished-sync' ); ?></h1>
+			<p class="description">
+				<?php
+				printf(
+					/* translators: %d: maximum number of log entries kept. */
+					esc_html__( 'Records of the most recent %d sync attempts. Newest first.', 'petstablished-sync' ),
+					(int) Petstablished_Sync_Log::MAX_ENTRIES
+				);
+				?>
+			</p>
+
+			<?php if ( empty( $entries ) ) : ?>
+				<div class="card" style="max-width: 600px;">
+					<p><?php esc_html_e( 'No syncs have been recorded yet.', 'petstablished-sync' ); ?></p>
+					<p>
+						<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=pet&page=' . self::PAGE_SLUG ) ); ?>">
+							<?php esc_html_e( 'Go to Sync Settings', 'petstablished-sync' ); ?>
+						</a>
+					</p>
+				</div>
+			<?php else : ?>
+				<style>
+					.ps-sync-log .col-when     { width: 22%; }
+					.ps-sync-log .col-trigger  { width: 10%; }
+					.ps-sync-log .col-outcome  { width: 10%; }
+					.ps-sync-log .col-counts   { width: 38%; }
+					.ps-sync-log .col-details  { width: 20%; }
+					.ps-badge {
+						display: inline-block;
+						padding: 2px 8px;
+						border-radius: 10px;
+						font-size: 11px;
+						font-weight: 600;
+						text-transform: uppercase;
+						letter-spacing: 0.03em;
+					}
+					.ps-badge-trigger-manual { background: #e5e5e5; color: #2c3338; }
+					.ps-badge-trigger-cron   { background: #d6e9fb; color: #0a4b78; }
+					.ps-badge-outcome-success { background: #d4edda; color: #155724; }
+					.ps-badge-outcome-partial { background: #fff3cd; color: #856404; }
+					.ps-badge-outcome-error   { background: #f8d7da; color: #721c24; }
+					.ps-sync-log .counts code {
+						background: none;
+						padding: 0;
+						font-size: 13px;
+					}
+					.ps-sync-log .detail-row td {
+						background: #f6f7f7;
+						padding: 12px 16px;
+					}
+					.ps-sync-log .detail-row dl {
+						margin: 0;
+						display: grid;
+						grid-template-columns: 140px 1fr;
+						row-gap: 4px;
+						column-gap: 12px;
+					}
+					.ps-sync-log .detail-row dt { font-weight: 600; }
+					.ps-sync-log .detail-row dd { margin: 0; }
+					.ps-sync-log .detail-row pre {
+						margin: 4px 0 0;
+						padding: 8px;
+						background: #fff;
+						border: 1px solid #dcdcde;
+						border-radius: 3px;
+						white-space: pre-wrap;
+						font-size: 12px;
+					}
+					.ps-sync-log .note {
+						display: inline-block;
+						margin-left: 8px;
+						font-style: italic;
+						color: #50575e;
+					}
+				</style>
+				<table class="wp-list-table widefat striped ps-sync-log">
+					<thead>
+						<tr>
+							<th class="col-when"><?php esc_html_e( 'When', 'petstablished-sync' ); ?></th>
+							<th class="col-trigger"><?php esc_html_e( 'Trigger', 'petstablished-sync' ); ?></th>
+							<th class="col-outcome"><?php esc_html_e( 'Outcome', 'petstablished-sync' ); ?></th>
+							<th class="col-counts"><?php esc_html_e( 'Counts', 'petstablished-sync' ); ?></th>
+							<th class="col-details"><?php esc_html_e( 'Details', 'petstablished-sync' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $entries as $entry ) : ?>
+							<?php
+							$id       = (string) ( $entry['id'] ?? '' );
+							$started  = (int) ( $entry['started'] ?? 0 );
+							$ended    = (int) ( $entry['ended'] ?? $started );
+							$duration = (int) ( $entry['duration'] ?? max( 0, $ended - $started ) );
+							$trigger  = (string) ( $entry['trigger'] ?? 'manual' );
+							$outcome  = (string) ( $entry['outcome'] ?? 'success' );
+							$stats    = is_array( $entry['stats'] ?? null ) ? $entry['stats'] : array();
+							$errors   = is_array( $entry['errors'] ?? null ) ? $entry['errors'] : array();
+							$note     = isset( $entry['note'] ) ? (string) $entry['note'] : '';
+							$detail_id = 'ps-detail-' . sanitize_html_class( $id );
+							?>
+							<tr>
+								<td class="col-when">
+									<?php echo esc_html( wp_date( 'M j, Y g:i a', $started ) ); ?>
+									<br><small><?php
+										/* translators: %d: duration in seconds. */
+										printf( esc_html__( '%ds', 'petstablished-sync' ), $duration );
+									?></small>
+								</td>
+								<td class="col-trigger">
+									<span class="ps-badge ps-badge-trigger-<?php echo esc_attr( $trigger ); ?>">
+										<?php echo esc_html( $trigger ); ?>
+									</span>
+								</td>
+								<td class="col-outcome">
+									<span class="ps-badge ps-badge-outcome-<?php echo esc_attr( $outcome ); ?>">
+										<?php echo esc_html( $outcome ); ?>
+									</span>
+									<?php if ( $note ) : ?>
+										<span class="note"><?php echo esc_html( $note ); ?></span>
+									<?php endif; ?>
+								</td>
+								<td class="col-counts counts">
+									<code>
+										C: <?php echo (int) ( $stats['created'] ?? 0 ); ?> ·
+										U: <?php echo (int) ( $stats['updated'] ?? 0 ); ?> ·
+										N: <?php echo (int) ( $stats['unchanged'] ?? 0 ); ?> ·
+										R: <?php echo (int) ( $stats['removed'] ?? 0 ); ?> ·
+										E: <?php echo (int) ( $stats['errors'] ?? 0 ); ?>
+									</code>
+								</td>
+								<td class="col-details">
+									<button type="button" class="button-link ps-detail-toggle" data-target="<?php echo esc_attr( $detail_id ); ?>">
+										<?php esc_html_e( 'Show details', 'petstablished-sync' ); ?>
+									</button>
+								</td>
+							</tr>
+							<tr id="<?php echo esc_attr( $detail_id ); ?>" class="detail-row" style="display:none;">
+								<td colspan="5">
+									<dl>
+										<dt><?php esc_html_e( 'Started', 'petstablished-sync' ); ?></dt>
+										<dd><?php echo esc_html( wp_date( 'F j, Y g:i:s a', $started ) ); ?></dd>
+										<dt><?php esc_html_e( 'Ended', 'petstablished-sync' ); ?></dt>
+										<dd><?php echo esc_html( wp_date( 'F j, Y g:i:s a', $ended ) ); ?></dd>
+										<dt><?php esc_html_e( 'Duration', 'petstablished-sync' ); ?></dt>
+										<dd><?php
+											/* translators: %d: duration in seconds. */
+											printf( esc_html__( '%d seconds', 'petstablished-sync' ), $duration );
+										?></dd>
+										<dt><?php esc_html_e( 'Created', 'petstablished-sync' ); ?></dt>
+										<dd><?php echo (int) ( $stats['created'] ?? 0 ); ?></dd>
+										<dt><?php esc_html_e( 'Updated', 'petstablished-sync' ); ?></dt>
+										<dd><?php echo (int) ( $stats['updated'] ?? 0 ); ?></dd>
+										<dt><?php esc_html_e( 'Unchanged', 'petstablished-sync' ); ?></dt>
+										<dd><?php echo (int) ( $stats['unchanged'] ?? 0 ); ?></dd>
+										<dt><?php esc_html_e( 'Removed', 'petstablished-sync' ); ?></dt>
+										<dd><?php echo (int) ( $stats['removed'] ?? 0 ); ?></dd>
+										<dt><?php esc_html_e( 'Errors', 'petstablished-sync' ); ?></dt>
+										<dd>
+											<?php echo (int) ( $stats['errors'] ?? 0 ); ?>
+											<?php if ( ! empty( $errors ) ) : ?>
+												<pre><?php echo esc_html( implode( "\n", $errors ) ); ?></pre>
+											<?php endif; ?>
+										</dd>
+										<?php if ( $note ) : ?>
+											<dt><?php esc_html_e( 'Note', 'petstablished-sync' ); ?></dt>
+											<dd><?php echo esc_html( $note ); ?></dd>
+										<?php endif; ?>
+									</dl>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+				<script>
+				(function() {
+					document.querySelectorAll('.ps-detail-toggle').forEach(function(btn) {
+						btn.addEventListener('click', function() {
+							const row = document.getElementById(btn.dataset.target);
+							if (!row) return;
+							const isHidden = row.style.display === 'none';
+							row.style.display = isHidden ? '' : 'none';
+							btn.textContent = isHidden
+								? <?php echo wp_json_encode( __( 'Hide details', 'petstablished-sync' ) ); ?>
+								: <?php echo wp_json_encode( __( 'Show details', 'petstablished-sync' ) ); ?>;
+						});
+					});
+				})();
+				</script>
+			<?php endif; ?>
+		</div>
 		<?php
 	}
 
