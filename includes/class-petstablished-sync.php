@@ -212,6 +212,26 @@ class Petstablished_Sync {
 		$started  = time();
 		$settings = Petstablished_Admin::get_settings();
 
+		// Sunday skip: when the user has chosen the 6pm-skip-Sunday schedule
+		// and this cron run lands on a Sunday in the site timezone, record
+		// the skip and bail. Recording it is intentional — proves to the
+		// user that cron fired and made a deliberate decision.
+		if ( $trigger === 'cron'
+			&& $settings['sync_interval'] === Petstablished_Admin::SCHEDULE_6PM_SKIP_SUNDAY
+			&& wp_date( 'w' ) === '0'
+		) {
+			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
+				$started,
+				time(),
+				$trigger,
+				'success',
+				array(),
+				array(),
+				'Skipped: Sunday'
+			) );
+			return true;
+		}
+
 		if ( empty( $settings['public_key'] ) ) {
 			$this->record_error_run( $trigger, 'Public key not configured' );
 			return false;
