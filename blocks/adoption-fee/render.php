@@ -7,7 +7,7 @@
  * published markup without any editor intervention.
  *
  * @package Petstablished_Sync
- * @since 4.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

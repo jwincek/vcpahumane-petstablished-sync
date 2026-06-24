@@ -6,7 +6,7 @@
  * Supports customizable size, stroke width, and additional attributes.
  *
  * @package Petstablished_Sync
- * @since 2.1.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );

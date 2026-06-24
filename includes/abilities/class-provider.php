@@ -10,7 +10,7 @@
  *   'petstablished/get-comparison'  → Petstablished\Abilities\Comparison\get()
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );
@@ -60,7 +60,7 @@ class Provider {
 	/**
 	 * Register all abilities from config.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public static function register(): void {
 		$abilities = Config::get_item( 'abilities', 'abilities', [] );
@@ -75,7 +75,7 @@ class Provider {
 	/**
 	 * Load all callback files.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	private static function load_callback_files(): void {
 		$base = PETSTABLISHED_SYNC_DIR . 'includes/abilities/';
@@ -91,7 +91,7 @@ class Provider {
 	/**
 	 * Register a single ability.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $name   Ability name (e.g. 'petstablished/toggle-favorite').
 	 * @param array  $config Ability configuration from JSON.
@@ -140,7 +140,7 @@ class Provider {
 	 *
 	 * Special cases are handled by explicit name-to-function mapping.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $name Ability name.
 	 * @return callable|null
@@ -174,7 +174,7 @@ class Provider {
 	/**
 	 * Resolve a permission string to a callback.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string|callable $permission Permission type or callback.
 	 * @return callable
@@ -208,7 +208,7 @@ class Provider {
 	/**
 	 * Get all registered ability names from config.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string[]
 	 */

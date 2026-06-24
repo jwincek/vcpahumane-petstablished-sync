@@ -9,7 +9,7 @@
  * by that term (e.g., clicking "Labrador" → /adopt/pets/?filter_breed=labrador).
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

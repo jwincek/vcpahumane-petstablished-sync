@@ -8,7 +8,7 @@
  * Adds loadOnClientNavigation for cross-page router support.
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );
@@ -135,7 +135,7 @@ function register_script_modules(): void {
 	/**
 	 * Mark script modules as compatible with client-side navigation.
 	 *
-	 * @since 4.2.0 (WordPress 6.9)
+	 * @since 1.0.0 (WordPress 6.9)
 	 *
 	 * When the interactivity-router performs client-side navigation and
 	 * encounters a page needing a module not present on the current page,

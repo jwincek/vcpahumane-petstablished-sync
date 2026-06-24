@@ -5,7 +5,7 @@
  * Rolling per-run audit trail for manual and cron-triggered syncs.
  *
  * @package Petstablished_Sync
- * @since 3.3.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );

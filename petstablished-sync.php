@@ -1,11 +1,13 @@
 <?php
 /**
- * Plugin Name: Petstablished Sync
+ * Plugin Name: Pet Sync for Petstablished
  * Description: Sync adoptable pets from Petstablished with WordPress 6.9 Abilities API, Block Bindings, and Interactivity API.
- * Version: 3.2.0
+ * Version: 1.0.0
  * Requires at least: 6.9
  * Requires PHP: 8.1
- * Author: Jerome Wincek / Claude
+ * Author: Jerome Wincek
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: petstablished-sync
  *
  * @package Petstablished_Sync
@@ -18,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'PETSTABLISHED_SYNC_VERSION', '3.2.0' );
+define( 'PETSTABLISHED_SYNC_VERSION', '1.0.0' );
 define( 'PETSTABLISHED_SYNC_FILE', __FILE__ );
 define( 'PETSTABLISHED_SYNC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PETSTABLISHED_SYNC_URL', plugin_dir_url( __FILE__ ) );

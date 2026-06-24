@@ -5,7 +5,7 @@
  * Provides aggregate adoption statistics for block bindings and archive pages.
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );

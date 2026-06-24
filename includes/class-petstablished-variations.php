@@ -7,7 +7,7 @@
  * petstablished/pet-data binding source is available.
  *
  * @package Petstablished_Sync
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );

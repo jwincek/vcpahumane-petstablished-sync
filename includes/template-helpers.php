@@ -7,7 +7,7 @@
  * global-namespaced for ergonomic use in templates.
  *
  * @package Petstablished_Sync
- * @since 3.2.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );
@@ -21,7 +21,7 @@ declare( strict_types = 1 );
  *
  * Returns null when the pet cannot be found or the ability errors.
  *
- * @since 3.2.0
+ * @since 1.0.0
  *
  * @param int    $post_id Post ID.
  * @param string $profile Hydration profile: 'full', 'summary', 'grid'.

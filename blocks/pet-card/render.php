@@ -3,7 +3,7 @@
  * Pet Card Block - Server-side render
  *
  * @package Petstablished_Sync
- * @since 2.0.0
+ * @since 1.0.0
  *
  * @var array    $attributes Block attributes.
  * @var string   $content    Block content.

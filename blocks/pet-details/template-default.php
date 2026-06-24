@@ -14,7 +14,7 @@
  * - $show_actions (bool)
  *
  * @package Petstablished_Sync
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -19,7 +19,7 @@
  * - Endpoint path ends in /run (matching core pattern)
  *
  * @package Petstablished_Sync
- * @since   3.0.1
+ * @since   1.0.0
  */
 
 declare( strict_types = 1 );

@@ -2,12 +2,10 @@
 /**
  * Pet Favorites Toggle Block
  *
- * v4.2.0: Now opens the favorites modal instead of toggling a grid filter.
- * The block is kept for backward compatibility with existing templates.
- * For new templates, use the pet-favorites-modal block instead.
+ * A compact control that opens the favorites modal. For a richer experience,
+ * use the pet-favorites-modal block instead.
  *
  * @package Petstablished_Sync
- * @deprecated 4.2.0 Use pet-favorites-modal instead.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

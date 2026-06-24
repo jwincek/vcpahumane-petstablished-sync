@@ -6,7 +6,7 @@
  * Plain HTML — no core/button wrapper, no specificity issues.
  *
  * @package Petstablished_Sync
- * @since 4.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

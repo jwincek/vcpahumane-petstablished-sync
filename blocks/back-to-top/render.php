@@ -7,7 +7,7 @@
  * scroll and show/hide via the Interactivity API.
  *
  * @package Petstablished_Sync
- * @since 4.3.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

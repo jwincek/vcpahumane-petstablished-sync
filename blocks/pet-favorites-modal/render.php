@@ -29,7 +29,7 @@
  * which the SSR evaluates via the array .length handler (6.8+).
  *
  * @package Petstablished_Sync
- * @since 4.2.1
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

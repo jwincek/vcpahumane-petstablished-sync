@@ -3,7 +3,7 @@
  * Favorites ability callbacks.
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );
@@ -37,7 +37,7 @@ function toggle( array $input ): array {
 	/**
 	 * Fires after a pet is toggled in/out of favorites.
 	 *
-	 * @since 3.2.0
+	 * @since 1.0.0
 	 *
 	 * @param int   $id        Pet post ID.
 	 * @param bool  $favorited Whether the pet was added (true) or removed (false).
@@ -60,7 +60,7 @@ function clear_all( array $input = [] ): array {
 	/**
 	 * Fires after all favorites are cleared.
 	 *
-	 * @since 4.3.0
+	 * @since 1.0.0
 	 */
 	do_action( 'petstablished_favorites_cleared' );
 

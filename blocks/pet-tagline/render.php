@@ -8,7 +8,7 @@
  * used by the pet-filters and pet-listing-grid blocks.
  *
  * @package Petstablished_Sync
- * @since 4.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

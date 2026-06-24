@@ -11,7 +11,7 @@
  * - viewScriptModule in block.json: Automatic loading when block renders
  *
  * @package Petstablished_Sync
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );

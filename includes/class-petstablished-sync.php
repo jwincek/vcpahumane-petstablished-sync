@@ -5,7 +5,7 @@
  * Handles synchronization of pets from Petstablished API.
  *
  * @package Petstablished_Sync
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );

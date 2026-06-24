@@ -12,7 +12,7 @@
  *   $pet  = Pet_Hydrator::hydrate( $post, 'summary' );
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 declare( strict_types = 1 );
@@ -205,7 +205,7 @@ class Pet_Hydrator {
 	 * Blocks can rely on this canonical shape without re-implementing
 	 * normalization logic.
 	 *
-	 * @since 3.2.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $value Raw tristate value from API or meta.
 	 * @return string One of 'yes', 'no', 'unknown', or '' (no data).

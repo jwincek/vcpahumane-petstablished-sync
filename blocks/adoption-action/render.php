@@ -7,7 +7,7 @@
  *   - pdf: renders a download link for an editor-selected PDF from the media library
  *
  * @package Petstablished_Sync
- * @since 4.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -4,17 +4,12 @@
  * hypoallergenic, declawed.
  *
  * Displays tristate health/care indicators with check/x/info icons.
- *
- * Changes in 3.2.0:
- * - Uses petstablished_get_pet() shared helper (eliminates ability-fetch boilerplate).
- * - Relies on Hydrator-normalized tristate values ('yes'|'no'|'unknown'|'').
- * - Adds displayMode attribute: 'all', 'known' (default), 'positive'.
- * - Adds hypoallergenic and declawed fields.
- * - Declawed is suppressed for non-cat animals regardless of toggle.
- * - Improved accessibility: each item gets a complete aria-label.
+ * Relies on Hydrator-normalized tristate values ('yes'|'no'|'unknown'|'').
+ * The displayMode attribute selects 'all', 'known' (default), or 'positive';
+ * declawed is suppressed for non-cat animals regardless of toggle.
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

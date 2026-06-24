@@ -13,7 +13,7 @@
  * shares the per-request cache with other blocks on the page.
  *
  * @package Petstablished_Sync
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
