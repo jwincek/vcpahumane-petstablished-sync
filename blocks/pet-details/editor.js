@@ -34,7 +34,7 @@
 		}, [
 			[ 'core/paragraph', {
 				className: 'pet-details__back-link',
-				content: '<a href="#pet-archive">← ' + __( 'Back to All Pets', 'petstablished-sync' ) + '</a>',
+				content: '<a href="#pet-archive">← ' + __( 'Back to All Pets', 'vcpahumane-pet-sync' ) + '</a>',
 			} ],
 		] ],
 
@@ -76,7 +76,7 @@
 					metadata: { name: 'About Section' },
 					className: 'pet-details__section pet-details__about',
 				}, [
-					[ 'core/heading', { level: 2, content: __( 'About', 'petstablished-sync' ) } ],
+					[ 'core/heading', { level: 2, content: __( 'About', 'vcpahumane-pet-sync' ) } ],
 					[ 'petstablished/pet-attributes', {} ],
 				] ],
 
@@ -85,7 +85,7 @@
 					metadata: { name: 'Compatibility Section' },
 					className: 'pet-details__section pet-details__compat',
 				}, [
-					[ 'core/heading', { level: 2, content: __( 'Good With', 'petstablished-sync' ) } ],
+					[ 'core/heading', { level: 2, content: __( 'Good With', 'vcpahumane-pet-sync' ) } ],
 					[ 'petstablished/pet-compatibility', {} ],
 				] ],
 
@@ -94,7 +94,7 @@
 					metadata: { name: 'Health Section' },
 					className: 'pet-details__section pet-details__health-section',
 				}, [
-					[ 'core/heading', { level: 2, content: __( 'Health', 'petstablished-sync' ) } ],
+					[ 'core/heading', { level: 2, content: __( 'Health', 'vcpahumane-pet-sync' ) } ],
 					[ 'petstablished/pet-health', {} ],
 				] ],
 			] ],
@@ -131,7 +131,7 @@
 		}, [
 			[ 'core/paragraph', {
 				className: 'pet-details__back-link',
-				content: '<a href="#pet-archive">← ' + __( 'Back to All Pets', 'petstablished-sync' ) + '</a>',
+				content: '<a href="#pet-archive">← ' + __( 'Back to All Pets', 'vcpahumane-pet-sync' ) + '</a>',
 			} ],
 		] ],
 
@@ -168,18 +168,18 @@
 			metadata: { name: 'About Section' },
 			className: 'pet-details__section',
 		}, [
-			[ 'core/heading', { level: 2, content: __( 'About', 'petstablished-sync' ) } ],
+			[ 'core/heading', { level: 2, content: __( 'About', 'vcpahumane-pet-sync' ) } ],
 			[ 'petstablished/pet-attributes', {} ],
 		] ],
 
 		// Compatibility & Health side by side
 		[ 'core/columns', {}, [
 			[ 'core/column', {}, [
-				[ 'core/heading', { level: 2, content: __( 'Good With', 'petstablished-sync' ) } ],
+				[ 'core/heading', { level: 2, content: __( 'Good With', 'vcpahumane-pet-sync' ) } ],
 				[ 'petstablished/pet-compatibility', {} ],
 			] ],
 			[ 'core/column', {}, [
-				[ 'core/heading', { level: 2, content: __( 'Health', 'petstablished-sync' ) } ],
+				[ 'core/heading', { level: 2, content: __( 'Health', 'vcpahumane-pet-sync' ) } ],
 				[ 'petstablished/pet-health', {} ],
 			] ],
 		] ],
@@ -256,13 +256,13 @@
 						null,
 						el(
 							PanelBody,
-							{ title: __( 'Layout', 'petstablished-sync' ) },
+							{ title: __( 'Layout', 'vcpahumane-pet-sync' ) },
 							el( SelectControl, {
-								label: __( 'Layout Style', 'petstablished-sync' ),
+								label: __( 'Layout Style', 'vcpahumane-pet-sync' ),
 								value: layout,
 								options: [
-									{ label: __( 'Sidebar (Gallery Left)', 'petstablished-sync' ), value: 'sidebar' },
-									{ label: __( 'Stacked (Gallery Top)', 'petstablished-sync' ), value: 'stacked' },
+									{ label: __( 'Sidebar (Gallery Left)', 'vcpahumane-pet-sync' ), value: 'sidebar' },
+									{ label: __( 'Stacked (Gallery Top)', 'vcpahumane-pet-sync' ), value: 'stacked' },
 								],
 								onChange: function( value ) {
 									setAttributes( { layout: value } );

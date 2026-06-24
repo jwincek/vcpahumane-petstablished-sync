@@ -27,15 +27,15 @@ if ( ! $pet ) {
 $pet_name      = $pet['name'] ?? get_the_title( $post_id );
 $archive_url   = get_post_type_archive_link( 'pet' );
 $home_url      = home_url( '/' );
-$home_label    = $attributes['homeLabel'] ?? __( 'Home', 'petstablished-sync' );
-$archive_label = $attributes['archiveLabel'] ?? __( 'Adoptable Pets', 'petstablished-sync' );
+$home_label    = $attributes['homeLabel'] ?? __( 'Home', 'vcpahumane-pet-sync' );
+$archive_label = $attributes['archiveLabel'] ?? __( 'Adoptable Pets', 'vcpahumane-pet-sync' );
 $separator     = $attributes['separator'] ?? '›';
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class' => 'pet-details__breadcrumb',
 ) );
 ?>
-<nav <?php echo $wrapper_attributes; ?> aria-label="<?php esc_attr_e( 'Breadcrumb', 'petstablished-sync' ); ?>">
+<nav <?php echo $wrapper_attributes; ?> aria-label="<?php esc_attr_e( 'Breadcrumb', 'vcpahumane-pet-sync' ); ?>">
 	<a href="<?php echo esc_url( $home_url ); ?>" class="pet-details__breadcrumb-item">
 		<?php echo esc_html( $home_label ); ?>
 	</a>

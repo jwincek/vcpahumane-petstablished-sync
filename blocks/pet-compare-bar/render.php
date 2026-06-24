@@ -96,7 +96,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'data-wp-init'              => 'callbacks.init',
 	'data-wp-watch'             => 'callbacks.watchAutoExpand',
 	'role'                      => 'region',
-	'aria-label'                => __( 'Pet comparison', 'petstablished-sync' ),
+	'aria-label'                => __( 'Pet comparison', 'vcpahumane-pet-sync' ),
 ) );
 ?>
 
@@ -106,10 +106,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		type="button"
 		class="pet-compare-bar__pill"
 		data-wp-on--click="actions.expandBar"
-		aria-label="<?php esc_attr_e( 'Show comparison bar', 'petstablished-sync' ); ?>"
+		aria-label="<?php esc_attr_e( 'Show comparison bar', 'vcpahumane-pet-sync' ); ?>"
 	>
 		<?php Petstablished_Icons::render( 'compare', array( 'width' => 14, 'height' => 14 ) ); ?>
-		<span><?php esc_html_e( 'Compare', 'petstablished-sync' ); ?></span>
+		<span><?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?></span>
 		<span
 			class="pet-compare-bar__pill-count"
 			data-wp-text="petstablished::state.comparisonCount"
@@ -120,14 +120,14 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	<div class="pet-compare-bar__inner">
 		<div class="pet-compare-bar__header">
 			<span class="pet-compare-bar__label">
-				<?php esc_html_e( 'Compare', 'petstablished-sync' ); ?>
+				<?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?>
 				(<span data-wp-text="petstablished::state.comparisonCount"><?php echo count( $comparison ); ?></span>/<?php echo $max_compare; ?>)
 			</span>
 			<button
 				type="button"
 				class="pet-compare-bar__minimize"
 				data-wp-on--click="actions.toggleBar"
-				aria-label="<?php esc_attr_e( 'Minimize comparison bar', 'petstablished-sync' ); ?>"
+				aria-label="<?php esc_attr_e( 'Minimize comparison bar', 'vcpahumane-pet-sync' ); ?>"
 			>
 				<?php Petstablished_Icons::render( 'chevron-down', array( 'width' => 16, 'height' => 16 ) ); ?>
 			</button>
@@ -192,7 +192,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 							data-wp-on--click="actions.removeFromSlot"
 							data-wp-bind--aria-label="state.slotRemoveLabel"
 							data-wp-bind--hidden="!state.slotHasPet"
-							aria-label="<?php echo $pet ? esc_attr( sprintf( __( 'Remove %s from comparison', 'petstablished-sync' ), $pet['name'] ) ) : ''; ?>"
+							aria-label="<?php echo $pet ? esc_attr( sprintf( __( 'Remove %s from comparison', 'vcpahumane-pet-sync' ), $pet['name'] ) ) : ''; ?>"
 							<?php echo $pet ? '' : 'hidden'; ?>
 						><?php Petstablished_Icons::render( 'x', array( 'width' => 10, 'height' => 10 ) ); ?></button>
 
@@ -200,7 +200,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 							class="screen-reader-text"
 							data-wp-bind--hidden="state.slotHasPet"
 							<?php echo $pet ? 'hidden' : ''; ?>
-						><?php esc_html_e( 'Empty slot', 'petstablished-sync' ); ?></span>
+						><?php esc_html_e( 'Empty slot', 'vcpahumane-pet-sync' ); ?></span>
 					</div>
 					<span
 						class="pet-compare-bar__pet-name"
@@ -219,7 +219,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				data-wp-on--click="actions.viewComparison"
 				data-wp-bind--disabled="!state.canCompare"
 			>
-				<?php esc_html_e( 'Compare', 'petstablished-sync' ); ?>
+				<?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?>
 			</button>
 
 			<button
@@ -227,10 +227,10 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				class="pet-compare-bar__btn pet-compare-bar__btn--secondary"
 				data-wp-on--click="petstablished::actions.shareComparison"
 				data-wp-bind--disabled="!state.canCompare"
-				title="<?php esc_attr_e( 'Copy share link', 'petstablished-sync' ); ?>"
+				title="<?php esc_attr_e( 'Copy share link', 'vcpahumane-pet-sync' ); ?>"
 			>
 				<?php Petstablished_Icons::render( 'share', array( 'width' => 16, 'height' => 16 ) ); ?>
-				<span class="pet-compare-bar__btn-text"><?php esc_html_e( 'Share', 'petstablished-sync' ); ?></span>
+				<span class="pet-compare-bar__btn-text"><?php esc_html_e( 'Share', 'vcpahumane-pet-sync' ); ?></span>
 			</button>
 
 			<button
@@ -238,7 +238,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				class="pet-compare-bar__btn pet-compare-bar__btn--text"
 				data-wp-on--click="actions.clearComparison"
 			>
-				<?php esc_html_e( 'Clear', 'petstablished-sync' ); ?>
+				<?php esc_html_e( 'Clear', 'vcpahumane-pet-sync' ); ?>
 			</button>
 		</div>
 	</div>

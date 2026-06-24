@@ -27,8 +27,8 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 		?>
 		<div <?php echo $wrapper_attributes; ?>>
 			<div class="pet-attributes__placeholder">
-				<p><?php esc_html_e( 'Pet Attributes', 'petstablished-sync' ); ?></p>
-				<small><?php esc_html_e( 'Breed, age, size, and more. Requires pet context.', 'petstablished-sync' ); ?></small>
+				<p><?php esc_html_e( 'Pet Attributes', 'vcpahumane-pet-sync' ); ?></p>
+				<small><?php esc_html_e( 'Breed, age, size, and more. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
 		</div>
 		<?php
@@ -75,14 +75,14 @@ $filter_key_map = array(
 // Build attribute list — each entry references an entity field key.
 // Only attributes whose toggle is enabled are included.
 $attr_defs = array(
-	array( 'toggle' => 'showBreed',       'label' => __( 'Breed', 'petstablished-sync' ),        'key' => 'breed' ),
-	array( 'toggle' => 'showAge',         'label' => __( 'Age', 'petstablished-sync' ),          'key' => 'numerical_age', 'fallback' => 'age', 'taxonomy_key' => 'age' ),
-	array( 'toggle' => 'showSex',         'label' => __( 'Sex', 'petstablished-sync' ),          'key' => 'sex' ),
-	array( 'toggle' => 'showSize',        'label' => __( 'Size', 'petstablished-sync' ),         'key' => 'size' ),
-	array( 'toggle' => 'showColor',       'label' => __( 'Color', 'petstablished-sync' ),        'key' => 'color' ),
-	array( 'toggle' => 'showCoat',        'label' => __( 'Coat', 'petstablished-sync' ),         'key' => 'coat' ),
-	array( 'toggle' => 'showCoatPattern', 'label' => __( 'Coat Pattern', 'petstablished-sync' ), 'key' => 'coat_pattern' ),
-	array( 'toggle' => 'showWeight',      'label' => __( 'Weight', 'petstablished-sync' ),       'key' => 'weight' ),
+	array( 'toggle' => 'showBreed',       'label' => __( 'Breed', 'vcpahumane-pet-sync' ),        'key' => 'breed' ),
+	array( 'toggle' => 'showAge',         'label' => __( 'Age', 'vcpahumane-pet-sync' ),          'key' => 'numerical_age', 'fallback' => 'age', 'taxonomy_key' => 'age' ),
+	array( 'toggle' => 'showSex',         'label' => __( 'Sex', 'vcpahumane-pet-sync' ),          'key' => 'sex' ),
+	array( 'toggle' => 'showSize',        'label' => __( 'Size', 'vcpahumane-pet-sync' ),         'key' => 'size' ),
+	array( 'toggle' => 'showColor',       'label' => __( 'Color', 'vcpahumane-pet-sync' ),        'key' => 'color' ),
+	array( 'toggle' => 'showCoat',        'label' => __( 'Coat', 'vcpahumane-pet-sync' ),         'key' => 'coat' ),
+	array( 'toggle' => 'showCoatPattern', 'label' => __( 'Coat Pattern', 'vcpahumane-pet-sync' ), 'key' => 'coat_pattern' ),
+	array( 'toggle' => 'showWeight',      'label' => __( 'Weight', 'vcpahumane-pet-sync' ),       'key' => 'weight' ),
 );
 
 $items = array();

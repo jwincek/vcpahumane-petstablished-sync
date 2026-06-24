@@ -33,8 +33,8 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 		<div <?php echo $wrapper_attributes; ?>>
 			<div class="pet-gallery__placeholder">
 				<?php Petstablished_Icons::render( 'image-placeholder', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
-				<p><?php esc_html_e( 'Pet Gallery', 'petstablished-sync' ); ?></p>
-				<small><?php esc_html_e( 'Displays pet photos with lightbox. Requires pet context.', 'petstablished-sync' ); ?></small>
+				<p><?php esc_html_e( 'Pet Gallery', 'vcpahumane-pet-sync' ); ?></p>
+				<small><?php esc_html_e( 'Displays pet photos with lightbox. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
 		</div>
 		<?php
@@ -107,8 +107,8 @@ if ( ! $has_featured && ! $has_thumbnails ) {
 		<div <?php echo $wrapper_attributes; ?>>
 			<div class="pet-gallery__placeholder">
 				<?php Petstablished_Icons::render( 'image-placeholder', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
-				<p><?php esc_html_e( 'No photos available', 'petstablished-sync' ); ?></p>
-				<small><?php esc_html_e( 'Add a featured image or gallery to this pet.', 'petstablished-sync' ); ?></small>
+				<p><?php esc_html_e( 'No photos available', 'vcpahumane-pet-sync' ); ?></p>
+				<small><?php esc_html_e( 'Add a featured image or gallery to this pet.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
 		</div>
 		<?php
@@ -134,21 +134,21 @@ if ( ( $attributes['showBadgeStatus'] ?? true ) && $status ) {
 
 if ( ( $attributes['showBadgeNew'] ?? true ) && ! empty( $pet['is_new'] ) ) {
 	$below_badges[] = array(
-		'label' => __( 'New', 'petstablished-sync' ),
+		'label' => __( 'New', 'vcpahumane-pet-sync' ),
 		'class' => 'pet-gallery__badge--new',
 	);
 }
 
 if ( ( $attributes['showBadgeBondedPair'] ?? true ) && ! empty( $pet['is_bonded_pair'] ) ) {
 	$below_badges[] = array(
-		'label' => __( 'Bonded Pair', 'petstablished-sync' ),
+		'label' => __( 'Bonded Pair', 'vcpahumane-pet-sync' ),
 		'class' => 'pet-gallery__badge--bonded',
 	);
 }
 
 if ( ( $attributes['showBadgeSpecialNeeds'] ?? true ) && isset( $pet['special_needs'] ) && 'yes' === strtolower( (string) $pet['special_needs'] ) ) {
 	$below_badges[] = array(
-		'label' => __( 'Special Needs', 'petstablished-sync' ),
+		'label' => __( 'Special Needs', 'vcpahumane-pet-sync' ),
 		'class' => 'pet-gallery__badge--special-needs',
 	);
 }
@@ -204,7 +204,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 			data-index="0"
 			aria-label="<?php echo esc_attr( sprintf(
 				/* translators: %s: pet name */
-				__( 'View photos of %s', 'petstablished-sync' ),
+				__( 'View photos of %s', 'vcpahumane-pet-sync' ),
 				$pet_name
 			) ); ?>"
 		>
@@ -247,7 +247,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 					<?php endif; ?>
 					aria-label="<?php echo esc_attr( sprintf(
 						/* translators: 1: pet name, 2: image number, 3: total images */
-						__( 'View %1$s photo %2$d of %3$d', 'petstablished-sync' ),
+						__( 'View %1$s photo %2$d of %3$d', 'vcpahumane-pet-sync' ),
 						$pet_name,
 						$lightbox_index + 1,
 						count( $lightbox_images )
@@ -284,7 +284,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 		<h3 class="pet-gallery__videos-heading">
 			<?php echo esc_html( sprintf(
 				/* translators: %s: pet name */
-				_n( 'Video of %s', 'Videos of %s', count( $videos ), 'petstablished-sync' ),
+				_n( 'Video of %s', 'Videos of %s', count( $videos ), 'vcpahumane-pet-sync' ),
 				$pet_name
 			) ); ?>
 		</h3>
@@ -296,7 +296,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 						src="https://www.youtube-nocookie.com/embed/<?php echo esc_attr( $video_id ); ?>"
 						title="<?php echo esc_attr( sprintf(
 							/* translators: %s: pet name */
-							__( 'Video of %s', 'petstablished-sync' ),
+							__( 'Video of %s', 'vcpahumane-pet-sync' ),
 							$pet_name
 						) ); ?>"
 						frameborder="0"
@@ -318,7 +318,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 		data-wp-on--keydown="actions.handleKeydown"
 		role="dialog"
 		aria-modal="true"
-		aria-label="<?php esc_attr_e( 'Image gallery', 'petstablished-sync' ); ?>"
+		aria-label="<?php esc_attr_e( 'Image gallery', 'vcpahumane-pet-sync' ); ?>"
 		tabindex="-1"
 	>
 		<div
@@ -341,7 +341,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 			type="button"
 			class="pet-gallery__lightbox-nav pet-gallery__lightbox-nav--prev"
 			data-wp-on--click="actions.prev"
-			aria-label="<?php esc_attr_e( 'Previous image', 'petstablished-sync' ); ?>"
+			aria-label="<?php esc_attr_e( 'Previous image', 'vcpahumane-pet-sync' ); ?>"
 		>
 			<span aria-hidden="true">‹</span>
 		</button>
@@ -350,7 +350,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 			type="button"
 			class="pet-gallery__lightbox-nav pet-gallery__lightbox-nav--next"
 			data-wp-on--click="actions.next"
-			aria-label="<?php esc_attr_e( 'Next image', 'petstablished-sync' ); ?>"
+			aria-label="<?php esc_attr_e( 'Next image', 'vcpahumane-pet-sync' ); ?>"
 		>
 			<span aria-hidden="true">›</span>
 		</button>
@@ -359,7 +359,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 			type="button"
 			class="pet-gallery__lightbox-close"
 			data-wp-on--click="actions.close"
-			aria-label="<?php esc_attr_e( 'Close gallery', 'petstablished-sync' ); ?>"
+			aria-label="<?php esc_attr_e( 'Close gallery', 'vcpahumane-pet-sync' ); ?>"
 		>
 			<span aria-hidden="true">×</span>
 		</button>

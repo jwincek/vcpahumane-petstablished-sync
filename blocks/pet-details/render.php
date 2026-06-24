@@ -39,10 +39,10 @@ if ( ! $has_valid_pet ) {
 	<article <?php echo $wrapper_attributes; ?>>
 		<div class="pet-details__placeholder">
 			<?php Petstablished_Icons::render( 'paw', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5, 'class' => 'pet-details__placeholder-icon' ) ); ?>
-			<p class="pet-details__placeholder-title"><?php esc_html_e( 'Pet Details', 'petstablished-sync' ); ?></p>
-			<p class="pet-details__placeholder-text"><?php esc_html_e( 'Add inner blocks and bind them to pet data using the block bindings panel.', 'petstablished-sync' ); ?></p>
+			<p class="pet-details__placeholder-title"><?php esc_html_e( 'Pet Details', 'vcpahumane-pet-sync' ); ?></p>
+			<p class="pet-details__placeholder-text"><?php esc_html_e( 'Add inner blocks and bind them to pet data using the block bindings panel.', 'vcpahumane-pet-sync' ); ?></p>
 			<p class="pet-details__placeholder-hint">
-				<?php esc_html_e( 'Source:', 'petstablished-sync' ); ?> <code>petstablished/pet-data</code>
+				<?php esc_html_e( 'Source:', 'vcpahumane-pet-sync' ); ?> <code>petstablished/pet-data</code>
 			</p>
 		</div>
 	</article>

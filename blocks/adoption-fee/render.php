@@ -35,6 +35,6 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ) );
 ?>
 <div <?php echo $wrapper_attributes; ?>>
-	<p class="pet-adoption-cta__fee-label"><?php esc_html_e( 'Adoption Fee:', 'petstablished-sync' ); ?></p>
+	<p class="pet-adoption-cta__fee-label"><?php esc_html_e( 'Adoption Fee:', 'vcpahumane-pet-sync' ); ?></p>
 	<p class="pet-adoption-cta__fee-amount"><?php echo esc_html( $fee ); ?></p>
 </div>

@@ -8,7 +8,7 @@
 	"description": "Display pet attributes like breed, age, sex, size in a definition list.",
 	"keywords": ["pet", "attributes", "breed", "age", "sex", "size"],
 	"ancestor": ["petstablished/pet-details"],
-	"textdomain": "petstablished-sync",
+	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {
 		"showBreed": { "type": "boolean", "default": true },

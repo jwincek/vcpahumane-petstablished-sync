@@ -8,7 +8,7 @@
 	"description": "Adoption application button — links to Petstablished form or provides a PDF download.",
 	"keywords": ["pet", "adoption", "button", "apply", "pdf", "form"],
 	"ancestor": ["petstablished/pet-adoption-cta"],
-	"textdomain": "petstablished-sync",
+	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {
 		"formMode": {

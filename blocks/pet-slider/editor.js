@@ -58,7 +58,7 @@
 			}, [] );
 
 			const fontFamilyOptions = [
-				{ label: __( 'Default', 'petstablished-sync' ), value: '' }
+				{ label: __( 'Default', 'vcpahumane-pet-sync' ), value: '' }
 			].concat(
 				editorSettings.fontFamilies.map( function( font ) {
 					return {
@@ -127,14 +127,14 @@
 					el(
 						PanelBody,
 						{
-							title: __( 'Similar Pets', 'petstablished-sync' ),
+							title: __( 'Similar Pets', 'vcpahumane-pet-sync' ),
 							initialOpen: similarPetsMode,
 						},
 						el( ToggleControl, {
-							label: __( 'Similar Pets Mode', 'petstablished-sync' ),
+							label: __( 'Similar Pets Mode', 'vcpahumane-pet-sync' ),
 							help: similarPetsMode 
-								? __( 'Shows pets filtered by current pet\'s type and age. Adapts to card layout for 1-3 results.', 'petstablished-sync' )
-								: __( 'Enable to filter by current pet\'s animal type and age group.', 'petstablished-sync' ),
+								? __( 'Shows pets filtered by current pet\'s type and age. Adapts to card layout for 1-3 results.', 'vcpahumane-pet-sync' )
+								: __( 'Enable to filter by current pet\'s animal type and age group.', 'vcpahumane-pet-sync' ),
 							checked: similarPetsMode,
 							onChange: function( value ) {
 								setAttributes( { similarPetsMode: value } );
@@ -146,18 +146,18 @@
 							el( 'p', {
 								className: 'components-base-control__help',
 								style: { marginTop: '8px', marginBottom: '16px', fontStyle: 'italic' }
-							}, __( 'Leave fields empty to auto-detect from current pet. Override by entering a specific value.', 'petstablished-sync' ) ),
+							}, __( 'Leave fields empty to auto-detect from current pet. Override by entering a specific value.', 'vcpahumane-pet-sync' ) ),
 							el( TextControl, {
-								label: __( 'Filter by Animal Type (slug)', 'petstablished-sync' ),
-								help: __( 'e.g., "dog", "cat" - leave empty to use current pet\'s type', 'petstablished-sync' ),
+								label: __( 'Filter by Animal Type (slug)', 'vcpahumane-pet-sync' ),
+								help: __( 'e.g., "dog", "cat" - leave empty to use current pet\'s type', 'vcpahumane-pet-sync' ),
 								value: filterAnimal,
 								onChange: function( value ) {
 									setAttributes( { filterAnimal: value } );
 								},
 							} ),
 							el( TextControl, {
-								label: __( 'Filter by Age Group (slug)', 'petstablished-sync' ),
-								help: __( 'e.g., "puppy", "adult", "senior" - leave empty to use current pet\'s age', 'petstablished-sync' ),
+								label: __( 'Filter by Age Group (slug)', 'vcpahumane-pet-sync' ),
+								help: __( 'e.g., "puppy", "adult", "senior" - leave empty to use current pet\'s age', 'vcpahumane-pet-sync' ),
 								value: filterAge,
 								onChange: function( value ) {
 									setAttributes( { filterAge: value } );
@@ -169,11 +169,11 @@
 					el(
 						PanelBody,
 						{
-							title: __( 'Card Styling', 'petstablished-sync' ),
+							title: __( 'Card Styling', 'vcpahumane-pet-sync' ),
 							initialOpen: ! similarPetsMode,
 						},
 						el( RangeControl, {
-							label: __( 'Card Border Radius', 'petstablished-sync' ),
+							label: __( 'Card Border Radius', 'vcpahumane-pet-sync' ),
 							value: cardBorderRadius,
 							onChange: function( value ) {
 								setAttributes( { cardBorderRadius: value } );
@@ -181,10 +181,10 @@
 							min: 0,
 							max: 32,
 							step: 1,
-							help: __( 'Rounded corners for pet cards (in pixels)', 'petstablished-sync' ),
+							help: __( 'Rounded corners for pet cards (in pixels)', 'vcpahumane-pet-sync' ),
 						} ),
 						el( RangeControl, {
-							label: __( 'Card Gap / Spacing', 'petstablished-sync' ),
+							label: __( 'Card Gap / Spacing', 'vcpahumane-pet-sync' ),
 							value: cardGap,
 							onChange: function( value ) {
 								setAttributes( { cardGap: value } );
@@ -192,21 +192,21 @@
 							min: 0,
 							max: 48,
 							step: 4,
-							help: __( 'Space between cards (in pixels)', 'petstablished-sync' ),
+							help: __( 'Space between cards (in pixels)', 'vcpahumane-pet-sync' ),
 						} )
 					),
 					// Typography Panel
 					el(
 						PanelBody,
 						{
-							title: __( 'Typography', 'petstablished-sync' ),
+							title: __( 'Typography', 'vcpahumane-pet-sync' ),
 							initialOpen: false,
 						},
 						// Pet Name Typography
 						el( 'p', { 
 							className: 'components-base-control__label',
 							style: { marginBottom: '8px', fontWeight: '500' }
-						}, __( 'Pet Name', 'petstablished-sync' ) ),
+						}, __( 'Pet Name', 'vcpahumane-pet-sync' ) ),
 						el( FontSizePicker, {
 							fontSizes: editorSettings.fontSizes,
 							value: nameFontSize,
@@ -217,7 +217,7 @@
 							withReset: true,
 						} ),
 						fontFamilyOptions.length > 1 && el( SelectControl, {
-							label: __( 'Pet Name Font', 'petstablished-sync' ),
+							label: __( 'Pet Name Font', 'vcpahumane-pet-sync' ),
 							value: nameFontFamily,
 							options: fontFamilyOptions,
 							onChange: function( value ) {
@@ -229,7 +229,7 @@
 							el( 'p', { 
 								className: 'components-base-control__label',
 								style: { marginBottom: '8px', fontWeight: '500' }
-							}, __( 'Pet Meta (breed, age, etc.)', 'petstablished-sync' ) ),
+							}, __( 'Pet Meta (breed, age, etc.)', 'vcpahumane-pet-sync' ) ),
 							el( FontSizePicker, {
 								fontSizes: editorSettings.fontSizes,
 								value: metaFontSize,
@@ -240,7 +240,7 @@
 								withReset: true,
 							} ),
 							fontFamilyOptions.length > 1 && el( SelectControl, {
-								label: __( 'Pet Meta Font', 'petstablished-sync' ),
+								label: __( 'Pet Meta Font', 'vcpahumane-pet-sync' ),
 								value: metaFontFamily,
 								options: fontFamilyOptions,
 								onChange: function( value ) {

@@ -62,7 +62,7 @@ class Petstablished_Blocks {
 		register_block_bindings_source(
 			'petstablished/pet-data',
 			array(
-				'label'              => __( 'Pet Data', 'petstablished-sync' ),
+				'label'              => __( 'Pet Data', 'vcpahumane-pet-sync' ),
 				'get_value_callback' => array( $this, 'get_binding_value' ),
 				'uses_context'       => array( 'postId', 'postType' ),
 			)
@@ -72,7 +72,7 @@ class Petstablished_Blocks {
 		register_block_bindings_source(
 			'petstablished/adoption-stats',
 			array(
-				'label'              => __( 'Adoption Statistics', 'petstablished-sync' ),
+				'label'              => __( 'Adoption Statistics', 'vcpahumane-pet-sync' ),
 				'get_value_callback' => array( $this, 'get_stats_binding_value' ),
 				'uses_context'       => array(),
 			)
@@ -115,7 +115,7 @@ class Petstablished_Blocks {
 
 		// Format for display.
 		if ( is_bool( $value ) ) {
-			return $value ? __( 'Yes', 'petstablished-sync' ) : __( 'No', 'petstablished-sync' );
+			return $value ? __( 'Yes', 'vcpahumane-pet-sync' ) : __( 'No', 'vcpahumane-pet-sync' );
 		}
 
 		return is_scalar( $value ) ? (string) $value : null;
@@ -123,12 +123,12 @@ class Petstablished_Blocks {
 
 	private function get_placeholder( string $key ): string {
 		$placeholders = array(
-			'status' => __( '[Status]', 'petstablished-sync' ),
-			'animal' => __( '[Animal]', 'petstablished-sync' ),
-			'breed'  => __( '[Breed]', 'petstablished-sync' ),
-			'age'    => __( '[Age]', 'petstablished-sync' ),
-			'sex'    => __( '[Sex]', 'petstablished-sync' ),
-			'size'   => __( '[Size]', 'petstablished-sync' ),
+			'status' => __( '[Status]', 'vcpahumane-pet-sync' ),
+			'animal' => __( '[Animal]', 'vcpahumane-pet-sync' ),
+			'breed'  => __( '[Breed]', 'vcpahumane-pet-sync' ),
+			'age'    => __( '[Age]', 'vcpahumane-pet-sync' ),
+			'sex'    => __( '[Sex]', 'vcpahumane-pet-sync' ),
+			'size'   => __( '[Size]', 'vcpahumane-pet-sync' ),
 		);
 		return $placeholders[ $key ] ?? '[' . ucfirst( str_replace( '_', ' ', $key ) ) . ']';
 	}
@@ -350,7 +350,7 @@ class Petstablished_Blocks {
 				'key'    => $key,
 				'type'   => 'taxonomy',
 				'source' => 'petstablished/pet-data',
-				'desc'   => sprintf( __( 'Pet %s', 'petstablished-sync' ), ucfirst( $key ) ),
+				'desc'   => sprintf( __( 'Pet %s', 'vcpahumane-pet-sync' ), ucfirst( $key ) ),
 			);
 		}
 

@@ -63,11 +63,11 @@
 					el(
 						PanelBody,
 						{
-							title: __( 'Display Settings', 'petstablished-sync' ),
+							title: __( 'Display Settings', 'vcpahumane-pet-sync' ),
 							initialOpen: true,
 						},
 						el( RangeControl, {
-							label: __( 'Columns', 'petstablished-sync' ),
+							label: __( 'Columns', 'vcpahumane-pet-sync' ),
 							value: columns,
 							onChange: function( value ) {
 								setAttributes( { columns: value } );
@@ -77,20 +77,20 @@
 							step: 1,
 						} ),
 						el( SelectControl, {
-							label: __( 'Badge Type', 'petstablished-sync' ),
+							label: __( 'Badge Type', 'vcpahumane-pet-sync' ),
 							value: badgeType,
 							options: [
-								{ label: __( 'Animal Type', 'petstablished-sync' ), value: 'animal' },
-								{ label: __( 'Age', 'petstablished-sync' ), value: 'age' },
-								{ label: __( 'New (7 days)', 'petstablished-sync' ), value: 'new' },
-								{ label: __( 'None', 'petstablished-sync' ), value: 'none' },
+								{ label: __( 'Animal Type', 'vcpahumane-pet-sync' ), value: 'animal' },
+								{ label: __( 'Age', 'vcpahumane-pet-sync' ), value: 'age' },
+								{ label: __( 'New (7 days)', 'vcpahumane-pet-sync' ), value: 'new' },
+								{ label: __( 'None', 'vcpahumane-pet-sync' ), value: 'none' },
 							],
 							onChange: function( value ) {
 								setAttributes( { badgeType: value } );
 							},
 						} ),
 						el( ToggleControl, {
-							label: __( 'Show Results Count', 'petstablished-sync' ),
+							label: __( 'Show Results Count', 'vcpahumane-pet-sync' ),
 							checked: showResultsCount,
 							onChange: function( value ) {
 								setAttributes( { showResultsCount: value } );
@@ -101,19 +101,19 @@
 					el(
 						PanelBody,
 						{
-							title: __( 'Filter Settings', 'petstablished-sync' ),
+							title: __( 'Filter Settings', 'vcpahumane-pet-sync' ),
 							initialOpen: false,
 						},
 						el( ToggleControl, {
-							label: __( 'Show Search', 'petstablished-sync' ),
-							help: __( 'Search pets by name or breed', 'petstablished-sync' ),
+							label: __( 'Show Search', 'vcpahumane-pet-sync' ),
+							help: __( 'Search pets by name or breed', 'vcpahumane-pet-sync' ),
 							checked: showSearch,
 							onChange: function( value ) {
 								setAttributes( { showSearch: value } );
 							},
 						} ),
 						el( ToggleControl, {
-							label: __( 'Show Filters', 'petstablished-sync' ),
+							label: __( 'Show Filters', 'vcpahumane-pet-sync' ),
 							checked: showFilters,
 							onChange: function( value ) {
 								setAttributes( { showFilters: value } );
@@ -125,37 +125,37 @@
 							el( 'p', {
 								className: 'components-base-control__label',
 								style: { marginTop: '16px', marginBottom: '8px', fontWeight: '600' }
-							}, __( 'Basic Filters', 'petstablished-sync' ) ),
+							}, __( 'Basic Filters', 'vcpahumane-pet-sync' ) ),
 							el( ToggleControl, {
-								label: __( 'Animal Type', 'petstablished-sync' ),
+								label: __( 'Animal Type', 'vcpahumane-pet-sync' ),
 								checked: filterAnimal,
 								onChange: function( value ) {
 									setAttributes( { filterAnimal: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Breed', 'petstablished-sync' ),
+								label: __( 'Breed', 'vcpahumane-pet-sync' ),
 								checked: filterBreed,
 								onChange: function( value ) {
 									setAttributes( { filterBreed: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Age', 'petstablished-sync' ),
+								label: __( 'Age', 'vcpahumane-pet-sync' ),
 								checked: filterAge,
 								onChange: function( value ) {
 									setAttributes( { filterAge: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Sex', 'petstablished-sync' ),
+								label: __( 'Sex', 'vcpahumane-pet-sync' ),
 								checked: filterSex,
 								onChange: function( value ) {
 									setAttributes( { filterSex: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Size', 'petstablished-sync' ),
+								label: __( 'Size', 'vcpahumane-pet-sync' ),
 								checked: filterSize,
 								onChange: function( value ) {
 									setAttributes( { filterSize: value } );
@@ -167,12 +167,12 @@
 					showFilters && el(
 						PanelBody,
 						{
-							title: __( 'Compatibility Filters', 'petstablished-sync' ),
+							title: __( 'Compatibility Filters', 'vcpahumane-pet-sync' ),
 							initialOpen: false,
 						},
 						el( ToggleControl, {
-							label: __( 'Show Compatibility Filters', 'petstablished-sync' ),
-							help: __( 'Filters for "good with" and health status', 'petstablished-sync' ),
+							label: __( 'Show Compatibility Filters', 'vcpahumane-pet-sync' ),
+							help: __( 'Filters for "good with" and health status', 'vcpahumane-pet-sync' ),
 							checked: showCompatibilityFilters,
 							onChange: function( value ) {
 								setAttributes( { showCompatibilityFilters: value } );
@@ -182,11 +182,11 @@
 							Fragment,
 							null,
 							el( SelectControl, {
-								label: __( 'Filter Style', 'petstablished-sync' ),
+								label: __( 'Filter Style', 'vcpahumane-pet-sync' ),
 								value: compatibilityStyle,
 								options: [
-									{ label: __( 'Chips (pill buttons)', 'petstablished-sync' ), value: 'chips' },
-									{ label: __( 'Checkboxes (grouped)', 'petstablished-sync' ), value: 'checkboxes' },
+									{ label: __( 'Chips (pill buttons)', 'vcpahumane-pet-sync' ), value: 'chips' },
+									{ label: __( 'Checkboxes (grouped)', 'vcpahumane-pet-sync' ), value: 'checkboxes' },
 								],
 								onChange: function( value ) {
 									setAttributes( { compatibilityStyle: value } );
@@ -195,23 +195,23 @@
 							el( 'p', {
 								className: 'components-base-control__label',
 								style: { marginTop: '16px', marginBottom: '8px', fontWeight: '600' }
-							}, __( 'Good With', 'petstablished-sync' ) ),
+							}, __( 'Good With', 'vcpahumane-pet-sync' ) ),
 							el( ToggleControl, {
-								label: __( 'Dogs', 'petstablished-sync' ),
+								label: __( 'Dogs', 'vcpahumane-pet-sync' ),
 								checked: filterGoodWithDogs,
 								onChange: function( value ) {
 									setAttributes( { filterGoodWithDogs: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Cats', 'petstablished-sync' ),
+								label: __( 'Cats', 'vcpahumane-pet-sync' ),
 								checked: filterGoodWithCats,
 								onChange: function( value ) {
 									setAttributes( { filterGoodWithCats: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Kids', 'petstablished-sync' ),
+								label: __( 'Kids', 'vcpahumane-pet-sync' ),
 								checked: filterGoodWithKids,
 								onChange: function( value ) {
 									setAttributes( { filterGoodWithKids: value } );
@@ -220,31 +220,31 @@
 							el( 'p', {
 								className: 'components-base-control__label',
 								style: { marginTop: '16px', marginBottom: '8px', fontWeight: '600' }
-							}, __( 'Health & Training', 'petstablished-sync' ) ),
+							}, __( 'Health & Training', 'vcpahumane-pet-sync' ) ),
 							el( ToggleControl, {
-								label: __( 'Shots Current', 'petstablished-sync' ),
+								label: __( 'Shots Current', 'vcpahumane-pet-sync' ),
 								checked: filterShotsCurrent,
 								onChange: function( value ) {
 									setAttributes( { filterShotsCurrent: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Spayed/Neutered', 'petstablished-sync' ),
+								label: __( 'Spayed/Neutered', 'vcpahumane-pet-sync' ),
 								checked: filterSpayedNeutered,
 								onChange: function( value ) {
 									setAttributes( { filterSpayedNeutered: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Housebroken', 'petstablished-sync' ),
+								label: __( 'Housebroken', 'vcpahumane-pet-sync' ),
 								checked: filterHousebroken,
 								onChange: function( value ) {
 									setAttributes( { filterHousebroken: value } );
 								},
 							} ),
 							el( ToggleControl, {
-								label: __( 'Special Needs', 'petstablished-sync' ),
-								help: __( 'Show pets with special needs', 'petstablished-sync' ),
+								label: __( 'Special Needs', 'vcpahumane-pet-sync' ),
+								help: __( 'Show pets with special needs', 'vcpahumane-pet-sync' ),
 								checked: filterSpecialNeeds,
 								onChange: function( value ) {
 									setAttributes( { filterSpecialNeeds: value } );

@@ -430,7 +430,7 @@ class Petstablished_Helpers {
 				
 			case 'story_title':
 				$name = get_the_title( $post_id );
-				return sprintf( __( 'Meet %s', 'petstablished-sync' ), $name );
+				return sprintf( __( 'Meet %s', 'vcpahumane-pet-sync' ), $name );
 				
 			case 'description':
 				$post = get_post( $post_id );
@@ -441,7 +441,7 @@ class Petstablished_Helpers {
 
 			case 'adoption_title':
 				$name = get_the_title( $post_id );
-				return sprintf( __( 'Adopt %s', 'petstablished-sync' ), $name );
+				return sprintf( __( 'Adopt %s', 'vcpahumane-pet-sync' ), $name );
 				
 			case 'adoption_fee_formatted':
 				$fee = $api_data['adoption_fee'] ?? '';
@@ -459,8 +459,8 @@ class Petstablished_Helpers {
 				}
 				$detail = $api_data['special_needs'] ?? '';
 				return $detail
-					? sprintf( __( 'Special Needs: %s', 'petstablished-sync' ), $detail )
-					: __( 'Special Needs', 'petstablished-sync' );
+					? sprintf( __( 'Special Needs: %s', 'vcpahumane-pet-sync' ), $detail )
+					: __( 'Special Needs', 'vcpahumane-pet-sync' );
 
 			case 'is_bonded_pair':
 				return ! empty( $api_data['group_id'] ) ? 'true' : '';
@@ -475,9 +475,9 @@ class Petstablished_Helpers {
 		$items = array();
 
 		$checks = array(
-			'is_ok_with_other_dogs' => __( 'dogs', 'petstablished-sync' ),
-			'is_ok_with_other_cats' => __( 'cats', 'petstablished-sync' ),
-			'is_ok_with_other_kids' => __( 'kids', 'petstablished-sync' ),
+			'is_ok_with_other_dogs' => __( 'dogs', 'vcpahumane-pet-sync' ),
+			'is_ok_with_other_cats' => __( 'cats', 'vcpahumane-pet-sync' ),
+			'is_ok_with_other_kids' => __( 'kids', 'vcpahumane-pet-sync' ),
 		);
 
 		$truthy = array( 'yes', '1', 'true' );
@@ -488,6 +488,6 @@ class Petstablished_Helpers {
 			}
 		}
 
-		return $items ? sprintf( __( 'Good with %s', 'petstablished-sync' ), implode( ', ', $items ) ) : '';
+		return $items ? sprintf( __( 'Good with %s', 'vcpahumane-pet-sync' ), implode( ', ', $items ) ) : '';
 	}
 }

@@ -43,7 +43,7 @@ function get( array $input ): array|WP_Error {
 	$post = get_post( $input['id'] );
 
 	if ( ! $post || 'pet' !== $post->post_type || 'publish' !== $post->post_status ) {
-		return new WP_Error( 'not_found', __( 'Pet not found.', 'petstablished-sync' ), [ 'status' => 404 ] );
+		return new WP_Error( 'not_found', __( 'Pet not found.', 'vcpahumane-pet-sync' ), [ 'status' => 404 ] );
 	}
 
 	$pet = Pet_Hydrator::hydrate( $post );

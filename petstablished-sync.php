@@ -8,7 +8,7 @@
  * Author: Jerome Wincek
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: petstablished-sync
+ * Text Domain: vcpahumane-pet-sync
  *
  * @package Petstablished_Sync
  */
@@ -155,8 +155,8 @@ function petstablished_sync_init(): void {
 	// Config-driven abilities registration (replaces old Petstablished_Abilities class).
 	add_action( 'wp_abilities_api_categories_init', function() {
 		wp_register_ability_category( 'pets', [
-			'label'       => __( 'Pets', 'petstablished-sync' ),
-			'description' => __( 'Pet adoption data operations.', 'petstablished-sync' ),
+			'label'       => __( 'Pets', 'vcpahumane-pet-sync' ),
+			'description' => __( 'Pet adoption data operations.', 'vcpahumane-pet-sync' ),
 		] );
 	} );
 	add_action( 'wp_abilities_api_init', [ \Petstablished\Abilities\Provider::class, 'register' ] );

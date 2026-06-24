@@ -89,7 +89,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					data-wp-bind--aria-label="state.favoriteLabel"
 				>
 					<?php echo Petstablished_Icons::get_heart_interactive(); ?>
-					<span class="screen-reader-text"><?php esc_html_e( 'Favorite', 'petstablished-sync' ); ?></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Favorite', 'vcpahumane-pet-sync' ); ?></span>
 				</button>
 			<?php endif; ?>
 
@@ -102,7 +102,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					data-wp-bind--aria-label="state.compareLabel"
 				>
 					<?php Petstablished_Icons::render( 'compare-grid', array( 'width' => 16, 'height' => 16 ) ); ?>
-					<span><?php esc_html_e( 'Compare', 'petstablished-sync' ); ?></span>
+					<span><?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?></span>
 				</button>
 			<?php endif; ?>
 		</div>

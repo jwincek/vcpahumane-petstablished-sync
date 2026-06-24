@@ -136,7 +136,7 @@ class Petstablished_REST {
 		if ( ! $name || ! in_array( $name, self::CLIENT_ABILITIES, true ) ) {
 			return new \WP_Error(
 				'rest_ability_not_found',
-				__( 'Ability not found.', 'petstablished-sync' ),
+				__( 'Ability not found.', 'vcpahumane-pet-sync' ),
 				[ 'status' => 404 ]
 			);
 		}
@@ -144,7 +144,7 @@ class Petstablished_REST {
 		if ( ! function_exists( 'wp_get_ability' ) ) {
 			return new \WP_Error(
 				'abilities_unavailable',
-				__( 'Abilities API is not available.', 'petstablished-sync' ),
+				__( 'Abilities API is not available.', 'vcpahumane-pet-sync' ),
 				[ 'status' => 501 ]
 			);
 		}
@@ -153,7 +153,7 @@ class Petstablished_REST {
 		if ( ! $ability ) {
 			return new \WP_Error(
 				'rest_ability_not_found',
-				sprintf( __( 'Ability "%s" is not registered.', 'petstablished-sync' ), $name ),
+				sprintf( __( 'Ability "%s" is not registered.', 'vcpahumane-pet-sync' ), $name ),
 				[ 'status' => 404 ]
 			);
 		}

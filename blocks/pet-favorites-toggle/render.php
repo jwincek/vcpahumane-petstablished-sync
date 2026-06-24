@@ -26,7 +26,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		type="button"
 		class="pet-favorites-toggle__btn"
 		data-wp-on--click="actions.openFavoritesModal"
-		aria-label="<?php esc_attr_e( 'View favorites', 'petstablished-sync' ); ?>"
+		aria-label="<?php esc_attr_e( 'View favorites', 'vcpahumane-pet-sync' ); ?>"
 	>
 		<?php echo Petstablished_Icons::get_heart_interactive( 
 			array( 'width' => 20, 'height' => 20, 'class' => 'pet-favorites-toggle__icon' ), 
@@ -34,7 +34,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		); ?>
 
 		<span class="pet-favorites-toggle__label">
-			<?php esc_html_e( 'Favorites', 'petstablished-sync' ); ?>
+			<?php esc_html_e( 'Favorites', 'vcpahumane-pet-sync' ); ?>
 		</span>
 
 		<?php if ( $show_count ) : ?>

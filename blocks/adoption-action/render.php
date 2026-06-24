@@ -36,7 +36,7 @@ if ( $form_mode === 'pdf' ) {
 		$pdf_url      = wp_get_attachment_url( $pdf_id );
 		$pdf_filename = basename( get_attached_file( $pdf_id ) );
 		$pdf_filesize = size_format( filesize( get_attached_file( $pdf_id ) ), 1 );
-		$pdf_text     = $attributes['pdfButtonText'] ?? __( 'Download Adoption Application', 'petstablished-sync' );
+		$pdf_text     = $attributes['pdfButtonText'] ?? __( 'Download Adoption Application', 'vcpahumane-pet-sync' );
 
 		if ( $pdf_url ) {
 			$has_action = true;
@@ -62,7 +62,7 @@ if ( $form_mode === 'pdf' ) {
 	}
 } else {
 	$adoption_url = $pet['adoption_form_url'] ?? '';
-	$button_text  = $attributes['buttonText'] ?? __( 'Start Adoption Application', 'petstablished-sync' );
+	$button_text  = $attributes['buttonText'] ?? __( 'Start Adoption Application', 'vcpahumane-pet-sync' );
 
 	if ( $adoption_url ) {
 		$has_action = true;

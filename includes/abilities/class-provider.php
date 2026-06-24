@@ -108,8 +108,8 @@ class Provider {
 		$permission_callback = self::resolve_permission( $config['permission'] ?? 'public' );
 
 		$args = [
-			'label'               => __( $config['label'] ?? $name, 'petstablished-sync' ),
-			'description'         => __( $config['description'] ?? '', 'petstablished-sync' ),
+			'label'               => __( $config['label'] ?? $name, 'vcpahumane-pet-sync' ),
+			'description'         => __( $config['description'] ?? '', 'vcpahumane-pet-sync' ),
 			'category'            => $config['category'] ?? 'pets',
 			'execute_callback'    => $execute_callback,
 			'permission_callback' => $permission_callback,

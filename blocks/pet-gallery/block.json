@@ -7,7 +7,7 @@
 	"category": "petstablished",
 	"description": "Display pet photos with lightbox functionality.",
 	"keywords": ["pet", "gallery", "photos", "images"],
-	"textdomain": "petstablished-sync",
+	"textdomain": "vcpahumane-pet-sync",
 	"ancestor": ["petstablished/pet-details"],
 	"attributes": {
 		"columns": {

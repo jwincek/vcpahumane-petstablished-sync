@@ -25,8 +25,8 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 		?>
 		<div <?php echo $wrapper_attributes; ?>>
 			<div class="pet-compat__placeholder">
-				<p><?php esc_html_e( 'Pet Compatibility', 'petstablished-sync' ); ?></p>
-				<small><?php esc_html_e( 'Good with dogs, cats, and children. Requires pet context.', 'petstablished-sync' ); ?></small>
+				<p><?php esc_html_e( 'Pet Compatibility', 'vcpahumane-pet-sync' ); ?></p>
+				<small><?php esc_html_e( 'Good with dogs, cats, and children. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
 		</div>
 		<?php
@@ -47,21 +47,21 @@ $archive_url = get_post_type_archive_link( 'pet' );
 $compat_defs = array(
 	array(
 		'toggle'    => 'showDogs',
-		'label'     => __( 'Dogs', 'petstablished-sync' ),
+		'label'     => __( 'Dogs', 'vcpahumane-pet-sync' ),
 		'key'       => 'ok_with_dogs',
 		'icon'      => 'dog',
 		'filter'    => 'compat_goodWithDogs',
 	),
 	array(
 		'toggle'    => 'showCats',
-		'label'     => __( 'Cats', 'petstablished-sync' ),
+		'label'     => __( 'Cats', 'vcpahumane-pet-sync' ),
 		'key'       => 'ok_with_cats',
 		'icon'      => 'cat',
 		'filter'    => 'compat_goodWithCats',
 	),
 	array(
 		'toggle'    => 'showKids',
-		'label'     => __( 'Children', 'petstablished-sync' ),
+		'label'     => __( 'Children', 'vcpahumane-pet-sync' ),
 		'key'       => 'ok_with_kids',
 		'icon'      => 'child',
 		'filter'    => 'compat_goodWithKids',
@@ -100,9 +100,9 @@ if ( empty( $items ) ) {
 
 // Status labels for screen readers and the visible status text.
 $status_labels = array(
-	'yes'     => __( 'Yes', 'petstablished-sync' ),
-	'no'      => __( 'No', 'petstablished-sync' ),
-	'unknown' => __( 'Ask us', 'petstablished-sync' ),
+	'yes'     => __( 'Yes', 'vcpahumane-pet-sync' ),
+	'no'      => __( 'No', 'vcpahumane-pet-sync' ),
+	'unknown' => __( 'Ask us', 'vcpahumane-pet-sync' ),
 );
 
 // Status icons.
@@ -118,8 +118,8 @@ $display_style = $attributes['displayStyle'] ?? 'cards';
 // every visible item is "yes". Fall back to the neutral heading ("Good with")
 // if any item is "no" or "unknown".
 $all_positive        = ! array_filter( $items, fn( $i ) => $i['status'] !== 'yes' );
-$positive_heading    = $attributes['positiveHeadingText'] ?? __( 'Plays nicely with', 'petstablished-sync' );
-$neutral_heading     = $attributes['headingText'] ?? __( 'Good with', 'petstablished-sync' );
+$positive_heading    = $attributes['positiveHeadingText'] ?? __( 'Plays nicely with', 'vcpahumane-pet-sync' );
+$neutral_heading     = $attributes['headingText'] ?? __( 'Good with', 'vcpahumane-pet-sync' );
 $heading_text        = $all_positive ? $positive_heading : $neutral_heading;
 
 $wrapper_attributes = get_block_wrapper_attributes( array(

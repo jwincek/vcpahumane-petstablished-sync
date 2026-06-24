@@ -49,14 +49,14 @@ function register_stores(): void {
 		'isCompareBarVisible'  => $has_comparison,
 		// Button text for pet-actions (used by derived state getters).
 		'_i18n' => [
-			'favorite'       => __( 'Favorite', 'petstablished-sync' ),
-			'unfavorite'     => __( 'Unfavorite', 'petstablished-sync' ),
-			'compare'        => __( 'Compare', 'petstablished-sync' ),
-			'comparing'      => __( 'Comparing', 'petstablished-sync' ),
-			'share'          => __( 'Share', 'petstablished-sync' ),
-			'copyLink'       => __( 'Copy link', 'petstablished-sync' ),
-			'copied'         => __( 'Copied!', 'petstablished-sync' ),
-			'copiedAnnounce' => __( 'Link copied to clipboard', 'petstablished-sync' ),
+			'favorite'       => __( 'Favorite', 'vcpahumane-pet-sync' ),
+			'unfavorite'     => __( 'Unfavorite', 'vcpahumane-pet-sync' ),
+			'compare'        => __( 'Compare', 'vcpahumane-pet-sync' ),
+			'comparing'      => __( 'Comparing', 'vcpahumane-pet-sync' ),
+			'share'          => __( 'Share', 'vcpahumane-pet-sync' ),
+			'copyLink'       => __( 'Copy link', 'vcpahumane-pet-sync' ),
+			'copied'         => __( 'Copied!', 'vcpahumane-pet-sync' ),
+			'copiedAnnounce' => __( 'Link copied to clipboard', 'vcpahumane-pet-sync' ),
 		],
 	] );
 
@@ -159,15 +159,15 @@ function register_script_modules(): void {
  */
 function get_i18n_strings(): array {
 	return [
-		'added'         => __( 'Added to favorites', 'petstablished-sync' ),
-		'removed'       => __( 'Removed from favorites', 'petstablished-sync' ),
-		'compareAdd'    => __( 'Added to comparison', 'petstablished-sync' ),
-		'compareRemove' => __( 'Removed from comparison', 'petstablished-sync' ),
-		'compareFull'   => __( 'Comparison is full (max 4)', 'petstablished-sync' ),
-		'copied'        => __( 'Link copied!', 'petstablished-sync' ),
-		'loading'       => __( 'Loading...', 'petstablished-sync' ),
-		'error'         => __( 'Something went wrong', 'petstablished-sync' ),
-		'noResults'     => __( 'No pets match your filters.', 'petstablished-sync' ),
-		'searchPlaceholder' => __( 'Search by name or breed…', 'petstablished-sync' ),
+		'added'         => __( 'Added to favorites', 'vcpahumane-pet-sync' ),
+		'removed'       => __( 'Removed from favorites', 'vcpahumane-pet-sync' ),
+		'compareAdd'    => __( 'Added to comparison', 'vcpahumane-pet-sync' ),
+		'compareRemove' => __( 'Removed from comparison', 'vcpahumane-pet-sync' ),
+		'compareFull'   => __( 'Comparison is full (max 4)', 'vcpahumane-pet-sync' ),
+		'copied'        => __( 'Link copied!', 'vcpahumane-pet-sync' ),
+		'loading'       => __( 'Loading...', 'vcpahumane-pet-sync' ),
+		'error'         => __( 'Something went wrong', 'vcpahumane-pet-sync' ),
+		'noResults'     => __( 'No pets match your filters.', 'vcpahumane-pet-sync' ),
+		'searchPlaceholder' => __( 'Search by name or breed…', 'vcpahumane-pet-sync' ),
 	];
 }

@@ -8,7 +8,7 @@
 	"description": "Quick-facts tagline with taxonomy filter links (e.g. Dog · Labrador · Young · Male · Medium).",
 	"keywords": ["pet", "tagline", "quick", "facts", "summary"],
 	"ancestor": ["petstablished/pet-details"],
-	"textdomain": "petstablished-sync",
+	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {
 		"separator": {

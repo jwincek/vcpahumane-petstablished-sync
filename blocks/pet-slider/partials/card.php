@@ -36,7 +36,7 @@ $badges = array();
 if ( ! empty( $show_badges ) ) {
 	if ( ! empty( $pet['special_needs'] ) && strtolower( $pet['special_needs'] ) === 'yes' ) {
 		$badges[] = array(
-			'label' => __( 'Special Needs', 'petstablished-sync' ),
+			'label' => __( 'Special Needs', 'vcpahumane-pet-sync' ),
 			'class' => 'pet-slider__badge--special-needs',
 			'icon'  => 'heart-special',
 		);
@@ -45,9 +45,9 @@ if ( ! empty( $show_badges ) ) {
 		$pair_name = '';
 		if ( ! empty( $pet['bonded_pair_names'][0]['name'] ) ) {
 			/* translators: %s: bonded partner pet name */
-			$pair_name = sprintf( __( 'Bonded with %s', 'petstablished-sync' ), $pet['bonded_pair_names'][0]['name'] );
+			$pair_name = sprintf( __( 'Bonded with %s', 'vcpahumane-pet-sync' ), $pet['bonded_pair_names'][0]['name'] );
 		} else {
-			$pair_name = __( 'Bonded Pair', 'petstablished-sync' );
+			$pair_name = __( 'Bonded Pair', 'vcpahumane-pet-sync' );
 		}
 		$badges[] = array(
 			'label' => $pair_name,
@@ -145,7 +145,7 @@ $badge_pos = $badge_position ?? 'image-top';
 				data-wp-on--click="actions.toggleFavorite"
 				data-wp-bind--aria-pressed="state.isFavorited"
 				data-wp-class--is-active="state.isFavorited"
-				aria-label="<?php esc_attr_e( 'Add to favorites', 'petstablished-sync' ); ?>"
+				aria-label="<?php esc_attr_e( 'Add to favorites', 'vcpahumane-pet-sync' ); ?>"
 			>
 				<?php echo Petstablished_Icons::get_heart_interactive( array( 'width' => 18, 'height' => 18 ) ); ?>
 			</button>
@@ -156,7 +156,7 @@ $badge_pos = $badge_position ?? 'image-top';
 				data-wp-bind--aria-pressed="state.isInComparison"
 				data-wp-class--is-active="state.isInComparison"
 				data-wp-bind--disabled="state.isCompareDisabled"
-				aria-label="<?php esc_attr_e( 'Add to comparison', 'petstablished-sync' ); ?>"
+				aria-label="<?php esc_attr_e( 'Add to comparison', 'vcpahumane-pet-sync' ); ?>"
 			>
 				<?php Petstablished_Icons::render( 'compare', array( 'width' => 18, 'height' => 18 ) ); ?>
 			</button>

@@ -54,95 +54,95 @@ $current_compat = array(
 
 $filters = array(
 	'animal' => array(
-		'label'   => __( 'Animal', 'petstablished-sync' ),
+		'label'   => __( 'Animal', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showAnimal'] ?? true,
 		'options' => $options['animal'] ?? array(),
-		'all'     => __( 'All Animals', 'petstablished-sync' ),
+		'all'     => __( 'All Animals', 'vcpahumane-pet-sync' ),
 	),
 	'breed' => array(
-		'label'   => __( 'Breed', 'petstablished-sync' ),
+		'label'   => __( 'Breed', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showBreed'] ?? true,
 		'options' => $options['breed'] ?? array(),
-		'all'     => __( 'All Breeds', 'petstablished-sync' ),
+		'all'     => __( 'All Breeds', 'vcpahumane-pet-sync' ),
 	),
 	'age' => array(
-		'label'   => __( 'Age', 'petstablished-sync' ),
+		'label'   => __( 'Age', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showAge'] ?? true,
 		'options' => $options['age'] ?? array(),
-		'all'     => __( 'Any Age', 'petstablished-sync' ),
+		'all'     => __( 'Any Age', 'vcpahumane-pet-sync' ),
 	),
 	'sex' => array(
-		'label'   => __( 'Sex', 'petstablished-sync' ),
+		'label'   => __( 'Sex', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showSex'] ?? true,
 		'options' => $options['sex'] ?? array(),
-		'all'     => __( 'Any', 'petstablished-sync' ),
+		'all'     => __( 'Any', 'vcpahumane-pet-sync' ),
 	),
 	'size' => array(
-		'label'   => __( 'Size', 'petstablished-sync' ),
+		'label'   => __( 'Size', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showSize'] ?? true,
 		'options' => $options['size'] ?? array(),
-		'all'     => __( 'Any Size', 'petstablished-sync' ),
+		'all'     => __( 'Any Size', 'vcpahumane-pet-sync' ),
 	),
 	'status' => array(
-		'label'   => __( 'Status', 'petstablished-sync' ),
+		'label'   => __( 'Status', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showStatus'] ?? false,
 		'options' => $options['status'] ?? array(),
-		'all'     => __( 'Any Status', 'petstablished-sync' ),
+		'all'     => __( 'Any Status', 'vcpahumane-pet-sync' ),
 	),
 );
 
 // Compatibility/meta filters configuration.
 $compat_filters = array(
 	'good_with_dogs' => array(
-		'label' => __( 'Good with dogs', 'petstablished-sync' ),
+		'label' => __( 'Good with dogs', 'vcpahumane-pet-sync' ),
 		'icon'  => '🐕',
 		'show'  => $attributes['showGoodWithDogs'] ?? true,
 		'group' => 'compatibility',
 	),
 	'good_with_cats' => array(
-		'label' => __( 'Good with cats', 'petstablished-sync' ),
+		'label' => __( 'Good with cats', 'vcpahumane-pet-sync' ),
 		'icon'  => '🐈',
 		'show'  => $attributes['showGoodWithCats'] ?? true,
 		'group' => 'compatibility',
 	),
 	'good_with_kids' => array(
-		'label' => __( 'Good with kids', 'petstablished-sync' ),
+		'label' => __( 'Good with kids', 'vcpahumane-pet-sync' ),
 		'icon'  => '👶',
 		'show'  => $attributes['showGoodWithKids'] ?? true,
 		'group' => 'compatibility',
 	),
 	'shots_current' => array(
-		'label' => __( 'Shots current', 'petstablished-sync' ),
+		'label' => __( 'Shots current', 'vcpahumane-pet-sync' ),
 		'icon'  => '💉',
 		'show'  => $attributes['showShotsCurrent'] ?? true,
 		'group' => 'health',
 	),
 	'spayed_neutered' => array(
-		'label' => __( 'Spayed/Neutered', 'petstablished-sync' ),
+		'label' => __( 'Spayed/Neutered', 'vcpahumane-pet-sync' ),
 		'icon'  => '✓',
 		'show'  => $attributes['showSpayedNeutered'] ?? true,
 		'group' => 'health',
 	),
 	'housebroken' => array(
-		'label' => __( 'Housebroken', 'petstablished-sync' ),
+		'label' => __( 'Housebroken', 'vcpahumane-pet-sync' ),
 		'icon'  => '🏠',
 		'show'  => $attributes['showHousebroken'] ?? true,
 		'group' => 'health',
 	),
 	'special_needs' => array(
-		'label' => __( 'Special needs', 'petstablished-sync' ),
+		'label' => __( 'Special needs', 'vcpahumane-pet-sync' ),
 		'icon'  => '❤️',
 		'show'  => $attributes['showSpecialNeeds'] ?? true,
 		'group' => 'health',
 	),
 	'hypoallergenic' => array(
-		'label' => __( 'Hypoallergenic', 'petstablished-sync' ),
+		'label' => __( 'Hypoallergenic', 'vcpahumane-pet-sync' ),
 		'icon'  => '✨',
 		'show'  => $attributes['showHypoallergenic'] ?? true,
 		'group' => 'health',
 	),
 	'declawed' => array(
-		'label' => __( 'Declawed', 'petstablished-sync' ),
+		'label' => __( 'Declawed', 'vcpahumane-pet-sync' ),
 		'icon'  => '🐾',
 		'show'  => $attributes['showDeclawed'] ?? false,
 		'group' => 'health',
@@ -170,7 +170,7 @@ $archive_url = get_post_type_archive_link( 'pet' );
 		method="get" 
 		action="<?php echo esc_url( $archive_url ); ?>"
 		role="search"
-		aria-label="<?php esc_attr_e( 'Filter pets', 'petstablished-sync' ); ?>"
+		aria-label="<?php esc_attr_e( 'Filter pets', 'vcpahumane-pet-sync' ); ?>"
 		data-wp-on--submit="actions.handleFilterSubmit"
 	>
 		<div class="pet-filters__fields">
@@ -213,7 +213,7 @@ $archive_url = get_post_type_archive_link( 'pet' );
 					data-wp-bind--aria-expanded="state.compatFiltersExpanded"
 				>
 					<span class="pet-filters__compat-toggle-text">
-						<?php esc_html_e( 'More Filters', 'petstablished-sync' ); ?>
+						<?php esc_html_e( 'More Filters', 'vcpahumane-pet-sync' ); ?>
 						<?php if ( $active_compat_count > 0 ) : ?>
 							<span class="pet-filters__compat-badge"><?php echo esc_html( $active_compat_count ); ?></span>
 						<?php endif; ?>
@@ -229,7 +229,7 @@ $archive_url = get_post_type_archive_link( 'pet' );
 				>
 					<?php if ( $compatibility_style === 'chips' ) : ?>
 						<!-- Chip-style filters -->
-						<div class="pet-filters__chips" role="group" aria-label="<?php esc_attr_e( 'Compatibility filters', 'petstablished-sync' ); ?>">
+						<div class="pet-filters__chips" role="group" aria-label="<?php esc_attr_e( 'Compatibility filters', 'vcpahumane-pet-sync' ); ?>">
 							<?php foreach ( $compat_filters as $key => $filter ) : ?>
 								<?php if ( $filter['show'] ) : ?>
 									<label class="pet-filters__chip <?php echo $current_compat[ $key ] === 'yes' ? 'pet-filters__chip--active' : ''; ?>">
@@ -258,7 +258,7 @@ $archive_url = get_post_type_archive_link( 'pet' );
 
 							<?php if ( ! empty( $compat_group ) ) : ?>
 								<fieldset class="pet-filters__checkbox-group">
-									<legend class="pet-filters__checkbox-legend"><?php esc_html_e( 'Good with', 'petstablished-sync' ); ?></legend>
+									<legend class="pet-filters__checkbox-legend"><?php esc_html_e( 'Good with', 'vcpahumane-pet-sync' ); ?></legend>
 									<?php foreach ( $compat_group as $key => $filter ) : ?>
 										<label class="pet-filters__checkbox-label">
 											<input
@@ -278,7 +278,7 @@ $archive_url = get_post_type_archive_link( 'pet' );
 
 							<?php if ( ! empty( $health_group ) ) : ?>
 								<fieldset class="pet-filters__checkbox-group">
-									<legend class="pet-filters__checkbox-legend"><?php esc_html_e( 'Health & Training', 'petstablished-sync' ); ?></legend>
+									<legend class="pet-filters__checkbox-legend"><?php esc_html_e( 'Health & Training', 'vcpahumane-pet-sync' ); ?></legend>
 									<?php foreach ( $health_group as $key => $filter ) : ?>
 										<label class="pet-filters__checkbox-label">
 											<input
@@ -303,12 +303,12 @@ $archive_url = get_post_type_archive_link( 'pet' );
 
 		<div class="pet-filters__actions">
 			<button type="submit" class="pet-filters__submit">
-				<?php esc_html_e( 'Apply Filters', 'petstablished-sync' ); ?>
+				<?php esc_html_e( 'Apply Filters', 'vcpahumane-pet-sync' ); ?>
 			</button>
 
 			<?php if ( array_filter( $current ) || array_filter( $current_compat ) ) : ?>
 				<a href="<?php echo esc_url( $archive_url ); ?>" class="pet-filters__reset">
-					<?php esc_html_e( 'Reset', 'petstablished-sync' ); ?>
+					<?php esc_html_e( 'Reset', 'vcpahumane-pet-sync' ); ?>
 				</a>
 			<?php endif; ?>
 
@@ -326,7 +326,7 @@ $archive_url = get_post_type_archive_link( 'pet' );
 			>
 				<?php
 				/* translators: default label before JS hydrates */
-				esc_html_e( "\u{2665} Favorites", 'petstablished-sync' );
+				esc_html_e( "\u{2665} Favorites", 'vcpahumane-pet-sync' );
 				?>
 			</button>
 		</div>
@@ -340,7 +340,7 @@ $archive_url = get_post_type_archive_link( 'pet' );
 				<?php
 				printf(
 					/* translators: %d: number of active filters */
-					_n( '%d filter active', '%d filters active', $active_count, 'petstablished-sync' ),
+					_n( '%d filter active', '%d filters active', $active_count, 'vcpahumane-pet-sync' ),
 					$active_count
 				);
 				?>

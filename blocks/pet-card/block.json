@@ -11,7 +11,7 @@
 		"animal",
 		"adoption"
 	],
-	"textdomain": "petstablished-sync",
+	"textdomain": "vcpahumane-pet-sync",
 	"attributes": {
 		"showFavorite": {
 			"type": "boolean",

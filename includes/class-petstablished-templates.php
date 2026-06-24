@@ -79,13 +79,13 @@ class Petstablished_Templates {
 	private function get_plugin_templates(): array {
 		return array(
 			'archive-pet' => array(
-				'title'       => __( 'Pet Archive', 'petstablished-sync' ),
-				'description' => __( 'Displays the pet adoption listings.', 'petstablished-sync' ),
+				'title'       => __( 'Pet Archive', 'vcpahumane-pet-sync' ),
+				'description' => __( 'Displays the pet adoption listings.', 'vcpahumane-pet-sync' ),
 				'post_types'  => array( 'pet' ),
 			),
 			'single-pet'  => array(
-				'title'       => __( 'Single Pet', 'petstablished-sync' ),
-				'description' => __( 'Displays a single adoptable pet.', 'petstablished-sync' ),
+				'title'       => __( 'Single Pet', 'vcpahumane-pet-sync' ),
+				'description' => __( 'Displays a single adoptable pet.', 'vcpahumane-pet-sync' ),
 				'post_types'  => array( 'pet' ),
 			),
 		);
@@ -94,8 +94,8 @@ class Petstablished_Templates {
 	private function get_plugin_template_parts(): array {
 		return array(
 			'pet-floating-ui' => array(
-				'title'       => __( 'Pet Floating UI', 'petstablished-sync' ),
-				'description' => __( 'Favorites modal and compare bar — shared across pet templates.', 'petstablished-sync' ),
+				'title'       => __( 'Pet Floating UI', 'vcpahumane-pet-sync' ),
+				'description' => __( 'Favorites modal and compare bar — shared across pet templates.', 'vcpahumane-pet-sync' ),
 				'area'        => 'uncategorized',
 			),
 		);
@@ -107,8 +107,8 @@ class Petstablished_Templates {
 		$content = file_exists( $file ) ? file_get_contents( $file ) : '';
 
 		$template                 = new WP_Block_Template();
-		$template->id             = 'petstablished-sync//' . $slug;
-		$template->theme          = 'petstablished-sync';
+		$template->id             = 'vcpahumane-pet-sync//' . $slug;
+		$template->theme          = 'vcpahumane-pet-sync';
 		$template->slug           = $slug;
 		$template->source         = 'plugin';
 		$template->type           = $type;

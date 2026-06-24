@@ -25,8 +25,8 @@ if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
 		?>
 		<div <?php echo $wrapper_attributes; ?>>
 			<div class="pet-adoption-cta__placeholder-inner">
-				<p><?php esc_html_e( 'Pet Adoption CTA', 'petstablished-sync' ); ?></p>
-				<small><?php esc_html_e( 'Adoption fee and application action. Requires pet context.', 'petstablished-sync' ); ?></small>
+				<p><?php esc_html_e( 'Pet Adoption CTA', 'vcpahumane-pet-sync' ); ?></p>
+				<small><?php esc_html_e( 'Adoption fee and application action. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
 		</div>
 		<?php

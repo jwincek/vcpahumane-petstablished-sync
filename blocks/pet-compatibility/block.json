@@ -8,7 +8,7 @@
 	"description": "Display pet compatibility with dogs, cats, and children.",
 	"keywords": ["pet", "compatibility", "dogs", "cats", "kids", "good with"],
 	"ancestor": ["petstablished/pet-details"],
-	"textdomain": "petstablished-sync",
+	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {
 		"showDogs": { "type": "boolean", "default": true },

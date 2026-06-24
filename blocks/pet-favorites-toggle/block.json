@@ -11,7 +11,7 @@
 		"favorites",
 		"filter"
 	],
-	"textdomain": "petstablished-sync",
+	"textdomain": "vcpahumane-pet-sync",
 	"attributes": {
 		"showCount": {
 			"type": "boolean",

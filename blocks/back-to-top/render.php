@@ -30,7 +30,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		href="#"
 		class="back-to-top__button"
 		data-wp-on--click="actions.scrollToTop"
-		aria-label="<?php esc_attr_e( 'Back to top', 'petstablished-sync' ); ?>"
+		aria-label="<?php esc_attr_e( 'Back to top', 'vcpahumane-pet-sync' ); ?>"
 	>
 		<?php Petstablished_Icons::render( 'chevron-up', array( 'width' => 20, 'height' => 20 ) ); ?>
 	</a>

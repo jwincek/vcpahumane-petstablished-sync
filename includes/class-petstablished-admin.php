@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Petstablished_Admin {
 
 	public const OPTION_NAME   = 'petstablished_sync_settings';
-	public const PAGE_SLUG     = 'petstablished-sync';
-	public const LOG_PAGE_SLUG = 'petstablished-sync-log';
+	public const PAGE_SLUG     = 'vcpahumane-pet-sync';
+	public const LOG_PAGE_SLUG = 'vcpahumane-pet-sync-log';
 
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
@@ -29,8 +29,8 @@ class Petstablished_Admin {
 	public function add_menu(): void {
 		add_submenu_page(
 			'edit.php?post_type=pet',
-			__( 'Petstablished Sync', 'petstablished-sync' ),
-			__( 'Sync Settings', 'petstablished-sync' ),
+			__( 'Petstablished Sync', 'vcpahumane-pet-sync' ),
+			__( 'Sync Settings', 'vcpahumane-pet-sync' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			array( $this, 'render_settings_page' )
@@ -38,8 +38,8 @@ class Petstablished_Admin {
 
 		add_submenu_page(
 			'edit.php?post_type=pet',
-			__( 'Petstablished Sync Log', 'petstablished-sync' ),
-			__( 'Sync Log', 'petstablished-sync' ),
+			__( 'Petstablished Sync Log', 'vcpahumane-pet-sync' ),
+			__( 'Sync Log', 'vcpahumane-pet-sync' ),
 			'manage_options',
 			self::LOG_PAGE_SLUG,
 			array( $this, 'render_sync_log_page' )
@@ -56,24 +56,24 @@ class Petstablished_Admin {
 		// API Settings Section.
 		add_settings_section(
 			'api_settings',
-			__( 'API Configuration', 'petstablished-sync' ),
-			fn() => printf( '<p>%s</p>', esc_html__( 'Connect to your Petstablished account.', 'petstablished-sync' ) ),
+			__( 'API Configuration', 'vcpahumane-pet-sync' ),
+			fn() => printf( '<p>%s</p>', esc_html__( 'Connect to your Petstablished account.', 'vcpahumane-pet-sync' ) ),
 			self::PAGE_SLUG
 		);
 
-		add_settings_field( 'public_key', __( 'Public Key', 'petstablished-sync' ), array( $this, 'render_public_key_field' ), self::PAGE_SLUG, 'api_settings' );
+		add_settings_field( 'public_key', __( 'Public Key', 'vcpahumane-pet-sync' ), array( $this, 'render_public_key_field' ), self::PAGE_SLUG, 'api_settings' );
 
 		// Sync Settings Section.
 		add_settings_section(
 			'sync_settings',
-			__( 'Sync Options', 'petstablished-sync' ),
-			fn() => printf( '<p>%s</p>', esc_html__( 'Configure automatic synchronization.', 'petstablished-sync' ) ),
+			__( 'Sync Options', 'vcpahumane-pet-sync' ),
+			fn() => printf( '<p>%s</p>', esc_html__( 'Configure automatic synchronization.', 'vcpahumane-pet-sync' ) ),
 			self::PAGE_SLUG
 		);
 
-		add_settings_field( 'auto_sync', __( 'Auto Sync', 'petstablished-sync' ), array( $this, 'render_auto_sync_field' ), self::PAGE_SLUG, 'sync_settings' );
-		add_settings_field( 'sync_interval', __( 'Sync Interval', 'petstablished-sync' ), array( $this, 'render_sync_interval_field' ), self::PAGE_SLUG, 'sync_settings' );
-		add_settings_field( 'batch_size', __( 'Batch Size', 'petstablished-sync' ), array( $this, 'render_batch_size_field' ), self::PAGE_SLUG, 'sync_settings' );
+		add_settings_field( 'auto_sync', __( 'Auto Sync', 'vcpahumane-pet-sync' ), array( $this, 'render_auto_sync_field' ), self::PAGE_SLUG, 'sync_settings' );
+		add_settings_field( 'sync_interval', __( 'Sync Interval', 'vcpahumane-pet-sync' ), array( $this, 'render_sync_interval_field' ), self::PAGE_SLUG, 'sync_settings' );
+		add_settings_field( 'batch_size', __( 'Batch Size', 'vcpahumane-pet-sync' ), array( $this, 'render_batch_size_field' ), self::PAGE_SLUG, 'sync_settings' );
 	}
 
 	public const SCHEDULE_6PM_SKIP_SUNDAY = 'daily_6pm_skip_sunday';
@@ -166,7 +166,7 @@ class Petstablished_Admin {
 			<p class="description">%s</p>',
 			esc_attr( self::OPTION_NAME ),
 			esc_attr( $settings['public_key'] ),
-			esc_html__( 'Your Petstablished public key (found in account settings).', 'petstablished-sync' )
+			esc_html__( 'Your Petstablished public key (found in account settings).', 'vcpahumane-pet-sync' )
 		);
 	}
 
@@ -176,17 +176,17 @@ class Petstablished_Admin {
 			'<label><input type="checkbox" name="%s[auto_sync]" value="1" %s> %s</label>',
 			esc_attr( self::OPTION_NAME ),
 			checked( $settings['auto_sync'], true, false ),
-			esc_html__( 'Automatically sync pets on a schedule', 'petstablished-sync' )
+			esc_html__( 'Automatically sync pets on a schedule', 'vcpahumane-pet-sync' )
 		);
 	}
 
 	public function render_sync_interval_field(): void {
 		$settings = self::get_settings();
 		$intervals = array(
-			self::SCHEDULE_6PM_SKIP_SUNDAY => __( 'Daily at 6pm (skip Sundays)', 'petstablished-sync' ),
-			'hourly'                       => __( 'Hourly', 'petstablished-sync' ),
-			'twicedaily'                   => __( 'Twice Daily', 'petstablished-sync' ),
-			'daily'                        => __( 'Daily', 'petstablished-sync' ),
+			self::SCHEDULE_6PM_SKIP_SUNDAY => __( 'Daily at 6pm (skip Sundays)', 'vcpahumane-pet-sync' ),
+			'hourly'                       => __( 'Hourly', 'vcpahumane-pet-sync' ),
+			'twicedaily'                   => __( 'Twice Daily', 'vcpahumane-pet-sync' ),
+			'daily'                        => __( 'Daily', 'vcpahumane-pet-sync' ),
 		);
 		echo '<select name="' . esc_attr( self::OPTION_NAME ) . '[sync_interval]">';
 		foreach ( $intervals as $value => $label ) {
@@ -202,7 +202,7 @@ class Petstablished_Admin {
 			<p class="description">%s</p>',
 			esc_attr( self::OPTION_NAME ),
 			$settings['batch_size'],
-			esc_html__( 'Number of pets to process per batch (1-50). Lower values for shared hosting.', 'petstablished-sync' )
+			esc_html__( 'Number of pets to process per batch (1-50). Lower values for shared hosting.', 'vcpahumane-pet-sync' )
 		);
 	}
 
@@ -218,30 +218,30 @@ class Petstablished_Admin {
 		$next_cron  = $settings['auto_sync'] ? wp_next_scheduled( 'petstablished_scheduled_sync' ) : false;
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Petstablished Sync', 'petstablished-sync' ); ?></h1>
+			<h1><?php esc_html_e( 'Petstablished Sync', 'vcpahumane-pet-sync' ); ?></h1>
 
 			<!-- Sync Status Card -->
 			<div class="card" style="max-width: 600px; margin-bottom: 20px;">
-				<h2><?php esc_html_e( 'Sync Status', 'petstablished-sync' ); ?></h2>
+				<h2><?php esc_html_e( 'Sync Status', 'vcpahumane-pet-sync' ); ?></h2>
 				
 				<div id="sync-status">
 					<?php if ( $last_sync ) : ?>
 						<p>
-							<strong><?php esc_html_e( 'Last sync:', 'petstablished-sync' ); ?></strong>
-							<?php echo esc_html( human_time_diff( $last_sync ) . ' ' . __( 'ago', 'petstablished-sync' ) ); ?>
+							<strong><?php esc_html_e( 'Last sync:', 'vcpahumane-pet-sync' ); ?></strong>
+							<?php echo esc_html( human_time_diff( $last_sync ) . ' ' . __( 'ago', 'vcpahumane-pet-sync' ) ); ?>
 							<br>
 							<small><?php echo esc_html( wp_date( 'F j, Y g:i a', $last_sync ) ); ?></small>
 						</p>
 					<?php else : ?>
-						<p><?php esc_html_e( 'No sync has been performed yet.', 'petstablished-sync' ); ?></p>
+						<p><?php esc_html_e( 'No sync has been performed yet.', 'vcpahumane-pet-sync' ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( $next_cron ) : ?>
 						<p>
-							<strong><?php esc_html_e( 'Next scheduled run:', 'petstablished-sync' ); ?></strong>
+							<strong><?php esc_html_e( 'Next scheduled run:', 'vcpahumane-pet-sync' ); ?></strong>
 							<?php echo esc_html( wp_date( 'F j, Y g:i a', $next_cron ) ); ?>
 							<?php if ( $settings['sync_interval'] === self::SCHEDULE_6PM_SKIP_SUNDAY ) : ?>
-								<br><small><?php esc_html_e( 'Sundays are skipped.', 'petstablished-sync' ); ?></small>
+								<br><small><?php esc_html_e( 'Sundays are skipped.', 'vcpahumane-pet-sync' ); ?></small>
 							<?php endif; ?>
 						</p>
 					<?php endif; ?>
@@ -261,7 +261,7 @@ class Petstablished_Admin {
 
 				<p>
 					<button type="button" id="sync-button" class="button button-primary" <?php echo empty( $settings['public_key'] ) ? 'disabled' : ''; ?>>
-						<?php esc_html_e( 'Sync Now', 'petstablished-sync' ); ?>
+						<?php esc_html_e( 'Sync Now', 'vcpahumane-pet-sync' ); ?>
 					</button>
 					
 					<?php
@@ -269,13 +269,13 @@ class Petstablished_Admin {
 					$total     = ( $pet_count->publish ?? 0 ) + ( $pet_count->draft ?? 0 );
 					?>
 					<span id="pet-count" style="margin-left: 10px;">
-						<?php printf( esc_html__( '%d pets in database', 'petstablished-sync' ), $total ); ?>
+						<?php printf( esc_html__( '%d pets in database', 'vcpahumane-pet-sync' ), $total ); ?>
 					</span>
 				</p>
 
 				<?php if ( empty( $settings['public_key'] ) ) : ?>
 					<p class="description" style="color: #d63638;">
-						<?php esc_html_e( 'Please enter your Public Key below to enable syncing.', 'petstablished-sync' ); ?>
+						<?php esc_html_e( 'Please enter your Public Key below to enable syncing.', 'vcpahumane-pet-sync' ); ?>
 					</p>
 				<?php endif; ?>
 			</div>
@@ -308,11 +308,11 @@ class Petstablished_Admin {
 
 			async function startSync() {
 				syncButton.disabled = true;
-				syncButton.textContent = '<?php esc_html_e( 'Starting...', 'petstablished-sync' ); ?>';
+				syncButton.textContent = '<?php esc_html_e( 'Starting...', 'vcpahumane-pet-sync' ); ?>';
 				progressDiv.style.display = 'block';
 				resultsDiv.style.display = 'none';
 				progressBar.style.width = '0%';
-				progressText.textContent = '<?php esc_html_e( 'Fetching pets from Petstablished...', 'petstablished-sync' ); ?>';
+				progressText.textContent = '<?php esc_html_e( 'Fetching pets from Petstablished...', 'vcpahumane-pet-sync' ); ?>';
 
 				try {
 					const startRes = await fetch(ajaxurl, {
@@ -334,7 +334,7 @@ class Petstablished_Admin {
 					processed = 0;
 					stats = { created: 0, updated: 0, unchanged: 0 };
 
-					progressText.textContent = `<?php esc_html_e( 'Found', 'petstablished-sync' ); ?> ${totalPets} <?php esc_html_e( 'pets. Processing...', 'petstablished-sync' ); ?>`;
+					progressText.textContent = `<?php esc_html_e( 'Found', 'vcpahumane-pet-sync' ); ?> ${totalPets} <?php esc_html_e( 'pets. Processing...', 'vcpahumane-pet-sync' ); ?>`;
 
 					// Process in batches
 					while (processed < totalPets) {
@@ -345,12 +345,12 @@ class Petstablished_Admin {
 					await finishSync();
 
 				} catch (error) {
-					progressText.textContent = '<?php esc_html_e( 'Error:', 'petstablished-sync' ); ?> ' + error.message;
+					progressText.textContent = '<?php esc_html_e( 'Error:', 'vcpahumane-pet-sync' ); ?> ' + error.message;
 					progressText.style.color = '#d63638';
 				}
 
 				syncButton.disabled = false;
-				syncButton.textContent = '<?php esc_html_e( 'Sync Now', 'petstablished-sync' ); ?>';
+				syncButton.textContent = '<?php esc_html_e( 'Sync Now', 'vcpahumane-pet-sync' ); ?>';
 			}
 
 			async function processBatch() {
@@ -377,11 +377,11 @@ class Petstablished_Admin {
 
 				const percent = Math.round((processed / totalPets) * 100);
 				progressBar.style.width = percent + '%';
-				progressText.textContent = `<?php esc_html_e( 'Processing:', 'petstablished-sync' ); ?> ${processed} / ${totalPets} (${percent}%)`;
+				progressText.textContent = `<?php esc_html_e( 'Processing:', 'vcpahumane-pet-sync' ); ?> ${processed} / ${totalPets} (${percent}%)`;
 			}
 
 			async function finishSync() {
-				progressText.textContent = '<?php esc_html_e( 'Finishing up...', 'petstablished-sync' ); ?>';
+				progressText.textContent = '<?php esc_html_e( 'Finishing up...', 'vcpahumane-pet-sync' ); ?>';
 
 				const res = await fetch(ajaxurl, {
 					method: 'POST',
@@ -397,16 +397,16 @@ class Petstablished_Admin {
 				progressDiv.style.display = 'none';
 
 				resultsDiv.innerHTML = `
-					<strong><?php esc_html_e( 'Sync Complete!', 'petstablished-sync' ); ?></strong><br>
-					<?php esc_html_e( 'Created:', 'petstablished-sync' ); ?> ${stats.created} |
-					<?php esc_html_e( 'Updated:', 'petstablished-sync' ); ?> ${stats.updated} |
-					<?php esc_html_e( 'Unchanged:', 'petstablished-sync' ); ?> ${stats.unchanged}
-					${data.data?.removed ? ` | <?php esc_html_e( 'Removed:', 'petstablished-sync' ); ?> ${data.data.removed}` : ''}
+					<strong><?php esc_html_e( 'Sync Complete!', 'vcpahumane-pet-sync' ); ?></strong><br>
+					<?php esc_html_e( 'Created:', 'vcpahumane-pet-sync' ); ?> ${stats.created} |
+					<?php esc_html_e( 'Updated:', 'vcpahumane-pet-sync' ); ?> ${stats.updated} |
+					<?php esc_html_e( 'Unchanged:', 'vcpahumane-pet-sync' ); ?> ${stats.unchanged}
+					${data.data?.removed ? ` | <?php esc_html_e( 'Removed:', 'vcpahumane-pet-sync' ); ?> ${data.data.removed}` : ''}
 				`;
 				resultsDiv.style.display = 'block';
 
 				// Update status text
-				statusDiv.innerHTML = '<p><strong><?php esc_html_e( 'Last sync:', 'petstablished-sync' ); ?></strong> <?php esc_html_e( 'Just now', 'petstablished-sync' ); ?></p>';
+				statusDiv.innerHTML = '<p><strong><?php esc_html_e( 'Last sync:', 'vcpahumane-pet-sync' ); ?></strong> <?php esc_html_e( 'Just now', 'vcpahumane-pet-sync' ); ?></p>';
 			}
 		})();
 		</script>
@@ -421,12 +421,12 @@ class Petstablished_Admin {
 		$entries = Petstablished_Sync_Log::all();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Sync Log', 'petstablished-sync' ); ?></h1>
+			<h1><?php esc_html_e( 'Sync Log', 'vcpahumane-pet-sync' ); ?></h1>
 			<p class="description">
 				<?php
 				printf(
 					/* translators: %d: maximum number of log entries kept. */
-					esc_html__( 'Records of the most recent %d sync attempts. Newest first.', 'petstablished-sync' ),
+					esc_html__( 'Records of the most recent %d sync attempts. Newest first.', 'vcpahumane-pet-sync' ),
 					(int) Petstablished_Sync_Log::MAX_ENTRIES
 				);
 				?>
@@ -434,10 +434,10 @@ class Petstablished_Admin {
 
 			<?php if ( empty( $entries ) ) : ?>
 				<div class="card" style="max-width: 600px;">
-					<p><?php esc_html_e( 'No syncs have been recorded yet.', 'petstablished-sync' ); ?></p>
+					<p><?php esc_html_e( 'No syncs have been recorded yet.', 'vcpahumane-pet-sync' ); ?></p>
 					<p>
 						<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=pet&page=' . self::PAGE_SLUG ) ); ?>">
-							<?php esc_html_e( 'Go to Sync Settings', 'petstablished-sync' ); ?>
+							<?php esc_html_e( 'Go to Sync Settings', 'vcpahumane-pet-sync' ); ?>
 						</a>
 					</p>
 				</div>
@@ -499,11 +499,11 @@ class Petstablished_Admin {
 				<table class="wp-list-table widefat striped ps-sync-log">
 					<thead>
 						<tr>
-							<th class="col-when"><?php esc_html_e( 'When', 'petstablished-sync' ); ?></th>
-							<th class="col-trigger"><?php esc_html_e( 'Trigger', 'petstablished-sync' ); ?></th>
-							<th class="col-outcome"><?php esc_html_e( 'Outcome', 'petstablished-sync' ); ?></th>
-							<th class="col-counts"><?php esc_html_e( 'Counts', 'petstablished-sync' ); ?></th>
-							<th class="col-details"><?php esc_html_e( 'Details', 'petstablished-sync' ); ?></th>
+							<th class="col-when"><?php esc_html_e( 'When', 'vcpahumane-pet-sync' ); ?></th>
+							<th class="col-trigger"><?php esc_html_e( 'Trigger', 'vcpahumane-pet-sync' ); ?></th>
+							<th class="col-outcome"><?php esc_html_e( 'Outcome', 'vcpahumane-pet-sync' ); ?></th>
+							<th class="col-counts"><?php esc_html_e( 'Counts', 'vcpahumane-pet-sync' ); ?></th>
+							<th class="col-details"><?php esc_html_e( 'Details', 'vcpahumane-pet-sync' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -525,7 +525,7 @@ class Petstablished_Admin {
 									<?php echo esc_html( wp_date( 'M j, Y g:i a', $started ) ); ?>
 									<br><small><?php
 										/* translators: %d: duration in seconds. */
-										printf( esc_html__( '%ds', 'petstablished-sync' ), $duration );
+										printf( esc_html__( '%ds', 'vcpahumane-pet-sync' ), $duration );
 									?></small>
 								</td>
 								<td class="col-trigger">
@@ -552,31 +552,31 @@ class Petstablished_Admin {
 								</td>
 								<td class="col-details">
 									<button type="button" class="button-link ps-detail-toggle" data-target="<?php echo esc_attr( $detail_id ); ?>">
-										<?php esc_html_e( 'Show details', 'petstablished-sync' ); ?>
+										<?php esc_html_e( 'Show details', 'vcpahumane-pet-sync' ); ?>
 									</button>
 								</td>
 							</tr>
 							<tr id="<?php echo esc_attr( $detail_id ); ?>" class="detail-row" style="display:none;">
 								<td colspan="5">
 									<dl>
-										<dt><?php esc_html_e( 'Started', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Started', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo esc_html( wp_date( 'F j, Y g:i:s a', $started ) ); ?></dd>
-										<dt><?php esc_html_e( 'Ended', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Ended', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo esc_html( wp_date( 'F j, Y g:i:s a', $ended ) ); ?></dd>
-										<dt><?php esc_html_e( 'Duration', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Duration', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php
 											/* translators: %d: duration in seconds. */
-											printf( esc_html__( '%d seconds', 'petstablished-sync' ), $duration );
+											printf( esc_html__( '%d seconds', 'vcpahumane-pet-sync' ), $duration );
 										?></dd>
-										<dt><?php esc_html_e( 'Created', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Created', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo (int) ( $stats['created'] ?? 0 ); ?></dd>
-										<dt><?php esc_html_e( 'Updated', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Updated', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo (int) ( $stats['updated'] ?? 0 ); ?></dd>
-										<dt><?php esc_html_e( 'Unchanged', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Unchanged', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo (int) ( $stats['unchanged'] ?? 0 ); ?></dd>
-										<dt><?php esc_html_e( 'Removed', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Removed', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo (int) ( $stats['removed'] ?? 0 ); ?></dd>
-										<dt><?php esc_html_e( 'Errors', 'petstablished-sync' ); ?></dt>
+										<dt><?php esc_html_e( 'Errors', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd>
 											<?php echo (int) ( $stats['errors'] ?? 0 ); ?>
 											<?php if ( ! empty( $errors ) ) : ?>
@@ -584,7 +584,7 @@ class Petstablished_Admin {
 											<?php endif; ?>
 										</dd>
 										<?php if ( $note ) : ?>
-											<dt><?php esc_html_e( 'Note', 'petstablished-sync' ); ?></dt>
+											<dt><?php esc_html_e( 'Note', 'vcpahumane-pet-sync' ); ?></dt>
 											<dd><?php echo esc_html( $note ); ?></dd>
 										<?php endif; ?>
 									</dl>
@@ -602,8 +602,8 @@ class Petstablished_Admin {
 							const isHidden = row.style.display === 'none';
 							row.style.display = isHidden ? '' : 'none';
 							btn.textContent = isHidden
-								? <?php echo wp_json_encode( __( 'Hide details', 'petstablished-sync' ) ); ?>
-								: <?php echo wp_json_encode( __( 'Show details', 'petstablished-sync' ) ); ?>;
+								? <?php echo wp_json_encode( __( 'Hide details', 'vcpahumane-pet-sync' ) ); ?>
+								: <?php echo wp_json_encode( __( 'Show details', 'vcpahumane-pet-sync' ) ); ?>;
 						});
 					});
 				})();
@@ -637,14 +637,14 @@ class Petstablished_Admin {
 
 		switch ( $status ) {
 			case 'started':
-				$message = __( 'Sync started. This may take a few minutes.', 'petstablished-sync' );
+				$message = __( 'Sync started. This may take a few minutes.', 'vcpahumane-pet-sync' );
 				$type    = 'info';
 				break;
 			case 'complete':
-				$message = __( 'Sync completed successfully.', 'petstablished-sync' );
+				$message = __( 'Sync completed successfully.', 'vcpahumane-pet-sync' );
 				break;
 			case 'error':
-				$message = __( 'Sync failed. Please check your API credentials.', 'petstablished-sync' );
+				$message = __( 'Sync failed. Please check your API credentials.', 'vcpahumane-pet-sync' );
 				$type    = 'error';
 				break;
 		}
@@ -656,7 +656,7 @@ class Petstablished_Admin {
 
 	public function add_settings_link( $links ): array {
 		$url  = admin_url( 'edit.php?post_type=pet&page=' . self::PAGE_SLUG );
-		$link = sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html__( 'Settings', 'petstablished-sync' ) );
+		$link = sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html__( 'Settings', 'vcpahumane-pet-sync' ) );
 		array_unshift( $links, $link );
 		return $links;
 	}

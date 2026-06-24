@@ -349,8 +349,8 @@ class Pet_Hydrator {
 			'url' => get_permalink( $id ),
 			'tagline' => self::compute_tagline( $entity ),
 			'compatibility' => self::compute_compatibility( $entity ),
-			'story_title' => sprintf( __( 'Meet %s', 'petstablished-sync' ), $entity['name'] ?? '' ),
-			'adoption_title' => sprintf( __( 'Adopt %s', 'petstablished-sync' ), $entity['name'] ?? '' ),
+			'story_title' => sprintf( __( 'Meet %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
+			'adoption_title' => sprintf( __( 'Adopt %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
 			'adoption_fee_formatted' => self::compute_formatted_fee( $entity ),
 			'has_adoption_info' => ! empty( $entity['adoption_fee'] ) || ! empty( $entity['adoption_form_url'] ),
 			'gallery' => self::compute_gallery( $id ),
@@ -435,9 +435,9 @@ class Pet_Hydrator {
 	private static function compute_compatibility( array $entity ): string {
 		$items = [];
 		$checks = [
-			'ok_with_dogs' => __( 'dogs', 'petstablished-sync' ),
-			'ok_with_cats' => __( 'cats', 'petstablished-sync' ),
-			'ok_with_kids' => __( 'kids', 'petstablished-sync' ),
+			'ok_with_dogs' => __( 'dogs', 'vcpahumane-pet-sync' ),
+			'ok_with_cats' => __( 'cats', 'vcpahumane-pet-sync' ),
+			'ok_with_kids' => __( 'kids', 'vcpahumane-pet-sync' ),
 		];
 
 		foreach ( $checks as $key => $label ) {
@@ -447,7 +447,7 @@ class Pet_Hydrator {
 		}
 
 		return $items
-			? sprintf( __( 'Good with %s', 'petstablished-sync' ), implode( ', ', $items ) )
+			? sprintf( __( 'Good with %s', 'vcpahumane-pet-sync' ), implode( ', ', $items ) )
 			: '';
 	}
 
@@ -564,10 +564,10 @@ class Pet_Hydrator {
 
 		$detail = trim( $entity['special_needs_detail'] ?? '' );
 		if ( $detail ) {
-			return sprintf( __( 'Special Needs: %s', 'petstablished-sync' ), $detail );
+			return sprintf( __( 'Special Needs: %s', 'vcpahumane-pet-sync' ), $detail );
 		}
 
-		return __( 'Special Needs', 'petstablished-sync' );
+		return __( 'Special Needs', 'vcpahumane-pet-sync' );
 	}
 
 	/**

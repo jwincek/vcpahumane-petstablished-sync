@@ -494,7 +494,7 @@ class Petstablished_Variations {
 			// Add at the beginning for visibility.
 			array_unshift( $categories, array(
 				'slug'  => 'petstablished',
-				'title' => __( 'Pet Blocks', 'petstablished-sync' ),
+				'title' => __( 'Pet Blocks', 'vcpahumane-pet-sync' ),
 				'icon'  => 'pets',
 			) );
 			return $categories;
