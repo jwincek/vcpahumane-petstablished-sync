@@ -97,8 +97,12 @@ function petstablished_sync_init(): void {
 	// Config-driven CPT, taxonomy, and meta registration.
 	\Petstablished\Core\CPT_Registry::init();
 
-	// Apply compatibility meta filters to pet archive main queries.
-	// This was previously in Petstablished_CPT but is a query concern, not registration.
+	// Apply compatibility filters (?compat_goodWithDogs=1 etc.) to the pet
+	// archive / taxonomy main query. Compatibility data lives in the
+	// pet_attribute taxonomy — it is NOT stored as post meta (the sync
+	// keeps it in the _pet_api_response snapshot + attribute terms), so
+	// this must be a tax_query. Mirrors Query::whereAttribute() and the
+	// filter-pets ability so a no-JS request and the grid block agree.
 	add_action( 'pre_get_posts', function( \WP_Query $query ): void {
 		if ( is_admin() || ! $query->is_main_query() ) {
 			return;
@@ -111,37 +115,48 @@ function petstablished_sync_init(): void {
 			return;
 		}
 
-		$meta_prefix = $entities['vcps_pet']['meta_prefix'] ?? '_pet_';
-		$fields      = $entities['vcps_pet']['fields'] ?? [];
-		$meta_query  = $query->get( 'meta_query' ) ?: [];
+		// camelCase URL key (compat_<key>) => pet_attribute term slug.
+		// Mirrors \Petstablished\Abilities\Pets\COMPAT_MAP and the grid block's URL params.
+		$compat_map = [
+			'goodWithDogs'   => 'good-with-dogs',
+			'goodWithCats'   => 'good-with-cats',
+			'goodWithKids'   => 'good-with-kids',
+			'shotsCurrent'   => 'shots-current',
+			'spayedNeutered' => 'spayed-neutered',
+			'housebroken'    => 'housebroken',
+			'specialNeeds'   => 'special-needs',
+			'hypoallergenic' => 'hypoallergenic',
+			'declawed'       => 'declawed',
+		];
+		$attribute_tax = $entities['vcps_pet']['attribute_taxonomy'] ?? 'pet_attribute';
 
-		// Build meta query from URL compat_ params using entity field config.
-		$compat_fields = [ 'ok_with_dogs', 'ok_with_cats', 'ok_with_kids', 'shots_current',
-			'spayed_neutered', 'housebroken', 'special_needs' ];
-
-		foreach ( $compat_fields as $field ) {
-			$url_key = 'compat_' . lcfirst( str_replace( '_', '', ucwords( $field, '_' ) ) );
-			if ( empty( $_GET[ $url_key ] ) ) {
-				// Also check legacy URL format (good_with_dogs=yes).
-				$legacy_key = $field;
-				$value = isset( $_GET[ $legacy_key ] ) ? sanitize_text_field( $_GET[ $legacy_key ] ) : '';
-				if ( $value !== 'yes' ) {
-					continue;
-				}
+		$compat_clauses = [];
+		foreach ( $compat_map as $input_key => $term_slug ) {
+			if ( ! empty( $_GET[ 'compat_' . $input_key ] ) ) {
+				$compat_clauses[] = [
+					'taxonomy' => $attribute_tax,
+					'field'    => 'slug',
+					'terms'    => $term_slug,
+				];
 			}
-
-			$truthy = $fields[ $field ]['truthy_values'] ?? [ 'yes', 'Yes', '1', 'true' ];
-			$meta_query[] = [
-				'key'     => $meta_prefix . $field,
-				'value'   => $truthy,
-				'compare' => 'IN',
-			];
 		}
 
-		if ( ! empty( $meta_query ) ) {
-			$meta_query['relation'] = 'AND';
-			$query->set( 'meta_query', $meta_query );
+		if ( empty( $compat_clauses ) ) {
+			return;
 		}
+
+		if ( count( $compat_clauses ) > 1 ) {
+			$compat_clauses['relation'] = 'AND';
+		}
+
+		// Combine with any pre-existing tax_query (e.g. an explicit one)
+		// via AND. On a taxonomy archive the term constraint comes from
+		// query vars and WordPress AND-merges it during parse_tax_query.
+		$existing = $query->get( 'tax_query' ) ?: [];
+		$query->set(
+			'tax_query',
+			$existing ? [ 'relation' => 'AND', $existing, $compat_clauses ] : $compat_clauses
+		);
 	} );
 
 	// Template helpers — shared functions for block render callbacks.
