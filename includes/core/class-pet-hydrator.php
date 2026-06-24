@@ -362,7 +362,6 @@ class Pet_Hydrator {
 			'is_bonded_pair' => self::compute_is_bonded_pair( $id ),
 			'bonded_pair_names' => self::compute_bonded_pair_names( $id ),
 			'special_needs_summary' => self::compute_special_needs_summary( $entity ),
-			'archive_url' => get_post_type_archive_link( 'vcps_pet' ) ?: '',
 			default => null,
 		};
 	}

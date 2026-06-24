@@ -81,8 +81,6 @@ foreach ( $pets as &$pet ) {
 	$pet['shots_display']         = ! empty( $pet['shots_current'] ) ? __( 'Current', 'vcpahumane-pet-sync' ) : '—';
 	$pet['fixed_display']         = ! empty( $pet['spayed_neutered'] ) ? __( 'Yes', 'vcpahumane-pet-sync' ) : '—';
 	$pet['housebroken_display']   = ! empty( $pet['housebroken'] ) ? __( 'Yes', 'vcpahumane-pet-sync' ) : '—';
-	$pet['coat_display']          = $pet['coat_length'] ?? '—';
-	$pet['shedding_display']      = $pet['shedding'] ?? '—';
 }
 unset( $pet );
 

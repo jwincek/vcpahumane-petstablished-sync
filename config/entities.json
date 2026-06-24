@@ -191,7 +191,7 @@
         "compatibility", "adoption_fee", "adoption_fee_formatted",
         "special_needs", "special_needs_detail",
         "shots_current", "spayed_neutered", "housebroken",
-        "hypoallergenic", "declawed", "coat_length", "shedding"
+        "hypoallergenic", "declawed"
       ]
     }
   }

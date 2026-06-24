@@ -171,7 +171,6 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 		action="<?php echo esc_url( $archive_url ); ?>"
 		role="search"
 		aria-label="<?php esc_attr_e( 'Filter pets', 'vcpahumane-pet-sync' ); ?>"
-		data-wp-on--submit="actions.handleFilterSubmit"
 	>
 		<div class="pet-filters__fields">
 			<?php foreach ( $filters as $key => $filter ) : ?>
