@@ -54,30 +54,39 @@ class Petstablished_Sync {
 		}
 
 		// Fetch all pets from API.
-		$pets = $this->fetch_pets( $settings['public_key'] );
+		$result = $this->fetch_pets( $settings['public_key'] );
 
-		if ( is_wp_error( $pets ) ) {
-			$this->record_error_run( 'manual', $pets->get_error_message() );
-			wp_send_json_error( $pets->get_error_message() );
+		if ( is_wp_error( $result ) ) {
+			$this->record_error_run( 'manual', $result->get_error_message() );
+			wp_send_json_error( $result->get_error_message() );
 		}
+
+		$pets = $result['pets'];
 
 		// Store pets in transient for batch processing.
 		set_transient( 'petstablished_sync_pets', $pets, HOUR_IN_SECONDS );
 		set_transient( 'petstablished_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
 
+		// When the fetch was incomplete, flag it so ajax_finish_sync skips
+		// stale-pet pruning — pets on the unfetched pages must not be drafted.
+		if ( ! $result['complete'] ) {
+			set_transient( 'petstablished_sync_incomplete', true, HOUR_IN_SECONDS );
+		}
+
 		// Initialize the server-side session aggregator. Stats accumulate here
 		// across batch calls so the final log entry doesn't depend on the
-		// browser POSTing back honest numbers.
+		// browser POSTing back honest numbers. Seed with any page-fetch errors.
 		set_transient( self::SESSION_TRANSIENT, array(
 			'started'       => time(),
 			'trigger'       => 'manual',
 			'running_stats' => array( 'created' => 0, 'updated' => 0, 'unchanged' => 0, 'errors' => 0 ),
-			'errors'        => array(),
+			'errors'        => $result['errors'],
 		), HOUR_IN_SECONDS );
 
 		wp_send_json_success( array(
-			'total'     => count( $pets ),
-			'batchSize' => $settings['batch_size'],
+			'total'      => count( $pets ),
+			'batchSize'  => $settings['batch_size'],
+			'incomplete' => ! $result['complete'],
 		) );
 	}
 
@@ -135,10 +144,13 @@ class Petstablished_Sync {
 			wp_send_json_error( 'Unauthorized' );
 		}
 
-		$pets    = get_transient( 'petstablished_sync_pets' );
-		$removed = 0;
+		$pets       = get_transient( 'petstablished_sync_pets' );
+		$incomplete = (bool) get_transient( 'petstablished_sync_incomplete' );
+		$removed    = 0;
 
-		if ( $pets ) {
+		// Only prune stale pets when the fetch was complete — otherwise pets on
+		// the unfetched pages would be wrongly drafted.
+		if ( $pets && ! $incomplete ) {
 			$removed = $this->remove_stale_pets( $pets );
 		}
 
@@ -154,7 +166,7 @@ class Petstablished_Sync {
 				'removed'   => $removed,
 				'errors'    => (int) ( $running['errors'] ?? 0 ),
 			);
-			$outcome = $stats['errors'] > 0 ? 'partial' : 'success';
+			$outcome = ( $stats['errors'] > 0 || $incomplete || ! empty( $errors ) ) ? 'partial' : 'success';
 			$started = (int) ( $session['started'] ?? time() );
 			$ended   = time();
 
@@ -180,6 +192,7 @@ class Petstablished_Sync {
 		// Clean up.
 		delete_transient( 'petstablished_sync_pets' );
 		delete_transient( 'petstablished_sync_in_progress' );
+		delete_transient( 'petstablished_sync_incomplete' );
 		delete_transient( self::SESSION_TRANSIENT );
 
 		update_option( 'petstablished_last_sync', time() );
@@ -240,28 +253,37 @@ class Petstablished_Sync {
 		set_transient( 'petstablished_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
 
 		try {
-			$pets = $this->fetch_pets( $settings['public_key'] );
+			$result = $this->fetch_pets( $settings['public_key'] );
 
-			if ( is_wp_error( $pets ) ) {
-				$message = $pets->get_error_message();
+			if ( is_wp_error( $result ) ) {
+				$message = $result->get_error_message();
 				delete_transient( 'petstablished_sync_in_progress' );
 				$this->record_error_run( $trigger, $message, $started );
 				return false;
 			}
 
+			$pets = $result['pets'];
+
 			foreach ( $pets as $pet_data ) {
-				$result = $this->process_single_pet( $pet_data );
-				if ( $result === 'errors' ) {
+				$status = $this->process_single_pet( $pet_data );
+				if ( $status === 'errors' ) {
 					$this->stats['errors'][] = 'Pet ID ' . ( $pet_data['id'] ?? 'unknown' );
 				} else {
-					$this->stats[ $result ]++;
+					$this->stats[ $status ]++;
 				}
 			}
 
-			$this->stats['removed'] = $this->remove_stale_pets( $pets );
+			// Only prune stale pets when the fetch was complete — otherwise pets
+			// on the unfetched pages would be wrongly drafted.
+			if ( $result['complete'] ) {
+				$this->stats['removed'] = $this->remove_stale_pets( $pets );
+			}
+
+			// Surface page-level fetch errors in the log.
+			$this->stats['errors'] = array_merge( $this->stats['errors'], $result['errors'] );
 
 			$ended   = time();
-			$outcome = empty( $this->stats['errors'] ) ? 'success' : 'partial';
+			$outcome = ( empty( $this->stats['errors'] ) && $result['complete'] ) ? 'success' : 'partial';
 
 			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
 				$started,
@@ -298,56 +320,122 @@ class Petstablished_Sync {
 	private const MAX_PAGES = 50;
 
 	/**
+	 * Attempts per page before a page is considered failed (transient errors).
+	 */
+	private const FETCH_RETRIES = 3;
+
+	/**
 	 * Fetch all pets from the Petstablished API, paginating automatically.
 	 *
-	 * The API returns up to 100 pets per page. This method loops through
-	 * all pages until `current_page >= total_pages`, collecting every pet
-	 * into a single flat array.
+	 * Resilient to transient failures: each page is retried (FETCH_RETRIES) with
+	 * linear backoff, and if a later page still fails the run keeps the pets it
+	 * already collected and reports itself INCOMPLETE rather than discarding
+	 * everything. Callers MUST skip stale-pet pruning on an incomplete run —
+	 * otherwise pets that merely live on an unfetched page would be wrongly
+	 * drafted. Each record is reduced to the consumed-key subset so the batch
+	 * transient stays small and free of upstream PII.
 	 *
 	 * @param string $public_key Petstablished public API key.
-	 * @return array|WP_Error All pet records, or WP_Error on failure.
+	 * @return array|WP_Error { pets: array[], complete: bool, errors: string[] }
+	 *                        on any progress; WP_Error only if even page 1 fails.
 	 */
 	private function fetch_pets( string $public_key ): array|WP_Error {
-		$all_pets     = [];
+		$all_pets     = array();
+		$page_errors  = array();
+		$consumed     = array_flip( self::get_consumed_api_keys() );
 		$current_page = 1;
-		$total_pages  = 1; // Will be updated after the first response.
+		$total_pages  = 1; // Updated after the first successful response.
+		$complete     = true;
 
-		while ( $current_page <= $total_pages && $current_page <= self::MAX_PAGES ) {
-			$query_args = [
-				'public_key'         => $public_key,
-				'search[animal]'     => 'Cat,Dog',
-				'pagination[limit]'  => 100,
-				'pagination[page]'   => $current_page,
-			];
-
-			$url      = add_query_arg( $query_args, self::API_BASE );
-			$response = wp_remote_get( $url, array( 'timeout' => 30 ) );
-
-			if ( is_wp_error( $response ) ) {
-				return $response;
+		while ( $current_page <= $total_pages ) {
+			if ( $current_page > self::MAX_PAGES ) {
+				$complete      = false;
+				$page_errors[] = sprintf( 'Stopped at the %d-page safety limit before fetching all %d pages.', self::MAX_PAGES, $total_pages );
+				break;
 			}
 
-			$code = wp_remote_retrieve_response_code( $response );
-			if ( $code !== 200 ) {
-				return new WP_Error( 'api_error', sprintf( 'API returned status %d on page %d', $code, $current_page ) );
+			$page = $this->fetch_page( $public_key, $current_page );
+
+			if ( is_wp_error( $page ) ) {
+				// Couldn't fetch even the first page — nothing to sync at all.
+				if ( empty( $all_pets ) ) {
+					return $page;
+				}
+				// A later page failed after retries: keep what we have and mark
+				// the run incomplete so the caller skips stale-pet pruning.
+				$complete      = false;
+				$page_errors[] = $page->get_error_message();
+				break;
 			}
 
-			$body = wp_remote_retrieve_body( $response );
-			$data = json_decode( $body, true );
-
-			if ( ! isset( $data['collection'] ) || ! is_array( $data['collection'] ) ) {
-				return new WP_Error( 'invalid_response', sprintf( 'Invalid API response format on page %d', $current_page ) );
+			foreach ( $page['collection'] as $pet ) {
+				$all_pets[] = array_intersect_key( $pet, $consumed );
 			}
 
-			$all_pets = array_merge( $all_pets, $data['collection'] );
-
-			// Update total_pages from the API's pagination metadata.
-			$total_pages = (int) ( $data['pagination']['total_pages'] ?? 1 );
-
+			$total_pages = max( 1, $page['total_pages'] );
 			$current_page++;
 		}
 
-		return $all_pets;
+		return array(
+			'pets'     => $all_pets,
+			'complete' => $complete,
+			'errors'   => $page_errors,
+		);
+	}
+
+	/**
+	 * Fetch a single page with retry/backoff on transient failures.
+	 *
+	 * Retries network errors, 429 (rate limit), 5xx, and malformed bodies;
+	 * fails fast on 4xx client errors (e.g. a bad public key) where retrying
+	 * cannot help.
+	 *
+	 * @param string $public_key Petstablished public API key.
+	 * @param int    $page       1-based page number.
+	 * @return array|WP_Error { collection: array[], total_pages: int } or error.
+	 */
+	private function fetch_page( string $public_key, int $page ): array|WP_Error {
+		$url = add_query_arg( array(
+			'public_key'        => $public_key,
+			'search[animal]'    => 'Cat,Dog',
+			'pagination[limit]' => 100,
+			'pagination[page]'  => $page,
+		), self::API_BASE );
+
+		$error = new WP_Error( 'fetch_failed', sprintf( 'Page %d: fetch failed', $page ) );
+
+		for ( $attempt = 1; $attempt <= self::FETCH_RETRIES; $attempt++ ) {
+			$response = wp_remote_get( $url, array( 'timeout' => 30 ) );
+
+			if ( is_wp_error( $response ) ) {
+				$error = new WP_Error( 'http_error', sprintf( 'Page %d: %s', $page, $response->get_error_message() ) );
+			} else {
+				$code = (int) wp_remote_retrieve_response_code( $response );
+
+				if ( 200 === $code ) {
+					$data = json_decode( wp_remote_retrieve_body( $response ), true );
+					if ( isset( $data['collection'] ) && is_array( $data['collection'] ) ) {
+						return array(
+							'collection'  => $data['collection'],
+							'total_pages' => (int) ( $data['pagination']['total_pages'] ?? 1 ),
+						);
+					}
+					$error = new WP_Error( 'invalid_response', sprintf( 'Page %d: malformed API response', $page ) );
+				} elseif ( 429 !== $code && $code < 500 ) {
+					// Client error (bad key/params) — retrying will not help.
+					return new WP_Error( 'api_error', sprintf( 'Page %d: API returned status %d', $page, $code ) );
+				} else {
+					$error = new WP_Error( 'api_error', sprintf( 'Page %d: API returned status %d', $page, $code ) );
+				}
+			}
+
+			// Linear backoff (1s, 2s, …) between attempts; none after the last.
+			if ( $attempt < self::FETCH_RETRIES ) {
+				sleep( $attempt );
+			}
+		}
+
+		return $error;
 	}
 
 	private function process_single_pet( array $data ): string {
