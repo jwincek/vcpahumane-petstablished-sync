@@ -39,7 +39,7 @@
 
 		const copyBinding = ( key ) => {
 			const json = JSON.stringify( {
-				source: 'petstablished/pet-data',
+				source: 'petsync/pet-data',
 				args: { key }
 			}, null, 2 );
 

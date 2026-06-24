@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "petstablished/pet-compatibility",
+	"name": "petsync/pet-compatibility",
 	"version": "1.0.0",
 	"title": "Pet Compatibility",
-	"category": "petstablished",
+	"category": "petsync",
 	"description": "Display pet compatibility with dogs, cats, and children.",
 	"keywords": ["pet", "compatibility", "dogs", "cats", "kids", "good with"],
-	"ancestor": ["petstablished/pet-details"],
+	"ancestor": ["petsync/pet-details"],
 	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {

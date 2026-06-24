@@ -14,8 +14,8 @@ import { store, getContext } from '@wordpress/interactivity';
 import { announce, storage, executeAbility, copyToClipboard } from '../utils.js';
 import { doToggleFavorite } from '../store.js';
 
-const getGlobalState   = () => store( 'petstablished' ).state;
-const getGlobalActions = () => store( 'petstablished' ).actions;
+const getGlobalState   = () => store( 'petsync' ).state;
+const getGlobalActions = () => store( 'petsync' ).actions;
 
 /**
  * Resolve pet ID from context — used by per-pet actions.
@@ -42,7 +42,7 @@ function getArchiveUrl() {
 	);
 }
 
-const { state, actions, callbacks } = store( 'petstablished/comparison', {
+const { state, actions, callbacks } = store( 'petsync/comparison', {
 	state: {
 		/**
 		 * Whether the current pet (from context) is favorited.
@@ -70,7 +70,7 @@ const { state, actions, callbacks } = store( 'petstablished/comparison', {
 		*copyCompareUrl() {
 			try {
 				const result = yield executeAbility(
-					'petstablished/get-comparison', null, { method: 'GET' }
+					'petsync/get-comparison', null, { method: 'GET' }
 				);
 				const copied = yield copyToClipboard( result.shareUrl );
 				if ( copied ) {
@@ -116,7 +116,7 @@ const { state, actions, callbacks } = store( 'petstablished/comparison', {
 
 			try {
 				const result = yield executeAbility(
-					'petstablished/update-comparison',
+					'petsync/update-comparison',
 					{ action: 'remove', id: petId }
 				);
 				gs.comparison = result.ids;
@@ -142,7 +142,7 @@ const { state, actions, callbacks } = store( 'petstablished/comparison', {
 		 * Initialize — sync favorites and comparison with server.
 		 */
 		init() {
-			executeAbility( 'petstablished/get-comparison', null, { method: 'GET' } )
+			executeAbility( 'petsync/get-comparison', null, { method: 'GET' } )
 				.then( result => {
 					getGlobalState().comparison    = result.ids;
 					getGlobalState().comparisonMax = result.max;
@@ -150,7 +150,7 @@ const { state, actions, callbacks } = store( 'petstablished/comparison', {
 				} )
 				.catch( () => {} );
 
-			executeAbility( 'petstablished/get-favorites', null, { method: 'GET' } )
+			executeAbility( 'petsync/get-favorites', null, { method: 'GET' } )
 				.then( result => {
 					getGlobalState().favorites = result.favorites;
 					storage.set( 'favorites', getGlobalState().favorites );

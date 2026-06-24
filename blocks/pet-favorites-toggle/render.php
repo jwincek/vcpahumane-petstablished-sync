@@ -17,7 +17,7 @@ $favorites  = Petstablished_Helpers::get_favorites();
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'               => 'pet-favorites-toggle',
-	'data-wp-interactive' => 'petstablished',
+	'data-wp-interactive' => 'petsync',
 ) );
 ?>
 

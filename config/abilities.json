@@ -1,6 +1,6 @@
 {
   "abilities": {
-    "petstablished/get-pet": {
+    "petsync/get-pet": {
       "label": "Get Pet",
       "description": "Retrieves a single pet by post ID with full hydrated data.",
       "category": "pets",
@@ -79,7 +79,7 @@
       }
     },
 
-    "petstablished/list-pets": {
+    "petsync/list-pets": {
       "label": "List Pets",
       "description": "Retrieves a paginated list of pets with taxonomy and compatibility filters.",
       "category": "pets",
@@ -121,7 +121,7 @@
       }
     },
 
-    "petstablished/filter-pets": {
+    "petsync/filter-pets": {
       "label": "Filter Pets",
       "description": "Retrieves filtered, paginated pets with live filter counts for each taxonomy value.",
       "category": "pets",
@@ -186,7 +186,7 @@
       }
     },
 
-    "petstablished/batch-get-pets": {
+    "petsync/batch-get-pets": {
       "label": "Batch Get Pets",
       "description": "Retrieves multiple pets by their post IDs in one request.",
       "category": "pets",
@@ -220,7 +220,7 @@
       }
     },
 
-    "petstablished/get-filter-options": {
+    "petsync/get-filter-options": {
       "label": "Get Filter Options",
       "description": "Retrieves all available filter values from pet taxonomies with term counts.",
       "category": "pets",
@@ -254,7 +254,7 @@
       }
     },
 
-    "petstablished/toggle-favorite": {
+    "petsync/toggle-favorite": {
       "label": "Toggle Favorite",
       "description": "Adds or removes a pet from the current user's favorites list.",
       "category": "pets",
@@ -288,7 +288,7 @@
       }
     },
 
-    "petstablished/get-favorites": {
+    "petsync/get-favorites": {
       "label": "Get Favorites",
       "description": "Retrieves the current user's favorite pet IDs and hydrated pet data.",
       "category": "pets",
@@ -314,7 +314,7 @@
       }
     },
 
-    "petstablished/clear-favorites": {
+    "petsync/clear-favorites": {
       "label": "Clear All Favorites",
       "description": "Removes all pets from the current user's favorites list in a single operation.",
       "category": "pets",
@@ -340,7 +340,7 @@
       }
     },
 
-    "petstablished/update-comparison": {
+    "petsync/update-comparison": {
       "label": "Update Comparison",
       "description": "Manages the pet comparison list: add, remove, clear, or set pets.",
       "category": "pets",
@@ -387,7 +387,7 @@
       }
     },
 
-    "petstablished/get-comparison": {
+    "petsync/get-comparison": {
       "label": "Get Comparison",
       "description": "Retrieves the current comparison list with hydrated pet data and share URL.",
       "category": "pets",
@@ -416,7 +416,7 @@
       }
     },
 
-    "petstablished/get-adoption-stats": {
+    "petsync/get-adoption-stats": {
       "label": "Get Adoption Stats",
       "description": "Retrieves aggregate adoption statistics for use in block bindings and archive pages.",
       "category": "pets",

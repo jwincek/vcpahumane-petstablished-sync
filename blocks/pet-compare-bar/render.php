@@ -69,7 +69,7 @@ if ( ! empty( $compared_pets ) ) {
 	foreach ( $compared_pets as $id => $pet_data ) {
 		$pets_for_state[ (string) $id ] = $pet_data;
 	}
-	wp_interactivity_state( 'petstablished', array(
+	wp_interactivity_state( 'petsync', array(
 		'pets' => $pets_for_state,
 	) );
 }
@@ -87,7 +87,7 @@ $wrapper_classes = 'pet-compare-bar pet-compare-bar--' . $position;
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'                       => $wrapper_classes,
-	'data-wp-interactive'       => 'petstablished/compare-bar',
+	'data-wp-interactive'       => 'petsync/compare-bar',
 	'data-wp-router-region'     => $router_region,
 	'data-wp-context'           => wp_json_encode( $context ),
 	'data-wp-bind--hidden'      => 'petstablished::state.isCompareBarHidden',

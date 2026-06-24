@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "petstablished/pet-breadcrumb",
+	"name": "petsync/pet-breadcrumb",
 	"version": "1.0.0",
 	"title": "Pet Breadcrumb",
-	"category": "petstablished",
+	"category": "petsync",
 	"description": "Breadcrumb trail: Home › Adoptable Pets › Pet Name.",
 	"keywords": ["pet", "breadcrumb", "navigation", "back"],
-	"ancestor": ["petstablished/pet-details"],
+	"ancestor": ["petsync/pet-details"],
 	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {

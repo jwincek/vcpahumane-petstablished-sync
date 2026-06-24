@@ -21,8 +21,8 @@ import {
 } from '../store.js';
 import { announce, storage, executeAbility } from '../utils.js';
 
-const getGlobalState = () => store( 'petstablished' ).state;
-const getGlobalActions = () => store( 'petstablished' ).actions;
+const getGlobalState = () => store( 'petsync' ).state;
+const getGlobalActions = () => store( 'petsync' ).actions;
 
 /* ─── Body overflow lock counter ───
  * Shared between the favorites modal, gallery lightbox, and any future
@@ -375,7 +375,7 @@ function resetModalState( modalState ) {
 
 /* ─── Store ─── */
 
-const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
+const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 	state: {
 		get triggerFill() {
 			return getGlobalState().favorites.length > 0 ? 'currentColor' : 'none';
@@ -451,7 +451,7 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 
 			try {
 				const result = yield executeAbility(
-					'petstablished/get-favorites', null, { method: 'GET' }
+					'petsync/get-favorites', null, { method: 'GET' }
 				);
 
 				// Abort if a clear happened while we were waiting.
@@ -524,7 +524,7 @@ const { state, actions, callbacks } = store( 'petstablished/favorites-modal', {
 
 			try {
 				// Single batch server call instead of N individual toggles.
-				yield executeAbility( 'petstablished/clear-favorites' );
+				yield executeAbility( 'petsync/clear-favorites' );
 
 				// Re-assert the cleared state in case a stale toggle-favorite
 				// response (from a previous heart-button click) arrived and

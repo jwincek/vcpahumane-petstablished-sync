@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "petstablished/pet-health",
+	"name": "petsync/pet-health",
 	"version": "1.0.0",
 	"title": "Pet Health",
-	"category": "petstablished",
+	"category": "petsync",
 	"description": "Display pet health information like vaccinations, spay/neuter status, and more.",
 	"keywords": ["pet", "health", "vaccinations", "spayed", "neutered", "hypoallergenic", "declawed"],
-	"ancestor": ["petstablished/pet-details"],
+	"ancestor": ["petsync/pet-details"],
 	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {

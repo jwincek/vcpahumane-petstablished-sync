@@ -74,7 +74,7 @@ if ( $favorites ) {
 	foreach ( $pets_cache as $id => $data ) {
 		$pets_for_state[ (string) $id ] = $data;
 	}
-	wp_interactivity_state( 'petstablished', array(
+	wp_interactivity_state( 'petsync', array(
 		'pets' => $pets_for_state,
 	) );
 }
@@ -91,7 +91,7 @@ $router_region = wp_json_encode( array(
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'                 => 'pet-favorites-modal pet-favorites-modal--' . $position,
-	'data-wp-interactive'   => 'petstablished/favorites-modal',
+	'data-wp-interactive'   => 'petsync/favorites-modal',
 	'data-wp-router-region' => $router_region,
 	'data-wp-context'       => wp_json_encode( $context ),
 	'data-wp-init'          => 'callbacks.init',

@@ -6,7 +6,7 @@
  * - data-wp-router-region for client-side filter/pagination navigation
  * - data-wp-context for instance-scoped mutable state
  * - Pet_Hydrator::hydrate_many() for N+1 elimination
- * - Ability-backed data fetching (petstablished/filter-pets)
+ * - Ability-backed data fetching (petsync/filter-pets)
  * - Live filter counts with inline display and zero-count hiding
  *
  * v3.0.0 changes:
@@ -86,7 +86,7 @@ $url_compat = array(
 
 // === Fetch Data via Ability ===
 $ability = function_exists( 'wp_get_ability' )
-	? wp_get_ability( 'petstablished/filter-pets' )
+	? wp_get_ability( 'petsync/filter-pets' )
 	: null;
 
 $pets          = array();
@@ -234,7 +234,7 @@ $context = array(
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'                   => 'pet-listing-grid',
-	'data-wp-interactive'     => 'petstablished/grid',
+	'data-wp-interactive'     => 'petsync/grid',
 	'data-wp-router-region'   => $region_id,
 	'data-wp-key'             => $region_id,
 	'data-pets-archive-url'   => $archive_url,
@@ -589,7 +589,7 @@ $filter_config = array(
 
 	<div class="pet-listing-grid__results-bar">
 		<!-- Favorites toggle — view mode, not a query filter -->
-		<div data-wp-interactive="petstablished/grid">
+		<div data-wp-interactive="petsync/grid">
 			<button
 				type="button"
 				class="pet-listing-grid__favorites-toggle"

@@ -30,7 +30,7 @@
 					description: variation.description,
 					icon: getIcon( variation.icon ),
 					keywords: variation.keywords || [],
-					category: 'petstablished',
+					category: 'petsync',
 					scope: [ 'inserter', 'transform' ],
 					attributes: variation.attributes || {},
 					isActive: function( blockAttributes, variationAttributes ) {
@@ -52,7 +52,7 @@
 					description: variation.description,
 					icon: getIcon( variation.icon ),
 					keywords: variation.keywords || [],
-					category: 'petstablished',
+					category: 'petsync',
 					scope: variation.scope || [ 'inserter' ],
 					attributes: variation.attributes || {},
 					innerBlocks: buildInnerBlocks( variation.innerBlocks || [] ),

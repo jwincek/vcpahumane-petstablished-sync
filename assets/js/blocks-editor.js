@@ -169,7 +169,7 @@
 	const pawIcon = icons.paw;
 
 	// === Pet Card ===
-	registerBlockType( 'petstablished/pet-card', {
+	registerBlockType( 'petsync/pet-card', {
 		title: __( 'Pet Card', 'vcpahumane-pet-sync' ),
 		description: __( 'Display a single pet card with image and details.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -207,7 +207,7 @@
 					)
 				),
 				el( ServerSideRender, {
-					block: 'petstablished/pet-card',
+					block: 'petsync/pet-card',
 					attributes: attributes,
 				})
 			);
@@ -216,7 +216,7 @@
 	});
 
 	// === Pet Listing Grid ===
-	registerBlockType( 'petstablished/pet-listing-grid', {
+	registerBlockType( 'petsync/pet-listing-grid', {
 		title: __( 'Pet Listing Grid', 'vcpahumane-pet-sync' ),
 		description: __( 'Display a filterable grid of adoptable pets with instant client-side filtering.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -269,7 +269,7 @@
 					)
 				),
 				el( ServerSideRender, {
-					block: 'petstablished/pet-listing-grid',
+					block: 'petsync/pet-listing-grid',
 					attributes: attributes,
 				})
 			);
@@ -278,7 +278,7 @@
 	});
 
 	// === Pet Details ===
-	registerBlockType( 'petstablished/pet-details', {
+	registerBlockType( 'petsync/pet-details', {
 		title: __( 'Pet Details', 'vcpahumane-pet-sync' ),
 		description: __( 'Display comprehensive pet profile information.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -358,7 +358,7 @@
 					)
 				),
 				el( ServerSideRender, {
-					block: 'petstablished/pet-details',
+					block: 'petsync/pet-details',
 					attributes: attributes,
 				})
 			);
@@ -367,7 +367,7 @@
 	});
 
 	// === Pet Compare Bar ===
-	registerBlockType( 'petstablished/pet-compare-bar', {
+	registerBlockType( 'petsync/pet-compare-bar', {
 		title: __( 'Pet Compare Bar', 'vcpahumane-pet-sync' ),
 		description: __( 'Sticky bar showing pets selected for comparison.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -405,7 +405,7 @@
 	});
 
 	// === Pet Filters (deprecated — use pet-listing-grid's built-in toolbar) ===
-	registerBlockType( 'petstablished/pet-filters', {
+	registerBlockType( 'petsync/pet-filters', {
 		title: __( 'Pet Filters (deprecated)', 'vcpahumane-pet-sync' ),
 		description: __( 'Deprecated — use the pet listing grid\'s built-in filter toolbar instead.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -466,7 +466,7 @@
 					)
 				),
 				el( ServerSideRender, {
-					block: 'petstablished/pet-filters',
+					block: 'petsync/pet-filters',
 					attributes: attributes,
 				})
 			);
@@ -475,7 +475,7 @@
 	});
 
 	// === Pet Favorites Toggle (deprecated — use pet-favorites-modal) ===
-	registerBlockType( 'petstablished/pet-favorites-toggle', {
+	registerBlockType( 'petsync/pet-favorites-toggle', {
 		title: __( 'Favorites Toggle (deprecated)', 'vcpahumane-pet-sync' ),
 		description: __( 'Deprecated — use Pet Favorites Modal instead.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -500,7 +500,7 @@
 					)
 				),
 				el( ServerSideRender, {
-					block: 'petstablished/pet-favorites-toggle',
+					block: 'petsync/pet-favorites-toggle',
 					attributes: attributes,
 				})
 			);
@@ -509,7 +509,7 @@
 	});
 
 	// === Pet Slider ===
-	registerBlockType( 'petstablished/pet-slider', {
+	registerBlockType( 'petsync/pet-slider', {
 		title: __( 'Pet Slider', 'vcpahumane-pet-sync' ),
 		description: __( 'A carousel slider showcasing available pets. Perfect for home pages, 404 pages, or anywhere you want to highlight adoptable pets.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -688,7 +688,7 @@
 					)
 				),
 				el( ServerSideRender, {
-					block: 'petstablished/pet-slider',
+					block: 'petsync/pet-slider',
 					attributes: attributes,
 				})
 			);
@@ -697,7 +697,7 @@
 	});
 
 	// === Pet Comparison ===
-	registerBlockType( 'petstablished/pet-comparison', {
+	registerBlockType( 'petsync/pet-comparison', {
 		title: __( 'Pet Comparison', 'vcpahumane-pet-sync' ),
 		description: __( 'Display side-by-side comparison of selected pets.', 'vcpahumane-pet-sync' ),
 		category: 'widgets',
@@ -710,7 +710,7 @@
 
 			return el( 'div', blockProps,
 				el( ServerSideRender, {
-					block: 'petstablished/pet-comparison',
+					block: 'petsync/pet-comparison',
 					attributes: props.attributes,
 				})
 			);
@@ -721,13 +721,13 @@
 	// === Child Blocks for Pet Details (Server-Side Rendered) ===
 
 	// Pet Gallery
-	registerBlockType( 'petstablished/pet-gallery', {
+	registerBlockType( 'petsync/pet-gallery', {
 		title: __( 'Pet Gallery', 'vcpahumane-pet-sync' ),
 		description: __( 'Display pet photo gallery with lightbox.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'format-gallery',
 		keywords: [ 'pet', 'gallery', 'photos', 'images' ],
-		parent: [ 'petstablished/pet-details' ],
+		parent: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -773,7 +773,7 @@
 					)
 				),
 				el( ServerSideRender, {
-					block: 'petstablished/pet-gallery',
+					block: 'petsync/pet-gallery',
 					attributes: attributes,
 					urlQueryArgs: { post_id: postId },
 				})
@@ -783,13 +783,13 @@
 	});
 
 	// Pet Actions (Favorite, Compare, Share buttons)
-	registerBlockType( 'petstablished/pet-actions', {
+	registerBlockType( 'petsync/pet-actions', {
 		title: __( 'Pet Actions', 'vcpahumane-pet-sync' ),
 		description: __( 'Display favorite, compare, and share action buttons.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'heart',
 		keywords: [ 'pet', 'actions', 'favorite', 'compare', 'share' ],
-		parent: [ 'petstablished/pet-details' ],
+		parent: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -867,13 +867,13 @@
 	});
 
 	// Pet Attributes (breed, age, sex, size, etc.)
-	registerBlockType( 'petstablished/pet-attributes', {
+	registerBlockType( 'petsync/pet-attributes', {
 		title: __( 'Pet Attributes', 'vcpahumane-pet-sync' ),
 		description: __( 'Display pet attributes like breed, age, sex, size in a definition list.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'list-view',
 		keywords: [ 'pet', 'attributes', 'breed', 'age', 'sex', 'size' ],
-		parent: [ 'petstablished/pet-details' ],
+		parent: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -951,13 +951,13 @@
 	});
 
 	// Pet Compatibility (good with dogs, cats, kids)
-	registerBlockType( 'petstablished/pet-compatibility', {
+	registerBlockType( 'petsync/pet-compatibility', {
 		title: __( 'Pet Compatibility', 'vcpahumane-pet-sync' ),
 		description: __( 'Display pet compatibility with dogs, cats, and children.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'groups',
 		keywords: [ 'pet', 'compatibility', 'good with', 'dogs', 'cats', 'kids' ],
-		parent: [ 'petstablished/pet-details' ],
+		parent: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -1041,13 +1041,13 @@
 	});
 
 	// Pet Health (vaccinations, spayed/neutered, etc.)
-	registerBlockType( 'petstablished/pet-health', {
+	registerBlockType( 'petsync/pet-health', {
 		title: __( 'Pet Health', 'vcpahumane-pet-sync' ),
 		description: __( 'Display pet health information like vaccinations and spay/neuter status.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'plus-alt',
 		keywords: [ 'pet', 'health', 'vaccinations', 'spayed', 'neutered' ],
-		parent: [ 'petstablished/pet-details' ],
+		parent: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -1093,14 +1093,14 @@
 
 	// Pet Adoption CTA — card container with InnerBlocks.
 	// Content (heading, fee row, note, action button) is composed from native
-	// core blocks with Block Bindings + the petstablished/adoption-action child block.
-	registerBlockType( 'petstablished/pet-adoption-cta', {
+	// core blocks with Block Bindings + the petsync/adoption-action child block.
+	registerBlockType( 'petsync/pet-adoption-cta', {
 		title: __( 'Pet Adoption CTA', 'vcpahumane-pet-sync' ),
 		description: __( 'Display adoption fee and application link or downloadable PDF form.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'heart',
 		keywords: [ 'pet', 'adoption', 'cta', 'apply', 'fee', 'pdf' ],
-		parent: [ 'petstablished/pet-details' ],
+		parent: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false, spacing: { margin: true, padding: true } },
 		attributes: {},
@@ -1115,7 +1115,7 @@
 			//         core/paragraph (static label)
 			//         core/paragraph (bound to adoption_fee_formatted)
 			//       core/paragraph (note — freeform)
-			//     petstablished/adoption-action (button)
+			//     petsync/adoption-action (button)
 			const TEMPLATE = [
 				[ 'core/group', {
 					className: 'pet-adoption-cta__card',
@@ -1136,7 +1136,7 @@
 							metadata: {
 								bindings: {
 									content: {
-										source: 'petstablished/pet-data',
+										source: 'petsync/pet-data',
 										args: { key: 'adoption_title' },
 									},
 								},
@@ -1155,7 +1155,7 @@
 								metadata: {
 									bindings: {
 										content: {
-											source: 'petstablished/pet-data',
+											source: 'petsync/pet-data',
 											args: { key: 'adoption_fee_formatted' },
 										},
 									},
@@ -1167,7 +1167,7 @@
 							className: 'pet-adoption-cta__note',
 						} ],
 					] ],
-					[ 'petstablished/adoption-action', {} ],
+					[ 'petsync/adoption-action', {} ],
 				] ],
 			];
 
@@ -1180,7 +1180,7 @@
 						'core/heading',
 						'core/paragraph',
 						'core/spacer',
-						'petstablished/adoption-action',
+						'petsync/adoption-action',
 					],
 				} )
 			);
@@ -1189,10 +1189,10 @@
 	} );
 
 	// Back to Top — floating scroll-to-top button.
-	registerBlockType( 'petstablished/back-to-top', {
+	registerBlockType( 'petsync/back-to-top', {
 		title: __( 'Back to Top', 'vcpahumane-pet-sync' ),
 		description: __( 'Floating button that scrolls back to the top of the page.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'arrow-up-alt',
 		keywords: [ 'back', 'top', 'scroll' ],
 		supports: { html: false, multiple: false },
@@ -1234,13 +1234,13 @@
 	} );
 
 	// Pet Breadcrumb — SSR breadcrumb trail: Home › Adoptable Pets › Pet Name.
-	registerBlockType( 'petstablished/pet-breadcrumb', {
+	registerBlockType( 'petsync/pet-breadcrumb', {
 		title: __( 'Pet Breadcrumb', 'vcpahumane-pet-sync' ),
 		description: __( 'Breadcrumb trail: Home › Adoptable Pets › Pet Name.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'arrow-left-alt',
 		keywords: [ 'pet', 'breadcrumb', 'navigation', 'back' ],
-		ancestor: [ 'petstablished/pet-details' ],
+		ancestor: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -1260,13 +1260,13 @@
 	} );
 
 	// Pet Tagline — quick-facts summary with taxonomy filter links.
-	registerBlockType( 'petstablished/pet-tagline', {
+	registerBlockType( 'petsync/pet-tagline', {
 		title: __( 'Pet Tagline', 'vcpahumane-pet-sync' ),
 		description: __( 'Quick-facts tagline with taxonomy filter links.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'tag',
 		keywords: [ 'pet', 'tagline', 'quick', 'facts' ],
-		ancestor: [ 'petstablished/pet-details' ],
+		ancestor: [ 'petsync/pet-details' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -1284,13 +1284,13 @@
 	} );
 
 	// Pet Adoption Fee — SSR fee row, auto-hidden when no fee is set.
-	registerBlockType( 'petstablished/adoption-fee', {
+	registerBlockType( 'petsync/adoption-fee', {
 		title: __( 'Pet Adoption Fee', 'vcpahumane-pet-sync' ),
 		description: __( 'Displays the adoption fee. Hidden automatically if no fee is set.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'tag',
 		keywords: [ 'pet', 'adoption', 'fee', 'price' ],
-		ancestor: [ 'petstablished/pet-adoption-cta' ],
+		ancestor: [ 'petsync/pet-adoption-cta' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {},
@@ -1309,14 +1309,14 @@
 	} );
 
 	// Pet Adoption Action — application button (Petstablished link or PDF download).
-	// Lives inside petstablished/pet-adoption-cta as a child block.
-	registerBlockType( 'petstablished/adoption-action', {
+	// Lives inside petsync/pet-adoption-cta as a child block.
+	registerBlockType( 'petsync/adoption-action', {
 		title: __( 'Pet Adoption Action', 'vcpahumane-pet-sync' ),
 		description: __( 'Adoption application button — links to Petstablished form or provides a PDF download.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'download',
 		keywords: [ 'pet', 'adoption', 'button', 'apply', 'pdf' ],
-		ancestor: [ 'petstablished/pet-adoption-cta' ],
+		ancestor: [ 'petsync/pet-adoption-cta' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
@@ -1385,10 +1385,10 @@
 	} );
 
 	// === Pet Favorites Modal ===
-	registerBlockType( 'petstablished/pet-favorites-modal', {
+	registerBlockType( 'petsync/pet-favorites-modal', {
 		title: __( 'Pet Favorites Modal', 'vcpahumane-pet-sync' ),
 		description: __( 'Floating heart button that opens a modal showing all favorited pets.', 'vcpahumane-pet-sync' ),
-		category: 'petstablished',
+		category: 'petsync',
 		icon: 'heart',
 		keywords: [ 'pet', 'favorites', 'heart', 'modal' ],
 		supports: { html: false, multiple: false },

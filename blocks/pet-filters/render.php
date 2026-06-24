@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $options = [];
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-filter-options' ) : null;
+$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petsync/get-filter-options' ) : null;
 if ( $ability ) {
 	$result = $ability->execute( [] );
 	if ( ! is_wp_error( $result ) ) {
@@ -157,7 +157,7 @@ $active_compat_count = count( array_filter( $current_compat ) );
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'               => 'pet-filters pet-filters--' . $layout,
-	'data-wp-interactive' => 'petstablished/filters',
+	'data-wp-interactive' => 'petsync/filters',
 	'data-wp-init'        => 'callbacks.init',
 ) );
 
@@ -314,7 +314,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 
 		</div>
 
-		<div class="pet-filters__favorites" data-wp-interactive="petstablished/grid">
+		<div class="pet-filters__favorites" data-wp-interactive="petsync/grid">
 			<button
 				type="button"
 				class="pet-filters__favorites-toggle"

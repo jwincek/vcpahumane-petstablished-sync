@@ -30,7 +30,7 @@ declare( strict_types = 1 );
 function petstablished_get_pet( int $post_id, string $profile = 'full' ): ?array {
 	// Abilities API path — validates permissions, fires hooks.
 	if ( function_exists( 'wp_get_ability' ) ) {
-		$ability = wp_get_ability( 'petstablished/get-pet' );
+		$ability = wp_get_ability( 'petsync/get-pet' );
 		if ( $ability ) {
 			$result = $ability->execute( [ 'id' => $post_id ] );
 			if ( ! is_wp_error( $result ) ) {

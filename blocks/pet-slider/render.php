@@ -65,7 +65,7 @@ if ( $similar_pets_mode ) {
 
 		// Read from hydrated entity instead of wp_get_post_terms() calls.
 		$current_pet = null;
-		$get_ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
+		$get_ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petsync/get-pet' ) : null;
 		if ( $get_ability ) {
 			$result = $get_ability->execute( [ 'id' => (int) $current_post_id ] );
 			if ( ! is_wp_error( $result ) ) {
@@ -122,7 +122,7 @@ switch ( $order_by ) {
 
 // Execute via Abilities API with fallback.
 $pets = array();
-$list_ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/list-pets' ) : null;
+$list_ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petsync/list-pets' ) : null;
 
 if ( $list_ability ) {
 	$result = $list_ability->execute( $ability_input );
@@ -188,7 +188,7 @@ $context = array(
 
 // Merge minimal pet data into global state for comparison tool.
 // Uses string-keyed array (not stdClass) — safe with multiple block instances.
-wp_interactivity_state( 'petstablished', array(
+wp_interactivity_state( 'petsync', array(
 	'pets' => $pets_for_state,
 ) );
 
@@ -225,7 +225,7 @@ if ( ! empty( $meta_font_family ) ) {
 $extra_attrs = array(
 	'id'                       => $slider_id,
 	'class'                    => implode( ' ', $wrapper_classes ),
-	'data-wp-interactive'      => 'petstablished/slider',
+	'data-wp-interactive'      => 'petsync/slider',
 	'data-wp-context'          => wp_json_encode( $context ),
 	'data-wp-init'             => $use_cards_layout ? '' : 'callbacks.init',
 	'data-wp-router-region'    => 'pet-slider-' . $slider_id,

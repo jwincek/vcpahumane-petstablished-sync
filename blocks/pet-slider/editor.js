@@ -26,7 +26,7 @@
 	 */
 	const withInspectorControls = createHigherOrderComponent( function( BlockEdit ) {
 		return function( props ) {
-			if ( props.name !== 'petstablished/pet-slider' ) {
+			if ( props.name !== 'petsync/pet-slider' ) {
 				return el( BlockEdit, props );
 			}
 
@@ -256,7 +256,7 @@
 
 	addFilter(
 		'editor.BlockEdit',
-		'petstablished/pet-slider/inspector-controls',
+		'petsync/pet-slider/inspector-controls',
 		withInspectorControls
 	);
 

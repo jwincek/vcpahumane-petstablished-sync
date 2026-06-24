@@ -19,7 +19,7 @@ import { getConfig } from '@wordpress/interactivity';
  * @returns {Object} Configuration object from wp_interactivity_config().
  */
 export function getSharedConfig() {
-	return getConfig( 'petstablished' ) || {};
+	return getConfig( 'petsync' ) || {};
 }
 
 /* === Storage (localStorage + cookie fallback for anonymous users) === */
@@ -77,7 +77,7 @@ export function announce( message, priority = 'polite' ) {
  * Execute a registered Ability via REST.
  *
  * Routes through the plugin's own thin REST controller at:
- *   /wp-json/petstablished/v1/{namespace}/{ability}/run
+ *   /wp-json/petsync/v1/{namespace}/{ability}/run
  *
  * This is necessary because the WP 6.9 core Abilities REST API at
  * /wp-abilities/v1/ requires an authenticated user for ALL endpoints,
@@ -88,7 +88,7 @@ export function announce( message, priority = 'polite' ) {
  * - GET input is passed as a URL-encoded `input` query parameter
  * - Endpoint path ends in /run
  *
- * @param {string}  abilityName  Namespaced ability, e.g. 'petstablished/toggle-favorite'.
+ * @param {string}  abilityName  Namespaced ability, e.g. 'petsync/toggle-favorite'.
  * @param {Object}  [input]      Input data matching the ability's input_schema.
  * @param {Object}  [options]    Override method ('GET'|'POST'|'DELETE') — auto-detected if omitted.
  * @returns {Promise<any>}       The ability's output.
@@ -96,7 +96,7 @@ export function announce( message, priority = 'polite' ) {
 export async function executeAbility( abilityName, input = null, options = {} ) {
 	const config = getSharedConfig();
 	const restUrl = config.restUrl || '/wp-json/';
-	let   url    = `${ restUrl }petstablished/v1/${ abilityName }/run`;
+	let   url    = `${ restUrl }petsync/v1/${ abilityName }/run`;
 	const method = options.method || ( input !== null ? 'POST' : 'GET' );
 
 	const fetchOptions = {

@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "petstablished/pet-tagline",
+	"name": "petsync/pet-tagline",
 	"version": "1.0.0",
 	"title": "Pet Tagline",
-	"category": "petstablished",
+	"category": "petsync",
 	"description": "Quick-facts tagline with taxonomy filter links (e.g. Dog · Labrador · Young · Male · Medium).",
 	"keywords": ["pet", "tagline", "quick", "facts", "summary"],
-	"ancestor": ["petstablished/pet-details"],
+	"ancestor": ["petsync/pet-details"],
 	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {

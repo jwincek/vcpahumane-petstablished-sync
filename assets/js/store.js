@@ -1,7 +1,7 @@
 /**
  * Petstablished Global Store
  *
- * Root 'petstablished' namespace — shared state across all pet blocks.
+ * Root 'petsync' namespace — shared state across all pet blocks.
  *
  * Provides: favorites, comparison, pets cache, notifications, gallery
  * lightbox, and comparison-page actions.
@@ -95,8 +95,8 @@ function* routerNavigate( url, options = {} ) {
  */
 function* doToggleFavorite( petId, petName ) {
 	if ( ! petId ) return;
-	const s = store( 'petstablished' ).state;
-	const config = getConfig( 'petstablished' );
+	const s = store( 'petsync' ).state;
+	const config = getConfig( 'petsync' );
 	const wasIn = s.favorites.includes( petId );
 
 	// Optimistic update.
@@ -109,7 +109,7 @@ function* doToggleFavorite( petId, petName ) {
 	announce( wasIn ? `${ name } removed from favorites` : `${ name } added to favorites` );
 
 	try {
-		const result = yield executeAbility( 'petstablished/toggle-favorite', { id: petId } );
+		const result = yield executeAbility( 'petsync/toggle-favorite', { id: petId } );
 		s.favorites = result.favorites;
 		storage.set( 'favorites', s.favorites );
 	} catch ( error ) {
@@ -132,8 +132,8 @@ function* doToggleFavorite( petId, petName ) {
  */
 function* doToggleComparison( petId, petName ) {
 	if ( ! petId ) return;
-	const s = store( 'petstablished' ).state;
-	const config = getConfig( 'petstablished' );
+	const s = store( 'petsync' ).state;
+	const config = getConfig( 'petsync' );
 	const wasIn = s.comparison.includes( petId );
 
 	if ( ! wasIn && s.comparison.length >= s.comparisonMax ) {
@@ -152,7 +152,7 @@ function* doToggleComparison( petId, petName ) {
 		: `${ name } added to comparison (${ s.comparison.length }/${ s.comparisonMax })` );
 
 	try {
-		const result = yield executeAbility( 'petstablished/update-comparison', {
+		const result = yield executeAbility( 'petsync/update-comparison', {
 			action: wasIn ? 'remove' : 'add', id: petId,
 		} );
 		s.comparison = result.ids;
@@ -172,7 +172,7 @@ function* doToggleComparison( petId, petName ) {
  * Store definition
  * ========================================================================= */
 
-const { state, actions, callbacks } = store( 'petstablished', {
+const { state, actions, callbacks } = store( 'petsync', {
 
 	/* -----------------------------------------------------------------
 	 * STATE
@@ -188,7 +188,7 @@ const { state, actions, callbacks } = store( 'petstablished', {
 		isLoading: false,
 		notification: null,
 
-		// Gallery lightbox state removed — owned by petstablished/gallery store
+		// Gallery lightbox state removed — owned by petsync/gallery store
 		// (see assets/js/interactivity/gallery.js).
 
 		/* --- Derived: favorites & comparison counts --- */
@@ -320,7 +320,7 @@ const { state, actions, callbacks } = store( 'petstablished', {
 			announce( `${ petName } removed from comparison` );
 
 			try {
-				const result = yield executeAbility( 'petstablished/update-comparison', { action: 'remove', id: petId } );
+				const result = yield executeAbility( 'petsync/update-comparison', { action: 'remove', id: petId } );
 				state.comparison = result.ids;
 				storage.set( 'comparison', state.comparison );
 			} catch ( error ) {
@@ -337,7 +337,7 @@ const { state, actions, callbacks } = store( 'petstablished', {
 			announce( 'Comparison cleared' );
 
 			try {
-				yield executeAbility( 'petstablished/update-comparison', { action: 'clear' } );
+				yield executeAbility( 'petsync/update-comparison', { action: 'clear' } );
 				storage.set( 'comparison', [] );
 			} catch ( error ) {
 				state.comparison = oldComparison;
@@ -359,7 +359,7 @@ const { state, actions, callbacks } = store( 'petstablished', {
 		*shareComparison() {
 			if ( state.comparison.length < 2 ) { announce( 'Add at least 2 pets to share' ); return; }
 			try {
-				const result = yield executeAbility( 'petstablished/get-comparison', null, { method: 'GET' } );
+				const result = yield executeAbility( 'petsync/get-comparison', null, { method: 'GET' } );
 				if ( navigator.share ) {
 					yield navigator.share( { title: 'Compare Pets', url: result.shareUrl } );
 				} else {

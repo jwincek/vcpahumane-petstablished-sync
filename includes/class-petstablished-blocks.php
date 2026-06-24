@@ -7,7 +7,7 @@
  *
  * Architecture (v2.1.0):
  * - Global store (petstablished): Favorites, comparison, pets cache
- * - Block stores (petstablished/gallery, etc.): Block-specific UI state
+ * - Block stores (petsync/gallery, etc.): Block-specific UI state
  * - viewScriptModule in block.json: Automatic loading when block renders
  *
  * @package Petstablished_Sync
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Petstablished_Blocks {
 
-	public const NAMESPACE = 'petstablished';
+	public const NAMESPACE = 'petsync';
 
 	private const BLOCKS = array(
 		'pet-card',
@@ -60,7 +60,7 @@ class Petstablished_Blocks {
 	public function register_block_bindings(): void {
 		// Pet entity data — reads from hydrated pet fields.
 		register_block_bindings_source(
-			'petstablished/pet-data',
+			'petsync/pet-data',
 			array(
 				'label'              => __( 'Pet Data', 'vcpahumane-pet-sync' ),
 				'get_value_callback' => array( $this, 'get_binding_value' ),
@@ -70,7 +70,7 @@ class Petstablished_Blocks {
 
 		// Adoption statistics — aggregate data for archive/landing pages.
 		register_block_bindings_source(
-			'petstablished/adoption-stats',
+			'petsync/adoption-stats',
 			array(
 				'label'              => __( 'Adoption Statistics', 'vcpahumane-pet-sync' ),
 				'get_value_callback' => array( $this, 'get_stats_binding_value' ),
@@ -93,7 +93,7 @@ class Petstablished_Blocks {
 		// The ability uses Pet_Hydrator internally with per-request caching,
 		// so repeated calls for the same post ID are effectively free.
 		$ability = function_exists( 'wp_get_ability' )
-			? wp_get_ability( 'petstablished/get-pet' )
+			? wp_get_ability( 'petsync/get-pet' )
 			: null;
 
 		if ( $ability ) {
@@ -156,7 +156,7 @@ class Petstablished_Blocks {
 		}
 
 		// Route through Abilities API if available.
-		$ability = wp_get_ability( 'petstablished/get-adoption-stats' );
+		$ability = wp_get_ability( 'petsync/get-adoption-stats' );
 		if ( $ability ) {
 			// Cache the stats result per-request to avoid duplicate calls
 			// when multiple stats bindings are on the same page.
@@ -263,7 +263,7 @@ class Petstablished_Blocks {
 
 		// Check for pet blocks in current post content.
 		$post = get_post();
-		if ( $post && has_block( 'petstablished/', $post ) ) {
+		if ( $post && has_block( 'petsync/', $post ) ) {
 			return true;
 		}
 
@@ -349,7 +349,7 @@ class Petstablished_Blocks {
 			$keys[] = array(
 				'key'    => $key,
 				'type'   => 'taxonomy',
-				'source' => 'petstablished/pet-data',
+				'source' => 'petsync/pet-data',
 				'desc'   => sprintf( __( 'Pet %s', 'vcpahumane-pet-sync' ), ucfirst( $key ) ),
 			);
 		}
@@ -381,7 +381,7 @@ class Petstablished_Blocks {
 			$keys[] = array(
 				'key'    => $key,
 				'type'   => 'api_field',
-				'source' => 'petstablished/pet-data',
+				'source' => 'petsync/pet-data',
 				'desc'   => $desc,
 			);
 		}
@@ -411,12 +411,12 @@ class Petstablished_Blocks {
 			$keys[] = array(
 				'key'    => $key,
 				'type'   => 'computed',
-				'source' => 'petstablished/pet-data',
+				'source' => 'petsync/pet-data',
 				'desc'   => $desc,
 			);
 		}
 
-		// Adoption stats keys (petstablished/adoption-stats source).
+		// Adoption stats keys (petsync/adoption-stats source).
 		$stats = array(
 			'available_count'      => 'Total Available Pets',
 			'available_by_species' => 'Available by Species (formatted)',
@@ -430,7 +430,7 @@ class Petstablished_Blocks {
 			$keys[] = array(
 				'key'    => $key,
 				'type'   => 'stats',
-				'source' => 'petstablished/adoption-stats',
+				'source' => 'petsync/adoption-stats',
 				'desc'   => $desc,
 			);
 		}

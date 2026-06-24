@@ -21,7 +21,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 }
 
 $pet = null;
-$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petstablished/get-pet' ) : null;
+$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petsync/get-pet' ) : null;
 if ( $ability ) {
 	$result = $ability->execute( [ 'id' => (int) $post_id ] );
 	if ( ! is_wp_error( $result ) ) {
@@ -42,7 +42,7 @@ $context = wp_json_encode( array(
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'               => 'pet-card',
-	'data-wp-interactive' => 'petstablished',
+	'data-wp-interactive' => 'petsync',
 	'data-wp-context'     => $context,
 ) );
 ?>

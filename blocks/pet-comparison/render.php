@@ -25,7 +25,7 @@ $comparison_ids = Petstablished_Helpers::get_comparison();
 if ( empty( $comparison_ids ) ) {
 	$wrapper_attributes = get_block_wrapper_attributes( array(
 		'class'               => 'pet-comparison pet-comparison--empty',
-		'data-wp-interactive' => 'petstablished',
+		'data-wp-interactive' => 'petsync',
 	) );
 	?>
 	<div <?php echo $wrapper_attributes; ?>>
@@ -116,7 +116,7 @@ $context = array(
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'                   => 'pet-comparison',
-	'data-wp-interactive'     => 'petstablished/comparison',
+	'data-wp-interactive'     => 'petsync/comparison',
 	'data-wp-context'         => wp_json_encode( $context ),
 	'data-wp-init'            => 'callbacks.init',
 	'style'                   => '--comparison-columns: ' . count( $pets ),

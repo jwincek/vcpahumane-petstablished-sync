@@ -10,7 +10,7 @@
 
 import { store, getContext } from '@wordpress/interactivity';
 
-const { state, actions, callbacks } = store( 'petstablished/back-to-top', {
+const { state, actions, callbacks } = store( 'petsync/back-to-top', {
 	state: {
 		isVisible: false,
 	},

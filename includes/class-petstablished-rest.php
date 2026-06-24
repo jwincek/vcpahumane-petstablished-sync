@@ -7,7 +7,7 @@
  * visitors who need to toggle favorites and manage pet comparisons.
  *
  * This class registers plugin-scoped REST routes at:
- *   /petstablished/v1/{namespace}/{ability}/run
+ *   /petsync/v1/{namespace}/{ability}/run
  *
  * Each route delegates to the registered ability. The ability's own
  * permission_callback still runs — we only bypass the core controller's
@@ -35,11 +35,11 @@ class Petstablished_REST {
 	 * @var string[]
 	 */
 	private const CLIENT_ABILITIES = [
-		'petstablished/toggle-favorite',
-		'petstablished/get-favorites',
-		'petstablished/clear-favorites',
-		'petstablished/update-comparison',
-		'petstablished/get-comparison',
+		'petsync/toggle-favorite',
+		'petsync/get-favorites',
+		'petsync/clear-favorites',
+		'petsync/update-comparison',
+		'petsync/get-comparison',
 	];
 
 	/**
@@ -47,10 +47,10 @@ class Petstablished_REST {
 	 */
 	public static function register_routes(): void {
 		foreach ( self::CLIENT_ABILITIES as $ability_name ) {
-			// Route: petstablished/v1/petstablished/toggle-favorite/run
+			// Route: petsync/v1/petsync/toggle-favorite/run
 			$route = $ability_name . '/run';
 
-			register_rest_route( 'petstablished/v1', $route, [
+			register_rest_route( 'petsync/v1', $route, [
 				[
 					'methods'             => \WP_REST_Server::CREATABLE,
 					'callback'            => [ __CLASS__, 'handle_execute' ],

@@ -26,7 +26,7 @@ const updateUrlFilters = ( filters, prefix = 'filter_' ) => {
 	window.history.replaceState( null, '', url.toString() );
 };
 
-const { state, actions } = store( 'petstablished/filters', {
+const { state, actions } = store( 'petsync/filters', {
 	state: {
 		compatFiltersExpanded: true,
 

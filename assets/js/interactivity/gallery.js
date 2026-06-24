@@ -19,7 +19,7 @@
 import { store, getContext, getElement } from '@wordpress/interactivity';
 import { overflowLock } from './favorites-modal.js';
 
-const { state, actions } = store( 'petstablished/gallery', {
+const { state, actions } = store( 'petsync/gallery', {
 	state: {
 		get currentImageUrl() {
 			const ctx = getContext();

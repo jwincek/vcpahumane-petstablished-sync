@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "petstablished/pet-attributes",
+	"name": "petsync/pet-attributes",
 	"version": "1.0.0",
 	"title": "Pet Attributes",
-	"category": "petstablished",
+	"category": "petsync",
 	"description": "Display pet attributes like breed, age, sex, size in a definition list.",
 	"keywords": ["pet", "attributes", "breed", "age", "sex", "size"],
-	"ancestor": ["petstablished/pet-details"],
+	"ancestor": ["petsync/pet-details"],
 	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {

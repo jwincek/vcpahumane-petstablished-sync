@@ -83,7 +83,7 @@ $mode_class    = 'pet-actions--' . $display_mode;
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'               => 'pet-actions ' . $display_class . ' ' . $mode_class,
-	'data-wp-interactive' => 'petstablished',
+	'data-wp-interactive' => 'petsync',
 ) );
 ?>
 <div <?php echo $wrapper_attributes; ?>>

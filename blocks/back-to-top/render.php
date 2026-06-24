@@ -19,7 +19,7 @@ $threshold = $attributes['threshold'] ?? 400;
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'               => 'back-to-top back-to-top--' . $position,
-	'data-wp-interactive' => 'petstablished/back-to-top',
+	'data-wp-interactive' => 'petsync/back-to-top',
 	'data-wp-context'     => wp_json_encode( array( 'threshold' => $threshold ) ),
 	'data-wp-class--is-visible' => 'state.isVisible',
 	'data-wp-init'        => 'callbacks.init',

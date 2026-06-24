@@ -42,8 +42,8 @@
 		[ 'core/columns', { className: 'pet-details__columns' }, [
 			// Left column — Gallery + Actions
 			[ 'core/column', { width: '50%', className: 'pet-details__gallery-col' }, [
-				[ 'petstablished/pet-gallery', {} ],
-				[ 'petstablished/pet-actions', {} ],
+				[ 'petsync/pet-gallery', {} ],
+				[ 'petsync/pet-actions', {} ],
 			] ],
 
 			// Right column — Info
@@ -57,18 +57,18 @@
 					[ 'core/heading', {
 						level: 1,
 						className: 'pet-details__name',
-						metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'name' } } } },
+						metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'name' } } } },
 					} ],
 					[ 'core/paragraph', {
 						className: 'pet-details__status',
-						metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'status' } } } },
+						metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'status' } } } },
 					} ],
 				] ],
 
 				// Tagline
 				[ 'core/paragraph', {
 					className: 'pet-details__tagline',
-					metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'tagline' } } } },
+					metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'tagline' } } } },
 				} ],
 
 				// About section
@@ -77,7 +77,7 @@
 					className: 'pet-details__section pet-details__about',
 				}, [
 					[ 'core/heading', { level: 2, content: __( 'About', 'vcpahumane-pet-sync' ) } ],
-					[ 'petstablished/pet-attributes', {} ],
+					[ 'petsync/pet-attributes', {} ],
 				] ],
 
 				// Compatibility section
@@ -86,7 +86,7 @@
 					className: 'pet-details__section pet-details__compat',
 				}, [
 					[ 'core/heading', { level: 2, content: __( 'Good With', 'vcpahumane-pet-sync' ) } ],
-					[ 'petstablished/pet-compatibility', {} ],
+					[ 'petsync/pet-compatibility', {} ],
 				] ],
 
 				// Health section
@@ -95,7 +95,7 @@
 					className: 'pet-details__section pet-details__health-section',
 				}, [
 					[ 'core/heading', { level: 2, content: __( 'Health', 'vcpahumane-pet-sync' ) } ],
-					[ 'petstablished/pet-health', {} ],
+					[ 'petsync/pet-health', {} ],
 				] ],
 			] ],
 		] ],
@@ -107,16 +107,16 @@
 		}, [
 			[ 'core/heading', {
 				level: 2,
-				metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'story_title' } } } },
+				metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'story_title' } } } },
 			} ],
 			[ 'core/paragraph', {
 				className: 'pet-details__description',
-				metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'description' } } } },
+				metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'description' } } } },
 			} ],
 		] ],
 
 		// Adoption CTA
-		[ 'petstablished/pet-adoption-cta', {} ],
+		[ 'petsync/pet-adoption-cta', {} ],
 	];
 
 	/**
@@ -136,7 +136,7 @@
 		] ],
 
 		// Gallery at top
-		[ 'petstablished/pet-gallery', {} ],
+		[ 'petsync/pet-gallery', {} ],
 
 		// Header
 		[ 'core/group', {
@@ -146,21 +146,21 @@
 		}, [
 			[ 'core/heading', {
 				level: 1,
-				metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'name' } } } },
+				metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'name' } } } },
 			} ],
 			[ 'core/paragraph', {
 				className: 'pet-details__status',
-				metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'status' } } } },
+				metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'status' } } } },
 			} ],
 		] ],
 
 		// Quick actions
-		[ 'petstablished/pet-actions', {} ],
+		[ 'petsync/pet-actions', {} ],
 
 		// Tagline
 		[ 'core/paragraph', {
 			className: 'pet-details__tagline',
-			metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'tagline' } } } },
+			metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'tagline' } } } },
 		} ],
 
 		// About
@@ -169,18 +169,18 @@
 			className: 'pet-details__section',
 		}, [
 			[ 'core/heading', { level: 2, content: __( 'About', 'vcpahumane-pet-sync' ) } ],
-			[ 'petstablished/pet-attributes', {} ],
+			[ 'petsync/pet-attributes', {} ],
 		] ],
 
 		// Compatibility & Health side by side
 		[ 'core/columns', {}, [
 			[ 'core/column', {}, [
 				[ 'core/heading', { level: 2, content: __( 'Good With', 'vcpahumane-pet-sync' ) } ],
-				[ 'petstablished/pet-compatibility', {} ],
+				[ 'petsync/pet-compatibility', {} ],
 			] ],
 			[ 'core/column', {}, [
 				[ 'core/heading', { level: 2, content: __( 'Health', 'vcpahumane-pet-sync' ) } ],
-				[ 'petstablished/pet-health', {} ],
+				[ 'petsync/pet-health', {} ],
 			] ],
 		] ],
 
@@ -191,15 +191,15 @@
 		}, [
 			[ 'core/heading', {
 				level: 2,
-				metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'story_title' } } } },
+				metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'story_title' } } } },
 			} ],
 			[ 'core/paragraph', {
-				metadata: { bindings: { content: { source: 'petstablished/pet-data', args: { key: 'description' } } } },
+				metadata: { bindings: { content: { source: 'petsync/pet-data', args: { key: 'description' } } } },
 			} ],
 		] ],
 
 		// Adoption CTA
-		[ 'petstablished/pet-adoption-cta', {} ],
+		[ 'petsync/pet-adoption-cta', {} ],
 	];
 
 	/**
@@ -217,20 +217,20 @@
 		'core/list',
 		'core/separator',
 		'core/spacer',
-		'petstablished/pet-gallery',
-		'petstablished/pet-actions',
-		'petstablished/pet-attributes',
-		'petstablished/pet-compatibility',
-		'petstablished/pet-health',
-		'petstablished/pet-adoption-cta',
+		'petsync/pet-gallery',
+		'petsync/pet-actions',
+		'petsync/pet-attributes',
+		'petsync/pet-compatibility',
+		'petsync/pet-health',
+		'petsync/pet-adoption-cta',
 	];
 
 	// Use hooks to add controls to the registered block.
 	wp.hooks.addFilter(
 		'blocks.registerBlockType',
-		'petstablished/pet-details-inner-blocks',
+		'petsync/pet-details-inner-blocks',
 		function( settings, name ) {
-			if ( name !== 'petstablished/pet-details' ) {
+			if ( name !== 'petsync/pet-details' ) {
 				return settings;
 			}
 

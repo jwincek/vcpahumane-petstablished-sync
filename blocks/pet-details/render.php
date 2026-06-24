@@ -10,7 +10,7 @@
  * The lightbox is owned exclusively by the pet-gallery child block.
  *
  * Example bound content in the template:
- * <!-- wp:heading {"metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"name"}}}}} -->
+ * <!-- wp:heading {"metadata":{"bindings":{"content":{"source":"petsync/pet-data","args":{"key":"name"}}}}} -->
  * <h1 class="wp-block-heading">Pet Name</h1>
  * <!-- /wp:heading -->
  *
@@ -42,7 +42,7 @@ if ( ! $has_valid_pet ) {
 			<p class="pet-details__placeholder-title"><?php esc_html_e( 'Pet Details', 'vcpahumane-pet-sync' ); ?></p>
 			<p class="pet-details__placeholder-text"><?php esc_html_e( 'Add inner blocks and bind them to pet data using the block bindings panel.', 'vcpahumane-pet-sync' ); ?></p>
 			<p class="pet-details__placeholder-hint">
-				<?php esc_html_e( 'Source:', 'vcpahumane-pet-sync' ); ?> <code>petstablished/pet-data</code>
+				<?php esc_html_e( 'Source:', 'vcpahumane-pet-sync' ); ?> <code>petsync/pet-data</code>
 			</p>
 		</div>
 	</article>
@@ -64,7 +64,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 // and favorites modal have access to image, breed, etc. without needing
 // a separate server fetch. On archive pages the grid's petIds handles
 // this; on single pages the pet-details block is the only data source.
-wp_interactivity_state( 'petstablished', array(
+wp_interactivity_state( 'petsync', array(
 	'pets' => array(
 		(string) $pet['id'] => array(
 			'id'                => $pet['id'],
@@ -94,7 +94,7 @@ $context = array(
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class'                     => 'pet-details pet-details--' . $layout,
-	'data-wp-interactive'       => 'petstablished',
+	'data-wp-interactive'       => 'petsync',
 	'data-wp-context'           => wp_json_encode( $context ),
 	'data-wp-class--is-loading' => 'state.isLoading',
 	'data-pets-archive-url'     => esc_url( $archive_url ),
@@ -104,12 +104,12 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 <article <?php echo $wrapper_attributes; ?>>
 	<?php
 	// Render InnerBlocks content. Core blocks with block bindings
-	// automatically resolve pet data via the petstablished/pet-data source.
+	// automatically resolve pet data via the petsync/pet-data source.
 	// Plugin sub-blocks (pet-gallery, pet-actions, pet-attributes, etc.)
 	// render via their own render.php, reading postId from block context.
 	//
 	// The breadcrumb link now uses a Block Binding on the core/paragraph
-	// 'url' attribute (source: petstablished/pet-data, key: archive_url)
+	// 'url' attribute (source: petsync/pet-data, key: archive_url)
 	// instead of the previous href="#pet-archive" str_replace approach.
 	echo $content;
 	?>

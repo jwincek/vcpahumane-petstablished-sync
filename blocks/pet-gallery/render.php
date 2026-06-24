@@ -9,7 +9,7 @@
  * Gallery images come from the Petstablished API response. Deduplication
  * by filename prevents the same photo from appearing in both places.
  *
- * Data is loaded via the Abilities API (petstablished/get-pet) which
+ * Data is loaded via the Abilities API (petsync/get-pet) which
  * shares the per-request cache with other blocks on the page.
  *
  * @package Petstablished_Sync
@@ -174,7 +174,7 @@ $wrapper_attrs = array(
 );
 
 if ( ! $is_editor ) {
-	$wrapper_attrs['data-wp-interactive'] = 'petstablished/gallery';
+	$wrapper_attrs['data-wp-interactive'] = 'petsync/gallery';
 	$wrapper_attrs['data-wp-context']     = wp_json_encode( $context );
 }
 

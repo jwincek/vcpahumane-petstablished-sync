@@ -16,8 +16,8 @@ import { store, getContext, getElement, withSyncEvent } from '@wordpress/interac
 import { doToggleFavorite, doToggleComparison } from '../store.js';
 import { announce } from '../utils.js';
 
-const getGlobalState = () => store( 'petstablished' ).state;
-const getGlobalActions = () => store( 'petstablished' ).actions;
+const getGlobalState = () => store( 'petsync' ).state;
+const getGlobalActions = () => store( 'petsync' ).actions;
 
 /* === URL Helpers === */
 
@@ -141,7 +141,7 @@ function* doNavigate( ctx, href, page ) {
 
 /* === Store Definition === */
 
-const { state, actions, callbacks } = store( 'petstablished/grid', {
+const { state, actions, callbacks } = store( 'petsync/grid', {
 	state: {
 		isNavigating: false,
 		compatFiltersExpanded: true,
@@ -317,7 +317,7 @@ const { state, actions, callbacks } = store( 'petstablished/grid', {
 
 		// === Favorites & Comparison ===
 		//
-		// The grid's pet cards set petId in the petstablished/grid context.
+		// The grid's pet cards set petId in the petsync/grid context.
 		// The global store's toggleFavorite uses getPetIdFromContext() which
 		// resolves against the petstablished namespace — where petId doesn't
 		// exist. We read petId from our own context and pass it to the

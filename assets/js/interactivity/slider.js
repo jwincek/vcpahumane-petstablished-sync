@@ -95,7 +95,7 @@ class SliderAutoplay {
 
 /* === Store Definition === */
 
-const { state, actions } = store( 'petstablished/slider', {
+const { state, actions } = store( 'petsync/slider', {
 	state: {
 		get currentPet() {
 			const ctx = getContext();

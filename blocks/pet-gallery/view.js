@@ -3,7 +3,7 @@
  *
  * Entry point for the gallery block's client-side interactivity.
  * Imports from the shared gallery store module which registers
- * the petstablished/gallery namespace with the Interactivity API.
+ * the petsync/gallery namespace with the Interactivity API.
  *
  * @package Petstablished_Sync
  * @since 3.0.0

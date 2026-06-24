@@ -4,7 +4,7 @@
  *
  * Registers block variations for core blocks pre-configured with pet data bindings.
  * These "Pet Name", "Pet Breed", etc. variations can be inserted anywhere the
- * petstablished/pet-data binding source is available.
+ * petsync/pet-data binding source is available.
  *
  * @package Petstablished_Sync
  * @since 1.0.0
@@ -288,7 +288,7 @@ class Petstablished_Variations {
 	);
 
 	/**
-	 * Adoption stats variations using the petstablished/adoption-stats source.
+	 * Adoption stats variations using the petsync/adoption-stats source.
 	 * These work on any page, not just pet single/archive.
 	 */
 	private const STATS_VARIATIONS = array(
@@ -469,7 +469,7 @@ class Petstablished_Variations {
 			'description' => 'Available count and species breakdown for landing pages.',
 			'icon'        => 'chart-bar',
 			'keywords'    => array( 'pet', 'stats', 'banner', 'count', 'landing' ),
-			'source'      => 'petstablished/adoption-stats',
+			'source'      => 'petsync/adoption-stats',
 			'innerBlocks' => array(
 				array( 'core/heading', array( 'level' => 2 ), 'available_count' ),
 				array( 'core/paragraph', array( 'className' => 'pet-stats-species' ), 'available_by_species' ),
@@ -493,7 +493,7 @@ class Petstablished_Variations {
 		add_filter( 'block_categories_all', function( $categories ) {
 			// Add at the beginning for visibility.
 			array_unshift( $categories, array(
-				'slug'  => 'petstablished',
+				'slug'  => 'petsync',
 				'title' => __( 'Pet Blocks', 'vcpahumane-pet-sync' ),
 				'icon'  => 'pets',
 			) );
@@ -509,7 +509,7 @@ class Petstablished_Variations {
 		$variations_data = array(
 			'simple' => $this->build_simple_variations(),
 			'groups' => $this->build_group_variations(),
-			'source' => 'petstablished/pet-data',
+			'source' => 'petsync/pet-data',
 		);
 
 		wp_enqueue_script(
@@ -532,13 +532,13 @@ class Petstablished_Variations {
 		// Pet data variations.
 		$variations = array_merge(
 			$variations,
-			$this->build_variations_for_source( self::VARIATIONS, 'petstablished/pet-data' )
+			$this->build_variations_for_source( self::VARIATIONS, 'petsync/pet-data' )
 		);
 
 		// Adoption stats variations.
 		$variations = array_merge(
 			$variations,
-			$this->build_variations_for_source( self::STATS_VARIATIONS, 'petstablished/adoption-stats' )
+			$this->build_variations_for_source( self::STATS_VARIATIONS, 'petsync/adoption-stats' )
 		);
 
 		return $variations;
@@ -574,12 +574,12 @@ class Petstablished_Variations {
 
 				$variations[] = array(
 					'block'       => $block_type,
-					'name'        => 'petstablished/' . $var['name'],
+					'name'        => 'petsync/' . $var['name'],
 					'title'       => $var['title'],
 					'description' => $var['description'],
 					'icon'        => $var['icon'],
 					'keywords'    => $var['keywords'],
-					'category'    => 'petstablished',
+					'category'    => 'petsync',
 					'attributes'  => array_merge(
 						$var['attributes'] ?? array(),
 						array(
@@ -602,7 +602,7 @@ class Petstablished_Variations {
 
 		foreach ( self::GROUP_VARIATIONS as $var ) {
 			$inner_blocks = array();
-			$source = $var['source'] ?? 'petstablished/pet-data';
+			$source = $var['source'] ?? 'petsync/pet-data';
 
 			foreach ( $var['innerBlocks'] as $inner ) {
 				$block_name = $inner[0];
@@ -634,12 +634,12 @@ class Petstablished_Variations {
 
 			$variations[] = array(
 				'block'       => 'core/group',
-				'name'        => 'petstablished/' . $var['name'],
+				'name'        => 'petsync/' . $var['name'],
 				'title'       => $var['title'],
 				'description' => $var['description'],
 				'icon'        => $var['icon'],
 				'keywords'    => $var['keywords'],
-				'category'    => 'petstablished',
+				'category'    => 'petsync',
 				'attributes'  => $var['attributes'] ?? array(),
 				'innerBlocks' => $inner_blocks,
 				'scope'       => array( 'inserter' ),

@@ -4,7 +4,7 @@
  *
  * Renders the outer card wrapper. Content (heading, fee, note, action button)
  * is composed from InnerBlocks — primarily native core blocks with Block Bindings
- * and the petstablished/adoption-action child block.
+ * and the petsync/adoption-action child block.
  *
  * @package Petstablished_Sync
  * @since 1.0.0

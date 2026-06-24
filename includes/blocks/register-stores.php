@@ -20,7 +20,7 @@ namespace Petstablished\Blocks;
  */
 function register_stores(): void {
 	// === Shared Config (non-reactive, available to all stores) ===
-	wp_interactivity_config( 'petstablished', [
+	wp_interactivity_config( 'petsync', [
 		'restUrl'      => rest_url(),
 		'nonce'        => wp_create_nonce( 'wp_rest' ),
 		'maxCompare'   => 4,
@@ -35,7 +35,7 @@ function register_stores(): void {
 	$has_comparison = ! empty( $comparison );
 
 	// === Global Store State ===
-	wp_interactivity_state( 'petstablished', [
+	wp_interactivity_state( 'petsync', [
 		'favorites'            => \Petstablished_Helpers::get_favorites(),
 		'comparison'           => $comparison,
 		'comparisonMax'        => 4,
@@ -61,7 +61,7 @@ function register_stores(): void {
 	] );
 
 	// === Grid Store State ===
-	wp_interactivity_state( 'petstablished/grid', [
+	wp_interactivity_state( 'petsync/grid', [
 		'isNavigating'          => false,
 		'compatFiltersExpanded' => true,
 	] );

@@ -16,9 +16,9 @@
 import { store, getContext } from '@wordpress/interactivity';
 import { announce, storage, executeAbility } from '../utils.js';
 
-const getGlobalState = () => store( 'petstablished' ).state;
+const getGlobalState = () => store( 'petsync' ).state;
 
-const { state, actions, callbacks } = store( 'petstablished/compare-bar', {
+const { state, actions, callbacks } = store( 'petsync/compare-bar', {
 	state: {
 		get comparisonCount() {
 			return getGlobalState().comparison.length;
@@ -92,7 +92,7 @@ const { state, actions, callbacks } = store( 'petstablished/compare-bar', {
 			announce( 'Removed from comparison' );
 
 			try {
-				const result = yield executeAbility( 'petstablished/update-comparison', {
+				const result = yield executeAbility( 'petsync/update-comparison', {
 					action: 'remove',
 					id: petId,
 				} );
@@ -104,7 +104,7 @@ const { state, actions, callbacks } = store( 'petstablished/compare-bar', {
 		},
 
 		*clearComparison() {
-			yield store( 'petstablished' ).actions.clearComparison();
+			yield store( 'petsync' ).actions.clearComparison();
 		},
 
 		/**
@@ -136,7 +136,7 @@ const { state, actions, callbacks } = store( 'petstablished/compare-bar', {
 		},
 
 		*shareComparison() {
-			yield store( 'petstablished' ).actions.shareComparison();
+			yield store( 'petsync' ).actions.shareComparison();
 		},
 
 		/**

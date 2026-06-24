@@ -6,15 +6,15 @@
 	<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
 	<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--50)">
 
-		<!-- wp:petstablished/pet-details {"layout":"sidebar"} -->
+		<!-- wp:petsync/pet-details {"layout":"sidebar"} -->
 
-			<!-- wp:petstablished/pet-breadcrumb /-->
+			<!-- wp:petsync/pet-breadcrumb /-->
 
-			<!-- wp:heading {"level":1,"className":"pet-details__name","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"name"}}}}} -->
+			<!-- wp:heading {"level":1,"className":"pet-details__name","metadata":{"bindings":{"content":{"source":"petsync/pet-data","args":{"key":"name"}}}}} -->
 			<h1 class="wp-block-heading pet-details__name">Pet Name</h1>
 			<!-- /wp:heading -->
 
-			<!-- wp:petstablished/pet-tagline /-->
+			<!-- wp:petsync/pet-tagline /-->
 
 			<!-- wp:columns {"className":"pet-details__columns"} -->
 			<div class="wp-block-columns pet-details__columns">
@@ -22,11 +22,11 @@
 				<!-- wp:column {"width":"50%","className":"pet-details__gallery-col"} -->
 				<div class="wp-block-column pet-details__gallery-col" style="flex-basis:50%">
 
-					<!-- wp:petstablished/pet-gallery /-->
+					<!-- wp:petsync/pet-gallery /-->
 
-					<!-- wp:petstablished/pet-actions {"displayMode":"overlay"} /-->
+					<!-- wp:petsync/pet-actions {"displayMode":"overlay"} /-->
 
-					<!-- wp:petstablished/pet-compatibility {"displayStyle":"pills"} /-->
+					<!-- wp:petsync/pet-compatibility {"displayStyle":"pills"} /-->
 
 				</div>
 				<!-- /wp:column -->
@@ -40,7 +40,7 @@
 						<h2 class="wp-block-heading">About</h2>
 						<!-- /wp:heading -->
 
-						<!-- wp:petstablished/pet-attributes /-->
+						<!-- wp:petsync/pet-attributes /-->
 					</div>
 					<!-- /wp:group -->
 
@@ -50,7 +50,7 @@
 						<h2 class="wp-block-heading">Health</h2>
 						<!-- /wp:heading -->
 
-						<!-- wp:petstablished/pet-health /-->
+						<!-- wp:petsync/pet-health /-->
 					</div>
 					<!-- /wp:group -->
 
@@ -62,17 +62,17 @@
 
 			<!-- wp:group {"metadata":{"name":"Story Section"},"className":"pet-details__section pet-details__story"} -->
 			<div class="wp-block-group pet-details__section pet-details__story">
-				<!-- wp:heading {"level":2,"metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"story_title"}}}}} -->
+				<!-- wp:heading {"level":2,"metadata":{"bindings":{"content":{"source":"petsync/pet-data","args":{"key":"story_title"}}}}} -->
 				<h2 class="wp-block-heading">Meet Pet Name</h2>
 				<!-- /wp:heading -->
 
-				<!-- wp:paragraph {"className":"pet-details__description","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"description"}}}}} -->
+				<!-- wp:paragraph {"className":"pet-details__description","metadata":{"bindings":{"content":{"source":"petsync/pet-data","args":{"key":"description"}}}}} -->
 				<p class="pet-details__description">Pet description will appear here.</p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->
 
-			<!-- wp:petstablished/pet-adoption-cta -->
+			<!-- wp:petsync/pet-adoption-cta -->
 
 			<!-- wp:group {"className":"pet-adoption-cta__card","style":{"color":{"gradient":"linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%)","text":"#ffffff"}}} -->
 			<div class="wp-block-group pet-adoption-cta__card has-text-color" style="color:#ffffff;background:linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%)">
@@ -80,11 +80,11 @@
 				<!-- wp:group {"className":"pet-adoption-cta__content","layout":{"type":"flex","orientation":"vertical","flexWrap":"nowrap"}} -->
 				<div class="wp-block-group pet-adoption-cta__content">
 
-					<!-- wp:heading {"level":2,"className":"pet-adoption-cta__title","metadata":{"bindings":{"content":{"source":"petstablished/pet-data","args":{"key":"adoption_title"}}}}} -->
+					<!-- wp:heading {"level":2,"className":"pet-adoption-cta__title","metadata":{"bindings":{"content":{"source":"petsync/pet-data","args":{"key":"adoption_title"}}}}} -->
 					<h2 class="wp-block-heading pet-adoption-cta__title">Adopt [Pet Name]</h2>
 					<!-- /wp:heading -->
 
-					<!-- wp:petstablished/adoption-fee /-->
+					<!-- wp:petsync/adoption-fee /-->
 
 					<!-- wp:paragraph {"className":"pet-adoption-cta__note"} -->
 					<p class="pet-adoption-cta__note">The adoption fee helps cover vaccinations, spay/neuter surgery, microchip, and initial veterinary care.</p>
@@ -93,16 +93,16 @@
 				</div>
 				<!-- /wp:group -->
 
-				<!-- wp:petstablished/adoption-action /-->
+				<!-- wp:petsync/adoption-action /-->
 
 			</div>
 			<!-- /wp:group -->
 
-		<!-- /wp:petstablished/pet-adoption-cta -->
+		<!-- /wp:petsync/pet-adoption-cta -->
 
-		<!-- /wp:petstablished/pet-details -->
+		<!-- /wp:petsync/pet-details -->
 
-		<!-- wp:petstablished/pet-slider {"title":"Similar Pets","similarPetsMode":true,"count":8,"orderBy":"random","showQuickActions":true,"linkToArchive":true,"archiveLinkText":"View All Pets","cardStyle":"default"} /-->
+		<!-- wp:petsync/pet-slider {"title":"Similar Pets","similarPetsMode":true,"count":8,"orderBy":"random","showQuickActions":true,"linkToArchive":true,"archiveLinkText":"View All Pets","cardStyle":"default"} /-->
 
 	</div>
 	<!-- /wp:group -->

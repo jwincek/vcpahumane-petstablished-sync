@@ -5,9 +5,9 @@
  * Reads ability definitions from config/abilities.json and registers them
  * with the WordPress 6.9 Abilities API. Callbacks are resolved by convention:
  *
- *   'petstablished/toggle-favorite' → Petstablished\Abilities\Favorites\toggle()
- *   'petstablished/list-pets'       → Petstablished\Abilities\Pets\list_pets()
- *   'petstablished/get-comparison'  → Petstablished\Abilities\Comparison\get()
+ *   'petsync/toggle-favorite' → Petstablished\Abilities\Favorites\toggle()
+ *   'petsync/list-pets'       → Petstablished\Abilities\Pets\list_pets()
+ *   'petsync/get-comparison'  → Petstablished\Abilities\Comparison\get()
  *
  * @package Petstablished_Sync
  * @since 1.0.0
@@ -44,17 +44,17 @@ class Provider {
 	 * @var array<string, string>
 	 */
 	private static array $ability_file_map = [
-		'petstablished/get-pet'            => 'pets',
-		'petstablished/list-pets'          => 'pets',
-		'petstablished/filter-pets'        => 'pets',
-		'petstablished/batch-get-pets'     => 'pets',
-		'petstablished/get-filter-options' => 'pets',
-		'petstablished/get-adoption-stats' => 'stats',
-		'petstablished/toggle-favorite'    => 'favorites',
-		'petstablished/get-favorites'      => 'favorites',
-		'petstablished/clear-favorites'    => 'favorites',
-		'petstablished/update-comparison'  => 'comparison',
-		'petstablished/get-comparison'     => 'comparison',
+		'petsync/get-pet'            => 'pets',
+		'petsync/list-pets'          => 'pets',
+		'petsync/filter-pets'        => 'pets',
+		'petsync/batch-get-pets'     => 'pets',
+		'petsync/get-filter-options' => 'pets',
+		'petsync/get-adoption-stats' => 'stats',
+		'petsync/toggle-favorite'    => 'favorites',
+		'petsync/get-favorites'      => 'favorites',
+		'petsync/clear-favorites'    => 'favorites',
+		'petsync/update-comparison'  => 'comparison',
+		'petsync/get-comparison'     => 'comparison',
 	];
 
 	/**
@@ -93,7 +93,7 @@ class Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $name   Ability name (e.g. 'petstablished/toggle-favorite').
+	 * @param string $name   Ability name (e.g. 'petsync/toggle-favorite').
 	 * @param array  $config Ability configuration from JSON.
 	 */
 	private static function register_ability( string $name, array $config ): void {
@@ -133,7 +133,7 @@ class Provider {
 	/**
 	 * Resolve the execute callback for an ability by convention.
 	 *
-	 * Convention: 'petstablished/toggle-favorite' →
+	 * Convention: 'petsync/toggle-favorite' →
 	 *   1. Look up file group: 'favorites'
 	 *   2. Derive function: 'toggle' (strip common prefixes like 'get-', 'list-', 'batch-get-')
 	 *   3. Full callable: 'Petstablished\Abilities\Favorites\toggle'
@@ -148,17 +148,17 @@ class Provider {
 	private static function resolve_callback( string $name ): ?callable {
 		// Explicit function mappings for non-obvious names.
 		$explicit_map = [
-			'petstablished/get-pet'            => 'Petstablished\\Abilities\\Pets\\get',
-			'petstablished/list-pets'          => 'Petstablished\\Abilities\\Pets\\list_pets',
-			'petstablished/filter-pets'        => 'Petstablished\\Abilities\\Pets\\filter_pets',
-			'petstablished/batch-get-pets'     => 'Petstablished\\Abilities\\Pets\\batch_get',
-			'petstablished/get-filter-options' => 'Petstablished\\Abilities\\Pets\\get_filter_options',
-			'petstablished/get-adoption-stats' => 'Petstablished\\Abilities\\Stats\\get_adoption_stats',
-			'petstablished/toggle-favorite'    => 'Petstablished\\Abilities\\Favorites\\toggle',
-			'petstablished/get-favorites'      => 'Petstablished\\Abilities\\Favorites\\get_favorites',
-			'petstablished/clear-favorites'    => 'Petstablished\\Abilities\\Favorites\\clear_all',
-			'petstablished/update-comparison'  => 'Petstablished\\Abilities\\Comparison\\update',
-			'petstablished/get-comparison'     => 'Petstablished\\Abilities\\Comparison\\get_comparison',
+			'petsync/get-pet'            => 'Petstablished\\Abilities\\Pets\\get',
+			'petsync/list-pets'          => 'Petstablished\\Abilities\\Pets\\list_pets',
+			'petsync/filter-pets'        => 'Petstablished\\Abilities\\Pets\\filter_pets',
+			'petsync/batch-get-pets'     => 'Petstablished\\Abilities\\Pets\\batch_get',
+			'petsync/get-filter-options' => 'Petstablished\\Abilities\\Pets\\get_filter_options',
+			'petsync/get-adoption-stats' => 'Petstablished\\Abilities\\Stats\\get_adoption_stats',
+			'petsync/toggle-favorite'    => 'Petstablished\\Abilities\\Favorites\\toggle',
+			'petsync/get-favorites'      => 'Petstablished\\Abilities\\Favorites\\get_favorites',
+			'petsync/clear-favorites'    => 'Petstablished\\Abilities\\Favorites\\clear_all',
+			'petsync/update-comparison'  => 'Petstablished\\Abilities\\Comparison\\update',
+			'petsync/get-comparison'     => 'Petstablished\\Abilities\\Comparison\\get_comparison',
 		];
 
 		if ( isset( $explicit_map[ $name ] ) ) {
