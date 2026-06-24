@@ -82,7 +82,7 @@ class Petstablished_Blocks {
 	public function get_binding_value( array $args, WP_Block $block ): ?string {
 		$post_id = $block->context['postId'] ?? get_the_ID();
 
-		if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
+		if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 			return $this->get_placeholder( $args['key'] ?? '' );
 		}
 
@@ -245,7 +245,7 @@ class Petstablished_Blocks {
 
 	private function should_enqueue(): bool {
 		// Always enqueue on pet-related archives/singles.
-		if ( is_singular( 'pet' ) || is_post_type_archive( 'pet' ) ) {
+		if ( is_singular( 'vcps_pet' ) || is_post_type_archive( 'vcps_pet' ) ) {
 			return true;
 		}
 

@@ -364,7 +364,7 @@ class Petstablished_Sync {
 
 		// Find existing pet by Petstablished ID.
 		$existing = get_posts( array(
-			'post_type'   => 'pet',
+			'post_type'   => 'vcps_pet',
 			'post_status' => 'any',
 			'meta_key'    => '_pet_ps_id',
 			'meta_value'  => $ps_id,
@@ -375,7 +375,7 @@ class Petstablished_Sync {
 
 		// Prepare post data.
 		$post_data = array(
-			'post_type'    => 'pet',
+			'post_type'    => 'vcps_pet',
 			'post_status'  => 'publish',
 			'post_title'   => sanitize_text_field( $data['name'] ?? 'Unnamed Pet' ),
 			'post_content' => wp_kses_post( $data['description'] ?? '' ),
@@ -608,7 +608,7 @@ class Petstablished_Sync {
 		$removed = 0;
 
 		$local_pets = get_posts( array(
-			'post_type'   => 'pet',
+			'post_type'   => 'vcps_pet',
 			'post_status' => 'publish',
 			'numberposts' => -1,
 			'fields'      => 'ids',

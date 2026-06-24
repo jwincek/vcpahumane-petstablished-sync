@@ -28,7 +28,7 @@ $post_id = $block->context['postId'] ?? get_the_ID();
 $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
 // Check if we have a valid pet.
-$has_valid_pet = $post_id && 'pet' === get_post_type( $post_id );
+$has_valid_pet = $post_id && 'vcps_pet' === get_post_type( $post_id );
 
 // Editor placeholder when no pet context.
 if ( ! $has_valid_pet ) {
@@ -58,7 +58,7 @@ if ( ! $pet ) {
 }
 
 $layout      = $attributes['layout'] ?? 'sidebar';
-$archive_url = get_post_type_archive_link( 'pet' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' );
 
 // Cache the current pet into the global pets store so the compare bar
 // and favorites modal have access to image, breed, etc. without needing

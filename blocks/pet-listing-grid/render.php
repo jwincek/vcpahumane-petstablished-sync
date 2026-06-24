@@ -146,7 +146,7 @@ if ( $ability ) {
 	}
 
 	$args = array(
-		'post_type'      => 'pet',
+		'post_type'      => 'vcps_pet',
 		'post_status'    => 'publish',
 		'posts_per_page' => $per_page,
 		'paged'          => $paged,
@@ -197,7 +197,7 @@ $comparison = Petstablished_Helpers::get_comparison();
 $region_id = 'pet-grid';
 
 // === Archive URL (base for filter navigation) ===
-$archive_url = get_post_type_archive_link( 'pet' ) ?: home_url( '/pets/' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' ) ?: home_url( '/pets/' );
 
 // === Sort options ===
 $sort_options = array(

@@ -78,15 +78,15 @@ class Petstablished_Templates {
 
 	private function get_plugin_templates(): array {
 		return array(
-			'archive-pet' => array(
+			'archive-vcps_pet' => array(
 				'title'       => __( 'Pet Archive', 'vcpahumane-pet-sync' ),
 				'description' => __( 'Displays the pet adoption listings.', 'vcpahumane-pet-sync' ),
-				'post_types'  => array( 'pet' ),
+				'post_types'  => array( 'vcps_pet' ),
 			),
-			'single-pet'  => array(
+			'single-vcps_pet'  => array(
 				'title'       => __( 'Single Pet', 'vcpahumane-pet-sync' ),
 				'description' => __( 'Displays a single adoptable pet.', 'vcpahumane-pet-sync' ),
-				'post_types'  => array( 'pet' ),
+				'post_types'  => array( 'vcps_pet' ),
 			),
 		);
 	}

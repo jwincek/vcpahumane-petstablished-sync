@@ -334,7 +334,7 @@ class Petstablished_Helpers {
 		}
 
 		$valid = get_posts( array(
-			'post_type'      => 'pet',
+			'post_type'      => 'vcps_pet',
 			'post_status'    => 'publish',
 			'post__in'       => $ids,
 			'posts_per_page' => count( $ids ),
@@ -437,7 +437,7 @@ class Petstablished_Helpers {
 				return $post ? wp_kses_post( wpautop( $post->post_content ) ) : '';
 				
 			case 'archive_url':
-				return get_post_type_archive_link( 'pet' ) ?: home_url( '/pets/' );
+				return get_post_type_archive_link( 'vcps_pet' ) ?: home_url( '/pets/' );
 
 			case 'adoption_title':
 				$name = get_the_title( $post_id );

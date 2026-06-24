@@ -42,7 +42,7 @@ const COMPAT_MAP = [
 function get( array $input ): array|WP_Error {
 	$post = get_post( $input['id'] );
 
-	if ( ! $post || 'pet' !== $post->post_type || 'publish' !== $post->post_status ) {
+	if ( ! $post || 'vcps_pet' !== $post->post_type || 'publish' !== $post->post_status ) {
 		return new WP_Error( 'not_found', __( 'Pet not found.', 'vcpahumane-pet-sync' ), [ 'status' => 404 ] );
 	}
 
@@ -192,7 +192,7 @@ function filter_pets( array $input = [] ): array {
 	// Hydrate the page.
 	$pets = [];
 	if ( ! empty( $page_ids ) ) {
-		$page_query = Query::for( 'pet' )
+		$page_query = Query::for( 'vcps_pet' )
 			->whereIn( $page_ids )
 			->withArgs( [ 'orderby' => 'post__in' ] );
 		$pets = $page_query->get( 'grid' );
@@ -229,7 +229,7 @@ function filter_pets( array $input = [] ): array {
 function batch_get( array $input ): array {
 	$ids = array_map( 'absint', $input['ids'] );
 
-	$query = Query::for( 'pet' )
+	$query = Query::for( 'vcps_pet' )
 		->whereIn( $ids )
 		->withArgs( [ 'orderby' => 'post__in' ] );
 
@@ -263,7 +263,7 @@ function get_filter_options( array $input = [] ): array {
  * @return Query
  */
 function build_base_query( array $input ): Query {
-	return Query::for( 'pet' )
+	return Query::for( 'vcps_pet' )
 		->status( $input['status'] ?? null )
 		->where( 'animal', $input['animal'] ?? null )
 		->where( 'breed', $input['breed'] ?? null )

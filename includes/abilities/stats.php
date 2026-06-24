@@ -52,7 +52,7 @@ function get_adoption_stats( array $input = [] ): array {
 
 	// Newest pet.
 	$newest = get_posts( [
-		'post_type'      => 'pet',
+		'post_type'      => 'vcps_pet',
 		'post_status'    => 'publish',
 		'posts_per_page' => 1,
 		'orderby'        => 'date',
@@ -68,7 +68,7 @@ function get_adoption_stats( array $input = [] ): array {
 
 	// Total pets (all statuses).
 	$total_query = new WP_Query( [
-		'post_type'      => 'pet',
+		'post_type'      => 'vcps_pet',
 		'post_status'    => 'publish',
 		'posts_per_page' => 1,
 		'fields'         => 'ids',
@@ -98,7 +98,7 @@ function get_adoption_stats( array $input = [] ): array {
  */
 function count_pets_by_status_and_term( string $status, string $taxonomy, int $term_id ): int {
 	$query = new WP_Query( [
-		'post_type'      => 'pet',
+		'post_type'      => 'vcps_pet',
 		'post_status'    => 'publish',
 		'posts_per_page' => 1,
 		'fields'         => 'ids',

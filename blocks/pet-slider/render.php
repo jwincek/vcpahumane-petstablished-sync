@@ -60,7 +60,7 @@ $meta_font_family   = $attributes['metaFontFamily'] ?? '';
 if ( $similar_pets_mode ) {
 	$current_post_id = $block->context['postId'] ?? get_the_ID();
 
-	if ( $current_post_id && get_post_type( $current_post_id ) === 'pet' ) {
+	if ( $current_post_id && get_post_type( $current_post_id ) === 'vcps_pet' ) {
 		$exclude_post_id = $current_post_id;
 
 		// Read from hydrated entity instead of wp_get_post_terms() calls.
@@ -133,7 +133,7 @@ if ( $list_ability ) {
 
 // Fallback: direct query builder (ability unavailable or failed).
 if ( empty( $pets ) ) {
-	$query = \Petstablished\Core\Query::for( 'pet' )
+	$query = \Petstablished\Core\Query::for( 'vcps_pet' )
 		->status( 'available' );
 
 	if ( ! empty( $filter_animal ) ) {
@@ -183,7 +183,7 @@ $context = array(
 	'isPaused'      => false,
 	'touchStartX'   => 0,
 	'displayMode'   => $use_cards_layout ? 'cards' : $display_mode,
-	'archiveUrl'    => get_post_type_archive_link( 'pet' ),
+	'archiveUrl'    => get_post_type_archive_link( 'vcps_pet' ),
 );
 
 // Merge minimal pet data into global state for comparison tool.
@@ -241,7 +241,7 @@ if ( 0 === $card_border_radius ) {
 
 $wrapper_attributes = get_block_wrapper_attributes( $extra_attrs );
 
-$archive_url = get_post_type_archive_link( 'pet' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' );
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>

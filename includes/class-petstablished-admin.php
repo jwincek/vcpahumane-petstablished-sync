@@ -28,7 +28,7 @@ class Petstablished_Admin {
 
 	public function add_menu(): void {
 		add_submenu_page(
-			'edit.php?post_type=pet',
+			'edit.php?post_type=vcps_pet',
 			__( 'Petstablished Sync', 'vcpahumane-pet-sync' ),
 			__( 'Sync Settings', 'vcpahumane-pet-sync' ),
 			'manage_options',
@@ -37,7 +37,7 @@ class Petstablished_Admin {
 		);
 
 		add_submenu_page(
-			'edit.php?post_type=pet',
+			'edit.php?post_type=vcps_pet',
 			__( 'Petstablished Sync Log', 'vcpahumane-pet-sync' ),
 			__( 'Sync Log', 'vcpahumane-pet-sync' ),
 			'manage_options',
@@ -265,7 +265,7 @@ class Petstablished_Admin {
 					</button>
 					
 					<?php
-					$pet_count = wp_count_posts( 'pet' );
+					$pet_count = wp_count_posts( 'vcps_pet' );
 					$total     = ( $pet_count->publish ?? 0 ) + ( $pet_count->draft ?? 0 );
 					?>
 					<span id="pet-count" style="margin-left: 10px;">
@@ -436,7 +436,7 @@ class Petstablished_Admin {
 				<div class="card" style="max-width: 600px;">
 					<p><?php esc_html_e( 'No syncs have been recorded yet.', 'vcpahumane-pet-sync' ); ?></p>
 					<p>
-						<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=pet&page=' . self::PAGE_SLUG ) ); ?>">
+						<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=vcps_pet&page=' . self::PAGE_SLUG ) ); ?>">
 							<?php esc_html_e( 'Go to Sync Settings', 'vcpahumane-pet-sync' ); ?>
 						</a>
 					</p>
@@ -655,7 +655,7 @@ class Petstablished_Admin {
 	}
 
 	public function add_settings_link( $links ): array {
-		$url  = admin_url( 'edit.php?post_type=pet&page=' . self::PAGE_SLUG );
+		$url  = admin_url( 'edit.php?post_type=vcps_pet&page=' . self::PAGE_SLUG );
 		$link = sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html__( 'Settings', 'vcpahumane-pet-sync' ) );
 		array_unshift( $links, $link );
 		return $links;

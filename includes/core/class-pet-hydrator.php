@@ -57,13 +57,13 @@ class Pet_Hydrator {
 		}
 
 		$post = get_post( $post_id );
-		if ( ! $post || 'pet' !== $post->post_type || 'publish' !== $post->post_status ) {
+		if ( ! $post || 'vcps_pet' !== $post->post_type || 'publish' !== $post->post_status ) {
 			return null;
 		}
 
 		// Prime caches for this single post.
 		update_postmeta_cache( [ $post_id ] );
-		update_object_term_cache( [ $post_id ], 'pet' );
+		update_object_term_cache( [ $post_id ], 'vcps_pet' );
 
 		$entity = self::hydrate( $post, $profile );
 		self::$cache[ $cache_key ] = $entity;
@@ -262,7 +262,7 @@ class Pet_Hydrator {
 		update_postmeta_cache( $ids );
 
 		// 2. Prime all taxonomy term lookups in one query.
-		update_object_term_cache( $ids, 'pet' );
+		update_object_term_cache( $ids, 'vcps_pet' );
 
 		// Hydrate each post — all get_post_meta() and get_the_terms()
 		// calls now hit the WP object cache, zero database queries.
@@ -362,7 +362,7 @@ class Pet_Hydrator {
 			'is_bonded_pair' => self::compute_is_bonded_pair( $id ),
 			'bonded_pair_names' => self::compute_bonded_pair_names( $id ),
 			'special_needs_summary' => self::compute_special_needs_summary( $entity ),
-			'archive_url' => get_post_type_archive_link( 'pet' ) ?: '',
+			'archive_url' => get_post_type_archive_link( 'vcps_pet' ) ?: '',
 			default => null,
 		};
 	}
@@ -509,7 +509,7 @@ class Pet_Hydrator {
 				}
 
 				$local = get_posts( [
-					'post_type'   => 'pet',
+					'post_type'   => 'vcps_pet',
 					'post_status' => 'publish',
 					'meta_key'    => '_pet_ps_id',
 					'meta_value'  => (string) $ps_id,

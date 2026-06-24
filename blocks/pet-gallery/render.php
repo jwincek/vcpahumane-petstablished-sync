@@ -24,7 +24,7 @@ $post_id   = $block->context['postId'] ?? get_the_ID();
 $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
 // Show placeholder in editor when no pet context.
-if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
+if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
 		$wrapper_attributes = get_block_wrapper_attributes( array(
 			'class' => 'pet-gallery pet-gallery--placeholder',

@@ -161,7 +161,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'data-wp-init'        => 'callbacks.init',
 ) );
 
-$archive_url = get_post_type_archive_link( 'pet' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' );
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>

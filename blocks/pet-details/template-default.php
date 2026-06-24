@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$archive_url = get_post_type_archive_link( 'pet' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' );
 
 // Quick facts for tagline.
 $quick_facts = array_filter( array(

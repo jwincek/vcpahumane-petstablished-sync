@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $post_id = $block->context['postId'] ?? get_the_ID();
 
-if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
+if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	return;
 }
 
@@ -25,7 +25,7 @@ if ( ! $pet ) {
 }
 
 $pet_name      = $pet['name'] ?? get_the_title( $post_id );
-$archive_url   = get_post_type_archive_link( 'pet' );
+$archive_url   = get_post_type_archive_link( 'vcps_pet' );
 $home_url      = home_url( '/' );
 $home_label    = $attributes['homeLabel'] ?? __( 'Home', 'vcpahumane-pet-sync' );
 $archive_label = $attributes['archiveLabel'] ?? __( 'Adoptable Pets', 'vcpahumane-pet-sync' );

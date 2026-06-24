@@ -105,14 +105,14 @@ function petstablished_sync_init(): void {
 		}
 
 		$entities   = \Petstablished\Core\Config::get_item( 'entities', 'entities', [] );
-		$taxonomies = array_column( $entities['pet']['taxonomies'] ?? [], 'taxonomy' );
+		$taxonomies = array_column( $entities['vcps_pet']['taxonomies'] ?? [], 'taxonomy' );
 
-		if ( ! $query->is_post_type_archive( 'pet' ) && ! $query->is_tax( $taxonomies ) ) {
+		if ( ! $query->is_post_type_archive( 'vcps_pet' ) && ! $query->is_tax( $taxonomies ) ) {
 			return;
 		}
 
-		$meta_prefix = $entities['pet']['meta_prefix'] ?? '_pet_';
-		$fields      = $entities['pet']['fields'] ?? [];
+		$meta_prefix = $entities['vcps_pet']['meta_prefix'] ?? '_pet_';
+		$fields      = $entities['vcps_pet']['fields'] ?? [];
 		$meta_query  = $query->get( 'meta_query' ) ?: [];
 
 		// Build meta query from URL compat_ params using entity field config.

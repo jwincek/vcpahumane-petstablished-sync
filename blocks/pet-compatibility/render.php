@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $post_id   = $block->context['postId'] ?? get_the_ID();
 $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
-if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
+if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
 		$wrapper_attributes = get_block_wrapper_attributes( array(
 			'class' => 'pet-compat pet-compat--placeholder',
@@ -40,7 +40,7 @@ if ( ! $pet ) {
 	return;
 }
 
-$archive_url = get_post_type_archive_link( 'pet' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' );
 
 // Build compatibility list — each entry has an entity field key and a
 // compat_* URL filter parameter for archive links.

@@ -1,0 +1,20 @@
+# Files excluded from the distributed plugin zip (wp-cli dist-archive / build).
+# These live in the repo but must not ship to WordPress.org.
+
+.git
+.github
+.gitignore
+.distignore
+.wp-env.json
+.DS_Store
+**/.DS_Store
+composer.json
+composer.lock
+package.json
+package-lock.json
+phpcs.xml.dist
+node_modules
+vendor/bin
+migration-scripts
+README.md
+CHANGELOG.md

@@ -1,7 +1,7 @@
 {
   "taxonomies": {
     "pet_status": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Status",
         "plural": "Statuses"
@@ -19,7 +19,7 @@
     },
 
     "pet_animal": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Animal",
         "plural": "Animals"
@@ -31,7 +31,7 @@
     },
 
     "pet_breed": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Breed",
         "plural": "Breeds"
@@ -43,7 +43,7 @@
     },
 
     "pet_age": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Age",
         "plural": "Ages"
@@ -55,7 +55,7 @@
     },
 
     "pet_sex": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Sex",
         "plural": "Sexes"
@@ -67,7 +67,7 @@
     },
 
     "pet_size": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Size",
         "plural": "Sizes"
@@ -79,7 +79,7 @@
     },
 
     "pet_color": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Color",
         "plural": "Colors"
@@ -91,7 +91,7 @@
     },
 
     "pet_coat": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Coat",
         "plural": "Coats"
@@ -103,7 +103,7 @@
     },
 
     "pet_attribute": {
-      "post_types": [ "pet" ],
+      "post_types": [ "vcps_pet" ],
       "labels": {
         "singular": "Attribute",
         "plural": "Attributes"

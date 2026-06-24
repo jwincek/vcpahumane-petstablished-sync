@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $post_id   = $block->context['postId'] ?? get_the_ID();
 $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
-if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
+if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
 		$wrapper_attributes = get_block_wrapper_attributes( array(
 			'class' => 'pet-attributes pet-attributes--placeholder',
@@ -46,7 +46,7 @@ if ( ! $pet ) {
 $taxonomy_map = Petstablished_Helpers::TAXONOMIES;
 
 // Pet archive base URL for filter links.
-$archive_url = get_post_type_archive_link( 'pet' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' );
 
 // Icon mapping — attribute key → icon name in Petstablished_Icons.
 $icon_map = array(

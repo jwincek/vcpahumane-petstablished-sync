@@ -1,7 +1,7 @@
 {
   "entities": {
-    "pet": {
-      "post_type": "pet",
+    "vcps_pet": {
+      "post_type": "vcps_pet",
       "meta_prefix": "_pet_",
 
       "taxonomies": {

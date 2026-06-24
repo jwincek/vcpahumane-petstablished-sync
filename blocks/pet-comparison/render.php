@@ -33,7 +33,7 @@ if ( empty( $comparison_ids ) ) {
 			<?php Petstablished_Icons::render( 'compare-grid', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
 			<h3><?php esc_html_e( 'No pets to compare', 'vcpahumane-pet-sync' ); ?></h3>
 			<p><?php esc_html_e( 'The pets in this comparison link may no longer be available.', 'vcpahumane-pet-sync' ); ?></p>
-			<a href="<?php echo esc_url( get_post_type_archive_link( 'pet' ) ); ?>" class="pet-comparison__browse-btn">
+			<a href="<?php echo esc_url( get_post_type_archive_link( 'vcps_pet' ) ); ?>" class="pet-comparison__browse-btn">
 				<?php esc_html_e( 'Browse Available Pets', 'vcpahumane-pet-sync' ); ?>
 			</a>
 		</div>
@@ -44,7 +44,7 @@ if ( empty( $comparison_ids ) ) {
 
 // Fetch the pets using the comparison hydration profile.
 $pets_query = get_posts( array(
-	'post_type'      => 'pet',
+	'post_type'      => 'vcps_pet',
 	'post__in'       => $comparison_ids,
 	'posts_per_page' => 4,
 	'orderby'        => 'post__in',
@@ -111,7 +111,7 @@ foreach ( $comparison_attrs as $attr ) {
 // Context for Interactivity - include pets data for reactive updates.
 $context = array(
 	'comparisonPets' => $pets,
-	'archiveUrl'     => get_post_type_archive_link( 'pet' ),
+	'archiveUrl'     => get_post_type_archive_link( 'vcps_pet' ),
 );
 
 $wrapper_attributes = get_block_wrapper_attributes( array(
@@ -362,7 +362,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				?>
 			</a>
 		<?php endif; ?>
-		<a href="<?php echo esc_url( get_post_type_archive_link( 'pet' ) ); ?>" class="pet-comparison__back-link">
+		<a href="<?php echo esc_url( get_post_type_archive_link( 'vcps_pet' ) ); ?>" class="pet-comparison__back-link">
 			<?php Petstablished_Icons::render( 'back', array( 'width' => 16, 'height' => 16 ) ); ?>
 			<?php esc_html_e( 'Back to all pets', 'vcpahumane-pet-sync' ); ?>
 		</a>

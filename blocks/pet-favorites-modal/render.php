@@ -50,7 +50,7 @@ wp_enqueue_script_module( 'petstablished-favorites-modal' );
 $favorite_pets = array();
 if ( $favorites ) {
 	$posts = get_posts( array(
-		'post_type'      => 'pet',
+		'post_type'      => 'vcps_pet',
 		'post_status'    => 'publish',
 		'post__in'       => $favorites,
 		'posts_per_page' => $fav_count,
@@ -183,7 +183,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					<p><?php esc_html_e( 'No favorites yet.', 'vcpahumane-pet-sync' ); ?></p>
 					<p class="pet-favorites-modal__empty-hint"><?php esc_html_e( 'Tap the heart on any pet to save them here.', 'vcpahumane-pet-sync' ); ?></p>
 					<a
-						href="<?php echo esc_url( get_post_type_archive_link( 'pet' ) ); ?>"
+						href="<?php echo esc_url( get_post_type_archive_link( 'vcps_pet' ) ); ?>"
 						class="pet-favorites-modal__empty-cta"
 						data-wp-on--click="actions.closeAndNavigate"
 					>

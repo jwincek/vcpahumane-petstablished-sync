@@ -29,13 +29,13 @@ if ( isset( $_GET['compare'] ) && ! empty( $_GET['compare'] ) ) {
 $position    = $attributes['position'] ?? 'bottom';
 $comparison  = Petstablished_Helpers::get_comparison();
 $max_compare = 4;
-$archive_url = get_post_type_archive_link( 'pet' ) ?: home_url( '/pets/' );
+$archive_url = get_post_type_archive_link( 'vcps_pet' ) ?: home_url( '/pets/' );
 
 // Hydrate only the compared pets (not all available pets).
 $compared_pets = array();
 if ( $comparison ) {
 	$posts = get_posts( array(
-		'post_type'      => 'pet',
+		'post_type'      => 'vcps_pet',
 		'post_status'    => 'publish',
 		'post__in'       => $comparison,
 		'posts_per_page' => $max_compare,

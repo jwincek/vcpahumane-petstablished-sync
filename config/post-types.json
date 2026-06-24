@@ -1,6 +1,6 @@
 {
   "post_types": {
-    "pet": {
+    "vcps_pet": {
       "labels": {
         "singular": "Pet",
         "plural": "Pets",

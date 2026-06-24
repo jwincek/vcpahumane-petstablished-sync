@@ -78,7 +78,7 @@ function get_favorites( array $input = [] ): array {
 
 	if ( $favorites ) {
 		$posts = get_posts( [
-			'post_type'      => 'pet',
+			'post_type'      => 'vcps_pet',
 			'post_status'    => 'publish',
 			'post__in'       => $favorites,
 			'posts_per_page' => count( $favorites ),

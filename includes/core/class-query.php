@@ -7,7 +7,7 @@
  * building code stays thin and declarative.
  *
  * Usage:
- *     $result = Query::for( 'pet' )
+ *     $result = Query::for( 'vcps_pet' )
  *         ->status( 'available' )
  *         ->where( 'animal', 'dog' )
  *         ->whereCompat( 'ok_with_dogs', true )

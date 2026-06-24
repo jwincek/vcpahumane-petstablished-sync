@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $post_id = $block->context['postId'] ?? get_the_ID();
 
-if ( ! $post_id || 'pet' !== get_post_type( $post_id ) ) {
+if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	return;
 }
 
