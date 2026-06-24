@@ -36,7 +36,7 @@ This plugin connects to the Petstablished public API to import your shelter's ad
 
 Review Petstablished's terms and privacy policy before use:
 
-* Terms of Service: https://petstablished.com/terms
+* Terms of Service: https://petstablished.com/tos
 * Privacy Policy: https://petstablished.com/privacy
 
 == Installation ==

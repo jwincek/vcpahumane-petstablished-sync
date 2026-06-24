@@ -507,9 +507,10 @@ class Petstablished_Variations {
 	public function enqueue_variation_assets(): void {
 		// Build variation data for JS.
 		$variations_data = array(
-			'simple' => $this->build_simple_variations(),
-			'groups' => $this->build_group_variations(),
-			'source' => 'petsync/pet-data',
+			'simple'           => $this->build_simple_variations(),
+			'groups'           => $this->build_group_variations(),
+			'source'           => 'petsync/pet-data',
+			'placeholderImage' => PETSTABLISHED_SYNC_URL . 'assets/images/pet-placeholder.svg',
 		);
 
 		wp_enqueue_script(

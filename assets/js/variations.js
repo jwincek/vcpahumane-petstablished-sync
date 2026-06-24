@@ -185,7 +185,7 @@
 			'adoption_title': 'Adopt Buddy',
 			'url': '#',
 			'adoption_form_url': '#',
-			'image': 'https://placedog.net/400/300',
+			'image': window.petstablishedVariations?.placeholderImage || '',
 			// Boolean fields
 			'shots_current': 'Yes',
 			'spayed_neutered': 'Yes',
