@@ -536,7 +536,7 @@ class Petstablished_Sync {
 	 * attributes are correctly cleared.
 	 */
 	private function update_attribute_terms( int $post_id, array $data ): void {
-		$config     = \Petstablished\Core\Config::get_path( 'entities', 'entities.pet', [] );
+		$config     = \Petstablished\Core\Config::get_path( 'entities', 'entities.vcps_pet', [] );
 		$attr_map   = $config['attribute_map'] ?? [];
 		$truthy     = $config['attribute_truthy_values'] ?? [ 'yes', 'Yes', '1', 'true' ];
 		$truthy_lc  = array_map( 'strtolower', $truthy );

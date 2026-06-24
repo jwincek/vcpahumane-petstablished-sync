@@ -102,7 +102,7 @@ class Config {
 	 * Get a nested item using dot notation.
 	 *
 	 * @param string $name    Config file name.
-	 * @param string $path    Dot-notation path (e.g., 'entities.pet.fields').
+	 * @param string $path    Dot-notation path (e.g., 'entities.vcps_pet.fields').
 	 * @param mixed  $default Default value if path not found.
 	 * @return mixed The config value or default.
 	 */

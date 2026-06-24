@@ -646,7 +646,7 @@ class Pet_Hydrator {
 	 */
 	private static function get_config(): array {
 		if ( null === self::$entity_config ) {
-			self::$entity_config = Config::get_path( 'entities', 'entities.pet', [] );
+			self::$entity_config = Config::get_path( 'entities', 'entities.vcps_pet', [] );
 		}
 		return self::$entity_config;
 	}
