@@ -409,7 +409,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 								class="pet-slider__hero-thumb <?php echo $index === 0 ? 'is-active' : ''; ?>"
 								data-wp-on--click="actions.goTo"
 								data-wp-class--is-active="state.isDotActive"
-								data-wp-context='<?php echo wp_json_encode( array( 'dotIndex' => $index ) ); ?>'
+								<?php echo wp_interactivity_data_wp_context( array( 'dotIndex' => $index ) ); ?>
 								aria-label="<?php echo esc_attr( sprintf( __( 'View %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 							>
 								<img 

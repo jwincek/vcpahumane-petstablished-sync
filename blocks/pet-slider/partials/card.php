@@ -60,7 +60,7 @@ $badge_pos = $badge_position ?? 'image-top';
 ?>
 <article
 	class="<?php echo esc_attr( $slide_class ); ?>"
-	data-wp-context='<?php echo wp_json_encode( $pet_context ); ?>'
+	<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
 	<?php echo $slide_directives ?? ''; ?>
 >
 	<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-slider__card">

@@ -161,7 +161,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		?>
 			<article 
 				class="pet-comparison__card"
-				data-wp-context='<?php echo wp_json_encode( $pet_context ); ?>'
+				<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
 			>
 				<button
 					type="button"
@@ -244,7 +244,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					?>
 						<th 
 							class="pet-comparison__th-pet"
-							data-wp-context='<?php echo wp_json_encode( $pet_context ); ?>'
+							<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
 						>
 							<?php if ( $show_image && $pet['image'] ) : ?>
 								<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-comparison__th-image-link">
@@ -307,7 +307,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					?>
 						<td 
 							class="pet-comparison__td-actions"
-							data-wp-context='<?php echo wp_json_encode( $pet_context ); ?>'
+							<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
 						>
 							<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-comparison__btn-view">
 								<?php esc_html_e( 'View', 'vcpahumane-pet-sync' ); ?>

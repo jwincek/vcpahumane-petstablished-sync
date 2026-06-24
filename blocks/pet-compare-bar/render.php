@@ -148,14 +148,14 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				$pet_id = $comparison[ $i ] ?? null;
 				$pet    = $pet_id ? ( $compared_pets[ $pet_id ] ?? null ) : null;
 
-				$slot_context = wp_json_encode( array(
-					'slotIndex' => $i,
-					'petId'     => $pet_id ?: 0,
-				) );
+				$slot_context = array(
+						'slotIndex' => $i,
+						'petId'     => $pet_id ?: 0,
+					);
 			?>
 				<div
 					class="pet-compare-bar__slot"
-					data-wp-context='<?php echo $slot_context; ?>'
+					<?php echo wp_interactivity_data_wp_context( $slot_context ); ?>
 					data-wp-class--has-pet="state.slotHasPet"
 				>
 					<div

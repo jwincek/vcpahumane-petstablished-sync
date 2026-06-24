@@ -138,7 +138,7 @@ $adoption_url = $pet['adoption_form_url'] ?? '';
 								class="pet-details__thumb <?php echo $idx === 0 ? 'is-active' : ''; ?>"
 								data-wp-on--click="actions.selectImage"
 								data-wp-class--is-active="state.isActiveThumb"
-								data-wp-context='<?php echo wp_json_encode( array( 'imageIndex' => $idx ) ); ?>'
+								<?php echo wp_interactivity_data_wp_context( array( 'imageIndex' => $idx ) ); ?>
 								role="option"
 								aria-selected="<?php echo $idx === 0 ? 'true' : 'false'; ?>"
 							>

@@ -62,16 +62,16 @@ $filter_special_needs    = $attributes['filterSpecialNeeds'] ?? false;
 $compat_style            = $attributes['compatibilityStyle'] ?? 'chips';
 
 // === URL Parameters (for SSR + bookmarkable URLs) ===
-$search_query = sanitize_text_field( $_GET['pet_search'] ?? '' );
+$search_query = sanitize_text_field( wp_unslash( $_GET['pet_search'] ?? '' ) );
 $paged        = max( 1, absint( $_GET['paged'] ?? 1 ) );
-$current_sort = sanitize_text_field( $_GET['sort'] ?? '' );
+$current_sort = sanitize_text_field( wp_unslash( $_GET['sort'] ?? '' ) );
 
 $url_filters = array(
-	'animal' => sanitize_text_field( $_GET['filter_animal'] ?? '' ),
-	'breed'  => sanitize_text_field( $_GET['filter_breed'] ?? '' ),
-	'age'    => sanitize_text_field( $_GET['filter_age'] ?? '' ),
-	'sex'    => sanitize_text_field( $_GET['filter_sex'] ?? '' ),
-	'size'   => sanitize_text_field( $_GET['filter_size'] ?? '' ),
+	'animal' => sanitize_text_field( wp_unslash( $_GET['filter_animal'] ?? '' ) ),
+	'breed'  => sanitize_text_field( wp_unslash( $_GET['filter_breed'] ?? '' ) ),
+	'age'    => sanitize_text_field( wp_unslash( $_GET['filter_age'] ?? '' ) ),
+	'sex'    => sanitize_text_field( wp_unslash( $_GET['filter_sex'] ?? '' ) ),
+	'size'   => sanitize_text_field( wp_unslash( $_GET['filter_size'] ?? '' ) ),
 );
 
 $url_compat = array(
@@ -243,9 +243,13 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 
 // Context is on an inner element so it gets replaced when the
 // interactivity-router swaps the region's innerHTML on navigation.
+// wp_interactivity_data_wp_context() emits a properly escaped
+// data-wp-context attribute (JSON_HEX_* flags), preventing a single
+// quote in request-derived state (e.g. ?pet_search=') from breaking
+// out of the attribute. Do NOT hand-roll this with wp_json_encode().
 $inner_attributes = sprintf(
-	'data-wp-context=\'%s\' data-wp-init="callbacks.init"',
-	wp_json_encode( $context )
+	'%s data-wp-init="callbacks.init"',
+	wp_interactivity_data_wp_context( $context )
 );
 
 // === Compatibility Filters Config ===
@@ -738,7 +742,7 @@ $filter_config = array(
 			<li
 				class="pet-listing-grid__item<?php echo $is_favorited ? ' is-favorited' : ''; ?>"
 				data-wp-key="pet-<?php echo esc_attr( $pet['id'] ); ?>"
-				data-wp-context='<?php echo wp_json_encode( $pet_context ); ?>'
+				<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
 				data-wp-bind--hidden="!state.isPetVisible"
 				data-wp-class--is-favorited="state.isFavorited"
 				data-wp-class--is-compared="state.isInComparison"
