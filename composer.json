@@ -18,6 +18,7 @@
 	},
 	"scripts": {
 		"lint": "phpcs",
-		"lint:fix": "phpcbf"
+		"lint:fix": "phpcbf",
+		"validate:config": "php bin/validate-config.php"
 	}
 }

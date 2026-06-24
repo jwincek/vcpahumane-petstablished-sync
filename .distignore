@@ -15,6 +15,7 @@ package-lock.json
 phpcs.xml.dist
 node_modules
 vendor/bin
+bin
 migration-scripts
 README.md
 CHANGELOG.md

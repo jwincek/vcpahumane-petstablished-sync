@@ -27,6 +27,22 @@ jobs:
       - name: Run PHPCS
         run: composer lint
 
+  validate-config:
+    name: Config Contract Validator
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Validate config contracts
+        run: php bin/validate-config.php
+
   js-lint:
     name: JS & CSS Lint
     runs-on: ubuntu-latest
