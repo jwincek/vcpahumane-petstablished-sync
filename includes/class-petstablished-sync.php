@@ -373,10 +373,16 @@ class Petstablished_Sync {
 
 		$post_id = $existing ? $existing[0]->ID : 0;
 
+		// Honor Petstablished's "don't show in public search" flag: such pets
+		// are imported as drafts so they never surface on the public wall, in
+		// the publish-only abilities, or in feeds. They re-publish automatically
+		// if the flag is later cleared (it is part of the change-detection hash).
+		$is_private = ! empty( $data['dont_show_in_public_search'] );
+
 		// Prepare post data.
 		$post_data = array(
 			'post_type'    => 'vcps_pet',
-			'post_status'  => 'publish',
+			'post_status'  => $is_private ? 'draft' : 'publish',
 			'post_title'   => sanitize_text_field( $data['name'] ?? 'Unnamed Pet' ),
 			'post_content' => wp_kses_post( $data['description'] ?? '' ),
 		);
@@ -453,19 +459,66 @@ class Petstablished_Sync {
 	}
 
 	/**
-	 * Store the full API response JSON and its hash for this pet.
+	 * The raw Petstablished API keys worth persisting in the stored snapshot.
 	 *
-	 * The stored snapshot enables:
-	 * - Fast hash-based change detection on subsequent syncs.
-	 * - Backfill of newly-mapped fields without re-fetching from the API.
-	 * - Admin-side debugging / "what changed" inspection.
+	 * The /public/pets endpoint returns the full internal record — owner PII,
+	 * euthanasia data, internal notes, GPS coordinates, admin links. We persist
+	 * ONLY the keys the display layer actually reads, so none of that PII is
+	 * retained at rest or reachable through hydration. Derived from config:
+	 *   - every api_field api_key (read by Pet_Hydrator into entity fields),
+	 *   - every attribute_map source key (read by update_attribute_terms()),
+	 * plus the few keys read directly by Pet_Hydrator computed fields.
+	 *
+	 * @return string[] Whitelisted API keys.
+	 */
+	public static function get_retained_api_keys(): array {
+		$config = \Petstablished\Core\Config::get_path( 'entities', 'entities.vcps_pet', [] );
+
+		$keys = array();
+		foreach ( $config['api_fields'] ?? array() as $field ) {
+			if ( ! empty( $field['api_key'] ) ) {
+				$keys[] = $field['api_key'];
+			}
+		}
+		$keys = array_merge( $keys, array_keys( $config['attribute_map'] ?? array() ) );
+
+		// Read straight from the snapshot by Pet_Hydrator compute_* methods:
+		//   images          → compute_image() / compute_gallery()
+		//   name            → compute_gallery() (image alt text)
+		//   id              → compute_bonded_pair_names() (own PS id)
+		//   date_aquired,
+		//   created_at      → compute_is_new() (intake date)
+		// (group_id, grouped_pet_ids, siblings_names are already api_fields.)
+		$computed_sources = array( 'id', 'name', 'images', 'date_aquired', 'created_at' );
+
+		return array_values( array_unique( array_merge( $keys, $computed_sources ) ) );
+	}
+
+	/**
+	 * Reduce a raw API response to the PII-free subset worth storing.
+	 *
+	 * @param array $data Raw API response for a single pet.
+	 * @return array Whitelisted subset.
+	 */
+	public static function normalize_api_response( array $data ): array {
+		return array_intersect_key( $data, array_flip( self::get_retained_api_keys() ) );
+	}
+
+	/**
+	 * Store the normalized API snapshot and its change-detection hash.
+	 *
+	 * Only the display-relevant subset is persisted (see normalize_api_response);
+	 * the third-party PII in the raw response is never stored. The hash is still
+	 * computed over the full response upstream, so any upstream change — even to
+	 * a field we don't store — still triggers a re-sync.
 	 *
 	 * @param int    $post_id Post ID.
 	 * @param array  $data    Raw API response for this pet.
-	 * @param string $hash    Pre-computed SHA-256 hash.
+	 * @param string $hash    Pre-computed SHA-256 hash (of the full response).
 	 */
 	private function store_api_snapshot( int $post_id, array $data, string $hash ): void {
-		update_post_meta( $post_id, '_pet_api_response', wp_json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+		$snapshot = self::normalize_api_response( $data );
+		update_post_meta( $post_id, '_pet_api_response', wp_json_encode( $snapshot, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
 		update_post_meta( $post_id, '_pet_api_hash', $hash );
 	}
 

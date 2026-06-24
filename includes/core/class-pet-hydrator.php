@@ -128,15 +128,11 @@ class Pet_Hydrator {
 			$entity[ $field_name ] = self::cast_api_value( $raw, $field_config );
 		}
 
-		// Registered meta fields (ps_id, api_hash — rarely needed in hydration).
-		$fields = $config['fields'] ?? [];
-		foreach ( $fields as $field_name => $field_config ) {
-			if ( $include_fields && ! in_array( $field_name, $include_fields, true ) ) {
-				continue;
-			}
-			$raw = get_post_meta( $id, $prefix . $field_name, true );
-			$entity[ $field_name ] = self::cast_value( $raw, $field_config );
-		}
+		// The registered `fields` (ps_id, api_response, api_hash) are internal
+		// storage plumbing — the change-detection hash and the raw API snapshot.
+		// They are deliberately NOT surfaced in the entity, so neither the raw
+		// Petstablished response nor internal IDs can leak through hydration
+		// (e.g. via the public-permission get-pet ability).
 
 		// Computed fields.
 		$computed = $config['computed'] ?? [];
@@ -291,45 +287,6 @@ class Pet_Hydrator {
 			'full'    => null, // Include everything.
 			default   => null,
 		};
-	}
-
-	/**
-	 * Cast a raw meta value to the type defined in config.
-	 *
-	 * @param mixed $raw    Raw meta value.
-	 * @param array $config Field config from entities.json.
-	 * @return mixed Cast value.
-	 */
-	private static function cast_value( mixed $raw, array $config ): mixed {
-		$type = $config['type'] ?? 'string';
-
-		return match ( $type ) {
-			'boolean' => self::to_bool( $raw, $config['truthy_values'] ?? null ),
-			'integer' => (int) $raw,
-			'float'   => (float) $raw,
-			'json_array' => is_string( $raw ) && $raw ? ( json_decode( $raw, true ) ?: [] ) : ( is_array( $raw ) ? $raw : [] ),
-			default   => is_string( $raw ) ? $raw : (string) ( $raw ?? $config['default'] ?? '' ),
-		};
-	}
-
-	/**
-	 * Convert a value to boolean, handling WordPress-style truthy strings.
-	 *
-	 * @param mixed      $value         Raw value.
-	 * @param array|null $truthy_values Custom truthy values from config.
-	 * @return bool
-	 */
-	private static function to_bool( mixed $value, ?array $truthy_values = null ): bool {
-		if ( is_bool( $value ) ) {
-			return $value;
-		}
-
-		$check = strtolower( (string) $value );
-		$truthy = $truthy_values
-			? array_map( 'strtolower', $truthy_values )
-			: [ 'yes', '1', 'true' ];
-
-		return in_array( $check, $truthy, true );
 	}
 
 	/**
