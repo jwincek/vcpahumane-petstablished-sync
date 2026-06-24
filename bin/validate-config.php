@@ -20,6 +20,9 @@
  *                     taxonomies / api_field keys.
  *   6. interactivity (heuristic) — actions.X / callbacks.X referenced in
  *                     block render.php are defined in a view.js / store.
+ *   7. hash-coverage — every literal $data['key'] the sync reads is in
+ *                     get_consumed_api_keys(), so the change-detection hash
+ *                     can't silently miss a field (stale-display risk).
  *
  * Usage:
  *   php bin/validate-config.php [--format=human|json]
@@ -275,6 +278,47 @@ $js_keywords = [ 'if', 'for', 'while', 'switch', 'catch', 'function', 'return' ]
 foreach ( $ref_names as $name => $where ) {
 	if ( ! isset( $defined_methods[ $name ] ) && ! in_array( $name, $js_keywords, true ) ) {
 		$add( 'warning', 'interactivity', "actions/callbacks.$name is referenced in " . implode( ', ', array_unique( $where ) ) . ' but no matching method is defined in any store/view.js.' );
+	}
+}
+
+// ── Check 7: change-detection hash covers every consumed API field ───────────
+$sync_src = $read( 'includes/class-petstablished-sync.php' );
+$consumed = [];
+foreach ( (array) ( $entity['api_fields'] ?? [] ) as $cfg ) {
+	if ( ! empty( $cfg['api_key'] ) ) {
+		$consumed[ $cfg['api_key'] ] = true;
+	}
+}
+foreach ( array_keys( (array) ( $entity['attribute_map'] ?? [] ) ) as $k ) {
+	$consumed[ $k ] = true;
+}
+// computed_sources[] literal in get_retained_api_keys().
+if ( preg_match( '/\$computed_sources\s*=\s*array\((.*?)\);/s', $sync_src, $m ) ) {
+	preg_match_all( "/'([a-z_]+)'/", $m[1], $cm );
+	foreach ( $cm[1] as $k ) {
+		$consumed[ $k ] = true;
+	}
+}
+// TAXONOMY_SOURCE_MAP keys.
+if ( preg_match( '/TAXONOMY_SOURCE_MAP\s*=\s*array\((.*?)\);/s', $sync_src, $m ) ) {
+	preg_match_all( "/'([a-z_]+)'\s*=>/", $m[1], $tm );
+	foreach ( $tm[1] as $k ) {
+		$consumed[ $k ] = true;
+	}
+}
+// Extra keys listed inside get_consumed_api_keys() (post/taxonomy drivers).
+if ( preg_match( '/function get_consumed_api_keys\(.*?\n\t\}/s', $sync_src, $m ) ) {
+	preg_match_all( "/'([a-z_]+)'/", $m[0], $em );
+	foreach ( $em[1] as $k ) {
+		$consumed[ $k ] = true;
+	}
+}
+$envelope = [ 'collection', 'pagination' ]; // Response wrapper, not per-pet.
+if ( preg_match_all( "/\\\$data\[\s*'([a-z_]+)'\s*\]/", $sync_src, $dm ) ) {
+	foreach ( array_unique( $dm[1] ) as $key ) {
+		if ( ! in_array( $key, $envelope, true ) && ! isset( $consumed[ $key ] ) ) {
+			$add( 'error', 'hash-coverage', "sync reads \$data['$key'] but it is not in get_consumed_api_keys() — changes to it won't trigger a re-sync (stale-display risk)." );
+		}
 	}
 }
 

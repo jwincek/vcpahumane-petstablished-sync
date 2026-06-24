@@ -417,24 +417,21 @@ class Petstablished_Sync {
 	}
 
 	/**
-	 * Compute a deterministic hash of the API response data.
+	 * Compute a deterministic change-detection hash for a pet.
 	 *
-	 * Strips admin-only fields (link_*, name_and_ps_id_link) that contain
-	 * Petstablished UI chrome and could trigger false-positive changes.
-	 * Sorts keys recursively so identical payloads always hash identically.
+	 * Hashes ONLY the fields the sync consumes (get_consumed_api_keys) — what we
+	 * store, display, or map onto the post/taxonomies — so churn in the ~210
+	 * fields we ignore (owner PII, internal notes, euthanasia data, admin links,
+	 * UI chrome) never triggers a needless re-process, while any change that
+	 * actually affects the pet still does. Keys are sorted recursively so an
+	 * identical payload always hashes identically.
 	 *
 	 * @param array $data Raw API response for a single pet.
 	 * @return string SHA-256 hex hash.
 	 */
 	private function compute_api_hash( array $data ): string {
-		// Remove admin-only fields that don't represent pet data.
-		$filtered = array_filter(
-			$data,
-			fn( $key ) => ! str_starts_with( $key, 'link_' ) && $key !== 'name_and_ps_id_link',
-			ARRAY_FILTER_USE_KEY
-		);
-
-		$normalized = $this->ksort_recursive( $filtered );
+		$relevant   = array_intersect_key( $data, array_flip( self::get_consumed_api_keys() ) );
+		$normalized = $this->ksort_recursive( $relevant );
 		return hash( 'sha256', wp_json_encode( $normalized, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
 	}
 
@@ -505,6 +502,32 @@ class Petstablished_Sync {
 	}
 
 	/**
+	 * Every raw API key the sync actually consumes — for storage/display OR to
+	 * build the post object and taxonomy terms.
+	 *
+	 * This is the change-detection set: the hash is computed over exactly these
+	 * keys, so churn in fields we never use (owner PII, internal notes, admin
+	 * links, euthanasia data, …) cannot trigger a needless re-process, while any
+	 * change to a field that affects the post still does. Superset of the stored
+	 * whitelist; the extras drive post_content / post_status / taxonomy terms but
+	 * aren't persisted. Guarded by the config validator against drift.
+	 *
+	 * @return string[] Consumed API keys.
+	 */
+	public static function get_consumed_api_keys(): array {
+		return array_values( array_unique( array_merge(
+			self::get_retained_api_keys(),              // stored + displayed
+			array_keys( self::TAXONOMY_SOURCE_MAP ),    // taxonomy term sources
+			array(
+				'description',                  // → post_content
+				'dont_show_in_public_search',   // → post_status (draft)
+				'secondary_breed',              // → appended pet_breed term
+			)
+			// name + secondary_color are already in the retained set.
+		) ) );
+	}
+
+	/**
 	 * Store the normalized API snapshot and its change-detection hash.
 	 *
 	 * Only the display-relevant subset is persisted (see normalize_api_response);
@@ -546,20 +569,26 @@ class Petstablished_Sync {
 	 * 3. Boolean attribute terms in pet_attribute taxonomy — replaces meta_query
 	 *    filtering with much faster tax_query filtering.
 	 */
-	private function update_pet_taxonomies( int $post_id, array $data ): void {
-		// Standard taxonomy mappings (API key → taxonomy).
-		$tax_map = array(
-			'status'        => 'pet_status',
-			'animal'        => 'pet_animal',
-			'primary_breed' => 'pet_breed',
-			'age'           => 'pet_age',
-			'sex'           => 'pet_sex',
-			'size'          => 'pet_size',
-			'primary_color' => 'pet_color',
-			'coat_length'   => 'pet_coat',
-		);
+	/**
+	 * Single-value taxonomy mappings: raw API key → taxonomy.
+	 *
+	 * Authoritative source for which API keys feed the standard taxonomies;
+	 * also consumed by get_consumed_api_keys() so the change-detection hash
+	 * covers them.
+	 */
+	private const TAXONOMY_SOURCE_MAP = array(
+		'status'        => 'pet_status',
+		'animal'        => 'pet_animal',
+		'primary_breed' => 'pet_breed',
+		'age'           => 'pet_age',
+		'sex'           => 'pet_sex',
+		'size'          => 'pet_size',
+		'primary_color' => 'pet_color',
+		'coat_length'   => 'pet_coat',
+	);
 
-		foreach ( $tax_map as $api_key => $taxonomy ) {
+	private function update_pet_taxonomies( int $post_id, array $data ): void {
+		foreach ( self::TAXONOMY_SOURCE_MAP as $api_key => $taxonomy ) {
 			$value = $data[ $api_key ] ?? '';
 			if ( $value ) {
 				wp_set_object_terms( $post_id, sanitize_text_field( $value ), $taxonomy );
