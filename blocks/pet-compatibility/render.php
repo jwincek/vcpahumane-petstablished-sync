@@ -23,7 +23,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 			'class' => 'pet-compat pet-compat--placeholder',
 		) );
 		?>
-		<div <?php echo $wrapper_attributes; ?>>
+		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-compat__placeholder">
 				<p><?php esc_html_e( 'Pet Compatibility', 'vcpahumane-pet-sync' ); ?></p>
 				<small><?php esc_html_e( 'Good with dogs, cats, and children. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
@@ -126,7 +126,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class' => 'pet-compat pet-compat--' . sanitize_html_class( $display_style ),
 ) );
 ?>
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<p class="pet-compat__heading"><?php echo esc_html( $heading_text ); ?></p>
 	<ul class="pet-compat__list" role="list">
 	<?php foreach ( $items as $item ) :

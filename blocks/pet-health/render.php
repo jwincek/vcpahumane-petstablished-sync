@@ -25,7 +25,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 			'class' => 'pet-health pet-health--placeholder',
 		) );
 		?>
-		<div <?php echo $wrapper_attributes; ?>>
+		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-health__placeholder">
 				<p><?php esc_html_e( 'Pet Health', 'vcpahumane-pet-sync' ); ?></p>
 				<small><?php esc_html_e( 'Vaccinations, spay/neuter, and more. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
@@ -156,7 +156,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class' => 'pet-health',
 ) );
 ?>
-<ul <?php echo $wrapper_attributes; ?> role="list">
+<ul <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?> role="list">
 	<?php foreach ( $items as $item ) : ?>
 		<li
 			class="pet-health__item pet-health__item--<?php echo esc_attr( $item['status'] ); ?>"

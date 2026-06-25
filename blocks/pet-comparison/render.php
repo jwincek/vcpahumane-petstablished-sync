@@ -28,7 +28,7 @@ if ( empty( $comparison_ids ) ) {
 		'data-wp-interactive' => 'petsync',
 	) );
 	?>
-	<div <?php echo $wrapper_attributes; ?>>
+	<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 		<div class="pet-comparison__empty">
 			<?php Petstablished_Icons::render( 'compare-grid', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
 			<h3><?php esc_html_e( 'No pets to compare', 'vcpahumane-pet-sync' ); ?></h3>
@@ -121,7 +121,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ) );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<!-- Header -->
 	<div class="pet-comparison__header">
 		<h2 class="pet-comparison__title">
@@ -159,7 +159,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		?>
 			<article 
 				class="pet-comparison__card"
-				<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
+				<?php echo wp_interactivity_data_wp_context( $pet_context ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_interactivity_data_wp_context() returns an escaped attribute. */ ?>
 			>
 				<button
 					type="button"
@@ -213,7 +213,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 							aria-pressed="<?php echo $is_favorited ? 'true' : 'false'; ?>"
 						>
 							<?php
-								echo Petstablished_Icons::get_heart_interactive(
+								echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
 									array( 'width' => 18, 'height' => 18 ),
 									"state.isFavorited ? 'currentColor' : 'none'",
 									$is_favorited ? 'currentColor' : 'none'
@@ -242,7 +242,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					?>
 						<th 
 							class="pet-comparison__th-pet"
-							<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
+							<?php echo wp_interactivity_data_wp_context( $pet_context ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_interactivity_data_wp_context() returns an escaped attribute. */ ?>
 						>
 							<?php if ( $show_image && $pet['image'] ) : ?>
 								<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-comparison__th-image-link">
@@ -305,7 +305,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					?>
 						<td 
 							class="pet-comparison__td-actions"
-							<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
+							<?php echo wp_interactivity_data_wp_context( $pet_context ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_interactivity_data_wp_context() returns an escaped attribute. */ ?>
 						>
 							<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-comparison__btn-view">
 								<?php esc_html_e( 'View', 'vcpahumane-pet-sync' ); ?>
@@ -320,7 +320,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 								aria-label="<?php echo esc_attr( sprintf( /* translators: %s: pet name */ __( 'Favorite %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 							>
 								<?php
-									echo Petstablished_Icons::get_heart_interactive(
+									echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
 										array( 'width' => 16, 'height' => 16 ),
 										"state.isFavorited ? 'currentColor' : 'none'",
 										$is_favorited ? 'currentColor' : 'none'

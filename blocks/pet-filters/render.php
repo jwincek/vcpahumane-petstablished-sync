@@ -164,7 +164,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 $archive_url = get_post_type_archive_link( 'vcps_pet' );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<form 
 		class="pet-filters__form" 
 		method="get" 
@@ -339,8 +339,8 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 				<?php
 				printf(
 					/* translators: %d: number of active filters */
-					_n( '%d filter active', '%d filters active', $active_count, 'vcpahumane-pet-sync' ),
-					$active_count
+					esc_html( _n( '%d filter active', '%d filters active', $active_count, 'vcpahumane-pet-sync' ) ),
+					(int) $active_count
 				);
 				?>
 			</p>

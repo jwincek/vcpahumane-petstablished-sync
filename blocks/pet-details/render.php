@@ -36,7 +36,7 @@ if ( ! $has_valid_pet ) {
 		'class' => 'pet-details pet-details--preview',
 	) );
 	?>
-	<article <?php echo $wrapper_attributes; ?>>
+	<article <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 		<div class="pet-details__placeholder">
 			<?php Petstablished_Icons::render( 'paw', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5, 'class' => 'pet-details__placeholder-icon' ) ); ?>
 			<p class="pet-details__placeholder-title"><?php esc_html_e( 'Pet Details', 'vcpahumane-pet-sync' ); ?></p>
@@ -101,7 +101,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ) );
 
 ?>
-<article <?php echo $wrapper_attributes; ?>>
+<article <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<?php
 	// Render InnerBlocks content. Core blocks with block bindings
 	// automatically resolve pet data via the petsync/pet-data source.
@@ -111,6 +111,6 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	// The breadcrumb link now uses a Block Binding on the core/paragraph
 	// 'url' attribute (source: petsync/pet-data, key: archive_url)
 	// instead of the previous href="#pet-archive" str_replace approach.
-	echo $content;
+	echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rendered InnerBlocks content (escaped by WP).
 	?>
 </article>

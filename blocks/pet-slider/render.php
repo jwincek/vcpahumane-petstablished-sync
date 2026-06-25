@@ -244,8 +244,8 @@ $wrapper_attributes = get_block_wrapper_attributes( $extra_attrs );
 $archive_url = get_post_type_archive_link( 'vcps_pet' );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
-	<style><?php echo implode( ' ', $scoped_styles ); ?></style>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
+	<style><?php echo implode( ' ', $scoped_styles ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS values pre-escaped with absint()/esc_attr(). */ ?></style>
 
 	<?php if ( $use_cards_layout ) : ?>
 		<!-- CARDS MODE: Static cards for 1-3 similar pets -->
@@ -325,7 +325,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 									data-wp-class--is-active="state.isCurrentPetFavorited"
 									aria-label="<?php esc_attr_e( 'Add to favorites', 'vcpahumane-pet-sync' ); ?>"
 								>
-									<?php echo Petstablished_Icons::get_heart_interactive( array( 'width' => 24, 'height' => 24 ), "state.isCurrentPetFavorited ? 'currentColor' : 'none'" ); ?>
+									<?php echo Petstablished_Icons::get_heart_interactive( array( 'width' => 24, 'height' => 24 ), "state.isCurrentPetFavorited ? 'currentColor' : 'none'" ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */ ?>
 								</button>
 								<button
 									type="button"
@@ -409,7 +409,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 								class="pet-slider__hero-thumb <?php echo $index === 0 ? 'is-active' : ''; ?>"
 								data-wp-on--click="actions.goTo"
 								data-wp-class--is-active="state.isDotActive"
-								<?php echo wp_interactivity_data_wp_context( array( 'dotIndex' => $index ) ); ?>
+								<?php echo wp_interactivity_data_wp_context( array( 'dotIndex' => $index ) ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_interactivity_data_wp_context() returns an escaped attribute. */ ?>
 								aria-label="<?php echo esc_attr( sprintf( /* translators: %s: pet name */ __( 'View %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 							>
 								<img 

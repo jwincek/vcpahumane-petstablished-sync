@@ -30,7 +30,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 			'class' => 'pet-gallery pet-gallery--placeholder',
 		) );
 		?>
-		<div <?php echo $wrapper_attributes; ?>>
+		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-gallery__placeholder">
 				<?php Petstablished_Icons::render( 'image-placeholder', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
 				<p><?php esc_html_e( 'Pet Gallery', 'vcpahumane-pet-sync' ); ?></p>
@@ -104,7 +104,7 @@ if ( ! $has_featured && ! $has_thumbnails ) {
 			'class' => 'pet-gallery pet-gallery--placeholder',
 		) );
 		?>
-		<div <?php echo $wrapper_attributes; ?>>
+		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-gallery__placeholder">
 				<?php Petstablished_Icons::render( 'image-placeholder', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
 				<p><?php esc_html_e( 'No photos available', 'vcpahumane-pet-sync' ); ?></p>
@@ -181,7 +181,7 @@ if ( ! $is_editor ) {
 $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 
 	<?php if ( ! empty( $overlay_badges ) ) : ?>
 		<div class="pet-gallery__status-bar">

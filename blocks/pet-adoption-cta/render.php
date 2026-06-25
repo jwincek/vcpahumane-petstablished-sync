@@ -23,7 +23,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 			'class' => 'pet-adoption-cta pet-adoption-cta--placeholder',
 		) );
 		?>
-		<div <?php echo $wrapper_attributes; ?>>
+		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-adoption-cta__placeholder-inner">
 				<p><?php esc_html_e( 'Pet Adoption CTA', 'vcpahumane-pet-sync' ); ?></p>
 				<small><?php esc_html_e( 'Adoption fee and application action. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
@@ -38,6 +38,6 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class' => 'pet-adoption-cta',
 ) );
 ?>
-<section <?php echo $wrapper_attributes; ?>>
+<section <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- InnerBlocks rendered output. ?>
 </section>

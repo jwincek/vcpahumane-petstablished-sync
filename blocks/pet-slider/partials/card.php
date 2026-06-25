@@ -60,8 +60,8 @@ $badge_pos = $badge_position ?? 'image-top';
 ?>
 <article
 	class="<?php echo esc_attr( $slide_class ); ?>"
-	<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
-	<?php echo $slide_directives ?? ''; ?>
+	<?php echo wp_interactivity_data_wp_context( $pet_context ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_interactivity_data_wp_context() returns an escaped attribute. */ ?>
+	<?php echo $slide_directives ?? ''; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static Interactivity directive string. */ ?>
 >
 	<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-slider__card">
 		<div class="pet-slider__image-wrapper">
@@ -147,7 +147,7 @@ $badge_pos = $badge_position ?? 'image-top';
 				data-wp-class--is-active="state.isFavorited"
 				aria-label="<?php esc_attr_e( 'Add to favorites', 'vcpahumane-pet-sync' ); ?>"
 			>
-				<?php echo Petstablished_Icons::get_heart_interactive( array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php echo Petstablished_Icons::get_heart_interactive( array( 'width' => 18, 'height' => 18 ) ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */ ?>
 			</button>
 			<button
 				type="button"

@@ -25,7 +25,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'data-wp-init'        => 'callbacks.init',
 ) );
 ?>
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<a
 		href="#"
 		class="back-to-top__button"

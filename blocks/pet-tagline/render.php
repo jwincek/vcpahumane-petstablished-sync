@@ -68,7 +68,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class' => 'pet-details__tagline',
 ) );
 ?>
-<p <?php echo $wrapper_attributes; ?>>
+<p <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<?php
 	$parts = array();
 	foreach ( $items as $item ) {

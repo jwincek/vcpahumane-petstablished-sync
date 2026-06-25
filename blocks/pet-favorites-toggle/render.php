@@ -21,14 +21,14 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ) );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<button
 		type="button"
 		class="pet-favorites-toggle__btn"
 		data-wp-on--click="actions.openFavoritesModal"
 		aria-label="<?php esc_attr_e( 'View favorites', 'vcpahumane-pet-sync' ); ?>"
 	>
-		<?php echo Petstablished_Icons::get_heart_interactive( 
+		<?php echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
 			array( 'width' => 20, 'height' => 20, 'class' => 'pet-favorites-toggle__icon' ), 
 			"petstablished::state.favoritesCount > 0 ? 'currentColor' : 'none'" 
 		); ?>

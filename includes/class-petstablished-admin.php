@@ -201,7 +201,7 @@ class Petstablished_Admin {
 			'<input type="number" name="%s[batch_size]" value="%d" min="1" max="50" class="small-text">
 			<p class="description">%s</p>',
 			esc_attr( self::OPTION_NAME ),
-			$settings['batch_size'],
+			(int) $settings['batch_size'],
 			esc_html__( 'Number of pets to process per batch (1-50). Lower values for shared hosting.', 'vcpahumane-pet-sync' )
 		);
 	}
@@ -269,7 +269,7 @@ class Petstablished_Admin {
 					$total     = ( $pet_count->publish ?? 0 ) + ( $pet_count->draft ?? 0 );
 					?>
 					<span id="pet-count" style="margin-left: 10px;">
-						<?php printf( /* translators: %d: number of pets */ esc_html__( '%d pets in database', 'vcpahumane-pet-sync' ), $total ); ?>
+						<?php printf( /* translators: %d: number of pets */ esc_html__( '%d pets in database', 'vcpahumane-pet-sync' ), (int) $total ); ?>
 					</span>
 				</p>
 
@@ -320,7 +320,7 @@ class Petstablished_Admin {
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 						body: new URLSearchParams({
 							action: 'petstablished_start_sync',
-							nonce: '<?php echo wp_create_nonce( 'petstablished_sync' ); ?>'
+							nonce: '<?php echo esc_js( wp_create_nonce( 'petstablished_sync' ) ); ?>'
 						})
 					});
 					const startData = await startRes.json();
@@ -359,7 +359,7 @@ class Petstablished_Admin {
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 					body: new URLSearchParams({
 						action: 'petstablished_process_batch',
-						nonce: '<?php echo wp_create_nonce( 'petstablished_sync' ); ?>',
+						nonce: '<?php echo esc_js( wp_create_nonce( 'petstablished_sync' ) ); ?>',
 						offset: processed,
 						limit: batchSize
 					})
@@ -388,7 +388,7 @@ class Petstablished_Admin {
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 					body: new URLSearchParams({
 						action: 'petstablished_finish_sync',
-						nonce: '<?php echo wp_create_nonce( 'petstablished_sync' ); ?>'
+						nonce: '<?php echo esc_js( wp_create_nonce( 'petstablished_sync' ) ); ?>'
 					})
 				});
 				const data = await res.json();
@@ -525,7 +525,7 @@ class Petstablished_Admin {
 									<?php echo esc_html( wp_date( 'M j, Y g:i a', $started ) ); ?>
 									<br><small><?php
 										/* translators: %d: duration in seconds. */
-										printf( esc_html__( '%ds', 'vcpahumane-pet-sync' ), $duration );
+										printf( esc_html__( '%ds', 'vcpahumane-pet-sync' ), (int) $duration );
 									?></small>
 								</td>
 								<td class="col-trigger">
@@ -566,7 +566,7 @@ class Petstablished_Admin {
 										<dt><?php esc_html_e( 'Duration', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php
 											/* translators: %d: duration in seconds. */
-											printf( esc_html__( '%d seconds', 'vcpahumane-pet-sync' ), $duration );
+											printf( esc_html__( '%d seconds', 'vcpahumane-pet-sync' ), (int) $duration );
 										?></dd>
 										<dt><?php esc_html_e( 'Created', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo (int) ( $stats['created'] ?? 0 ); ?></dd>

@@ -368,8 +368,8 @@ $filter_config = array(
 );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
-<div class="pet-listing-grid__inner" <?php echo $inner_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
+<div class="pet-listing-grid__inner" <?php echo $inner_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from wp_interactivity_data_wp_context() plus static directives. */ ?>>
 	<?php if ( $show_filters || $show_search || $show_favorites_toggle ) :
 		// Count active filters for the toggle badge.
 		$active_filter_count = count( array_filter( $url_filters ) )
@@ -525,7 +525,7 @@ $filter_config = array(
 								printf(
 									/* translators: %d: number of additional filter options */
 									esc_html__( 'More Filters (%d)', 'vcpahumane-pet-sync' ),
-									$visible_compat_count
+									(int) $visible_compat_count
 								);
 								?>
 								<?php if ( $active_compat_count > 0 ) : ?>
@@ -550,7 +550,7 @@ $filter_config = array(
 											aria-pressed="<?php echo $url_compat[ $key ] ? 'true' : 'false'; ?>"
 											data-wp-bind--aria-pressed="context.compatFilters.<?php echo esc_attr( $key ); ?>"
 										>
-											<span class="pet-listing-grid__compat-chip-icon" aria-hidden="true"><?php echo $filter['icon']; ?></span>
+											<span class="pet-listing-grid__compat-chip-icon" aria-hidden="true"><?php echo $filter['icon']; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static plugin SVG from Petstablished_Icons. */ ?></span>
 											<span class="pet-listing-grid__compat-chip-label"><?php echo esc_html( $filter['label'] ); ?></span>
 											<span class="pet-listing-grid__compat-chip-count">(<?php echo esc_html( $count ); ?>)</span>
 										</button>
@@ -563,7 +563,7 @@ $filter_config = array(
 												data-compat-key="<?php echo esc_attr( $key ); ?>"
 												<?php checked( $url_compat[ $key ] ); ?>
 											>
-											<span class="pet-listing-grid__compat-checkbox-icon" aria-hidden="true"><?php echo $filter['icon']; ?></span>
+											<span class="pet-listing-grid__compat-checkbox-icon" aria-hidden="true"><?php echo $filter['icon']; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static plugin SVG from Petstablished_Icons. */ ?></span>
 											<span class="pet-listing-grid__compat-checkbox-label"><?php echo esc_html( $filter['label'] ); ?></span>
 											<span class="pet-listing-grid__compat-checkbox-count">(<?php echo esc_html( $count ); ?>)</span>
 										</label>
@@ -614,13 +614,13 @@ $filter_config = array(
 					printf(
 						/* translators: 1: count, 2: search query */
 						esc_html( _n( '%1$d result for &ldquo;%2$s&rdquo;', '%1$d results for &ldquo;%2$s&rdquo;', $total, 'vcpahumane-pet-sync' ) ),
-						$total,
+						(int) $total,
 						esc_html( $search_query )
 					);
 				} else {
 					printf(
 						esc_html( /* translators: %d: number of pets */ _n( '%d pet', '%d pets', $total, 'vcpahumane-pet-sync' ) ),
-						$total
+						(int) $total
 					);
 				}
 				?>
@@ -742,7 +742,7 @@ $filter_config = array(
 			<li
 				class="pet-listing-grid__item<?php echo $is_favorited ? ' is-favorited' : ''; ?>"
 				data-wp-key="pet-<?php echo esc_attr( $pet['id'] ); ?>"
-				<?php echo wp_interactivity_data_wp_context( $pet_context ); ?>
+				<?php echo wp_interactivity_data_wp_context( $pet_context ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_interactivity_data_wp_context() returns an escaped attribute. */ ?>
 				data-wp-bind--hidden="!state.isPetVisible"
 				data-wp-class--is-favorited="state.isFavorited"
 				data-wp-class--is-compared="state.isInComparison"
@@ -865,7 +865,7 @@ $filter_config = array(
 								aria-label="<?php esc_attr_e( 'Toggle favorite', 'vcpahumane-pet-sync' ); ?>"
 							>
 								<?php
-								echo Petstablished_Icons::get_heart_interactive(
+								echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
 									array(),
 									"state.isFavorited ? 'currentColor' : 'none'",
 									$is_favorited ? 'currentColor' : 'none'

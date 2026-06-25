@@ -25,7 +25,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 			'class' => 'pet-attributes pet-attributes--placeholder',
 		) );
 		?>
-		<div <?php echo $wrapper_attributes; ?>>
+		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-attributes__placeholder">
 				<p><?php esc_html_e( 'Pet Attributes', 'vcpahumane-pet-sync' ); ?></p>
 				<small><?php esc_html_e( 'Breed, age, size, and more. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
@@ -130,7 +130,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class' => 'pet-attributes',
 ) );
 ?>
-<dl <?php echo $wrapper_attributes; ?>>
+<dl <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<?php foreach ( $items as $item ) : ?>
 		<div class="pet-attributes__item">
 			<dt class="pet-attributes__label">

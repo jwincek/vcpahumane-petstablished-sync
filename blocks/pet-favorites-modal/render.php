@@ -98,7 +98,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ) );
 ?>
 
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 
 	<!-- ─── Floating trigger button ─── -->
 	<button
@@ -128,7 +128,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 			data-wp-text="petstablished::state.favorites.length"
 			data-wp-watch="callbacks.syncBadgeVisibility"
 			<?php echo $fav_count === 0 ? 'hidden' : ''; ?>
-		><?php echo $fav_count ?: ''; ?></span>
+		><?php echo esc_html( $fav_count ?: '' ); ?></span>
 	</button>
 
 	<!-- ─── Modal overlay ─── -->
@@ -154,7 +154,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					<?php esc_html_e( 'Favorites', 'vcpahumane-pet-sync' ); ?>
 					<span class="pet-favorites-modal__count">(<span
 						data-wp-text="petstablished::state.favorites.length"
-					><?php echo $fav_count; ?></span>)</span>
+					><?php echo (int) $fav_count; ?></span>)</span>
 				</h2>
 				<button
 					type="button"

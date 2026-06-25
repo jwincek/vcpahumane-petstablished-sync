@@ -47,7 +47,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ) );
 ?>
 
-<article <?php echo $wrapper_attributes; ?>>
+<article <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-card__link">
 		<?php if ( $pet['image'] ) : ?>
 			<img 
@@ -88,7 +88,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					data-wp-bind--aria-pressed="state.isFavorited"
 					data-wp-bind--aria-label="state.favoriteLabel"
 				>
-					<?php echo Petstablished_Icons::get_heart_interactive(); ?>
+					<?php echo Petstablished_Icons::get_heart_interactive(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */ ?>
 					<span class="screen-reader-text"><?php esc_html_e( 'Favorite', 'vcpahumane-pet-sync' ); ?></span>
 				</button>
 			<?php endif; ?>

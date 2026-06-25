@@ -28,7 +28,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 			'class' => 'pet-actions pet-actions--placeholder',
 		) );
 		?>
-		<div <?php echo $wrapper_attributes; ?>>
+		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-actions__placeholder">
 				<?php Petstablished_Icons::render( 'heart', array( 'width' => 24, 'height' => 24, 'stroke-width' => 1.5 ) ); ?>
 				<p><?php esc_html_e( 'Pet Actions', 'vcpahumane-pet-sync' ); ?></p>
@@ -86,7 +86,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'data-wp-interactive' => 'petsync',
 ) );
 ?>
-<div <?php echo $wrapper_attributes; ?>>
+<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 
 	<?php if ( $show_favorite ) : ?>
 	<button
@@ -104,7 +104,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 			$pet_name
 		) ); ?>"
 	>
-		<?php echo Petstablished_Icons::get_heart_interactive(); ?>
+		<?php echo Petstablished_Icons::get_heart_interactive(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */ ?>
 		<span class="pet-actions__label" data-wp-text="state.favoriteButtonText">
 			<?php echo $is_favorited
 				? esc_html__( 'Unfavorite', 'vcpahumane-pet-sync' )

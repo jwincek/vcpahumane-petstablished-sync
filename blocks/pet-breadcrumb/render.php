@@ -35,7 +35,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'class' => 'pet-details__breadcrumb',
 ) );
 ?>
-<nav <?php echo $wrapper_attributes; ?> aria-label="<?php esc_attr_e( 'Breadcrumb', 'vcpahumane-pet-sync' ); ?>">
+<nav <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?> aria-label="<?php esc_attr_e( 'Breadcrumb', 'vcpahumane-pet-sync' ); ?>">
 	<a href="<?php echo esc_url( $home_url ); ?>" class="pet-details__breadcrumb-item">
 		<?php echo esc_html( $home_label ); ?>
 	</a>

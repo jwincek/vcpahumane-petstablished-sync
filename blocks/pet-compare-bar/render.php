@@ -100,7 +100,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 ) );
 ?>
 
-<aside <?php echo $wrapper_attributes; ?>>
+<aside <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<!-- Collapsed pill — visible when bar is collapsed -->
 	<button
 		type="button"
@@ -113,7 +113,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		<span
 			class="pet-compare-bar__pill-count"
 			data-wp-text="petstablished::state.comparisonCount"
-		><?php echo count( $comparison ); ?></span>
+		><?php echo (int) count( $comparison ); ?></span>
 	</button>
 
 	<!-- Expanded bar — the full interface -->
@@ -121,7 +121,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		<div class="pet-compare-bar__header">
 			<span class="pet-compare-bar__label">
 				<?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?>
-				(<span data-wp-text="petstablished::state.comparisonCount"><?php echo count( $comparison ); ?></span>/<?php echo $max_compare; ?>)
+				(<span data-wp-text="petstablished::state.comparisonCount"><?php echo (int) count( $comparison ); ?></span>/<?php echo (int) $max_compare; ?>)
 			</span>
 			<button
 				type="button"
@@ -155,7 +155,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 			?>
 				<div
 					class="pet-compare-bar__slot"
-					<?php echo wp_interactivity_data_wp_context( $slot_context ); ?>
+					<?php echo wp_interactivity_data_wp_context( $slot_context ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_interactivity_data_wp_context() returns an escaped attribute. */ ?>
 					data-wp-class--has-pet="state.slotHasPet"
 				>
 					<div
