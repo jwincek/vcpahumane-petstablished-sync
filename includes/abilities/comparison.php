@@ -10,6 +10,10 @@ declare( strict_types = 1 );
 
 namespace Petstablished\Abilities\Comparison;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Petstablished\Core\Pet_Hydrator;
 
 /**

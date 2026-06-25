@@ -165,7 +165,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					type="button"
 					class="pet-comparison__card-remove"
 					data-wp-on--click="actions.removeAndRefresh"
-					aria-label="<?php echo esc_attr( sprintf( __( 'Remove %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
+					aria-label="<?php echo esc_attr( sprintf( /* translators: %s: pet name */ __( 'Remove %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 				>
 					<?php Petstablished_Icons::render( 'x', array( 'width' => 16, 'height' => 16 ) ); ?>
 				</button>
@@ -248,7 +248,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 								<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-comparison__th-image-link">
 									<img 
 										src="<?php echo esc_url( $pet['image'] ); ?>" 
-										alt="<?php echo esc_attr( sprintf( __( 'Photo of %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
+										alt="<?php echo esc_attr( sprintf( /* translators: %s: pet name */ __( 'Photo of %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 										class="pet-comparison__th-image"
 									>
 								</a>
@@ -262,7 +262,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 								type="button"
 								class="pet-comparison__th-remove"
 								data-wp-on--click="actions.removeAndRefresh"
-								aria-label="<?php echo esc_attr( sprintf( __( 'Remove %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: %s: pet name */ __( 'Remove %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 							>
 								<?php Petstablished_Icons::render( 'x', array( 'width' => 12, 'height' => 12, 'stroke-width' => 2.5 ) ); ?>
 							</button>
@@ -317,7 +317,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 								data-wp-bind--aria-pressed="state.isFavorited"
 								data-wp-class--is-favorited="state.isFavorited"
 								aria-pressed="<?php echo $is_favorited ? 'true' : 'false'; ?>"
-								aria-label="<?php echo esc_attr( sprintf( __( 'Favorite %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: %s: pet name */ __( 'Favorite %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 							>
 								<?php
 									echo Petstablished_Icons::get_heart_interactive(

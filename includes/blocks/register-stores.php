@@ -15,6 +15,10 @@ declare( strict_types = 1 );
 
 namespace Petstablished\Blocks;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Register all interactivity stores and config.
  */

@@ -389,6 +389,6 @@ class Petstablished_Helpers {
 			}
 		}
 
-		return $items ? sprintf( __( 'Good with %s', 'vcpahumane-pet-sync' ), implode( ', ', $items ) ) : '';
+		return $items ? sprintf( /* translators: %s: comma-separated compatibility list */ __( 'Good with %s', 'vcpahumane-pet-sync' ), implode( ', ', $items ) ) : '';
 	}
 }

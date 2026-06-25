@@ -192,7 +192,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 							data-wp-on--click="actions.removeFromSlot"
 							data-wp-bind--aria-label="state.slotRemoveLabel"
 							data-wp-bind--hidden="!state.slotHasPet"
-							aria-label="<?php echo $pet ? esc_attr( sprintf( __( 'Remove %s from comparison', 'vcpahumane-pet-sync' ), $pet['name'] ) ) : ''; ?>"
+							aria-label="<?php echo $pet ? esc_attr( sprintf( /* translators: %s: pet name */ __( 'Remove %s from comparison', 'vcpahumane-pet-sync' ), $pet['name'] ) ) : ''; ?>"
 							<?php echo $pet ? '' : 'hidden'; ?>
 						><?php Petstablished_Icons::render( 'x', array( 'width' => 10, 'height' => 10 ) ); ?></button>
 

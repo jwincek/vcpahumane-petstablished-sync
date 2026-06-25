@@ -99,8 +99,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		aria-pressed="<?php echo $is_favorited ? 'true' : 'false'; ?>"
 		aria-label="<?php echo esc_attr( sprintf(
 			$is_favorited
-				? __( 'Unfavorite %s', 'vcpahumane-pet-sync' )
-				: __( 'Favorite %s', 'vcpahumane-pet-sync' ),
+				? /* translators: %s: pet name */ __( 'Unfavorite %s', 'vcpahumane-pet-sync' )
+				: /* translators: %s: pet name */ __( 'Favorite %s', 'vcpahumane-pet-sync' ),
 			$pet_name
 		) ); ?>"
 	>

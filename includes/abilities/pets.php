@@ -14,6 +14,10 @@ declare( strict_types = 1 );
 
 namespace Petstablished\Abilities\Pets;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Petstablished\Core\Pet_Hydrator;
 use Petstablished\Core\Query;
 use WP_Error;

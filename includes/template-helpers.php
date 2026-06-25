@@ -12,6 +12,10 @@
 
 declare( strict_types = 1 );
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Retrieve a hydrated pet entity by post ID.
  *

@@ -619,7 +619,7 @@ $filter_config = array(
 					);
 				} else {
 					printf(
-						esc_html( _n( '%d pet', '%d pets', $total, 'vcpahumane-pet-sync' ) ),
+						esc_html( /* translators: %d: number of pets */ _n( '%d pet', '%d pets', $total, 'vcpahumane-pet-sync' ) ),
 						$total
 					);
 				}
@@ -676,7 +676,7 @@ $filter_config = array(
 		$active_chips[] = array(
 			'type'  => 'search',
 			'key'   => 'search',
-			'label' => sprintf( __( 'Search: "%s"', 'vcpahumane-pet-sync' ), $search_query ),
+			'label' => sprintf( /* translators: %s: search query */ __( 'Search: "%s"', 'vcpahumane-pet-sync' ), $search_query ),
 		);
 	}
 
@@ -691,7 +691,7 @@ $filter_config = array(
 					data-filter-key="<?php echo esc_attr( $chip['key'] ); ?>"
 					data-wp-on--click="actions.removeFilter"
 					role="listitem"
-					aria-label="<?php echo esc_attr( sprintf( __( 'Remove filter: %s', 'vcpahumane-pet-sync' ), $chip['label'] ) ); ?>"
+					aria-label="<?php echo esc_attr( sprintf( /* translators: %s: active filter label */ __( 'Remove filter: %s', 'vcpahumane-pet-sync' ), $chip['label'] ) ); ?>"
 				>
 					<span class="pet-listing-grid__filter-chip-label"><?php echo esc_html( $chip['label'] ); ?></span>
 					<span class="pet-listing-grid__filter-chip-remove" aria-hidden="true">&times;</span>

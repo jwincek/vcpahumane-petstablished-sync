@@ -350,7 +350,7 @@ class Petstablished_Blocks {
 				'key'    => $key,
 				'type'   => 'taxonomy',
 				'source' => 'petsync/pet-data',
-				'desc'   => sprintf( __( 'Pet %s', 'vcpahumane-pet-sync' ), ucfirst( $key ) ),
+				'desc'   => sprintf( /* translators: %s: pet field name */ __( 'Pet %s', 'vcpahumane-pet-sync' ), ucfirst( $key ) ),
 			);
 		}
 

@@ -306,8 +306,8 @@ class Pet_Hydrator {
 			'url' => get_permalink( $id ),
 			'tagline' => self::compute_tagline( $entity ),
 			'compatibility' => self::compute_compatibility( $entity ),
-			'story_title' => sprintf( __( 'Meet %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
-			'adoption_title' => sprintf( __( 'Adopt %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
+			'story_title' => sprintf( /* translators: %s: pet name */ __( 'Meet %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
+			'adoption_title' => sprintf( /* translators: %s: pet name */ __( 'Adopt %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
 			'adoption_fee_formatted' => self::compute_formatted_fee( $entity ),
 			'has_adoption_info' => ! empty( $entity['adoption_fee'] ) || ! empty( $entity['adoption_form_url'] ),
 			'gallery' => self::compute_gallery( $id ),
@@ -403,7 +403,7 @@ class Pet_Hydrator {
 		}
 
 		return $items
-			? sprintf( __( 'Good with %s', 'vcpahumane-pet-sync' ), implode( ', ', $items ) )
+			? sprintf( /* translators: %s: comma-separated compatibility list */ __( 'Good with %s', 'vcpahumane-pet-sync' ), implode( ', ', $items ) )
 			: '';
 	}
 
@@ -520,7 +520,7 @@ class Pet_Hydrator {
 
 		$detail = trim( $entity['special_needs_detail'] ?? '' );
 		if ( $detail ) {
-			return sprintf( __( 'Special Needs: %s', 'vcpahumane-pet-sync' ), $detail );
+			return sprintf( /* translators: %s: special needs detail */ __( 'Special Needs: %s', 'vcpahumane-pet-sync' ), $detail );
 		}
 
 		return __( 'Special Needs', 'vcpahumane-pet-sync' );

@@ -410,7 +410,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 								data-wp-on--click="actions.goTo"
 								data-wp-class--is-active="state.isDotActive"
 								<?php echo wp_interactivity_data_wp_context( array( 'dotIndex' => $index ) ); ?>
-								aria-label="<?php echo esc_attr( sprintf( __( 'View %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: %s: pet name */ __( 'View %s', 'vcpahumane-pet-sync' ), $pet['name'] ) ); ?>"
 							>
 								<img 
 									src="<?php echo esc_url( $pet['thumb'] ); ?>" 

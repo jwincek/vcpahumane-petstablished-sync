@@ -153,7 +153,7 @@ class Petstablished_REST {
 		if ( ! $ability ) {
 			return new \WP_Error(
 				'rest_ability_not_found',
-				sprintf( __( 'Ability "%s" is not registered.', 'vcpahumane-pet-sync' ), $name ),
+				sprintf( /* translators: %s: ability name */ __( 'Ability "%s" is not registered.', 'vcpahumane-pet-sync' ), $name ),
 				[ 'status' => 404 ]
 			);
 		}

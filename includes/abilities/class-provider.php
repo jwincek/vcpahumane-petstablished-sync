@@ -107,9 +107,12 @@ class Provider {
 
 		$permission_callback = self::resolve_permission( $config['permission'] ?? 'public' );
 
+		// Ability label/description come from abilities.json (dynamic), so they
+		// can't be wrapped in __() — the string extractor only sees literals,
+		// and a non-literal __() call yields no POT entry anyway.
 		$args = [
-			'label'               => __( $config['label'] ?? $name, 'vcpahumane-pet-sync' ),
-			'description'         => __( $config['description'] ?? '', 'vcpahumane-pet-sync' ),
+			'label'               => $config['label'] ?? $name,
+			'description'         => $config['description'] ?? '',
 			'category'            => $config['category'] ?? 'pets',
 			'execute_callback'    => $execute_callback,
 			'permission_callback' => $permission_callback,

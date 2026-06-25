@@ -269,7 +269,7 @@ class Petstablished_Admin {
 					$total     = ( $pet_count->publish ?? 0 ) + ( $pet_count->draft ?? 0 );
 					?>
 					<span id="pet-count" style="margin-left: 10px;">
-						<?php printf( esc_html__( '%d pets in database', 'vcpahumane-pet-sync' ), $total ); ?>
+						<?php printf( /* translators: %d: number of pets */ esc_html__( '%d pets in database', 'vcpahumane-pet-sync' ), $total ); ?>
 					</span>
 				</p>
 

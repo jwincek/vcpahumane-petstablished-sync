@@ -10,6 +10,10 @@ declare( strict_types = 1 );
 
 namespace Petstablished\Abilities\Favorites;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Petstablished\Core\Pet_Hydrator;
 
 /**
