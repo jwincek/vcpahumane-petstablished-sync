@@ -25,7 +25,7 @@
  *   UNSAFE: data-wp-bind--hidden="!state.isCardFavorited"
  *           SSR: !null → true → hidden on first render! ✗
  *
- * For counts and text, use petstablished::state.favorites.length
+ * For counts and text, use petsync::state.favorites.length
  * which the SSR evaluates via the array .length handler (6.8+).
  *
  * @package Petstablished_Sync
@@ -120,12 +120,12 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 			<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
 		</svg>
 		<?php
-		// Badge: uses petstablished::state.favorites.length which the
+		// Badge: uses petsync::state.favorites.length which the
 		// SSR evaluates correctly (array .length → count()).
 		?>
 		<span
 			class="pet-favorites-modal__trigger-count"
-			data-wp-text="petstablished::state.favorites.length"
+			data-wp-text="petsync::state.favorites.length"
 			data-wp-watch="callbacks.syncBadgeVisibility"
 			<?php echo $fav_count === 0 ? 'hidden' : ''; ?>
 		><?php echo esc_html( $fav_count ?: '' ); ?></span>
@@ -153,7 +153,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					</svg>
 					<?php esc_html_e( 'Favorites', 'vcpahumane-pet-sync' ); ?>
 					<span class="pet-favorites-modal__count">(<span
-						data-wp-text="petstablished::state.favorites.length"
+						data-wp-text="petsync::state.favorites.length"
 					><?php echo (int) $fav_count; ?></span>)</span>
 				</h2>
 				<button

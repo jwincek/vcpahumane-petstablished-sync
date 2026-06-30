@@ -126,7 +126,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	<div class="pet-comparison__header">
 		<h2 class="pet-comparison__title">
 			<?php esc_html_e( 'Compare Pets', 'vcpahumane-pet-sync' ); ?>
-			<span class="pet-comparison__count">(<span data-wp-text="petstablished::state.comparisonCount"><?php echo count( $pets ); ?></span>)</span>
+			<span class="pet-comparison__count">(<span data-wp-text="petsync::state.comparisonCount"><?php echo count( $pets ); ?></span>)</span>
 		</h2>
 		<div class="pet-comparison__actions">
 			<button
@@ -369,8 +369,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	<!-- Toast notification -->
 	<div 
 		class="pet-comparison__toast"
-		data-wp-bind--hidden="petstablished::state.noNotification"
-		data-wp-text="petstablished::state.notification"
+		data-wp-bind--hidden="petsync::state.noNotification"
+		data-wp-text="petsync::state.notification"
 		role="status"
 		aria-live="polite"
 		hidden

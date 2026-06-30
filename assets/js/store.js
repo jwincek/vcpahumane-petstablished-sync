@@ -282,7 +282,7 @@ const { state, actions, callbacks } = store( 'petsync', {
 		 * Toggle favorite — directive handler.
 		 *
 		 * When called from a data-wp-on--click directive on an element whose
-		 * context (in the petstablished namespace) contains petId,
+		 * context (in the petsync namespace) contains petId,
 		 * getPetIdFromContext() finds it directly. Child namespaces (grid,
 		 * modal) should import and call doToggleFavorite() instead.
 		 */

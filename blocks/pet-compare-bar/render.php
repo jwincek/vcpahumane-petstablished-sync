@@ -90,9 +90,9 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	'data-wp-interactive'       => 'petsync/compare-bar',
 	'data-wp-router-region'     => $router_region,
 	'data-wp-context'           => wp_json_encode( $context ),
-	'data-wp-bind--hidden'      => 'petstablished::state.isCompareBarHidden',
-	'data-wp-class--is-visible' => 'petstablished::state.isCompareBarVisible',
-	'data-wp-class--is-expanded' => 'petstablished::state._compareBarExpanded',
+	'data-wp-bind--hidden'      => 'petsync::state.isCompareBarHidden',
+	'data-wp-class--is-visible' => 'petsync::state.isCompareBarVisible',
+	'data-wp-class--is-expanded' => 'petsync::state._compareBarExpanded',
 	'data-wp-init'              => 'callbacks.init',
 	'data-wp-watch'             => 'callbacks.watchAutoExpand',
 	'role'                      => 'region',
@@ -112,7 +112,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		<span><?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?></span>
 		<span
 			class="pet-compare-bar__pill-count"
-			data-wp-text="petstablished::state.comparisonCount"
+			data-wp-text="petsync::state.comparisonCount"
 		><?php echo (int) count( $comparison ); ?></span>
 	</button>
 
@@ -121,7 +121,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		<div class="pet-compare-bar__header">
 			<span class="pet-compare-bar__label">
 				<?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?>
-				(<span data-wp-text="petstablished::state.comparisonCount"><?php echo (int) count( $comparison ); ?></span>/<?php echo (int) $max_compare; ?>)
+				(<span data-wp-text="petsync::state.comparisonCount"><?php echo (int) count( $comparison ); ?></span>/<?php echo (int) $max_compare; ?>)
 			</span>
 			<button
 				type="button"
@@ -225,7 +225,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 			<button
 				type="button"
 				class="pet-compare-bar__btn pet-compare-bar__btn--secondary"
-				data-wp-on--click="petstablished::actions.shareComparison"
+				data-wp-on--click="petsync::actions.shareComparison"
 				data-wp-bind--disabled="!state.canCompare"
 				title="<?php esc_attr_e( 'Copy share link', 'vcpahumane-pet-sync' ); ?>"
 			>
@@ -245,8 +245,8 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	
 	<div 
 		class="pet-compare-bar__toast"
-		data-wp-bind--hidden="petstablished::state.noNotification"
-		data-wp-text="petstablished::state.notification"
+		data-wp-bind--hidden="petsync::state.noNotification"
+		data-wp-text="petsync::state.notification"
 		role="status"
 		aria-live="polite"
 		hidden

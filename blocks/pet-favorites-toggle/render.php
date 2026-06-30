@@ -30,7 +30,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 	>
 		<?php echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
 			array( 'width' => 20, 'height' => 20, 'class' => 'pet-favorites-toggle__icon' ), 
-			"petstablished::state.favoritesCount > 0 ? 'currentColor' : 'none'" 
+			"petsync::state.favoritesCount > 0 ? 'currentColor' : 'none'" 
 		); ?>
 
 		<span class="pet-favorites-toggle__label">
