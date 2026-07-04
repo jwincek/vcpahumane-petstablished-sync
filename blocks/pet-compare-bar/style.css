@@ -22,6 +22,16 @@
 	box-shadow: none;
 }
 
+/* The wp-components stylesheet (loaded on the front end for logged-in
+   users by some plugins) ships a broad [role=region] { position:
+   relative } rule. It ties with .pet-compare-bar on specificity, so
+   whichever loads last wins — and this file loads early when WP links
+   it instead of inlining it. The doubled class outranks the attribute
+   selector regardless of load order. */
+.pet-compare-bar.pet-compare-bar {
+	position: fixed;
+}
+
 /* Show when has pets */
 .pet-compare-bar.is-visible,
 .pet-compare-bar:not([hidden]) {
