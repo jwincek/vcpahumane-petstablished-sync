@@ -69,7 +69,7 @@ No. The blocks use the WordPress Interactivity API and ship as ready-to-run sour
 
 = What happens to my data if I delete the plugin? =
 
-Deleting the plugin removes all of its data: imported pets and their taxonomies, plugin settings, sync state, and visitors' saved favorites/comparison lists. Pets live in Petstablished, so reinstalling and running Sync Now restores the catalog. Deactivating (without deleting) leaves everything in place.
+By default, deleting the plugin keeps your data — imported pets, settings, and template customizations all stay in place, so you can delete and reinstall without losing anything. Only temporary state (the sync schedule and caches) is cleaned up. To remove everything on deletion instead, enable **Delete all data when this plugin is deleted** under Pets → Sync Settings first. Pets always live in Petstablished, so a full re-import is one Sync Now away.
 
 == Changelog ==
 

@@ -1,20 +1,29 @@
 <?php
 /**
- * Uninstall handler — removes all plugin data.
+ * Uninstall handler.
  *
- * Runs when the plugin is deleted from the Plugins screen. Pets are
- * synced from the Petstablished API, so nothing removed here is
- * user-authored or unrecoverable: reinstalling and running Sync Now
- * restores the catalog.
+ * Runs when the plugin is deleted from the Plugins screen. Cleanup is
+ * two-tier:
  *
- * Removes:
+ * Always removed (ephemeral state, not data):
+ *  - the scheduled sync cron event
+ *  - plugin transients (including suffixed sync snapshots)
+ *
+ * Removed only when "Delete all data when this plugin is deleted" is
+ * enabled in Pets → Sync Settings (default off, so delete + reinstall
+ * loses nothing):
  *  - all `vcps_pet` posts (and their post meta / term relationships)
  *  - all terms in the plugin's `pet_*` taxonomies
  *  - Site Editor customizations of plugin templates and template parts
  *    (wp_template / wp_template_part posts filed under this plugin's
  *    wp_theme term), plus that term itself
- *  - settings and sync-state options, plugin transients, the scheduled
- *    sync cron event, and per-user favorites/comparison meta
+ *  - settings and sync-state options
+ *  - per-user favorites/comparison meta
+ *
+ * Pets are synced from the Petstablished API, so the destructive tier
+ * is recoverable by reinstalling and running Sync Now — except Site
+ * Editor template customizations and users' saved lists, which is why
+ * it is opt-in.
  *
  * @package Petstablished_Sync
  */
@@ -24,13 +33,39 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 /**
- * Delete this plugin's data for the current site.
+ * Clean up the current site. Returns whether the destructive tier ran,
+ * so the caller can decide about the (network-wide) user meta.
  */
-function vcps_uninstall_site(): void {
+function vcps_uninstall_site(): bool {
 	global $wpdb;
 
-	// --- Pets -----------------------------------------------------------
-	// wp_delete_post() also removes post meta and term relationships.
+	// --- Ephemeral tier: always removed --------------------------------
+	wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
+
+	delete_transient( 'petstablished_sync_in_progress' );
+	delete_transient( 'petstablished_sync_incomplete' );
+	delete_transient( 'petstablished_sync_pets' );
+
+	// Suffixed transients (e.g. paged sync snapshots) — no wildcard API.
+	$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->prepare(
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+			$wpdb->esc_like( '_transient_petstablished_' ) . '%',
+			$wpdb->esc_like( '_transient_timeout_petstablished_' ) . '%'
+		)
+	);
+
+	// The vcps_pet rewrite rules are stale once the plugin is gone,
+	// whether or not data is kept.
+	flush_rewrite_rules( false );
+
+	// --- Destructive tier: opt-in via Sync Settings ---------------------
+	$settings = get_option( 'petstablished_sync_settings', array() );
+	if ( empty( $settings['delete_data_on_uninstall'] ) ) {
+		return false;
+	}
+
+	// Pets. wp_delete_post() also removes post meta and term relationships.
 	$pet_ids = get_posts( array(
 		'post_type'      => 'vcps_pet',
 		'post_status'    => 'any',
@@ -43,10 +78,9 @@ function vcps_uninstall_site(): void {
 		wp_delete_post( $pet_id, true );
 	}
 
-	// --- Taxonomy terms -------------------------------------------------
-	// The plugin isn't loaded during uninstall, so its taxonomies are
-	// unregistered and get_terms()/wp_delete_term() would refuse them.
-	// Stub-register each one just for this request.
+	// Taxonomy terms. The plugin isn't loaded during uninstall, so its
+	// taxonomies are unregistered and get_terms()/wp_delete_term() would
+	// refuse them. Stub-register each one just for this request.
 	$taxonomies = array(
 		'pet_status',
 		'pet_animal',
@@ -77,8 +111,8 @@ function vcps_uninstall_site(): void {
 		unregister_taxonomy( $taxonomy );
 	}
 
-	// --- Site Editor customizations of plugin templates -----------------
-	// Saved under this plugin's wp_theme term (see
+	// Site Editor customizations of plugin templates, saved under this
+	// plugin's wp_theme term (see
 	// Petstablished_Templates::get_customized_template()); inert without
 	// the plugin.
 	$template_ids = get_posts( array(
@@ -105,45 +139,30 @@ function vcps_uninstall_site(): void {
 		wp_delete_term( $theme_term->term_id, 'wp_theme' );
 	}
 
-	// --- Options ----------------------------------------------------------
+	// Options (including the settings that held the opt-in itself).
 	delete_option( 'petstablished_sync_settings' );
 	delete_option( 'petstablished_last_sync' );
 	delete_option( 'petstablished_last_sync_stats' );
 
-	// --- Transients -------------------------------------------------------
-	// Known names first; then sweep suffixed ones (e.g. paged sync
-	// snapshots) directly, since there is no core wildcard API.
-	delete_transient( 'petstablished_sync_in_progress' );
-	delete_transient( 'petstablished_sync_incomplete' );
-	delete_transient( 'petstablished_sync_pets' );
-
-	$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->prepare(
-			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-			$wpdb->esc_like( '_transient_petstablished_' ) . '%',
-			$wpdb->esc_like( '_transient_timeout_petstablished_' ) . '%'
-		)
-	);
-
-	// --- Cron ---------------------------------------------------------------
-	wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
-
-	// Pet rewrite rules (/adopt/pets/…) are stale once the CPT is gone.
-	flush_rewrite_rules( false );
+	return true;
 }
+
+$vcps_delete_user_meta = false;
 
 if ( is_multisite() ) {
 	$vcps_site_ids = get_sites( array( 'fields' => 'ids', 'number' => 0 ) );
 	foreach ( $vcps_site_ids as $vcps_site_id ) {
 		switch_to_blog( (int) $vcps_site_id );
-		vcps_uninstall_site();
+		$vcps_delete_user_meta = vcps_uninstall_site() || $vcps_delete_user_meta;
 		restore_current_blog();
 	}
 } else {
-	vcps_uninstall_site();
+	$vcps_delete_user_meta = vcps_uninstall_site();
 }
 
-// User meta is network-wide (shared usermeta table) — delete once for
-// all users. Logged-in visitors' favorites/comparison selections.
-delete_metadata( 'user', 0, '_pet_favorites', '', true );
-delete_metadata( 'user', 0, '_pet_comparison', '', true );
+// User meta is network-wide (shared usermeta table) — delete once, and
+// only if at least one site opted into data removal.
+if ( $vcps_delete_user_meta ) {
+	delete_metadata( 'user', 0, '_pet_favorites', '', true );
+	delete_metadata( 'user', 0, '_pet_comparison', '', true );
+}

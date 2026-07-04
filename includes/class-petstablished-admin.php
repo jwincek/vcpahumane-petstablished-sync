@@ -74,16 +74,27 @@ class Petstablished_Admin {
 		add_settings_field( 'auto_sync', __( 'Auto Sync', 'vcpahumane-pet-sync' ), array( $this, 'render_auto_sync_field' ), self::PAGE_SLUG, 'sync_settings' );
 		add_settings_field( 'sync_interval', __( 'Sync Interval', 'vcpahumane-pet-sync' ), array( $this, 'render_sync_interval_field' ), self::PAGE_SLUG, 'sync_settings' );
 		add_settings_field( 'batch_size', __( 'Batch Size', 'vcpahumane-pet-sync' ), array( $this, 'render_batch_size_field' ), self::PAGE_SLUG, 'sync_settings' );
+
+		// Uninstall Section.
+		add_settings_section(
+			'uninstall_settings',
+			__( 'Uninstall', 'vcpahumane-pet-sync' ),
+			fn() => printf( '<p>%s</p>', esc_html__( 'What happens when the plugin is deleted from the Plugins screen.', 'vcpahumane-pet-sync' ) ),
+			self::PAGE_SLUG
+		);
+
+		add_settings_field( 'delete_data_on_uninstall', __( 'Data Removal', 'vcpahumane-pet-sync' ), array( $this, 'render_delete_data_field' ), self::PAGE_SLUG, 'uninstall_settings' );
 	}
 
 	public const SCHEDULE_6PM_SKIP_SUNDAY = 'daily_6pm_skip_sunday';
 
 	public static function get_defaults(): array {
 		return array(
-			'public_key'    => '',
-			'auto_sync'     => true,
-			'sync_interval' => self::SCHEDULE_6PM_SKIP_SUNDAY,
-			'batch_size'    => 10,
+			'public_key'               => '',
+			'auto_sync'                => true,
+			'sync_interval'            => self::SCHEDULE_6PM_SKIP_SUNDAY,
+			'batch_size'               => 10,
+			'delete_data_on_uninstall' => false,
 		);
 	}
 
@@ -110,6 +121,7 @@ class Petstablished_Admin {
 			? $input['sync_interval'] : self::SCHEDULE_6PM_SKIP_SUNDAY;
 		$sanitized['batch_size']    = absint( $input['batch_size'] ?? 10 );
 		$sanitized['batch_size']    = max( 1, min( 50, $sanitized['batch_size'] ) );
+		$sanitized['delete_data_on_uninstall'] = ! empty( $input['delete_data_on_uninstall'] );
 
 		// Reschedule cron if auto_sync or interval changed.
 		$old = self::get_settings();
@@ -177,6 +189,17 @@ class Petstablished_Admin {
 			esc_attr( self::OPTION_NAME ),
 			checked( $settings['auto_sync'], true, false ),
 			esc_html__( 'Automatically sync pets on a schedule', 'vcpahumane-pet-sync' )
+		);
+	}
+
+	public function render_delete_data_field(): void {
+		$settings = self::get_settings();
+		printf(
+			'<label><input type="checkbox" name="%s[delete_data_on_uninstall]" value="1" %s> %s</label><p class="description">%s</p>',
+			esc_attr( self::OPTION_NAME ),
+			checked( $settings['delete_data_on_uninstall'], true, false ),
+			esc_html__( 'Delete all data when this plugin is deleted', 'vcpahumane-pet-sync' ),
+			esc_html__( 'Removes imported pets, pet taxonomies, template customizations, settings, and visitors’ saved favorites and comparison lists. Leave off to keep everything in place for a reinstall. Pets can be re-imported from Petstablished at any time.', 'vcpahumane-pet-sync' )
 		);
 	}
 
