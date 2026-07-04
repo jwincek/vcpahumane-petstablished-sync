@@ -586,7 +586,7 @@ $filter_config = array(
 		role="status"
 		aria-live="polite"
 	>
-		<span class="pet-listing-grid__loading-text" data-wp-bind--hidden="!state.isNavigating">
+		<span class="pet-listing-grid__loading-text" hidden data-wp-bind--hidden="!state.isNavigating">
 			<?php esc_html_e( 'Updating results…', 'vcpahumane-pet-sync' ); ?>
 		</span>
 	</div>

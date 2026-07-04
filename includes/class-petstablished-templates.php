@@ -46,7 +46,8 @@ class Petstablished_Templates {
 			}
 
 			if ( ! $exists ) {
-				$templates[] = $this->build_template_object( $slug, $data, $template_type );
+				$templates[] = $this->get_customized_template( $slug, $template_type )
+					?? $this->build_template_object( $slug, $data, $template_type );
 			}
 		}
 
@@ -74,6 +75,40 @@ class Petstablished_Templates {
 		}
 
 		return $this->build_template_object( $slug, $plugin_items[ $slug ], $template_type );
+	}
+
+	/**
+	 * Find a user-customized version of a plugin template.
+	 *
+	 * The Site Editor saves customizations as wp_template/wp_template_part
+	 * posts filed under this plugin's wp_theme term — not the active
+	 * theme's — so the default front-end template query never sees them.
+	 * Without this lookup the front end always renders the bundled file
+	 * and silently ignores editor customizations.
+	 */
+	private function get_customized_template( string $slug, string $type ): ?WP_Block_Template {
+		$posts = get_posts( array(
+			'post_type'      => $type,
+			'name'           => $slug,
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'no_found_rows'  => true,
+			'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'wp_theme',
+					'field'    => 'name',
+					'terms'    => 'vcpahumane-pet-sync',
+				),
+			),
+		) );
+
+		if ( ! $posts ) {
+			return null;
+		}
+
+		$template = _build_block_template_result_from_post( $posts[0] );
+
+		return $template instanceof WP_Block_Template ? $template : null;
 	}
 
 	private function get_plugin_templates(): array {
