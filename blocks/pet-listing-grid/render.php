@@ -895,7 +895,7 @@ $filter_config = array(
 	<div
 		class="pet-listing-grid__empty"
 		<?php echo empty( $pets ) ? '' : 'hidden'; ?>
-		data-wp-bind--hidden="state.visibleCount > 0"
+		data-wp-bind--hidden="state.hasVisiblePets"
 	>
 		<p><?php esc_html_e( 'No pets match your filters.', 'vcpahumane-pet-sync' ); ?></p>
 		<button type="button" class="pet-listing-grid__empty-reset" data-wp-on--click="actions.resetFilters">

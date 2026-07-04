@@ -239,6 +239,10 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			return ctx.total ?? ctx.petIds?.length ?? 0;
 		},
 
+		get hasVisiblePets() {
+			return state.visibleCount > 0;
+		},
+
 		get resultsText() {
 			if ( state.showFavoritesOnly ) {
 				const inView = state.favoritesInViewCount;
