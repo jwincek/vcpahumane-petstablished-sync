@@ -88,6 +88,28 @@ function* routerNavigate( url, options = {} ) {
  * ========================================================================= */
 
 /**
+ * Toast + screen-reader notification.
+ *
+ * Writes to state.notification, which the petsync/pet-toast block (an
+ * aria-live region in the pet-floating-ui part) renders visibly and
+ * announces. On pages without that block, fall back to the SR-only
+ * announcer so messages are never lost. Calling announce()
+ * unconditionally would double-announce wherever the toast exists.
+ *
+ * @param {string} message The message to show.
+ */
+let toastTimer;
+function showToast( message ) {
+	const s = store( 'petsync' ).state;
+	s.notification = message;
+	if ( ! document.querySelector( '.pet-toast' ) ) {
+		announce( message );
+	}
+	clearTimeout( toastTimer );
+	toastTimer = setTimeout( () => { s.notification = null; }, 3000 );
+}
+
+/**
  * Core favorites toggle logic. Accepts petId explicitly.
  *
  * @param {number}      petId   Pet post ID.
@@ -106,7 +128,7 @@ function* doToggleFavorite( petId, petName ) {
 	if ( s.pets[ petId ] ) s.pets[ petId ].favorited = ! wasIn;
 
 	const name = petName || s.pets[ petId ]?.name || 'Pet';
-	announce( wasIn ? `${ name } removed from favorites` : `${ name } added to favorites` );
+	showToast( wasIn ? `${ name } removed from favorites` : `${ name } added to favorites` );
 
 	try {
 		const result = yield executeAbility( 'petsync/toggle-favorite', { id: petId } );
@@ -120,7 +142,7 @@ function* doToggleFavorite( petId, petName ) {
 		if ( s.pets[ petId ] ) s.pets[ petId ].favorited = wasIn;
 		storage.set( 'favorites', s.favorites );
 		console.error( 'Failed to toggle favorite:', error );
-		announce( config.i18n?.error || 'Failed to update favorites' );
+		showToast( config.i18n?.error || 'Failed to update favorites' );
 	}
 }
 
@@ -137,7 +159,7 @@ function* doToggleComparison( petId, petName ) {
 	const wasIn = s.comparison.includes( petId );
 
 	if ( ! wasIn && s.comparison.length >= s.comparisonMax ) {
-		announce( config.i18n?.compareFull || 'Comparison is full. Remove a pet first.' );
+		showToast( config.i18n?.compareFull || 'Comparison is full. Remove a pet first.' );
 		return;
 	}
 
@@ -147,7 +169,7 @@ function* doToggleComparison( petId, petName ) {
 	if ( s.pets[ petId ] ) s.pets[ petId ].compared = ! wasIn;
 
 	const name = petName || s.pets[ petId ]?.name || 'Pet';
-	announce( wasIn
+	showToast( wasIn
 		? `${ name } removed from comparison`
 		: `${ name } added to comparison (${ s.comparison.length }/${ s.comparisonMax })` );
 
@@ -164,6 +186,7 @@ function* doToggleComparison( petId, petName ) {
 			: s.comparison.filter( id => id !== petId );
 		if ( s.pets[ petId ] ) s.pets[ petId ].compared = wasIn;
 		console.error( 'Failed to update comparison:', error );
+		showToast( config.i18n?.error || 'Failed to update comparison' );
 	}
 }
 
@@ -365,9 +388,7 @@ const { state, actions, callbacks } = store( 'petsync', {
 				} else {
 					const copied = yield copyToClipboard( result.shareUrl );
 					if ( copied ) {
-						state.notification = 'Link copied!';
-						setTimeout( () => ( state.notification = null ), 3000 );
-						announce( 'Comparison link copied' );
+						showToast( 'Link copied!' );
 					}
 				}
 			} catch ( error ) {
@@ -394,9 +415,7 @@ const { state, actions, callbacks } = store( 'petsync', {
 		},
 
 		notify( message ) {
-			state.notification = message;
-			announce( message );
-			setTimeout( () => { state.notification = null; }, 3000 );
+			showToast( message );
 		},
 
 		clearNotification() { state.notification = null; },

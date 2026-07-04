@@ -366,13 +366,5 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		</a>
 	</div>
 
-	<!-- Toast notification -->
-	<div 
-		class="pet-comparison__toast"
-		data-wp-bind--hidden="petsync::state.noNotification"
-		data-wp-text="petsync::state.notification"
-		role="status"
-		aria-live="polite"
-		hidden
-	></div>
+	<?php // Toast notifications render via the petsync/pet-toast block (pet-floating-ui part). ?>
 </div>

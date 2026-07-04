@@ -46,6 +46,7 @@ class Petstablished_Blocks {
 		'pet-tagline',
 		'pet-breadcrumb',
 		'back-to-top',
+		'pet-toast',
 	);
 
 	public function __construct() {

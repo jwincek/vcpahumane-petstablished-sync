@@ -1203,6 +1203,28 @@
 		save: () => null,
 	} );
 
+	// Pet Notifications — standalone toast region driven by the global
+	// petsync store's notification state. Invisible until a message fires.
+	registerBlockType( 'petsync/pet-toast', {
+		title: __( 'Pet Notifications', 'vcpahumane-pet-sync' ),
+		description: __( 'Floating toast that surfaces favorites, comparison, and sharing confirmations.', 'vcpahumane-pet-sync' ),
+		category: 'petsync',
+		icon: 'megaphone',
+		keywords: [ 'toast', 'notification', 'feedback', 'status' ],
+		supports: { html: false, multiple: false, reusable: false },
+		attributes: {},
+		edit: function() {
+			const blockProps = useBlockProps();
+			return el( 'div', blockProps,
+				el( 'div', { className: 'petstablished-editor-placeholder' },
+					el( 'p', {}, __( 'Pet Notifications', 'vcpahumane-pet-sync' ) ),
+					el( 'small', {}, __( 'Toast messages (favorites, comparison, sharing) appear here on the front end. Not visible until a message fires.', 'vcpahumane-pet-sync' ) )
+				)
+			);
+		},
+		save: () => null,
+	} );
+
 	// Pet Breadcrumb — SSR breadcrumb trail: Home › Adoptable Pets › Pet Name.
 	registerBlockType( 'petsync/pet-breadcrumb', {
 		title: __( 'Pet Breadcrumb', 'vcpahumane-pet-sync' ),
