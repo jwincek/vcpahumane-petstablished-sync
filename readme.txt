@@ -20,9 +20,11 @@ Built on the modern WordPress stack — the Abilities API, Block Bindings, and t
 
 * Batched sync with an admin progress UI and optional WP-Cron scheduling.
 * Pet blocks: cards, listing grid, slider, filters, gallery, attributes, health, compatibility, comparison, favorites, adoption CTA, and more.
+* Adoption call-to-action links to the pet's Petstablished application form, an internal page of your choice, or a downloadable PDF application.
 * Taxonomy filtering (species, breed, age, size, gender, color) plus URL-driven compatibility filters (good with dogs/cats/kids, house-trained, etc.).
 * Block Bindings connect block attributes to pet data.
 * Anonymous favorites and side-by-side comparison that work without a login.
+* Toast notifications confirm favorites, comparison, and sharing actions — visible on screen and announced to screen readers.
 
 This plugin is not affiliated with, endorsed by, or sponsored by Petstablished. "Petstablished" is a trademark of its respective owner and is used here only to describe compatibility.
 
@@ -71,8 +73,9 @@ No. The blocks use the WordPress Interactivity API and ship as ready-to-run sour
 * Initial public release.
 * Batched sync from the Petstablished public API with admin progress UI and WP-Cron scheduling.
 * Pet custom post type with taxonomy and compatibility filtering.
-* Block library: pet card, listing grid, slider, filters, gallery, attributes, health, compatibility, comparison, favorites (toggle and modal), adoption CTA, adoption fee, breadcrumb, tagline, and back-to-top.
-* Anonymous favorites and comparison via the Interactivity API.
+* Block library: pet card, listing grid, slider, filters, details, gallery, actions, attributes, health, compatibility, comparison, compare bar, favorites (toggle and modal), adoption CTA, adoption action, adoption fee, breadcrumb, tagline, notifications toast, and back-to-top.
+* Adoption action supports three modes: Petstablished application form, internal page link, or PDF download.
+* Anonymous favorites and comparison via the Interactivity API, with toast confirmations.
 * Built on the WordPress Abilities API and Block Bindings.
 
 == Upgrade Notice ==

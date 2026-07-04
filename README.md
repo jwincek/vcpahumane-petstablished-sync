@@ -1,4 +1,4 @@
-# Petstablished Sync
+# Pet Sync for Petstablished
 
 Sync adoptable pets from [Petstablished](https://petstablished.com) into WordPress, built on the modern WordPress 6.9 stack: Abilities API, Block Bindings, and Interactivity API.
 
@@ -10,7 +10,7 @@ Sync adoptable pets from [Petstablished](https://petstablished.com) into WordPre
 
 ## Installation
 
-1. Download or clone this repository into `wp-content/plugins/petstablished-sync/`.
+1. Download or clone this repository into `wp-content/plugins/vcpahumane-pet-sync/`.
 2. Activate the plugin in **Plugins → Installed Plugins**.
 3. Go to **Pets → Sync Settings** and enter your Petstablished public key.
 4. Click **Sync Now** to import your adoptable pets.
@@ -56,7 +56,8 @@ config/          → JSON definitions (entities, abilities, post types, schemas)
 includes/core/   → Reusable infrastructure (Config loader, CPT registry, Query builder, Hydrator)
 includes/abilities/ → Ability callbacks registered via the WP 6.9 Abilities API
 blocks/          → Server-rendered blocks with Interactivity API view scripts
-templates/       → Block theme templates (archive-pet.html, single-pet.html)
+templates/       → Block theme templates (archive-vcps_pet.html, single-vcps_pet.html)
+parts/           → Template parts (pet-floating-ui: compare bar, favorites, notifications)
 assets/          → Editor scripts, Interactivity stores, stylesheets
 ```
 
@@ -65,8 +66,8 @@ Business logic lives in **abilities** — thin, testable operations with JSON Sc
 ## Key Features
 
 - **Batched sync** with admin progress UI and WP-Cron scheduling.
-- **14 blocks** for pet cards, grids, sliders, filters, galleries, comparison, favorites, and more.
-- **Interactivity API** for reactive front-end (favorites, compare, filters, gallery) — no build step required.
+- **21 blocks** for pet cards, grids, sliders, filters, galleries, comparison, favorites, adoption CTAs, and more.
+- **Interactivity API** for reactive front-end (favorites, compare, filters, gallery, toast notifications) — no build step required.
 - **Block Bindings** to connect block attributes to pet post meta.
 - **Taxonomy filtering** (species, breed, age, size, gender, color) with URL-driven compatibility meta filters.
 
