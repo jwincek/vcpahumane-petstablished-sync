@@ -370,6 +370,65 @@
 	height: 18px;
 }
 
+/* === Overlay tooltips ===
+   Overlay buttons are icon-only, so surface each button's aria-label
+   as a tooltip on hover and keyboard focus. attr() reads the live
+   attribute, which data-wp-bind--aria-label keeps state-aware
+   ("Favorite Doc" ↔ "Unfavorite Doc"), so the text is always current.
+   Buttons hug the gallery's right edge, so tooltips open to the left.
+   Visual style matches .pet-listing-grid__favorites-tooltip. */
+.pet-actions--overlay .pet-actions__button {
+	position: relative;
+}
+
+.pet-actions--overlay .pet-actions__button[aria-label]::before,
+.pet-actions--overlay .pet-actions__button[aria-label]::after {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	pointer-events: none;
+	z-index: 10;
+}
+
+/* Bubble */
+.pet-actions--overlay .pet-actions__button[aria-label]::after {
+	content: attr(aria-label);
+	right: calc(100% + 10px);
+	padding: 6px 10px;
+	background: var(--wp--preset--color--contrast, #1e1e1e);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.2;
+	white-space: nowrap;
+	border-radius: 4px;
+}
+
+/* Arrow — points right, at the button's edge */
+.pet-actions--overlay .pet-actions__button[aria-label]::before {
+	content: '';
+	right: calc(100% + 1px);
+	border: 5px solid transparent;
+	border-left-color: var(--wp--preset--color--contrast, #1e1e1e);
+}
+
+/* Keyboard focus always shows the tooltip … */
+.pet-actions--overlay .pet-actions__button[aria-label]:focus-visible::before,
+.pet-actions--overlay .pet-actions__button[aria-label]:focus-visible::after {
+	opacity: 1;
+}
+
+/* … hover only on devices that actually hover, so touch never sees
+   a stuck tooltip after a tap. */
+@media (hover: hover) {
+	.pet-actions--overlay .pet-actions__button[aria-label]:hover::before,
+	.pet-actions--overlay .pet-actions__button[aria-label]:hover::after {
+		opacity: 1;
+	}
+}
+
 /* Favorite active — red translucent */
 .pet-actions--overlay .pet-actions__button--favorite.is-active {
 	color: #fff;
