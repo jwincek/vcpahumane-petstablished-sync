@@ -32,7 +32,7 @@
  * @package Petstablished_Sync
  */
 
-declare( strict_types = 1 );
+// declare( strict_types = 1 );
 
 if ( ! defined( 'ABSPATH' ) ) {
 	fwrite( STDERR, "Must run inside WordPress (use: wp eval-file <this>).\n" );
