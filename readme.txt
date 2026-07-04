@@ -67,6 +67,10 @@ Pets that are no longer returned by the Petstablished API are removed on the nex
 
 No. The blocks use the WordPress Interactivity API and ship as ready-to-run source — no compilation needed.
 
+= What happens to my data if I delete the plugin? =
+
+Deleting the plugin removes all of its data: imported pets and their taxonomies, plugin settings, sync state, and visitors' saved favorites/comparison lists. Pets live in Petstablished, so reinstalling and running Sync Now restores the catalog. Deactivating (without deleting) leaves everything in place.
+
 == Changelog ==
 
 = 1.0.0 =

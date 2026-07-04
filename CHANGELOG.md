@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Anonymous favorites and side-by-side comparison powered by the Interactivity API.
 - Block templates and template parts editable in the Site Editor, including user customizations (served from the plugin's `wp_theme` namespace).
 - Built on the WordPress Abilities API and Block Bindings; server-rendered blocks with no build step.
+- Uninstall handler removing all plugin data: pets, `pet_*` taxonomy terms, Site Editor template customizations, options, transients, the sync cron event, and per-user favorites/comparison meta (multisite-aware).
 
 [Unreleased]: https://github.com/jwincek/vcpahumane-pet-sync/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/jwincek/vcpahumane-pet-sync/releases/tag/v1.0.0
