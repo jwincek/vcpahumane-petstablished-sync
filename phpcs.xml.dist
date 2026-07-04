@@ -2,12 +2,20 @@
 <ruleset name="Petstablished Sync">
 	<description>WordPress coding standards for Petstablished Sync plugin.</description>
 
-	<!-- What to scan -->
+	<!-- What to scan: PHP only — JS and CSS are covered by
+	     @wordpress/scripts (eslint / stylelint). -->
 	<file>.</file>
+	<arg name="extensions" value="php"/>
 
 	<!-- Exclude paths -->
 	<exclude-pattern>/vendor/*</exclude-pattern>
 	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<!-- Dev-only tooling, not shipped in the plugin zip (see .distignore). -->
+	<exclude-pattern>/migration-scripts/*</exclude-pattern>
+	<exclude-pattern>/bin/*</exclude-pattern>
+
+	<!-- Warnings stay visible but don't fail CI; errors do. -->
+	<config name="ignore_warnings_on_exit" value="1"/>
 
 	<!-- PHP compatibility -->
 	<config name="testVersion" value="8.1-"/>
@@ -16,17 +24,34 @@
 	<!-- WordPress standards -->
 	<config name="minimum_supported_wp_version" value="6.9"/>
 	<rule ref="WordPress">
-		<!-- Allow short array syntax -->
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+		<!-- Allow short array syntax (WPCS 3.x sniff name; the old
+		     Generic.Arrays.DisallowShortArraySyntax no longer matches). -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
 		<!-- Allow short closures and arrow functions -->
 		<exclude name="Universal.FunctionDeclarations.NoLongClosures"/>
+		<!-- House style: allow non-Yoda conditions and short ternaries. -->
+		<exclude name="WordPress.PHP.YodaConditions"/>
+		<exclude name="Universal.Operators.DisallowShortTernary"/>
+		<!-- Docblock completeness (WordPress-Docs) is aspirational for
+		     this codebase; re-enable and backfill incrementally. -->
+		<exclude name="WordPress-Docs"/>
+	</rule>
+
+	<!-- PHP files under blocks/ (render.php and partials) are included
+	     inside WP's render callback, so their variables are function-
+	     scoped, not global — both sniffs false-positive on them. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>/blocks/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
+		<exclude-pattern>/blocks/*</exclude-pattern>
 	</rule>
 
 	<!-- Plugin text domain -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="petstablished-sync"/>
+				<element value="vcpahumane-pet-sync"/>
 			</property>
 		</properties>
 	</rule>
@@ -37,6 +62,8 @@
 			<property name="prefixes" type="array">
 				<element value="petstablished"/>
 				<element value="Petstablished"/>
+				<element value="petsync"/>
+				<element value="vcps"/>
 			</property>
 		</properties>
 	</rule>

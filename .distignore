@@ -13,6 +13,8 @@ composer.lock
 package.json
 package-lock.json
 phpcs.xml.dist
+.eslintrc.json
+.stylelintrc.json
 node_modules
 vendor/bin
 bin

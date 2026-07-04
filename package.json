@@ -8,7 +8,7 @@
 		"start": "wp-env start",
 		"stop": "wp-env stop",
 		"lint:js": "wp-scripts lint-js assets/js/",
-		"lint:css": "wp-scripts lint-style assets/css/ blocks/"
+		"lint:css": "wp-scripts lint-style 'assets/css/**/*.css' 'blocks/**/*.css'"
 	},
 	"devDependencies": {
 		"@wordpress/env": "^10.0.0",
