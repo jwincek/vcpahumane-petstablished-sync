@@ -35,7 +35,7 @@
 }
 
 .pet-favorites-toggle__btn.is-active .pet-favorites-toggle__icon {
-	fill: currentColor;
+	fill: currentcolor;
 }
 
 .pet-favorites-toggle__count {
@@ -51,6 +51,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-favorites-toggle__btn {
 		transition: none;
 	}

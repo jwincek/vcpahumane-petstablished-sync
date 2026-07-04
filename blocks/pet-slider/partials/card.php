@@ -69,7 +69,15 @@ $badge_pos = $badge_position ?? 'image-top';
 				<div class="pet-slider__badges pet-slider__badges--image-top">
 					<?php foreach ( $badges as $badge ) : ?>
 						<span class="pet-slider__badge <?php echo esc_attr( $badge['class'] ); ?>">
-							<?php Petstablished_Icons::render( $badge['icon'], array( 'width' => 12, 'height' => 12 ) ); ?>
+							<?php
+							Petstablished_Icons::render(
+								$badge['icon'],
+								array(
+									'width'  => 12,
+									'height' => 12,
+								)
+							);
+							?>
 							<?php echo esc_html( $badge['label'] ); ?>
 						</span>
 					<?php endforeach; ?>
@@ -88,7 +96,15 @@ $badge_pos = $badge_position ?? 'image-top';
 						<div class="pet-slider__badges pet-slider__badges--above-name">
 							<?php foreach ( $badges as $badge ) : ?>
 								<span class="pet-slider__badge <?php echo esc_attr( $badge['class'] ); ?>">
-									<?php Petstablished_Icons::render( $badge['icon'], array( 'width' => 12, 'height' => 12 ) ); ?>
+									<?php
+									Petstablished_Icons::render(
+										$badge['icon'],
+										array(
+											'width'  => 12,
+											'height' => 12,
+										)
+									);
+									?>
 									<?php echo esc_html( $badge['label'] ); ?>
 								</span>
 							<?php endforeach; ?>
@@ -102,7 +118,15 @@ $badge_pos = $badge_position ?? 'image-top';
 						<div class="pet-slider__badges pet-slider__badges--overlay-bottom">
 							<?php foreach ( $badges as $badge ) : ?>
 								<span class="pet-slider__badge <?php echo esc_attr( $badge['class'] ); ?>">
-									<?php Petstablished_Icons::render( $badge['icon'], array( 'width' => 12, 'height' => 12 ) ); ?>
+									<?php
+									Petstablished_Icons::render(
+										$badge['icon'],
+										array(
+											'width'  => 12,
+											'height' => 12,
+										)
+									);
+									?>
 									<?php echo esc_html( $badge['label'] ); ?>
 								</span>
 							<?php endforeach; ?>
@@ -118,7 +142,15 @@ $badge_pos = $badge_position ?? 'image-top';
 					<div class="pet-slider__badges pet-slider__badges--info">
 						<?php foreach ( $badges as $badge ) : ?>
 							<span class="pet-slider__badge <?php echo esc_attr( $badge['class'] ); ?>">
-								<?php Petstablished_Icons::render( $badge['icon'], array( 'width' => 12, 'height' => 12 ) ); ?>
+								<?php
+								Petstablished_Icons::render(
+									$badge['icon'],
+									array(
+										'width'  => 12,
+										'height' => 12,
+									)
+								);
+								?>
 								<?php echo esc_html( $badge['label'] ); ?>
 							</span>
 						<?php endforeach; ?>
@@ -147,7 +179,14 @@ $badge_pos = $badge_position ?? 'image-top';
 				data-wp-class--is-active="state.isFavorited"
 				aria-label="<?php esc_attr_e( 'Add to favorites', 'vcpahumane-pet-sync' ); ?>"
 			>
-				<?php echo Petstablished_Icons::get_heart_interactive( array( 'width' => 18, 'height' => 18 ) ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */ ?>
+				<?php
+				echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */
+				?>
 			</button>
 			<button
 				type="button"
@@ -158,7 +197,15 @@ $badge_pos = $badge_position ?? 'image-top';
 				data-wp-bind--disabled="state.isCompareDisabled"
 				aria-label="<?php esc_attr_e( 'Add to comparison', 'vcpahumane-pet-sync' ); ?>"
 			>
-				<?php Petstablished_Icons::render( 'compare', array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'compare',
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				);
+				?>
 			</button>
 		</div>
 	<?php endif; ?>

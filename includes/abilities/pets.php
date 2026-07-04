@@ -95,18 +95,25 @@ function list_pets( array $input = [] ): array {
 	if ( $cursor ) {
 		$cursor_data = \Petstablished_Helpers::decode_cursor( $cursor );
 		if ( $cursor_data ) {
-			$query->withArgs( [
-				'date_query'     => [ [ 'before' => $cursor_data['date'], 'inclusive' => false ] ],
-				'posts_per_page' => $per_page + 1,
-				'paged'          => 1,
-			] );
+			$query->withArgs(
+				[
+					'date_query'     => [
+						[
+							'before'    => $cursor_data['date'],
+							'inclusive' => false,
+						],
+					],
+					'posts_per_page' => $per_page + 1,
+					'paged'          => 1,
+				]
+			);
 		}
 
 		$args  = $query->toArgs( 1, $per_page + 1 );
 		$posts = ( new \WP_Query( $args ) )->posts;
 
-		$hasMore = count( $posts ) > $per_page;
-		if ( $hasMore ) {
+		$has_more = count( $posts ) > $per_page;
+		if ( $has_more ) {
 			array_pop( $posts );
 		}
 
@@ -115,11 +122,11 @@ function list_pets( array $input = [] ): array {
 		$result = [
 			'pets'    => $pets,
 			'total'   => count( $pets ),
-			'hasMore' => $hasMore,
+			'hasMore' => $has_more,
 		];
 
-		if ( $hasMore && ! empty( $posts ) ) {
-			$last = end( $posts );
+		if ( $has_more && ! empty( $posts ) ) {
+			$last                 = end( $posts );
 			$result['nextCursor'] = \Petstablished_Helpers::encode_cursor( $last->ID, $last->post_date );
 		}
 
@@ -199,7 +206,7 @@ function filter_pets( array $input = [] ): array {
 		$page_query = Query::for( 'vcps_pet' )
 			->whereIn( $page_ids )
 			->withArgs( [ 'orderby' => 'post__in' ] );
-		$pets = $page_query->get( 'grid' );
+		$pets       = $page_query->get( 'grid' );
 	}
 
 	// Calculate filter counts relative to other active filters.
@@ -293,7 +300,12 @@ function calculate_filter_counts( array $input, array $all_ids = [] ): array {
 	$taxonomies = \Petstablished_Helpers::TAXONOMIES;
 
 	foreach ( $taxonomies as $key => $taxonomy ) {
-		$terms = get_terms( [ 'taxonomy' => $taxonomy, 'hide_empty' => true ] );
+		$terms = get_terms(
+			[
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => true,
+			]
+		);
 		if ( is_wp_error( $terms ) ) {
 			$counts[ $key ] = [];
 			continue;
@@ -321,7 +333,7 @@ function calculate_filter_counts( array $input, array $all_ids = [] ): array {
 				$count = 0;
 			} else {
 				$term_post_ids = get_objects_in_term( $term->term_id, $taxonomy );
-				$count = count( array_intersect( $other_ids, $term_post_ids ) );
+				$count         = count( array_intersect( $other_ids, $term_post_ids ) );
 			}
 
 			if ( $count > 0 ) {
@@ -341,7 +353,12 @@ function calculate_filter_counts( array $input, array $all_ids = [] ): array {
 	// Format as single-element arrays to match the taxonomy count structure.
 	if ( ! empty( $all_ids ) ) {
 		$attribute_taxonomy = 'pet_attribute';
-		$attr_terms = get_terms( [ 'taxonomy' => $attribute_taxonomy, 'hide_empty' => false ] );
+		$attr_terms         = get_terms(
+			[
+				'taxonomy'   => $attribute_taxonomy,
+				'hide_empty' => false,
+			]
+		);
 
 		if ( ! is_wp_error( $attr_terms ) ) {
 			// Build a slug → camelCase lookup from COMPAT_MAP (reversed).
@@ -353,8 +370,8 @@ function calculate_filter_counts( array $input, array $all_ids = [] ): array {
 					continue;
 				}
 
-				$term_post_ids = get_objects_in_term( $term->term_id, $attribute_taxonomy );
-				$count = count( array_intersect( $all_ids, $term_post_ids ) );
+				$term_post_ids        = get_objects_in_term( $term->term_id, $attribute_taxonomy );
+				$count                = count( array_intersect( $all_ids, $term_post_ids ) );
 				$counts[ $camel_key ] = [
 					[
 						'value' => $term->slug,

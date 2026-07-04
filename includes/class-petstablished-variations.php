@@ -23,7 +23,7 @@ class Petstablished_Variations {
 	 */
 	private const VARIATIONS = array(
 		// === Headings ===
-		'core/heading' => array(
+		'core/heading'   => array(
 			array(
 				'name'        => 'pet-name',
 				'title'       => 'Pet Name',
@@ -230,7 +230,7 @@ class Petstablished_Variations {
 		),
 
 		// === Images ===
-		'core/image' => array(
+		'core/image'     => array(
 			array(
 				'name'        => 'pet-photo',
 				'title'       => 'Pet Photo',
@@ -242,42 +242,42 @@ class Petstablished_Variations {
 				'attributes'  => array( 'sizeSlug' => 'large' ),
 			),
 			array(
-				'name'        => 'pet-thumbnail',
-				'title'       => 'Pet Thumbnail',
-				'description' => 'Displays the pet\'s photo as a thumbnail.',
-				'icon'        => 'format-image',
-				'keywords'    => array( 'pet', 'thumbnail', 'small', 'thumb' ),
-				'binding_key' => 'image',
-				'binding_args'=> array( 'size' => 'thumbnail' ),
-				'alt_key'     => 'name',
-				'attributes'  => array( 'sizeSlug' => 'thumbnail' ),
+				'name'         => 'pet-thumbnail',
+				'title'        => 'Pet Thumbnail',
+				'description'  => 'Displays the pet\'s photo as a thumbnail.',
+				'icon'         => 'format-image',
+				'keywords'     => array( 'pet', 'thumbnail', 'small', 'thumb' ),
+				'binding_key'  => 'image',
+				'binding_args' => array( 'size' => 'thumbnail' ),
+				'alt_key'      => 'name',
+				'attributes'   => array( 'sizeSlug' => 'thumbnail' ),
 			),
 		),
 
 		// === Buttons ===
-		'core/button' => array(
+		'core/button'    => array(
 			array(
-				'name'        => 'pet-view-details',
-				'title'       => 'View Pet Details',
-				'description' => 'Link button to the pet\'s detail page.',
-				'icon'        => 'visibility',
-				'keywords'    => array( 'pet', 'view', 'details', 'more', 'link' ),
-				'binding_key' => 'url',
-				'binding_attr'=> 'url',
-				'attributes'  => array(
+				'name'         => 'pet-view-details',
+				'title'        => 'View Pet Details',
+				'description'  => 'Link button to the pet\'s detail page.',
+				'icon'         => 'visibility',
+				'keywords'     => array( 'pet', 'view', 'details', 'more', 'link' ),
+				'binding_key'  => 'url',
+				'binding_attr' => 'url',
+				'attributes'   => array(
 					'text'      => 'View Details',
 					'className' => 'is-style-outline',
 				),
 			),
 			array(
-				'name'        => 'pet-adopt-button',
-				'title'       => 'Adopt Button',
-				'description' => 'Link button to the adoption application form.',
-				'icon'        => 'heart',
-				'keywords'    => array( 'pet', 'adopt', 'apply', 'application', 'button' ),
-				'binding_key' => 'adoption_form_url',
-				'binding_attr'=> 'url',
-				'attributes'  => array(
+				'name'         => 'pet-adopt-button',
+				'title'        => 'Adopt Button',
+				'description'  => 'Link button to the adoption application form.',
+				'icon'         => 'heart',
+				'keywords'     => array( 'pet', 'adopt', 'apply', 'application', 'button' ),
+				'binding_key'  => 'adoption_form_url',
+				'binding_attr' => 'url',
+				'attributes'   => array(
 					'text'       => 'Start Adoption',
 					'className'  => 'is-style-fill',
 					'linkTarget' => '_blank',
@@ -292,7 +292,7 @@ class Petstablished_Variations {
 	 * These work on any page, not just pet single/archive.
 	 */
 	private const STATS_VARIATIONS = array(
-		'core/heading' => array(
+		'core/heading'   => array(
 			array(
 				'name'        => 'pet-available-count-heading',
 				'title'       => 'Available Pets Count',
@@ -346,7 +346,12 @@ class Petstablished_Variations {
 				array( 'core/paragraph', array( 'className' => 'pet-status-badge' ), 'status' ),
 			),
 			'attributes'  => array(
-				'layout' => array( 'type' => 'flex', 'flexWrap' => 'wrap', 'justifyContent' => 'space-between', 'verticalAlignment' => 'center' ),
+				'layout' => array(
+					'type'              => 'flex',
+					'flexWrap'          => 'wrap',
+					'justifyContent'    => 'space-between',
+					'verticalAlignment' => 'center',
+				),
 			),
 		),
 		array(
@@ -362,7 +367,10 @@ class Petstablished_Variations {
 			),
 			'attributes'  => array(
 				'className' => 'pet-quick-facts',
-				'layout'    => array( 'type' => 'flex', 'flexWrap' => 'wrap' ),
+				'layout'    => array(
+					'type'     => 'flex',
+					'flexWrap' => 'wrap',
+				),
 			),
 		),
 		array(
@@ -372,9 +380,24 @@ class Petstablished_Variations {
 			'icon'        => 'id-alt',
 			'keywords'    => array( 'pet', 'card', 'content', 'name', 'tagline' ),
 			'innerBlocks' => array(
-				array( 'core/heading', array( 'level' => 3, 'className' => 'pet-card-name' ), 'name' ),
+				array(
+					'core/heading',
+					array(
+						'level'     => 3,
+						'className' => 'pet-card-name',
+					),
+					'name',
+				),
 				array( 'core/paragraph', array( 'className' => 'pet-card-tagline' ), 'tagline' ),
-				array( 'core/button', array( 'text' => 'View Details', 'className' => 'pet-card-button' ), 'url', 'url' ),
+				array(
+					'core/button',
+					array(
+						'text'      => 'View Details',
+						'className' => 'pet-card-button',
+					),
+					'url',
+					'url',
+				),
 			),
 			'attributes'  => array(
 				'className' => 'pet-card-content',
@@ -389,7 +412,15 @@ class Petstablished_Variations {
 			'innerBlocks' => array(
 				array( 'core/heading', array( 'level' => 2 ), 'adoption_title' ),
 				array( 'core/paragraph', array( 'className' => 'pet-adoption-fee' ), 'adoption_fee_formatted' ),
-				array( 'core/button', array( 'text' => 'Start Adoption', 'linkTarget' => '_blank' ), 'adoption_form_url', 'url' ),
+				array(
+					'core/button',
+					array(
+						'text'       => 'Start Adoption',
+						'linkTarget' => '_blank',
+					),
+					'adoption_form_url',
+					'url',
+				),
 			),
 			'attributes'  => array(
 				'className' => 'pet-adoption-cta',
@@ -425,7 +456,15 @@ class Petstablished_Variations {
 				array( 'core/paragraph', array( 'className' => 'pet-card-breed' ), 'breed' ),
 				array( 'core/paragraph', array( 'className' => 'pet-card-age' ), 'age' ),
 				array( 'core/paragraph', array( 'className' => 'pet-card-fee' ), 'adoption_fee_formatted' ),
-				array( 'core/button', array( 'text' => 'Start Adoption', 'linkTarget' => '_blank' ), 'adoption_form_url', 'url' ),
+				array(
+					'core/button',
+					array(
+						'text'       => 'Start Adoption',
+						'linkTarget' => '_blank',
+					),
+					'adoption_form_url',
+					'url',
+				),
 			),
 			'attributes'  => array(
 				'className' => 'pet-adoption-card',
@@ -444,7 +483,10 @@ class Petstablished_Variations {
 			),
 			'attributes'  => array(
 				'className' => 'pet-compatibility-grid',
-				'layout'    => array( 'type' => 'flex', 'flexWrap' => 'wrap' ),
+				'layout'    => array(
+					'type'     => 'flex',
+					'flexWrap' => 'wrap',
+				),
 			),
 		),
 		array(
@@ -460,7 +502,10 @@ class Petstablished_Variations {
 			),
 			'attributes'  => array(
 				'className' => 'pet-medical-summary',
-				'layout'    => array( 'type' => 'flex', 'flexWrap' => 'wrap' ),
+				'layout'    => array(
+					'type'     => 'flex',
+					'flexWrap' => 'wrap',
+				),
 			),
 		),
 		array(
@@ -476,7 +521,11 @@ class Petstablished_Variations {
 			),
 			'attributes'  => array(
 				'className' => 'pet-stats-banner',
-				'layout'    => array( 'type' => 'flex', 'flexWrap' => 'wrap', 'justifyContent' => 'center' ),
+				'layout'    => array(
+					'type'           => 'flex',
+					'flexWrap'       => 'wrap',
+					'justifyContent' => 'center',
+				),
 			),
 		),
 	);
@@ -490,15 +539,21 @@ class Petstablished_Variations {
 	 * Register custom block category for pet variations.
 	 */
 	public function register_block_category(): void {
-		add_filter( 'block_categories_all', function( $categories ) {
-			// Add at the beginning for visibility.
-			array_unshift( $categories, array(
-				'slug'  => 'petsync',
-				'title' => __( 'Pet Blocks', 'vcpahumane-pet-sync' ),
-				'icon'  => 'pets',
-			) );
-			return $categories;
-		} );
+		add_filter(
+			'block_categories_all',
+			function ( $categories ) {
+				// Add at the beginning for visibility.
+				array_unshift(
+					$categories,
+					array(
+						'slug'  => 'petsync',
+						'title' => __( 'Pet Blocks', 'vcpahumane-pet-sync' ),
+						'icon'  => 'pets',
+					)
+				);
+				return $categories;
+			}
+		);
 	}
 
 	/**
@@ -554,7 +609,7 @@ class Petstablished_Variations {
 		foreach ( $source_variations as $block_type => $block_variations ) {
 			foreach ( $block_variations as $var ) {
 				$binding_attr = $var['binding_attr'] ?? ( 'core/image' === $block_type ? 'url' : 'content' );
-				
+
 				$bindings = array(
 					$binding_attr => array(
 						'source' => $source,
@@ -603,12 +658,12 @@ class Petstablished_Variations {
 
 		foreach ( self::GROUP_VARIATIONS as $var ) {
 			$inner_blocks = array();
-			$source = $var['source'] ?? 'petsync/pet-data';
+			$source       = $var['source'] ?? 'petsync/pet-data';
 
 			foreach ( $var['innerBlocks'] as $inner ) {
-				$block_name = $inner[0];
-				$attrs = $inner[1] ?? array();
-				$binding_key = $inner[2] ?? null;
+				$block_name   = $inner[0];
+				$attrs        = $inner[1] ?? array();
+				$binding_key  = $inner[2] ?? null;
 				$binding_attr = $inner[3] ?? ( str_starts_with( $block_name, 'core/button' ) ? 'url' : ( str_starts_with( $block_name, 'core/image' ) ? 'url' : 'content' ) );
 
 				if ( $binding_key ) {

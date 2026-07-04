@@ -20,7 +20,7 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	return;
 }
 
-$pet = null;
+$pet     = null;
 $ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petsync/get-pet' ) : null;
 if ( $ability ) {
 	$result = $ability->execute( [ 'id' => (int) $post_id ] );
@@ -35,16 +35,20 @@ $show_favorite = $attributes['showFavorite'] ?? true;
 $show_compare  = $attributes['showCompare'] ?? true;
 $show_status   = $attributes['showStatus'] ?? true;
 
-$context = wp_json_encode( array(
-	'petId'   => $pet['id'],
-	'petName' => $pet['name'],
-) );
+$context = wp_json_encode(
+	array(
+		'petId'   => $pet['id'],
+		'petName' => $pet['name'],
+	)
+);
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'               => 'pet-card',
-	'data-wp-interactive' => 'petsync',
-	'data-wp-context'     => $context,
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'               => 'pet-card',
+		'data-wp-interactive' => 'petsync',
+		'data-wp-context'     => $context,
+	)
+);
 ?>
 
 <article <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
@@ -101,7 +105,15 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 					data-wp-bind--aria-pressed="state.isInComparison"
 					data-wp-bind--aria-label="state.compareLabel"
 				>
-					<?php Petstablished_Icons::render( 'compare-grid', array( 'width' => 16, 'height' => 16 ) ); ?>
+					<?php
+					Petstablished_Icons::render(
+						'compare-grid',
+						array(
+							'width'  => 16,
+							'height' => 16,
+						)
+					);
+					?>
 					<span><?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?></span>
 				</button>
 			<?php endif; ?>

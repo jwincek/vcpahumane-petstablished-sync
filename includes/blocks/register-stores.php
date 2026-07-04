@@ -24,51 +24,60 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function register_stores(): void {
 	// === Shared Config (non-reactive, available to all stores) ===
-	wp_interactivity_config( 'petsync', [
-		'restUrl'      => rest_url(),
-		'nonce'        => wp_create_nonce( 'wp_rest' ),
-		'maxCompare'   => 4,
-		'features'     => [
-			'serverFiltering' => true,
-			'searchHighlight' => true,
-		],
-		'i18n'         => get_i18n_strings(),
-	] );
+	wp_interactivity_config(
+		'petsync',
+		[
+			'restUrl'    => rest_url(),
+			'nonce'      => wp_create_nonce( 'wp_rest' ),
+			'maxCompare' => 4,
+			'features'   => [
+				'serverFiltering' => true,
+				'searchHighlight' => true,
+			],
+			'i18n'       => get_i18n_strings(),
+		]
+	);
 
-	$comparison = \Petstablished_Helpers::get_comparison();
+	$comparison     = \Petstablished_Helpers::get_comparison();
 	$has_comparison = ! empty( $comparison );
 
 	// === Global Store State ===
-	wp_interactivity_state( 'petsync', [
-		'favorites'            => \Petstablished_Helpers::get_favorites(),
-		'comparison'           => $comparison,
-		'comparisonMax'        => 4,
-		'pets'                 => array(),
-		'isLoading'            => false,
-		'notification'         => null,
-		'noNotification'       => true,
-		'_compareBarExpanded'  => $has_comparison,
-		'_compareBarPrevCount' => count( $comparison ),
-		'isCompareBarHidden'   => ! $has_comparison,
-		'isCompareBarVisible'  => $has_comparison,
-		// Button text for pet-actions (used by derived state getters).
-		'_i18n' => [
-			'favorite'       => __( 'Favorite', 'vcpahumane-pet-sync' ),
-			'unfavorite'     => __( 'Unfavorite', 'vcpahumane-pet-sync' ),
-			'compare'        => __( 'Compare', 'vcpahumane-pet-sync' ),
-			'comparing'      => __( 'Comparing', 'vcpahumane-pet-sync' ),
-			'share'          => __( 'Share', 'vcpahumane-pet-sync' ),
-			'copyLink'       => __( 'Copy link', 'vcpahumane-pet-sync' ),
-			'copied'         => __( 'Copied!', 'vcpahumane-pet-sync' ),
-			'copiedAnnounce' => __( 'Link copied to clipboard', 'vcpahumane-pet-sync' ),
-		],
-	] );
+	wp_interactivity_state(
+		'petsync',
+		[
+			'favorites'            => \Petstablished_Helpers::get_favorites(),
+			'comparison'           => $comparison,
+			'comparisonMax'        => 4,
+			'pets'                 => array(),
+			'isLoading'            => false,
+			'notification'         => null,
+			'noNotification'       => true,
+			'_compareBarExpanded'  => $has_comparison,
+			'_compareBarPrevCount' => count( $comparison ),
+			'isCompareBarHidden'   => ! $has_comparison,
+			'isCompareBarVisible'  => $has_comparison,
+			// Button text for pet-actions (used by derived state getters).
+			'_i18n'                => [
+				'favorite'       => __( 'Favorite', 'vcpahumane-pet-sync' ),
+				'unfavorite'     => __( 'Unfavorite', 'vcpahumane-pet-sync' ),
+				'compare'        => __( 'Compare', 'vcpahumane-pet-sync' ),
+				'comparing'      => __( 'Comparing', 'vcpahumane-pet-sync' ),
+				'share'          => __( 'Share', 'vcpahumane-pet-sync' ),
+				'copyLink'       => __( 'Copy link', 'vcpahumane-pet-sync' ),
+				'copied'         => __( 'Copied!', 'vcpahumane-pet-sync' ),
+				'copiedAnnounce' => __( 'Link copied to clipboard', 'vcpahumane-pet-sync' ),
+			],
+		]
+	);
 
 	// === Grid Store State ===
-	wp_interactivity_state( 'petsync/grid', [
-		'isNavigating'          => false,
-		'compatFiltersExpanded' => true,
-	] );
+	wp_interactivity_state(
+		'petsync/grid',
+		[
+			'isNavigating'          => false,
+			'compatFiltersExpanded' => true,
+		]
+	);
 }
 
 /**
@@ -163,15 +172,15 @@ function register_script_modules(): void {
  */
 function get_i18n_strings(): array {
 	return [
-		'added'         => __( 'Added to favorites', 'vcpahumane-pet-sync' ),
-		'removed'       => __( 'Removed from favorites', 'vcpahumane-pet-sync' ),
-		'compareAdd'    => __( 'Added to comparison', 'vcpahumane-pet-sync' ),
-		'compareRemove' => __( 'Removed from comparison', 'vcpahumane-pet-sync' ),
-		'compareFull'   => __( 'Comparison is full (max 4)', 'vcpahumane-pet-sync' ),
-		'copied'        => __( 'Link copied!', 'vcpahumane-pet-sync' ),
-		'loading'       => __( 'Loading...', 'vcpahumane-pet-sync' ),
-		'error'         => __( 'Something went wrong', 'vcpahumane-pet-sync' ),
-		'noResults'     => __( 'No pets match your filters.', 'vcpahumane-pet-sync' ),
+		'added'             => __( 'Added to favorites', 'vcpahumane-pet-sync' ),
+		'removed'           => __( 'Removed from favorites', 'vcpahumane-pet-sync' ),
+		'compareAdd'        => __( 'Added to comparison', 'vcpahumane-pet-sync' ),
+		'compareRemove'     => __( 'Removed from comparison', 'vcpahumane-pet-sync' ),
+		'compareFull'       => __( 'Comparison is full (max 4)', 'vcpahumane-pet-sync' ),
+		'copied'            => __( 'Link copied!', 'vcpahumane-pet-sync' ),
+		'loading'           => __( 'Loading...', 'vcpahumane-pet-sync' ),
+		'error'             => __( 'Something went wrong', 'vcpahumane-pet-sync' ),
+		'noResults'         => __( 'No pets match your filters.', 'vcpahumane-pet-sync' ),
 		'searchPlaceholder' => __( 'Search by name or breed…', 'vcpahumane-pet-sync' ),
 	];
 }

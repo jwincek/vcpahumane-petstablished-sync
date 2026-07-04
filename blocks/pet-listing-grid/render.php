@@ -44,22 +44,22 @@ $show_favorites_toggle = true; // Always show — client-side toggle, no attribu
 $badge_type            = $attributes['badgeType'] ?? 'animal';
 
 // Filter visibility settings.
-$filter_animal    = $attributes['filterAnimal'] ?? true;
-$filter_breed     = $attributes['filterBreed'] ?? true;
-$filter_age       = $attributes['filterAge'] ?? true;
-$filter_sex       = $attributes['filterSex'] ?? true;
-$filter_size      = $attributes['filterSize'] ?? true;
+$filter_animal = $attributes['filterAnimal'] ?? true;
+$filter_breed  = $attributes['filterBreed'] ?? true;
+$filter_age    = $attributes['filterAge'] ?? true;
+$filter_sex    = $attributes['filterSex'] ?? true;
+$filter_size   = $attributes['filterSize'] ?? true;
 
 // Compatibility filter settings.
-$show_compat_filters     = $attributes['showCompatibilityFilters'] ?? true;
-$filter_good_with_dogs   = $attributes['filterGoodWithDogs'] ?? true;
-$filter_good_with_cats   = $attributes['filterGoodWithCats'] ?? true;
-$filter_good_with_kids   = $attributes['filterGoodWithKids'] ?? true;
-$filter_shots_current    = $attributes['filterShotsCurrent'] ?? true;
-$filter_spayed_neutered  = $attributes['filterSpayedNeutered'] ?? true;
-$filter_housebroken      = $attributes['filterHousebroken'] ?? true;
-$filter_special_needs    = $attributes['filterSpecialNeeds'] ?? false;
-$compat_style            = $attributes['compatibilityStyle'] ?? 'chips';
+$show_compat_filters    = $attributes['showCompatibilityFilters'] ?? true;
+$filter_good_with_dogs  = $attributes['filterGoodWithDogs'] ?? true;
+$filter_good_with_cats  = $attributes['filterGoodWithCats'] ?? true;
+$filter_good_with_kids  = $attributes['filterGoodWithKids'] ?? true;
+$filter_shots_current   = $attributes['filterShotsCurrent'] ?? true;
+$filter_spayed_neutered = $attributes['filterSpayedNeutered'] ?? true;
+$filter_housebroken     = $attributes['filterHousebroken'] ?? true;
+$filter_special_needs   = $attributes['filterSpecialNeeds'] ?? false;
+$compat_style           = $attributes['compatibilityStyle'] ?? 'chips';
 
 // === URL Parameters (for SSR + bookmarkable URLs) ===
 $search_query = sanitize_text_field( wp_unslash( $_GET['pet_search'] ?? '' ) );
@@ -122,7 +122,7 @@ if ( $ability ) {
 
 	// Add sort.
 	if ( $current_sort ) {
-		$sort_parts = explode( '-', $current_sort, 2 );
+		$sort_parts       = explode( '-', $current_sort, 2 );
 		$input['orderby'] = $sort_parts[0] === 'name' ? 'title' : $sort_parts[0];
 		$input['order']   = strtoupper( $sort_parts[1] ?? 'asc' );
 	}
@@ -140,7 +140,7 @@ if ( $ability ) {
 	$fallback_orderby = 'date';
 	$fallback_order   = 'DESC';
 	if ( $current_sort ) {
-		$sort_parts = explode( '-', $current_sort, 2 );
+		$sort_parts       = explode( '-', $current_sort, 2 );
 		$fallback_orderby = $sort_parts[0] === 'name' ? 'title' : ( $sort_parts[0] === 'random' ? 'rand' : $sort_parts[0] );
 		$fallback_order   = strtoupper( $sort_parts[1] ?? 'asc' );
 	}
@@ -161,9 +161,9 @@ if ( $ability ) {
 		),
 	);
 
-	$query = new WP_Query( $args );
-	$pets  = Pet_Hydrator::hydrate_many( $query->posts, 'grid' );
-	$total = $query->found_posts;
+	$query       = new WP_Query( $args );
+	$pets        = Pet_Hydrator::hydrate_many( $query->posts, 'grid' );
+	$total       = $query->found_posts;
 	$total_pages = $query->max_num_pages;
 	wp_reset_postdata();
 }
@@ -174,17 +174,17 @@ if ( $ability ) {
 $pet_ids = array();
 foreach ( $pets as $pet ) {
 	$pet_ids[] = array(
-		'id'              => $pet['id'],
-		'name'            => $pet['name'],
-		'url'             => $pet['url'] ?? '',
-		'image'           => $pet['image'] ?? '',
-		'breed'           => $pet['breed'] ?? '',
-		'age'             => $pet['age'] ?? '',
-		'sex'             => $pet['sex'] ?? '',
-		'size'            => $pet['size'] ?? '',
-		'special_needs'   => $pet['special_needs'] ?? '',
-		'is_new'          => $pet['is_new'] ?? false,
-		'is_bonded_pair'  => $pet['is_bonded_pair'] ?? false,
+		'id'                => $pet['id'],
+		'name'              => $pet['name'],
+		'url'               => $pet['url'] ?? '',
+		'image'             => $pet['image'] ?? '',
+		'breed'             => $pet['breed'] ?? '',
+		'age'               => $pet['age'] ?? '',
+		'sex'               => $pet['sex'] ?? '',
+		'size'              => $pet['size'] ?? '',
+		'special_needs'     => $pet['special_needs'] ?? '',
+		'is_new'            => $pet['is_new'] ?? false,
+		'is_bonded_pair'    => $pet['is_bonded_pair'] ?? false,
 		'bonded_pair_names' => $pet['bonded_pair_names'] ?? array(),
 	);
 }
@@ -201,45 +201,47 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' ) ?: home_url( '/pets/' );
 
 // === Sort options ===
 $sort_options = array(
-	''           => __( 'Newest First', 'vcpahumane-pet-sync' ),
-	'name-asc'   => __( 'Name A–Z', 'vcpahumane-pet-sync' ),
-	'name-desc'  => __( 'Name Z–A', 'vcpahumane-pet-sync' ),
-	'age-asc'    => __( 'Youngest First', 'vcpahumane-pet-sync' ),
-	'age-desc'   => __( 'Oldest First', 'vcpahumane-pet-sync' ),
-	'random'     => __( 'Random', 'vcpahumane-pet-sync' ),
+	''          => __( 'Newest First', 'vcpahumane-pet-sync' ),
+	'name-asc'  => __( 'Name A–Z', 'vcpahumane-pet-sync' ),
+	'name-desc' => __( 'Name Z–A', 'vcpahumane-pet-sync' ),
+	'age-asc'   => __( 'Youngest First', 'vcpahumane-pet-sync' ),
+	'age-desc'  => __( 'Oldest First', 'vcpahumane-pet-sync' ),
+	'random'    => __( 'Random', 'vcpahumane-pet-sync' ),
 );
 
 // === Build Context ===
 $context = array(
 	// Router.
-	'routerRegionId'    => $region_id,
-	'archiveUrl'        => $archive_url,
+	'routerRegionId' => $region_id,
+	'archiveUrl'     => $archive_url,
 
 	// Listing data — minimal payload for client reactivity.
-	'petIds'            => $pet_ids,
-	'total'             => $total,
-	'totalPages'        => $total_pages,
-	'page'              => $paged,
+	'petIds'         => $pet_ids,
+	'total'          => $total,
+	'totalPages'     => $total_pages,
+	'page'           => $paged,
 
 	// Filter state.
-	'searchQuery'       => $search_query,
-	'filters'           => $url_filters,
-	'compatFilters'     => $url_compat,
-	'filterCounts'      => $filter_counts,
-	'sort'              => $current_sort,
+	'searchQuery'    => $search_query,
+	'filters'        => $url_filters,
+	'compatFilters'  => $url_compat,
+	'filterCounts'   => $filter_counts,
+	'sort'           => $current_sort,
 	// Config.
-	'badgeType'         => $badge_type,
-	'perPage'           => $per_page,
+	'badgeType'      => $badge_type,
+	'perPage'        => $per_page,
 );
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'                   => 'pet-listing-grid',
-	'data-wp-interactive'     => 'petsync/grid',
-	'data-wp-router-region'   => $region_id,
-	'data-wp-key'             => $region_id,
-	'data-pets-archive-url'   => $archive_url,
-	'style'                   => '--pet-grid-columns: ' . intval( $columns ),
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'                 => 'pet-listing-grid',
+		'data-wp-interactive'   => 'petsync/grid',
+		'data-wp-router-region' => $region_id,
+		'data-wp-key'           => $region_id,
+		'data-pets-archive-url' => $archive_url,
+		'style'                 => '--pet-grid-columns: ' . intval( $columns ),
+	)
+);
 
 // Context is on an inner element so it gets replaced when the
 // interactivity-router swaps the region's innerHTML on navigation.
@@ -254,35 +256,77 @@ $inner_attributes = sprintf(
 
 // === Compatibility Filters Config ===
 $compat_icons = array(
-	'goodWithDogs'   => Petstablished_Icons::get( 'dog', array( 'width' => 16, 'height' => 16 ) ),
-	'goodWithCats'   => Petstablished_Icons::get( 'cat', array( 'width' => 16, 'height' => 16 ) ),
-	'goodWithKids'   => Petstablished_Icons::get( 'child', array( 'width' => 16, 'height' => 16 ) ),
-	'shotsCurrent'   => Petstablished_Icons::get( 'shield-check', array( 'width' => 16, 'height' => 16 ) ),
-	'spayedNeutered' => Petstablished_Icons::get( 'check', array( 'width' => 16, 'height' => 16 ) ),
-	'housebroken'    => Petstablished_Icons::get( 'house', array( 'width' => 16, 'height' => 16 ) ),
-	'specialNeeds'   => Petstablished_Icons::get( 'heart-special', array( 'width' => 16, 'height' => 16 ) ),
+	'goodWithDogs'   => Petstablished_Icons::get(
+		'dog',
+		array(
+			'width'  => 16,
+			'height' => 16,
+		)
+	),
+	'goodWithCats'   => Petstablished_Icons::get(
+		'cat',
+		array(
+			'width'  => 16,
+			'height' => 16,
+		)
+	),
+	'goodWithKids'   => Petstablished_Icons::get(
+		'child',
+		array(
+			'width'  => 16,
+			'height' => 16,
+		)
+	),
+	'shotsCurrent'   => Petstablished_Icons::get(
+		'shield-check',
+		array(
+			'width'  => 16,
+			'height' => 16,
+		)
+	),
+	'spayedNeutered' => Petstablished_Icons::get(
+		'check',
+		array(
+			'width'  => 16,
+			'height' => 16,
+		)
+	),
+	'housebroken'    => Petstablished_Icons::get(
+		'house',
+		array(
+			'width'  => 16,
+			'height' => 16,
+		)
+	),
+	'specialNeeds'   => Petstablished_Icons::get(
+		'heart-special',
+		array(
+			'width'  => 16,
+			'height' => 16,
+		)
+	),
 );
 
 $compat_filters_config = array(
-	'goodWithDogs' => array(
+	'goodWithDogs'   => array(
 		'label' => __( 'Good with dogs', 'vcpahumane-pet-sync' ),
 		'icon'  => $compat_icons['goodWithDogs'],
 		'show'  => $filter_good_with_dogs,
 		'key'   => 'goodWithDogs',
 	),
-	'goodWithCats' => array(
+	'goodWithCats'   => array(
 		'label' => __( 'Good with cats', 'vcpahumane-pet-sync' ),
 		'icon'  => $compat_icons['goodWithCats'],
 		'show'  => $filter_good_with_cats,
 		'key'   => 'goodWithCats',
 	),
-	'goodWithKids' => array(
+	'goodWithKids'   => array(
 		'label' => __( 'Good with kids', 'vcpahumane-pet-sync' ),
 		'icon'  => $compat_icons['goodWithKids'],
 		'show'  => $filter_good_with_kids,
 		'key'   => 'goodWithKids',
 	),
-	'shotsCurrent' => array(
+	'shotsCurrent'   => array(
 		'label' => __( 'Shots current', 'vcpahumane-pet-sync' ),
 		'icon'  => $compat_icons['shotsCurrent'],
 		'show'  => $filter_shots_current,
@@ -294,13 +338,13 @@ $compat_filters_config = array(
 		'show'  => $filter_spayed_neutered,
 		'key'   => 'spayedNeutered',
 	),
-	'housebroken' => array(
+	'housebroken'    => array(
 		'label' => __( 'Housebroken', 'vcpahumane-pet-sync' ),
 		'icon'  => $compat_icons['housebroken'],
 		'show'  => $filter_housebroken,
 		'key'   => 'housebroken',
 	),
-	'specialNeeds' => array(
+	'specialNeeds'   => array(
 		'label' => __( 'Special needs', 'vcpahumane-pet-sync' ),
 		'icon'  => $compat_icons['specialNeeds'],
 		'show'  => $filter_special_needs,
@@ -319,7 +363,7 @@ $compat_field_map = array(
 	'housebroken'    => 'housebroken',
 	'specialNeeds'   => 'special_needs',
 );
-$truthy_lc = array( 'yes', '1', 'true' );
+$truthy_lc        = array( 'yes', '1', 'true' );
 
 $compat_counts = array();
 foreach ( array_keys( $compat_filters_config ) as $key ) {
@@ -329,10 +373,15 @@ foreach ( array_keys( $compat_filters_config ) as $key ) {
 		$compat_counts[ $key ] = $count_data[0]['count'];
 	} else {
 		// Fallback: count from hydrated pet data.
-		$field = $compat_field_map[ $key ] ?? $key;
-		$compat_counts[ $key ] = count( array_filter( $pets, function( $pet ) use ( $field, $truthy_lc ) {
-			return in_array( strtolower( (string) ( $pet[ $field ] ?? '' ) ), $truthy_lc, true );
-		} ) );
+		$field                 = $compat_field_map[ $key ] ?? $key;
+		$compat_counts[ $key ] = count(
+			array_filter(
+				$pets,
+				function ( $pet ) use ( $field, $truthy_lc ) {
+					return in_array( strtolower( (string) ( $pet[ $field ] ?? '' ) ), $truthy_lc, true );
+				}
+			)
+		);
 	}
 }
 
@@ -370,12 +419,13 @@ $filter_config = array(
 
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 <div class="pet-listing-grid__inner" <?php echo $inner_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from wp_interactivity_data_wp_context() plus static directives. */ ?>>
-	<?php if ( $show_filters || $show_search || $show_favorites_toggle ) :
+	<?php
+	if ( $show_filters || $show_search || $show_favorites_toggle ) :
 		// Count active filters for the toggle badge.
 		$active_filter_count = count( array_filter( $url_filters ) )
 			+ count( array_filter( $url_compat ) );
-		$has_active_filters = $active_filter_count > 0 || $search_query || $current_sort;
-	?>
+		$has_active_filters  = $active_filter_count > 0 || $search_query || $current_sort;
+		?>
 		<div class="pet-listing-grid__toolbar">
 			<!-- Always-visible row: search, filter toggle, sort -->
 			<div class="pet-listing-grid__toolbar-row">
@@ -413,7 +463,15 @@ $filter_config = array(
 								data-wp-on--click="actions.submitSearch"
 								aria-label="<?php esc_attr_e( 'Search', 'vcpahumane-pet-sync' ); ?>"
 							>
-								<?php Petstablished_Icons::render( 'search', array( 'width' => 16, 'height' => 16 ) ); ?>
+								<?php
+								Petstablished_Icons::render(
+									'search',
+									array(
+										'width'  => 16,
+										'height' => 16,
+									)
+								);
+								?>
 							</button>
 						</div>
 					</div>
@@ -468,16 +526,20 @@ $filter_config = array(
 					data-wp-class--is-open="state.filterDrawerOpen"
 				>
 				<!-- Single inner wrapper ensures overflow:hidden clips everything
-				     (taxonomy selects + compat details) when the drawer collapses. -->
+					(taxonomy selects + compat details) when the drawer collapses. -->
 				<div class="pet-listing-grid__filter-drawer-inner">
 					<div class="pet-listing-grid__filters" role="group" aria-label="<?php esc_attr_e( 'Filter pets', 'vcpahumane-pet-sync' ); ?>">
 						<?php
 						foreach ( $filter_config as $key => $config ) :
-							if ( ! $config['show'] ) continue;
+							if ( ! $config['show'] ) {
+								continue;
+							}
 							$options = $filter_counts[ $key ] ?? array();
-							if ( empty( $options ) ) continue;
+							if ( empty( $options ) ) {
+								continue;
+							}
 							$current_value = $url_filters[ $key ] ?? '';
-						?>
+							?>
 							<div class="pet-listing-grid__filter-group">
 								<label class="pet-listing-grid__filter-label screen-reader-text" for="filter-<?php echo esc_attr( $key ); ?>">
 									<?php echo esc_html( $config['label'] ); ?>
@@ -513,7 +575,7 @@ $filter_config = array(
 
 					<?php if ( $has_compat_filters ) : ?>
 						<?php
-						$active_compat_count = count( array_filter( $url_compat ) );
+						$active_compat_count  = count( array_filter( $url_compat ) );
 						$visible_compat_count = count( array_filter( array_column( $compat_filters_config, 'show' ) ) );
 						// Always open in HTML — visible on desktop immediately.
 						// On mobile, the grid's init callback closes it unless
@@ -531,14 +593,27 @@ $filter_config = array(
 								<?php if ( $active_compat_count > 0 ) : ?>
 									<span class="pet-listing-grid__compat-summary-count"><?php echo esc_html( $active_compat_count ); ?></span>
 								<?php endif; ?>
-								<?php Petstablished_Icons::render( 'chevron-down', array( 'width' => 16, 'height' => 16, 'class' => 'pet-listing-grid__compat-summary-icon' ) ); ?>
+								<?php
+								Petstablished_Icons::render(
+									'chevron-down',
+									array(
+										'width'  => 16,
+										'height' => 16,
+										'class'  => 'pet-listing-grid__compat-summary-icon',
+									)
+								);
+								?>
 							</summary>
 							<div class="pet-listing-grid__compat-filters pet-listing-grid__compat-filters--<?php echo esc_attr( $compat_style ); ?>" role="group" aria-label="<?php esc_attr_e( 'Compatibility filters', 'vcpahumane-pet-sync' ); ?>">
 								<?php foreach ( $compat_filters_config as $key => $filter ) : ?>
 									<?php
-									if ( ! $filter['show'] ) continue;
+									if ( ! $filter['show'] ) {
+										continue;
+									}
 									$count = $compat_counts[ $key ] ?? 0;
-									if ( $count === 0 ) continue;
+									if ( $count === 0 ) {
+										continue;
+									}
 									?>
 									<?php if ( $compat_style === 'chips' ) : ?>
 										<button
@@ -681,7 +756,7 @@ $filter_config = array(
 	}
 
 	if ( ! empty( $active_chips ) ) :
-	?>
+		?>
 		<div class="pet-listing-grid__active-filters" role="list" aria-label="<?php esc_attr_e( 'Active filters', 'vcpahumane-pet-sync' ); ?>">
 			<?php foreach ( $active_chips as $chip ) : ?>
 				<button
@@ -712,7 +787,8 @@ $filter_config = array(
 	<?php endif; ?>
 
 	<ul class="pet-listing-grid__grid" role="list">
-		<?php foreach ( $pets as $index => $pet ) :
+		<?php
+		foreach ( $pets as $index => $pet ) :
 			$pet_context = array(
 				'petId'   => $pet['id'],
 				'petName' => $pet['name'],
@@ -738,7 +814,7 @@ $filter_config = array(
 					break;
 			}
 			$is_favorited = in_array( $pet['id'], $favorites, true );
-		?>
+			?>
 			<li
 				class="pet-listing-grid__item<?php echo $is_favorited ? ' is-favorited' : ''; ?>"
 				data-wp-key="pet-<?php echo esc_attr( $pet['id'] ); ?>"
@@ -761,7 +837,16 @@ $filter_config = array(
 							>
 						<?php else : ?>
 							<div class="pet-listing-grid__card-placeholder">
-								<?php Petstablished_Icons::render( 'paw', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1 ) ); ?>
+								<?php
+								Petstablished_Icons::render(
+									'paw',
+									array(
+										'width'        => 48,
+										'height'       => 48,
+										'stroke-width' => 1,
+									)
+								);
+								?>
 							</div>
 						<?php endif; ?>
 
@@ -799,7 +884,7 @@ $filter_config = array(
 							|| ( isset( $pet['special_needs'] ) && strtolower( (string) $pet['special_needs'] ) === 'yes' )
 							|| ( $pet['is_bonded_pair'] ?? false );
 						if ( $has_badges ) :
-						?>
+							?>
 							<div class="pet-listing-grid__card-badges">
 								<?php if ( $pet['is_new'] ?? false ) : ?>
 									<span class="pet-listing-grid__badge pet-listing-grid__badge--new"><?php esc_html_e( 'New', 'vcpahumane-pet-sync' ); ?></span>
@@ -837,7 +922,7 @@ $filter_config = array(
 												<?php
 												$partners = $pet['bonded_pair_names'] ?? array();
 												foreach ( $partners as $partner ) :
-												?>
+													?>
 													<li>
 														<?php if ( ! empty( $partner['url'] ) ) : ?>
 															<a href="<?php echo esc_url( $partner['url'] ); ?>" class="pet-listing-grid__bonded-popover-link">
@@ -870,7 +955,7 @@ $filter_config = array(
 									"state.isFavorited ? 'currentColor' : 'none'",
 									$is_favorited ? 'currentColor' : 'none'
 								);
-							?>
+								?>
 							</button>
 
 							<button
@@ -881,7 +966,15 @@ $filter_config = array(
 								data-wp-class--is-active="state.isInComparison"
 								data-wp-bind--disabled="state.isCompareDisabled"
 							>
-								<?php Petstablished_Icons::render( 'compare', array( 'width' => 16, 'height' => 16 ) ); ?>
+								<?php
+								Petstablished_Icons::render(
+									'compare',
+									array(
+										'width'  => 16,
+										'height' => 16,
+									)
+								);
+								?>
 								<span><?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?></span>
 							</button>
 						</div>
@@ -904,26 +997,32 @@ $filter_config = array(
 	</div>
 
 	<?php // === Pagination === ?>
-	<?php if ( $total_pages > 1 ) :
-		$base_url = $archive_url;
-		$current_params = array_filter( array_merge(
-			array_map( fn( $v ) => $v ?: null, array_combine(
-				array_map( fn( $k ) => 'filter_' . $k, array_keys( $url_filters ) ),
-				array_values( $url_filters )
-			) ),
-			array_map(
-				fn( $v ) => $v ? '1' : null,
-				array_combine(
-					array_map( fn( $k ) => 'compat_' . $k, array_keys( $url_compat ) ),
-					array_values( $url_compat )
-				)
-			),
-			$search_query ? array( 'pet_search' => $search_query ) : array(),
-			$current_sort ? array( 'sort' => $current_sort ) : array(),
-		) );
+	<?php
+	if ( $total_pages > 1 ) :
+		$base_url       = $archive_url;
+		$current_params = array_filter(
+			array_merge(
+				array_map(
+					fn( $v ) => $v ?: null,
+					array_combine(
+						array_map( fn( $k ) => 'filter_' . $k, array_keys( $url_filters ) ),
+						array_values( $url_filters )
+					)
+				),
+				array_map(
+					fn( $v ) => $v ? '1' : null,
+					array_combine(
+						array_map( fn( $k ) => 'compat_' . $k, array_keys( $url_compat ) ),
+						array_values( $url_compat )
+					)
+				),
+				$search_query ? array( 'pet_search' => $search_query ) : array(),
+				$current_sort ? array( 'sort' => $current_sort ) : array(),
+			)
+		);
 
 		// Build page URL helper.
-		$page_url_fn = function( $page_num ) use ( $current_params, $base_url ) {
+		$page_url_fn = function ( $page_num ) use ( $current_params, $base_url ) {
 			$params = $current_params;
 			if ( $page_num > 1 ) {
 				$params['paged'] = $page_num;
@@ -934,17 +1033,17 @@ $filter_config = array(
 		};
 
 		// Ellipsis pagination: always show first, last, and a window around current.
-		$window = 1; // pages to show on each side of current
+		$window        = 1; // pages to show on each side of current
 		$pages_to_show = array();
 		for ( $i = 1; $i <= $total_pages; $i++ ) {
 			if ( $i === 1 || $i === $total_pages
-				|| ( $i >= $paged - $window && $i <= $paged + $window ) ) {
+			|| ( $i >= $paged - $window && $i <= $paged + $window ) ) {
 				$pages_to_show[] = $i;
 			}
 		}
 		$pages_to_show = array_unique( $pages_to_show );
 		sort( $pages_to_show );
-	?>
+		?>
 		<nav class="pet-listing-grid__pagination" aria-label="<?php esc_attr_e( 'Pet listing pages', 'vcpahumane-pet-sync' ); ?>">
 			<?php // Prev button ?>
 			<?php if ( $paged > 1 ) : ?>
@@ -967,12 +1066,15 @@ $filter_config = array(
 			// Page numbers with ellipsis.
 			$prev_page = 0;
 			foreach ( $pages_to_show as $page_num ) :
-				if ( $prev_page && $page_num - $prev_page > 1 ) : ?>
+				if ( $prev_page && $page_num - $prev_page > 1 ) :
+					?>
 					<span class="pet-listing-grid__page pet-listing-grid__page--ellipsis" aria-hidden="true">…</span>
-				<?php endif;
+					<?php
+				endif;
 				$prev_page = $page_num;
 
-				if ( $page_num === $paged ) : ?>
+				if ( $page_num === $paged ) :
+					?>
 					<span class="pet-listing-grid__page pet-listing-grid__page--current" aria-current="page">
 						<?php echo esc_html( $page_num ); ?>
 					</span>
@@ -985,8 +1087,10 @@ $filter_config = array(
 					>
 						<?php echo esc_html( $page_num ); ?>
 					</a>
-				<?php endif;
-			endforeach; ?>
+					<?php
+				endif;
+			endforeach;
+			?>
 
 			<?php // Next button ?>
 			<?php if ( $paged < $total_pages ) : ?>

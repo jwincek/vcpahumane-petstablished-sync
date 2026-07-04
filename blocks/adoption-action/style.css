@@ -66,6 +66,7 @@
 }
 
 @media (min-width: 480px) {
+
 	.pet-adoption-cta__actions {
 		align-items: stretch;
 		min-width: 200px;
@@ -73,12 +74,14 @@
 }
 
 @media (min-width: 768px) {
+
 	.pet-adoption-cta__actions {
 		min-width: 240px;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-adoption-cta__action-btn {
 		transition: none;
 	}

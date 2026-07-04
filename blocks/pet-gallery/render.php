@@ -26,13 +26,24 @@ $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 // Show placeholder in editor when no pet context.
 if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
-		$wrapper_attributes = get_block_wrapper_attributes( array(
-			'class' => 'pet-gallery pet-gallery--placeholder',
-		) );
+		$wrapper_attributes = get_block_wrapper_attributes(
+			array(
+				'class' => 'pet-gallery pet-gallery--placeholder',
+			)
+		);
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-gallery__placeholder">
-				<?php Petstablished_Icons::render( 'image-placeholder', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'image-placeholder',
+					array(
+						'width'        => 48,
+						'height'       => 48,
+						'stroke-width' => 1.5,
+					)
+				);
+				?>
 				<p><?php esc_html_e( 'Pet Gallery', 'vcpahumane-pet-sync' ); ?></p>
 				<small><?php esc_html_e( 'Displays pet photos with lightbox. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
@@ -75,8 +86,8 @@ $all_gallery = $pet['gallery'] ?? [];
 // featured image so it doesn't appear twice on the page.
 // WordPress sideloading preserves the original filename, so a
 // case-insensitive basename comparison catches the domain mismatch.
-$featured_basename  = strtolower( pathinfo( $featured_url, PATHINFO_FILENAME ) );
-$thumbnail_images   = array();
+$featured_basename = strtolower( pathinfo( $featured_url, PATHINFO_FILENAME ) );
+$thumbnail_images  = array();
 
 foreach ( $all_gallery as $img ) {
 	$img_url = $img['url'] ?? '';
@@ -100,13 +111,24 @@ $lightbox_images = array_values( array_filter( $all_gallery, fn( $img ) => ! emp
 // Nothing to show.
 if ( ! $has_featured && ! $has_thumbnails ) {
 	if ( $is_editor ) {
-		$wrapper_attributes = get_block_wrapper_attributes( array(
-			'class' => 'pet-gallery pet-gallery--placeholder',
-		) );
+		$wrapper_attributes = get_block_wrapper_attributes(
+			array(
+				'class' => 'pet-gallery pet-gallery--placeholder',
+			)
+		);
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-gallery__placeholder">
-				<?php Petstablished_Icons::render( 'image-placeholder', array( 'width' => 48, 'height' => 48, 'stroke-width' => 1.5 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'image-placeholder',
+					array(
+						'width'        => 48,
+						'height'       => 48,
+						'stroke-width' => 1.5,
+					)
+				);
+				?>
 				<p><?php esc_html_e( 'No photos available', 'vcpahumane-pet-sync' ); ?></p>
 				<small><?php esc_html_e( 'Add a featured image or gallery to this pet.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
@@ -118,14 +140,14 @@ if ( ! $has_featured && ! $has_thumbnails ) {
 
 // === Badges ===
 // Split into two groups:
-//   - Overlay: status badge only (stays on the featured image, top-left)
-//   - Below:   everything else (rendered as a pill strip beneath the image)
+// - Overlay: status badge only (stays on the featured image, top-left)
+// - Below:   everything else (rendered as a pill strip beneath the image)
 $overlay_badges = array();
 $below_badges   = array();
 
 $status = $pet['status'] ?? '';
 if ( ( $attributes['showBadgeStatus'] ?? true ) && $status ) {
-	$status_slug = sanitize_title( $status );
+	$status_slug      = sanitize_title( $status );
 	$overlay_badges[] = array(
 		'label' => esc_html( $status ),
 		'class' => 'pet-gallery__badge--status pet-gallery__badge--status-' . $status_slug,
@@ -161,7 +183,7 @@ if ( ( $attributes['showBadgeSpecialNeeds'] ?? true ) && isset( $pet['special_ne
 // === Interactivity context ===
 // The lightbox gets the complete gallery so every image is navigable.
 $has_lightbox = ! empty( $lightbox_images );
-$context = array(
+$context      = array(
 	'images'       => $lightbox_images,
 	'currentIndex' => 0,
 	'isOpen'       => false,
@@ -202,11 +224,17 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 			class="pet-gallery__featured-trigger"
 			data-wp-on--click="actions.open"
 			data-index="0"
-			aria-label="<?php echo esc_attr( sprintf(
+			aria-label="
+			<?php
+			echo esc_attr(
+				sprintf(
 				/* translators: %s: pet name */
-				__( 'View photos of %s', 'vcpahumane-pet-sync' ),
-				$pet_name
-			) ); ?>"
+					__( 'View photos of %s', 'vcpahumane-pet-sync' ),
+					$pet_name
+				)
+			);
+			?>
+			"
 		>
 		<?php endif; ?>
 			<img
@@ -228,7 +256,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 		// Map each thumbnail back to its position in the full lightbox
 		// array so clicking a thumbnail opens the correct lightbox image.
 		foreach ( $thumbnail_images as $thumb ) :
-			$thumb_url = $thumb['url'] ?? '';
+			$thumb_url      = $thumb['url'] ?? '';
 			$lightbox_index = 0;
 			foreach ( $lightbox_images as $li => $lb_img ) {
 				if ( ( $lb_img['url'] ?? '' ) === $thumb_url ) {
@@ -236,7 +264,7 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 					break;
 				}
 			}
-		?>
+			?>
 			<li class="pet-gallery__item">
 				<button
 					type="button"
@@ -245,13 +273,19 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 					data-wp-on--click="actions.open"
 					data-index="<?php echo esc_attr( $lightbox_index ); ?>"
 					<?php endif; ?>
-					aria-label="<?php echo esc_attr( sprintf(
+					aria-label="
+					<?php
+					echo esc_attr(
+						sprintf(
 						/* translators: 1: pet name, 2: image number, 3: total images */
-						__( 'View %1$s photo %2$d of %3$d', 'vcpahumane-pet-sync' ),
-						$pet_name,
-						$lightbox_index + 1,
-						count( $lightbox_images )
-					) ); ?>"
+							__( 'View %1$s photo %2$d of %3$d', 'vcpahumane-pet-sync' ),
+							$pet_name,
+							$lightbox_index + 1,
+							count( $lightbox_images )
+						)
+					);
+					?>
+					"
 				>
 					<img
 						src="<?php echo esc_url( $thumb_url ); ?>"
@@ -282,11 +316,15 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 	<?php if ( ! empty( $videos ) ) : ?>
 	<div class="pet-gallery__videos">
 		<h3 class="pet-gallery__videos-heading">
-			<?php echo esc_html( sprintf(
+			<?php
+			echo esc_html(
+				sprintf(
 				/* translators: %s: pet name */
-				_n( 'Video of %s', 'Videos of %s', count( $videos ), 'vcpahumane-pet-sync' ),
-				$pet_name
-			) ); ?>
+					_n( 'Video of %s', 'Videos of %s', count( $videos ), 'vcpahumane-pet-sync' ),
+					$pet_name
+				)
+			);
+			?>
 		</h3>
 		<div class="pet-gallery__videos-grid">
 			<?php foreach ( $videos as $video_id ) : ?>
@@ -294,11 +332,17 @@ $wrapper_attributes = get_block_wrapper_attributes( $wrapper_attrs );
 					<iframe
 						class="pet-gallery__video-iframe"
 						src="https://www.youtube-nocookie.com/embed/<?php echo esc_attr( $video_id ); ?>"
-						title="<?php echo esc_attr( sprintf(
+						title="
+						<?php
+						echo esc_attr(
+							sprintf(
 							/* translators: %s: pet name */
-							__( 'Video of %s', 'vcpahumane-pet-sync' ),
-							$pet_name
-						) ); ?>"
+								__( 'Video of %s', 'vcpahumane-pet-sync' ),
+								$pet_name
+							)
+						);
+						?>
+						"
 						frameborder="0"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 						allowfullscreen

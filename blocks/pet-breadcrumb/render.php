@@ -31,9 +31,11 @@ $home_label    = $attributes['homeLabel'] ?? __( 'Home', 'vcpahumane-pet-sync' )
 $archive_label = $attributes['archiveLabel'] ?? __( 'Adoptable Pets', 'vcpahumane-pet-sync' );
 $separator     = $attributes['separator'] ?? '›';
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class' => 'pet-details__breadcrumb',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'pet-details__breadcrumb',
+	)
+);
 ?>
 <nav <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?> aria-label="<?php esc_attr_e( 'Breadcrumb', 'vcpahumane-pet-sync' ); ?>">
 	<a href="<?php echo esc_url( $home_url ); ?>" class="pet-details__breadcrumb-item">

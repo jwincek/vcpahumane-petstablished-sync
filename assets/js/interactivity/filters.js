@@ -6,7 +6,7 @@
  *
  * v3.0.0: imports from utils.js
  *
- * @package Petstablished_Sync
+ * @package
  * @since 3.0.0
  */
 
@@ -18,10 +18,12 @@ import { announce } from '../utils.js';
 const updateUrlFilters = ( filters, prefix = 'filter_' ) => {
 	const url = new URL( window.location.href );
 	Array.from( url.searchParams.keys() )
-		.filter( key => key.startsWith( prefix ) )
-		.forEach( key => url.searchParams.delete( key ) );
+		.filter( ( key ) => key.startsWith( prefix ) )
+		.forEach( ( key ) => url.searchParams.delete( key ) );
 	Object.entries( filters || {} ).forEach( ( [ key, value ] ) => {
-		if ( value ) url.searchParams.set( prefix + key, value );
+		if ( value ) {
+			url.searchParams.set( prefix + key, value );
+		}
 	} );
 	window.history.replaceState( null, '', url.toString() );
 };
@@ -35,17 +37,23 @@ const { state, actions } = store( 'petsync/filters', {
 
 			if ( ctx.filters ) {
 				for ( const value of Object.values( ctx.filters ) ) {
-					if ( value ) return true;
+					if ( value ) {
+						return true;
+					}
 				}
 			}
 
 			if ( ctx.compatFilters ) {
 				for ( const value of Object.values( ctx.compatFilters ) ) {
-					if ( value ) return true;
+					if ( value ) {
+						return true;
+					}
 				}
 			}
 
-			if ( ctx.searchQuery?.trim() ) return true;
+			if ( ctx.searchQuery?.trim() ) {
+				return true;
+			}
 
 			return false;
 		},
@@ -61,10 +69,16 @@ const { state, actions } = store( 'petsync/filters', {
 			}
 
 			updateUrlFilters( ctx.filters );
-			announce( select.value ? `Filtered by ${ select.name }` : `${ select.name } filter cleared` );
+			announce(
+				select.value
+					? `Filtered by ${ select.name }`
+					: `${ select.name } filter cleared`
+			);
 
 			if ( ctx.navigateOnChange ) {
-				window.location.href = new URL( window.location.href ).toString();
+				window.location.href = new URL(
+					window.location.href
+				).toString();
 			}
 		},
 
@@ -72,16 +86,21 @@ const { state, actions } = store( 'petsync/filters', {
 			const ctx = getContext();
 			const input = event.target;
 			const filterKey = input.dataset.filterKey || input.name;
-			const isChecked = input.type === 'checkbox'
-				? input.checked
-				: input.getAttribute( 'aria-pressed' ) === 'true';
+			const isChecked =
+				input.type === 'checkbox'
+					? input.checked
+					: input.getAttribute( 'aria-pressed' ) === 'true';
 
 			if ( ctx.compatFilters ) {
-				ctx.compatFilters[ filterKey ] = input.type === 'checkbox' ? input.checked : ! isChecked;
+				ctx.compatFilters[ filterKey ] =
+					input.type === 'checkbox' ? input.checked : ! isChecked;
 			}
 
 			if ( input.type !== 'checkbox' ) {
-				input.setAttribute( 'aria-pressed', ctx.compatFilters[ filterKey ] ? 'true' : 'false' );
+				input.setAttribute(
+					'aria-pressed',
+					ctx.compatFilters[ filterKey ] ? 'true' : 'false'
+				);
 			}
 
 			announce(
@@ -134,16 +153,25 @@ const { state, actions } = store( 'petsync/filters', {
 			ctx.searchQuery = '';
 
 			if ( ctx.filters ) {
-				Object.keys( ctx.filters ).forEach( key => ( ctx.filters[ key ] = '' ) );
+				Object.keys( ctx.filters ).forEach(
+					( key ) => ( ctx.filters[ key ] = '' )
+				);
 			}
 			if ( ctx.compatFilters ) {
-				Object.keys( ctx.compatFilters ).forEach( key => ( ctx.compatFilters[ key ] = false ) );
+				Object.keys( ctx.compatFilters ).forEach(
+					( key ) => ( ctx.compatFilters[ key ] = false )
+				);
 			}
 
 			const url = new URL( window.location.href );
 			Array.from( url.searchParams.keys() )
-				.filter( key => key.startsWith( 'filter_' ) || key === 'pet_search' || key === 'favorites' )
-				.forEach( key => url.searchParams.delete( key ) );
+				.filter(
+					( key ) =>
+						key.startsWith( 'filter_' ) ||
+						key === 'pet_search' ||
+						key === 'favorites'
+				)
+				.forEach( ( key ) => url.searchParams.delete( key ) );
 			window.history.replaceState( null, '', url.toString() );
 
 			announce( 'All filters cleared' );

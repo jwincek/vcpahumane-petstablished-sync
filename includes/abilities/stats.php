@@ -29,10 +29,12 @@ function get_adoption_stats( array $input = [] ): array {
 
 	// Count by species.
 	$species_counts = [];
-	$animal_terms   = get_terms( [
-		'taxonomy'   => 'pet_animal',
-		'hide_empty' => true,
-	] );
+	$animal_terms   = get_terms(
+		[
+			'taxonomy'   => 'pet_animal',
+			'hide_empty' => true,
+		]
+	);
 
 	$total_available = 0;
 
@@ -41,7 +43,7 @@ function get_adoption_stats( array $input = [] ): array {
 			$count = count_pets_by_status_and_term( $status, 'pet_animal', $term->term_id );
 			if ( $count > 0 ) {
 				$species_counts[ $term->name ] = $count;
-				$total_available += $count;
+				$total_available              += $count;
 			}
 		}
 	}
@@ -55,28 +57,32 @@ function get_adoption_stats( array $input = [] ): array {
 	$available_by_species = implode( ', ', $parts );
 
 	// Newest pet.
-	$newest = get_posts( [
-		'post_type'      => 'vcps_pet',
-		'post_status'    => 'publish',
-		'posts_per_page' => 1,
-		'orderby'        => 'date',
-		'order'          => 'DESC',
-		'tax_query'      => [
-			[
-				'taxonomy' => 'pet_status',
-				'field'    => 'slug',
-				'terms'    => $status,
+	$newest = get_posts(
+		[
+			'post_type'      => 'vcps_pet',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+			'tax_query'      => [
+				[
+					'taxonomy' => 'pet_status',
+					'field'    => 'slug',
+					'terms'    => $status,
+				],
 			],
-		],
-	] );
+		]
+	);
 
 	// Total pets (all statuses).
-	$total_query = new WP_Query( [
-		'post_type'      => 'vcps_pet',
-		'post_status'    => 'publish',
-		'posts_per_page' => 1,
-		'fields'         => 'ids',
-	] );
+	$total_query = new WP_Query(
+		[
+			'post_type'      => 'vcps_pet',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+		]
+	);
 
 	// Last sync time.
 	$last_sync = get_option( 'petstablished_last_sync', '' );
@@ -101,25 +107,27 @@ function get_adoption_stats( array $input = [] ): array {
  * @return int
  */
 function count_pets_by_status_and_term( string $status, string $taxonomy, int $term_id ): int {
-	$query = new WP_Query( [
-		'post_type'      => 'vcps_pet',
-		'post_status'    => 'publish',
-		'posts_per_page' => 1,
-		'fields'         => 'ids',
-		'tax_query'      => [
-			'relation' => 'AND',
-			[
-				'taxonomy' => 'pet_status',
-				'field'    => 'slug',
-				'terms'    => $status,
+	$query = new WP_Query(
+		[
+			'post_type'      => 'vcps_pet',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'tax_query'      => [
+				'relation' => 'AND',
+				[
+					'taxonomy' => 'pet_status',
+					'field'    => 'slug',
+					'terms'    => $status,
+				],
+				[
+					'taxonomy' => $taxonomy,
+					'field'    => 'term_id',
+					'terms'    => $term_id,
+				],
 			],
-			[
-				'taxonomy' => $taxonomy,
-				'field'    => 'term_id',
-				'terms'    => $term_id,
-			],
-		],
-	] );
+		]
+	);
 
 	return $query->found_posts;
 }

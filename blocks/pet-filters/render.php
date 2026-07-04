@@ -1,7 +1,7 @@
 <?php
 /**
  * Pet Filters Block
- * 
+ *
  * Progressive enhancement: Works as plain HTML form (no JS required),
  * enhanced with Interactivity API for instant filtering.
  *
@@ -22,7 +22,7 @@ if ( $ability ) {
 } else {
 	$options = Petstablished_Helpers::get_filter_options();
 }
-$layout  = $attributes['layout'] ?? 'horizontal';
+$layout = $attributes['layout'] ?? 'horizontal';
 
 // Compatibility filter settings.
 $show_compatibility      = $attributes['showCompatibility'] ?? true;
@@ -31,25 +31,25 @@ $compatibility_collapsed = $attributes['compatibilityCollapsed'] ?? false;
 
 // Get current filter values from URL.
 $current = array(
-	'animal' => sanitize_text_field( $_GET['animal'] ?? '' ),
-	'breed'  => sanitize_text_field( $_GET['breed'] ?? '' ),
-	'age'    => sanitize_text_field( $_GET['age'] ?? '' ),
-	'sex'    => sanitize_text_field( $_GET['sex'] ?? '' ),
-	'size'   => sanitize_text_field( $_GET['size'] ?? '' ),
-	'status' => sanitize_text_field( $_GET['status'] ?? '' ),
+	'animal' => sanitize_text_field( wp_unslash( $_GET['animal'] ?? '' ) ),
+	'breed'  => sanitize_text_field( wp_unslash( $_GET['breed'] ?? '' ) ),
+	'age'    => sanitize_text_field( wp_unslash( $_GET['age'] ?? '' ) ),
+	'sex'    => sanitize_text_field( wp_unslash( $_GET['sex'] ?? '' ) ),
+	'size'   => sanitize_text_field( wp_unslash( $_GET['size'] ?? '' ) ),
+	'status' => sanitize_text_field( wp_unslash( $_GET['status'] ?? '' ) ),
 );
 
 // Compatibility/meta filter values (checkboxes use 'yes' when checked).
 $current_compat = array(
-	'good_with_dogs'  => sanitize_text_field( $_GET['good_with_dogs'] ?? '' ),
-	'good_with_cats'  => sanitize_text_field( $_GET['good_with_cats'] ?? '' ),
-	'good_with_kids'  => sanitize_text_field( $_GET['good_with_kids'] ?? '' ),
-	'shots_current'   => sanitize_text_field( $_GET['shots_current'] ?? '' ),
-	'spayed_neutered' => sanitize_text_field( $_GET['spayed_neutered'] ?? '' ),
-	'housebroken'     => sanitize_text_field( $_GET['housebroken'] ?? '' ),
-	'special_needs'   => sanitize_text_field( $_GET['special_needs'] ?? '' ),
-	'hypoallergenic'  => sanitize_text_field( $_GET['hypoallergenic'] ?? '' ),
-	'declawed'        => sanitize_text_field( $_GET['declawed'] ?? '' ),
+	'good_with_dogs'  => sanitize_text_field( wp_unslash( $_GET['good_with_dogs'] ?? '' ) ),
+	'good_with_cats'  => sanitize_text_field( wp_unslash( $_GET['good_with_cats'] ?? '' ) ),
+	'good_with_kids'  => sanitize_text_field( wp_unslash( $_GET['good_with_kids'] ?? '' ) ),
+	'shots_current'   => sanitize_text_field( wp_unslash( $_GET['shots_current'] ?? '' ) ),
+	'spayed_neutered' => sanitize_text_field( wp_unslash( $_GET['spayed_neutered'] ?? '' ) ),
+	'housebroken'     => sanitize_text_field( wp_unslash( $_GET['housebroken'] ?? '' ) ),
+	'special_needs'   => sanitize_text_field( wp_unslash( $_GET['special_needs'] ?? '' ) ),
+	'hypoallergenic'  => sanitize_text_field( wp_unslash( $_GET['hypoallergenic'] ?? '' ) ),
+	'declawed'        => sanitize_text_field( wp_unslash( $_GET['declawed'] ?? '' ) ),
 );
 
 $filters = array(
@@ -59,25 +59,25 @@ $filters = array(
 		'options' => $options['animal'] ?? array(),
 		'all'     => __( 'All Animals', 'vcpahumane-pet-sync' ),
 	),
-	'breed' => array(
+	'breed'  => array(
 		'label'   => __( 'Breed', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showBreed'] ?? true,
 		'options' => $options['breed'] ?? array(),
 		'all'     => __( 'All Breeds', 'vcpahumane-pet-sync' ),
 	),
-	'age' => array(
+	'age'    => array(
 		'label'   => __( 'Age', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showAge'] ?? true,
 		'options' => $options['age'] ?? array(),
 		'all'     => __( 'Any Age', 'vcpahumane-pet-sync' ),
 	),
-	'sex' => array(
+	'sex'    => array(
 		'label'   => __( 'Sex', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showSex'] ?? true,
 		'options' => $options['sex'] ?? array(),
 		'all'     => __( 'Any', 'vcpahumane-pet-sync' ),
 	),
-	'size' => array(
+	'size'   => array(
 		'label'   => __( 'Size', 'vcpahumane-pet-sync' ),
 		'show'    => $attributes['showSize'] ?? true,
 		'options' => $options['size'] ?? array(),
@@ -93,25 +93,25 @@ $filters = array(
 
 // Compatibility/meta filters configuration.
 $compat_filters = array(
-	'good_with_dogs' => array(
+	'good_with_dogs'  => array(
 		'label' => __( 'Good with dogs', 'vcpahumane-pet-sync' ),
 		'icon'  => '🐕',
 		'show'  => $attributes['showGoodWithDogs'] ?? true,
 		'group' => 'compatibility',
 	),
-	'good_with_cats' => array(
+	'good_with_cats'  => array(
 		'label' => __( 'Good with cats', 'vcpahumane-pet-sync' ),
 		'icon'  => '🐈',
 		'show'  => $attributes['showGoodWithCats'] ?? true,
 		'group' => 'compatibility',
 	),
-	'good_with_kids' => array(
+	'good_with_kids'  => array(
 		'label' => __( 'Good with kids', 'vcpahumane-pet-sync' ),
 		'icon'  => '👶',
 		'show'  => $attributes['showGoodWithKids'] ?? true,
 		'group' => 'compatibility',
 	),
-	'shots_current' => array(
+	'shots_current'   => array(
 		'label' => __( 'Shots current', 'vcpahumane-pet-sync' ),
 		'icon'  => '💉',
 		'show'  => $attributes['showShotsCurrent'] ?? true,
@@ -123,25 +123,25 @@ $compat_filters = array(
 		'show'  => $attributes['showSpayedNeutered'] ?? true,
 		'group' => 'health',
 	),
-	'housebroken' => array(
+	'housebroken'     => array(
 		'label' => __( 'Housebroken', 'vcpahumane-pet-sync' ),
 		'icon'  => '🏠',
 		'show'  => $attributes['showHousebroken'] ?? true,
 		'group' => 'health',
 	),
-	'special_needs' => array(
+	'special_needs'   => array(
 		'label' => __( 'Special needs', 'vcpahumane-pet-sync' ),
 		'icon'  => '❤️',
 		'show'  => $attributes['showSpecialNeeds'] ?? true,
 		'group' => 'health',
 	),
-	'hypoallergenic' => array(
+	'hypoallergenic'  => array(
 		'label' => __( 'Hypoallergenic', 'vcpahumane-pet-sync' ),
 		'icon'  => '✨',
 		'show'  => $attributes['showHypoallergenic'] ?? true,
 		'group' => 'health',
 	),
-	'declawed' => array(
+	'declawed'        => array(
 		'label' => __( 'Declawed', 'vcpahumane-pet-sync' ),
 		'icon'  => '🐾',
 		'show'  => $attributes['showDeclawed'] ?? false,
@@ -155,11 +155,13 @@ $has_compat_filters = $show_compatibility && count( array_filter( array_column( 
 // Check if any compatibility filters are active.
 $active_compat_count = count( array_filter( $current_compat ) );
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'               => 'pet-filters pet-filters--' . $layout,
-	'data-wp-interactive' => 'petsync/filters',
-	'data-wp-init'        => 'callbacks.init',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'               => 'pet-filters pet-filters--' . $layout,
+		'data-wp-interactive' => 'petsync/filters',
+		'data-wp-init'        => 'callbacks.init',
+	)
+);
 
 $archive_url = get_post_type_archive_link( 'vcps_pet' );
 ?>
@@ -217,7 +219,16 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 							<span class="pet-filters__compat-badge"><?php echo esc_html( $active_compat_count ); ?></span>
 						<?php endif; ?>
 					</span>
-					<?php Petstablished_Icons::render( 'chevron-down', array( 'width' => 20, 'height' => 20, 'class' => 'pet-filters__compat-toggle-icon' ) ); ?>
+					<?php
+					Petstablished_Icons::render(
+						'chevron-down',
+						array(
+							'width'  => 20,
+							'height' => 20,
+							'class'  => 'pet-filters__compat-toggle-icon',
+						)
+					);
+					?>
 				</button>
 
 				<div 
@@ -334,7 +345,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 		// Show active filter count for screen readers.
 		$active_count = count( array_filter( $current ) ) + $active_compat_count;
 		if ( $active_count ) :
-		?>
+			?>
 			<p class="screen-reader-text" role="status">
 				<?php
 				printf(

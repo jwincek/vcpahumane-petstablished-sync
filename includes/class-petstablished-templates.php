@@ -87,20 +87,22 @@ class Petstablished_Templates {
 	 * and silently ignores editor customizations.
 	 */
 	private function get_customized_template( string $slug, string $type ): ?WP_Block_Template {
-		$posts = get_posts( array(
-			'post_type'      => $type,
-			'name'           => $slug,
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-			'no_found_rows'  => true,
-			'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+		$posts = get_posts(
+			array(
+				'post_type'      => $type,
+				'name'           => $slug,
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'no_found_rows'  => true,
+				'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
 					'taxonomy' => 'wp_theme',
 					'field'    => 'name',
 					'terms'    => 'vcpahumane-pet-sync',
 				),
-			),
-		) );
+				),
+			)
+		);
 
 		if ( ! $posts ) {
 			return null;
@@ -137,8 +139,8 @@ class Petstablished_Templates {
 	}
 
 	private function build_template_object( string $slug, array $data, string $type = 'wp_template' ): WP_Block_Template {
-		$dir  = 'wp_template_part' === $type ? 'parts' : 'templates';
-		$file = PETSTABLISHED_SYNC_DIR . $dir . '/' . $slug . '.html';
+		$dir     = 'wp_template_part' === $type ? 'parts' : 'templates';
+		$file    = PETSTABLISHED_SYNC_DIR . $dir . '/' . $slug . '.html';
 		$content = file_exists( $file ) ? file_get_contents( $file ) : '';
 
 		$template                 = new WP_Block_Template();

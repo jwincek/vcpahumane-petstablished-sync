@@ -6,15 +6,20 @@
  * extracts comparison-specific actions that were previously mixed
  * into the root store.
  *
- * @package Petstablished_Sync
+ * @package
  * @since 4.3.0
  */
 
 import { store, getContext } from '@wordpress/interactivity';
-import { announce, storage, executeAbility, copyToClipboard } from '../utils.js';
+import {
+	announce,
+	storage,
+	executeAbility,
+	copyToClipboard,
+} from '../utils.js';
 import { doToggleFavorite } from '../store.js';
 
-const getGlobalState   = () => store( 'petsync' ).state;
+const getGlobalState = () => store( 'petsync' ).state;
 const getGlobalActions = () => store( 'petsync' ).actions;
 
 /**
@@ -23,7 +28,7 @@ const getGlobalActions = () => store( 'petsync' ).actions;
 function getPetIdFromContext() {
 	const ctx = getContext();
 	return {
-		petId:   ctx.petId ?? null,
+		petId: ctx.petId ?? null,
 		petName: ctx.petName ?? '',
 	};
 }
@@ -34,11 +39,15 @@ function getPetIdFromContext() {
 function getArchiveUrl() {
 	try {
 		const ctx = getContext();
-		if ( ctx.archiveUrl ) return ctx.archiveUrl;
-	} catch { /* no context available */ }
+		if ( ctx.archiveUrl ) {
+			return ctx.archiveUrl;
+		}
+	} catch {
+		/* no context available */
+	}
 	return (
-		document.querySelector( '[data-pets-archive-url]' )?.dataset.petsArchiveUrl
-		|| '/pets/'
+		document.querySelector( '[data-pets-archive-url]' )?.dataset
+			.petsArchiveUrl || '/pets/'
 	);
 }
 
@@ -49,7 +58,9 @@ const { state, actions, callbacks } = store( 'petsync/comparison', {
 		 */
 		get isFavorited() {
 			const { petId } = getPetIdFromContext();
-			if ( ! petId ) return false;
+			if ( ! petId ) {
+				return false;
+			}
 			return getGlobalState().favorites.includes( petId );
 		},
 	},
@@ -60,7 +71,9 @@ const { state, actions, callbacks } = store( 'petsync/comparison', {
 		 */
 		*toggleFavorite() {
 			const { petId, petName } = getPetIdFromContext();
-			if ( ! petId ) return;
+			if ( ! petId ) {
+				return;
+			}
 			yield* doToggleFavorite( petId, petName );
 		},
 
@@ -70,12 +83,17 @@ const { state, actions, callbacks } = store( 'petsync/comparison', {
 		*copyCompareUrl() {
 			try {
 				const result = yield executeAbility(
-					'petsync/get-comparison', null, { method: 'GET' }
+					'petsync/get-comparison',
+					null,
+					{ method: 'GET' }
 				);
 				const copied = yield copyToClipboard( result.shareUrl );
 				if ( copied ) {
 					getGlobalState().notification = 'Link copied!';
-					setTimeout( () => ( getGlobalState().notification = null ), 3000 );
+					setTimeout(
+						() => ( getGlobalState().notification = null ),
+						3000
+					);
 					announce( 'Comparison link copied' );
 				}
 			} catch ( error ) {
@@ -89,7 +107,9 @@ const { state, actions, callbacks } = store( 'petsync/comparison', {
 		*clearAndRedirect() {
 			try {
 				yield getGlobalActions().clearComparison();
-			} catch { /* continue to redirect */ }
+			} catch {
+				/* continue to redirect */
+			}
 
 			// Hard reload — the comparison block is outside the grid's
 			// router region, so router navigation can't remove it.
@@ -107,11 +127,15 @@ const { state, actions, callbacks } = store( 'petsync/comparison', {
 		 */
 		*removeAndRefresh() {
 			const { petId, petName } = getPetIdFromContext();
-			if ( ! petId ) return;
+			if ( ! petId ) {
+				return;
+			}
 
 			const gs = getGlobalState();
-			gs.comparison = gs.comparison.filter( id => id !== petId );
-			if ( gs.pets[ petId ] ) gs.pets[ petId ].compared = false;
+			gs.comparison = gs.comparison.filter( ( id ) => id !== petId );
+			if ( gs.pets[ petId ] ) {
+				gs.pets[ petId ].compared = false;
+			}
 			announce( `${ petName || 'Pet' } removed from comparison` );
 
 			try {
@@ -143,15 +167,15 @@ const { state, actions, callbacks } = store( 'petsync/comparison', {
 		 */
 		init() {
 			executeAbility( 'petsync/get-comparison', null, { method: 'GET' } )
-				.then( result => {
-					getGlobalState().comparison    = result.ids;
+				.then( ( result ) => {
+					getGlobalState().comparison = result.ids;
 					getGlobalState().comparisonMax = result.max;
 					storage.set( 'comparison', getGlobalState().comparison );
 				} )
 				.catch( () => {} );
 
 			executeAbility( 'petsync/get-favorites', null, { method: 'GET' } )
-				.then( result => {
+				.then( ( result ) => {
 					getGlobalState().favorites = result.favorites;
 					storage.set( 'favorites', getGlobalState().favorites );
 				} )

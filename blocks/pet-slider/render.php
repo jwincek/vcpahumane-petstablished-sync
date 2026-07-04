@@ -24,23 +24,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Attributes with defaults.
-$title             = $attributes['title'] ?? __( 'Meet Our Pets', 'vcpahumane-pet-sync' );
-$show_title        = $attributes['showTitle'] ?? true;
-$count             = $attributes['count'] ?? 8;
-$order_by          = $attributes['orderBy'] ?? 'random';
-$autoplay          = $attributes['autoplay'] ?? false;
-$autoplay_speed    = $attributes['autoplaySpeed'] ?? 5000;
-$show_navigation   = $attributes['showNavigation'] ?? true;
-$show_dots         = $attributes['showDots'] ?? true;
-$card_style        = $attributes['cardStyle'] ?? 'default';
-$display_mode      = $attributes['displayMode'] ?? 'carousel';
+$title              = $attributes['title'] ?? __( 'Meet Our Pets', 'vcpahumane-pet-sync' );
+$show_title         = $attributes['showTitle'] ?? true;
+$count              = $attributes['count'] ?? 8;
+$order_by           = $attributes['orderBy'] ?? 'random';
+$autoplay           = $attributes['autoplay'] ?? false;
+$autoplay_speed     = $attributes['autoplaySpeed'] ?? 5000;
+$show_navigation    = $attributes['showNavigation'] ?? true;
+$show_dots          = $attributes['showDots'] ?? true;
+$card_style         = $attributes['cardStyle'] ?? 'default';
+$display_mode       = $attributes['displayMode'] ?? 'carousel';
 $show_quick_actions = $attributes['showQuickActions'] ?? true;
-$show_badges       = $attributes['showBadges'] ?? true;
-$badge_position    = $attributes['badgePosition'] ?? 'image-top';
-$cta_text          = $attributes['ctaText'] ?? __( 'Find Your New Best Friend', 'vcpahumane-pet-sync' );
-$show_cta          = $attributes['showCta'] ?? false;
-$link_to_archive   = $attributes['linkToArchive'] ?? true;
-$archive_link_text = $attributes['archiveLinkText'] ?? __( 'View All Pets', 'vcpahumane-pet-sync' );
+$show_badges        = $attributes['showBadges'] ?? true;
+$badge_position     = $attributes['badgePosition'] ?? 'image-top';
+$cta_text           = $attributes['ctaText'] ?? __( 'Find Your New Best Friend', 'vcpahumane-pet-sync' );
+$show_cta           = $attributes['showCta'] ?? false;
+$link_to_archive    = $attributes['linkToArchive'] ?? true;
+$archive_link_text  = $attributes['archiveLinkText'] ?? __( 'View All Pets', 'vcpahumane-pet-sync' );
 
 // Similar pets mode attributes.
 $similar_pets_mode = $attributes['similarPetsMode'] ?? false;
@@ -121,7 +121,7 @@ switch ( $order_by ) {
 }
 
 // Execute via Abilities API with fallback.
-$pets = array();
+$pets         = array();
 $list_ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( 'petsync/list-pets' ) : null;
 
 if ( $list_ability ) {
@@ -188,9 +188,12 @@ $context = array(
 
 // Merge minimal pet data into global state for comparison tool.
 // Uses string-keyed array (not stdClass) — safe with multiple block instances.
-wp_interactivity_state( 'petsync', array(
-	'pets' => $pets_for_state,
-) );
+wp_interactivity_state(
+	'petsync',
+	array(
+		'pets' => $pets_for_state,
+	)
+);
 
 $wrapper_classes = array(
 	'pet-slider',
@@ -206,29 +209,29 @@ if ( $similar_pets_mode ) {
 $slider_id = 'pet-slider-' . wp_unique_id();
 
 // Build scoped CSS for custom styling — set custom properties on the root.
-$scoped_styles = array();
-$scoped_styles[] = "#{$slider_id} { --slider-gap: " . absint( $card_gap ) . "px; --slider-card-radius: " . absint( $card_border_radius ) . "px; }";
+$scoped_styles   = array();
+$scoped_styles[] = "#{$slider_id} { --slider-gap: " . absint( $card_gap ) . 'px; --slider-card-radius: ' . absint( $card_border_radius ) . 'px; }';
 
 if ( ! empty( $name_font_size ) ) {
-	$scoped_styles[] = "#{$slider_id} .pet-slider__name { font-size: " . esc_attr( $name_font_size ) . " !important; }";
+	$scoped_styles[] = "#{$slider_id} .pet-slider__name { font-size: " . esc_attr( $name_font_size ) . ' !important; }';
 }
 if ( ! empty( $name_font_family ) ) {
-	$scoped_styles[] = "#{$slider_id} .pet-slider__name { font-family: " . esc_attr( $name_font_family ) . " !important; }";
+	$scoped_styles[] = "#{$slider_id} .pet-slider__name { font-family: " . esc_attr( $name_font_family ) . ' !important; }';
 }
 if ( ! empty( $meta_font_size ) ) {
-	$scoped_styles[] = "#{$slider_id} .pet-slider__meta { font-size: " . esc_attr( $meta_font_size ) . " !important; }";
+	$scoped_styles[] = "#{$slider_id} .pet-slider__meta { font-size: " . esc_attr( $meta_font_size ) . ' !important; }';
 }
 if ( ! empty( $meta_font_family ) ) {
-	$scoped_styles[] = "#{$slider_id} .pet-slider__meta { font-family: " . esc_attr( $meta_font_family ) . " !important; }";
+	$scoped_styles[] = "#{$slider_id} .pet-slider__meta { font-family: " . esc_attr( $meta_font_family ) . ' !important; }';
 }
 
 $extra_attrs = array(
-	'id'                       => $slider_id,
-	'class'                    => implode( ' ', $wrapper_classes ),
-	'data-wp-interactive'      => 'petsync/slider',
-	'data-wp-context'          => wp_json_encode( $context ),
-	'data-wp-init'             => $use_cards_layout ? '' : 'callbacks.init',
-	'data-wp-router-region'    => 'pet-slider-' . $slider_id,
+	'id'                    => $slider_id,
+	'class'                 => implode( ' ', $wrapper_classes ),
+	'data-wp-interactive'   => 'petsync/slider',
+	'data-wp-context'       => wp_json_encode( $context ),
+	'data-wp-init'          => $use_cards_layout ? '' : 'callbacks.init',
+	'data-wp-router-region' => 'pet-slider-' . $slider_id,
 );
 
 // Flush layout hints for CSS.
@@ -258,18 +261,28 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 						class="pet-slider__view-all"
 					>
 						<?php echo esc_html( $archive_link_text ); ?>
-						<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 16, 'height' => 16 ) ); ?>
+						<?php
+						Petstablished_Icons::render(
+							'arrow-right',
+							array(
+								'width'  => 16,
+								'height' => 16,
+							)
+						);
+						?>
 					</a>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 
 		<div class="pet-slider__cards" style="--card-count: <?php echo esc_attr( $pet_count ); ?>">
-			<?php foreach ( $pets as $index => $pet ) :
+			<?php
+			foreach ( $pets as $index => $pet ) :
 				$slide_class      = 'pet-slider__slide pet-slider__slide--card';
 				$slide_directives = '';
 				include __DIR__ . '/partials/card.php';
-			endforeach; ?>
+			endforeach;
+			?>
 		</div>
 
 		<?php if ( ! $show_title && $link_to_archive ) : ?>
@@ -279,7 +292,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 					class="pet-slider__view-all-btn"
 				>
 					<?php echo esc_html( $archive_link_text ); ?>
-					<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 16, 'height' => 16 ) ); ?>
+					<?php
+					Petstablished_Icons::render(
+						'arrow-right',
+						array(
+							'width'  => 16,
+							'height' => 16,
+						)
+					);
+					?>
 				</a>
 			</div>
 		<?php endif; ?>
@@ -325,7 +346,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 									data-wp-class--is-active="state.isCurrentPetFavorited"
 									aria-label="<?php esc_attr_e( 'Add to favorites', 'vcpahumane-pet-sync' ); ?>"
 								>
-									<?php echo Petstablished_Icons::get_heart_interactive( array( 'width' => 24, 'height' => 24 ), "state.isCurrentPetFavorited ? 'currentColor' : 'none'" ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */ ?>
+									<?php
+									echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
+										array(
+											'width'  => 24,
+											'height' => 24,
+										),
+										"state.isCurrentPetFavorited ? 'currentColor' : 'none'"
+									); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */
+									?>
 								</button>
 								<button
 									type="button"
@@ -334,7 +363,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 									data-wp-class--is-active="state.isCurrentPetInComparison"
 									aria-label="<?php esc_attr_e( 'Add to comparison', 'vcpahumane-pet-sync' ); ?>"
 								>
-									<?php Petstablished_Icons::render( 'compare-grid', array( 'width' => 24, 'height' => 24 ) ); ?>
+									<?php
+									Petstablished_Icons::render(
+										'compare-grid',
+										array(
+											'width'  => 24,
+											'height' => 24,
+										)
+									);
+									?>
 								</button>
 							</div>
 						<?php endif; ?>
@@ -357,7 +394,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 								</a>
 							</h3>
 							<p class="pet-slider__hero-overlay-meta" data-wp-text="state.currentPetMeta">
-								<?php 
+								<?php
 								$overlay_meta = array_filter( array( $pets[0]['breed'] ?? '', $pets[0]['age'] ?? '', $pets[0]['sex'] ?? '' ) );
 								echo esc_html( implode( ' · ', $overlay_meta ) );
 								?>
@@ -368,7 +405,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 								data-wp-bind--href="state.currentPetUrl"
 							>
 								<?php esc_html_e( 'Meet Me', 'vcpahumane-pet-sync' ); ?>
-								<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 14, 'height' => 14 ) ); ?>
+								<?php
+								Petstablished_Icons::render(
+									'arrow-right',
+									array(
+										'width'  => 14,
+										'height' => 14,
+									)
+								);
+								?>
 							</a>
 						</div>
 					</div>
@@ -384,7 +429,7 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 							</a>
 						</h3>
 						<p class="pet-slider__hero-meta" data-wp-text="state.currentPetMeta">
-							<?php 
+							<?php
 							$meta_parts = array_filter( array( $pets[0]['breed'], $pets[0]['age'], $pets[0]['sex'] ) );
 							echo esc_html( implode( ' · ', $meta_parts ) );
 							?>
@@ -395,7 +440,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 							data-wp-bind--href="state.currentPetUrl"
 						>
 							<?php esc_html_e( 'Meet Me', 'vcpahumane-pet-sync' ); ?>
-							<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 16, 'height' => 16 ) ); ?>
+							<?php
+							Petstablished_Icons::render(
+								'arrow-right',
+								array(
+									'width'  => 16,
+									'height' => 16,
+								)
+							);
+							?>
 						</a>
 					</div>
 				</div>
@@ -430,7 +483,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 						class="pet-slider__view-all-btn"
 					>
 						<?php echo esc_html( $archive_link_text ); ?>
-						<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 16, 'height' => 16 ) ); ?>
+						<?php
+						Petstablished_Icons::render(
+							'arrow-right',
+							array(
+								'width'  => 16,
+								'height' => 16,
+							)
+						);
+						?>
 					</a>
 				</div>
 			<?php endif; ?>
@@ -447,7 +508,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 						class="pet-slider__view-all"
 					>
 						<?php echo esc_html( $archive_link_text ); ?>
-						<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 16, 'height' => 16 ) ); ?>
+						<?php
+						Petstablished_Icons::render(
+							'arrow-right',
+							array(
+								'width'  => 16,
+								'height' => 16,
+							)
+						);
+						?>
 					</a>
 				<?php endif; ?>
 			</div>
@@ -458,11 +527,13 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 			data-wp-watch="callbacks.syncScroll"
 		>
 			<div class="pet-slider__track">
-				<?php foreach ( $pets as $index => $pet ) :
+				<?php
+				foreach ( $pets as $index => $pet ) :
 					$slide_class      = 'pet-slider__slide';
 					$slide_directives = 'data-wp-class--is-active="state.isActiveSlide"';
 					include __DIR__ . '/partials/card.php';
-				endforeach; ?>
+				endforeach;
+				?>
 			</div>
 		</div>
 
@@ -473,7 +544,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 				data-wp-on--click="actions.prev"
 				aria-label="<?php esc_attr_e( 'Previous pet', 'vcpahumane-pet-sync' ); ?>"
 			>
-				<?php Petstablished_Icons::render( 'chevron-left', array( 'width' => 24, 'height' => 24 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'chevron-left',
+					array(
+						'width'  => 24,
+						'height' => 24,
+					)
+				);
+				?>
 			</button>
 			<button
 				type="button"
@@ -481,7 +560,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 				data-wp-on--click="actions.next"
 				aria-label="<?php esc_attr_e( 'Next pet', 'vcpahumane-pet-sync' ); ?>"
 			>
-				<?php Petstablished_Icons::render( 'chevron-right', array( 'width' => 24, 'height' => 24 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'chevron-right',
+					array(
+						'width'  => 24,
+						'height' => 24,
+					)
+				);
+				?>
 			</button>
 		<?php endif; ?>
 
@@ -503,7 +590,15 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 					class="pet-slider__view-all-btn"
 				>
 					<?php echo esc_html( $archive_link_text ); ?>
-					<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 16, 'height' => 16 ) ); ?>
+					<?php
+					Petstablished_Icons::render(
+						'arrow-right',
+						array(
+							'width'  => 16,
+							'height' => 16,
+						)
+					);
+					?>
 				</a>
 			</div>
 		<?php endif; ?>

@@ -12,7 +12,7 @@
  * which naturally scopes to the focused lightbox without needing
  * document-level listeners.
  *
- * @package Petstablished_Sync
+ * @package
  * @since 3.0.0
  */
 
@@ -65,8 +65,7 @@ const { state, actions } = store( 'petsync/gallery', {
 
 			// Focus the lightbox so keyboard events reach its keydown handler.
 			requestAnimationFrame( () => {
-				ref
-					?.closest( '[data-wp-interactive]' )
+				ref?.closest( '[data-wp-interactive]' )
 					?.querySelector( '.pet-gallery__lightbox' )
 					?.focus();
 			} );
@@ -87,13 +86,17 @@ const { state, actions } = store( 'petsync/gallery', {
 
 		next() {
 			const ctx = getContext();
-			if ( ! ctx.images?.length || ctx.images.length <= 1 ) return;
+			if ( ! ctx.images?.length || ctx.images.length <= 1 ) {
+				return;
+			}
 			ctx.currentIndex = ( ctx.currentIndex + 1 ) % ctx.images.length;
 		},
 
 		prev() {
 			const ctx = getContext();
-			if ( ! ctx.images?.length || ctx.images.length <= 1 ) return;
+			if ( ! ctx.images?.length || ctx.images.length <= 1 ) {
+				return;
+			}
 			const len = ctx.images.length;
 			ctx.currentIndex = ( ctx.currentIndex - 1 + len ) % len;
 		},
@@ -102,10 +105,13 @@ const { state, actions } = store( 'petsync/gallery', {
 		 * Keyboard handler — bound via data-wp-on--keydown on the lightbox.
 		 * Because the lightbox receives focus when opened, this handles
 		 * all keyboard navigation without needing document-level listeners.
+		 * @param event
 		 */
 		handleKeydown( event ) {
 			const ctx = getContext();
-			if ( ! ctx.isOpen ) return;
+			if ( ! ctx.isOpen ) {
+				return;
+			}
 
 			switch ( event.key ) {
 				case 'Escape':

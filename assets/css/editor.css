@@ -1,6 +1,6 @@
 /**
  * Petstablished Editor Styles
- * 
+ *
  * @package Petstablished_Sync
  * @since 2.0.0
  */
@@ -187,9 +187,20 @@
 	width: fit-content;
 }
 
-.pet-binding-type--taxonomy { background: #d4edda; color: #155724; }
-.pet-binding-type--meta { background: #cce5ff; color: #004085; }
-.pet-binding-type--computed { background: #fff3cd; color: #856404; }
+.pet-binding-type--taxonomy {
+	background: #d4edda;
+	color: #155724;
+}
+
+.pet-binding-type--meta {
+	background: #cce5ff;
+	color: #004085;
+}
+
+.pet-binding-type--computed {
+	background: #fff3cd;
+	color: #856404;
+}
 
 .pet-binding-desc {
 	font-size: 11px;

@@ -30,7 +30,9 @@ class Petstablished_Helpers {
 
 	/** Registered meta fields (only essential sync keys). */
 	public const META_FIELDS = array(
-		'ps_id', 'api_response', 'api_hash',
+		'ps_id',
+		'api_response',
+		'api_hash',
 	);
 
 	// === Pet Data Formatting ===
@@ -128,19 +130,19 @@ class Petstablished_Helpers {
 
 		// Map from our internal field names to API keys.
 		$api_map = array(
-			'weight'              => 'weight',
-			'adoption_fee'        => 'adoption_fee',
-			'shots_current'       => 'shots_up_to_date',
-			'spayed_neutered'     => 'is_spayed',
-			'housebroken'         => 'is_housebroken',
-			'ok_with_dogs'        => 'is_ok_with_other_dogs',
-			'ok_with_cats'        => 'is_ok_with_other_cats',
-			'ok_with_kids'        => 'is_ok_with_other_kids',
-			'special_needs'       => 'has_special_need',
+			'weight'               => 'weight',
+			'adoption_fee'         => 'adoption_fee',
+			'shots_current'        => 'shots_up_to_date',
+			'spayed_neutered'      => 'is_spayed',
+			'housebroken'          => 'is_housebroken',
+			'ok_with_dogs'         => 'is_ok_with_other_dogs',
+			'ok_with_cats'         => 'is_ok_with_other_cats',
+			'ok_with_kids'         => 'is_ok_with_other_kids',
+			'special_needs'        => 'has_special_need',
 			'special_needs_detail' => 'special_needs',
-			'hypoallergenic'      => 'is_hypoallergenic',
-			'declawed'            => 'declawed',
-			'adoption_form_url'   => 'public_url',
+			'hypoallergenic'       => 'is_hypoallergenic',
+			'declawed'             => 'declawed',
+			'adoption_form_url'    => 'public_url',
 		);
 
 		$meta = array();
@@ -192,16 +194,19 @@ class Petstablished_Helpers {
 
 	public static function get_gallery( int $id ): array {
 		$api_data = self::get_api_data( $id );
-		$images = $api_data['images'] ?? [];
+		$images   = $api_data['images'] ?? [];
 		if ( empty( $images ) || ! is_array( $images ) ) {
 			return array();
 		}
-		return array_map( function( $img ) use ( $api_data ) {
-			return array(
-				'url' => $img['image']['url'] ?? '',
-				'alt' => $api_data['name'] ?? '',
-			);
-		}, $images );
+		return array_map(
+			function ( $img ) use ( $api_data ) {
+				return array(
+					'url' => $img['image']['url'] ?? '',
+					'alt' => $api_data['name'] ?? '',
+				);
+			},
+			$images
+		);
 	}
 
 	// === Taxonomy Queries ===
@@ -230,7 +235,12 @@ class Petstablished_Helpers {
 		$options = array();
 
 		foreach ( self::TAXONOMIES as $key => $taxonomy ) {
-			$terms = get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true ) );
+			$terms           = get_terms(
+				array(
+					'taxonomy'   => $taxonomy,
+					'hide_empty' => true,
+				)
+			);
 			$options[ $key ] = array();
 
 			if ( ! is_wp_error( $terms ) ) {
@@ -275,7 +285,7 @@ class Petstablished_Helpers {
 		if ( is_user_logged_in() ) {
 			$data = get_user_meta( get_current_user_id(), '_pet_favorites', true );
 		} else {
-			$data = isset( $_COOKIE['pet_favorites'] ) ? json_decode( wp_unslash( $_COOKIE['pet_favorites'] ), true ) : array();
+			$data = isset( $_COOKIE['pet_favorites'] ) ? json_decode( wp_unslash( $_COOKIE['pet_favorites'] ), true ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON-decoded, then absint-mapped below.
 		}
 		return is_array( $data ) ? array_map( 'absint', $data ) : array();
 	}
@@ -297,7 +307,7 @@ class Petstablished_Helpers {
 	public static function get_comparison(): array {
 		// Priority: URL > User Meta > Cookie.
 		if ( isset( $_GET['compare'] ) ) {
-			$ids = array_map( 'absint', explode( ',', sanitize_text_field( $_GET['compare'] ) ) );
+			$ids = array_map( 'absint', explode( ',', sanitize_text_field( wp_unslash( $_GET['compare'] ) ) ) );
 			return self::validate_pet_ids( $ids );
 		}
 
@@ -309,7 +319,7 @@ class Petstablished_Helpers {
 		}
 
 		if ( isset( $_COOKIE['pet_comparison'] ) ) {
-			$data = json_decode( wp_unslash( $_COOKIE['pet_comparison'] ), true );
+			$data = json_decode( wp_unslash( $_COOKIE['pet_comparison'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON-decoded, then absint-mapped below.
 			return is_array( $data ) ? array_map( 'absint', $data ) : array();
 		}
 
@@ -333,13 +343,15 @@ class Petstablished_Helpers {
 			return array();
 		}
 
-		$valid = get_posts( array(
-			'post_type'      => 'vcps_pet',
-			'post_status'    => 'publish',
-			'post__in'       => $ids,
-			'posts_per_page' => count( $ids ),
-			'fields'         => 'ids',
-		) );
+		$valid = get_posts(
+			array(
+				'post_type'      => 'vcps_pet',
+				'post_status'    => 'publish',
+				'post__in'       => $ids,
+				'posts_per_page' => count( $ids ),
+				'fields'         => 'ids',
+			)
+		);
 
 		// Preserve original order.
 		return array_values( array_intersect( $ids, $valid ) );
@@ -354,16 +366,16 @@ class Petstablished_Helpers {
 		// Note: showFavoritesOnly is per-block context, not global state.
 		// Each pet-listing-grid block has its own filters context.
 		return array(
-			'favorites'       => $favorites,
-			'comparison'      => $comparison,
-			'comparisonMax'   => 4,
-			'isLoading'       => false,
-			'notification'    => null,
-			'apiConfig'       => array(
+			'favorites'     => $favorites,
+			'comparison'    => $comparison,
+			'comparisonMax' => 4,
+			'isLoading'     => false,
+			'notification'  => null,
+			'apiConfig'     => array(
 				'restUrl' => rest_url(),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
 			),
-			'gallery'         => array(
+			'gallery'       => array(
 				'isOpen'       => false,
 				'images'       => array(),
 				'currentIndex' => 0,
@@ -373,7 +385,7 @@ class Petstablished_Helpers {
 
 	public static function get_compatibility_summary( int $id ): string {
 		$api_data = self::get_api_data( $id );
-		$items = array();
+		$items    = array();
 
 		$checks = array(
 			'is_ok_with_other_dogs' => __( 'dogs', 'vcpahumane-pet-sync' ),

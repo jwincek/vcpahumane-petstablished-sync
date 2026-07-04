@@ -72,6 +72,7 @@
 
 /* === Reduced Motion === */
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-favorite-btn {
 		transition: none;
 	}
@@ -79,6 +80,7 @@
 
 /* === Focus Visible (for browsers that support it) === */
 @supports selector(:focus-visible) {
+
 	.pet-favorite-btn:focus:not(:focus-visible),
 	.pet-compare-btn:focus:not(:focus-visible) {
 		outline: none;

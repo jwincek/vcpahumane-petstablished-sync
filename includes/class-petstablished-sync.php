@@ -76,18 +76,29 @@ class Petstablished_Sync {
 		// Initialize the server-side session aggregator. Stats accumulate here
 		// across batch calls so the final log entry doesn't depend on the
 		// browser POSTing back honest numbers. Seed with any page-fetch errors.
-		set_transient( self::SESSION_TRANSIENT, array(
-			'started'       => time(),
-			'trigger'       => 'manual',
-			'running_stats' => array( 'created' => 0, 'updated' => 0, 'unchanged' => 0, 'errors' => 0 ),
-			'errors'        => $result['errors'],
-		), HOUR_IN_SECONDS );
+		set_transient(
+			self::SESSION_TRANSIENT,
+			array(
+				'started'       => time(),
+				'trigger'       => 'manual',
+				'running_stats' => array(
+					'created'   => 0,
+					'updated'   => 0,
+					'unchanged' => 0,
+					'errors'    => 0,
+				),
+				'errors'        => $result['errors'],
+			),
+			HOUR_IN_SECONDS
+		);
 
-		wp_send_json_success( array(
-			'total'      => count( $pets ),
-			'batchSize'  => $settings['batch_size'],
-			'incomplete' => ! $result['complete'],
-		) );
+		wp_send_json_success(
+			array(
+				'total'      => count( $pets ),
+				'batchSize'  => $settings['batch_size'],
+				'incomplete' => ! $result['complete'],
+			)
+		);
 	}
 
 	public function ajax_process_batch(): void {
@@ -106,17 +117,22 @@ class Petstablished_Sync {
 			wp_send_json_error( 'Sync session expired. Please start again.' );
 		}
 
-		$batch = array_slice( $pets, $offset, $limit );
-		$stats = array( 'created' => 0, 'updated' => 0, 'unchanged' => 0, 'errors' => 0 );
+		$batch        = array_slice( $pets, $offset, $limit );
+		$stats        = array(
+			'created'   => 0,
+			'updated'   => 0,
+			'unchanged' => 0,
+			'errors'    => 0,
+		);
 		$batch_errors = array();
 
 		foreach ( $batch as $pet_data ) {
 			$result = $this->process_single_pet( $pet_data );
 			if ( $result === 'errors' ) {
-				$stats['errors']++;
+				++$stats['errors'];
 				$batch_errors[] = 'Pet ID ' . ( $pet_data['id'] ?? 'unknown' );
 			} else {
-				$stats[ $result ]++;
+				++$stats[ $result ];
 			}
 		}
 
@@ -131,10 +147,12 @@ class Petstablished_Sync {
 			set_transient( self::SESSION_TRANSIENT, $session, HOUR_IN_SECONDS );
 		}
 
-		wp_send_json_success( array(
-			'processed' => count( $batch ),
-			'stats'     => $stats,
-		) );
+		wp_send_json_success(
+			array(
+				'processed' => count( $batch ),
+				'stats'     => $stats,
+			)
+		);
 	}
 
 	public function ajax_finish_sync(): void {
@@ -170,23 +188,28 @@ class Petstablished_Sync {
 			$started = (int) ( $session['started'] ?? time() );
 			$ended   = time();
 
-			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
-				$started,
-				$ended,
-				'manual',
-				$outcome,
-				$stats,
-				$errors
-			) );
+			Petstablished_Sync_Log::record(
+				Petstablished_Sync_Log::build_entry(
+					$started,
+					$ended,
+					'manual',
+					$outcome,
+					$stats,
+					$errors
+				)
+			);
 
 			// Preserve back-compat: keep writing last_sync_stats in its legacy shape.
-			update_option( 'petstablished_last_sync_stats', array(
-				'created'   => $stats['created'],
-				'updated'   => $stats['updated'],
-				'unchanged' => $stats['unchanged'],
-				'removed'   => $stats['removed'],
-				'errors'    => $errors,
-			) );
+			update_option(
+				'petstablished_last_sync_stats',
+				array(
+					'created'   => $stats['created'],
+					'updated'   => $stats['updated'],
+					'unchanged' => $stats['unchanged'],
+					'removed'   => $stats['removed'],
+					'errors'    => $errors,
+				)
+			);
 		}
 
 		// Clean up.
@@ -197,9 +220,11 @@ class Petstablished_Sync {
 
 		update_option( 'petstablished_last_sync', time() );
 
-		wp_send_json_success( array(
-			'removed' => $removed,
-		) );
+		wp_send_json_success(
+			array(
+				'removed' => $removed,
+			)
+		);
 	}
 
 	/**
@@ -209,14 +234,16 @@ class Petstablished_Sync {
 	private function record_error_run( string $trigger, string $message, ?int $started = null ): void {
 		$ended   = time();
 		$started = $started ?? $ended;
-		Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
-			$started,
-			$ended,
-			$trigger,
-			'error',
-			array(),
-			array( $message )
-		) );
+		Petstablished_Sync_Log::record(
+			Petstablished_Sync_Log::build_entry(
+				$started,
+				$ended,
+				$trigger,
+				'error',
+				array(),
+				array( $message )
+			)
+		);
 	}
 
 	// === Background sync for cron ===
@@ -233,15 +260,17 @@ class Petstablished_Sync {
 			&& $settings['sync_interval'] === Petstablished_Admin::SCHEDULE_6PM_SKIP_SUNDAY
 			&& wp_date( 'w' ) === '0'
 		) {
-			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
-				$started,
-				time(),
-				$trigger,
-				'success',
-				array(),
-				array(),
-				'Skipped: Sunday'
-			) );
+			Petstablished_Sync_Log::record(
+				Petstablished_Sync_Log::build_entry(
+					$started,
+					time(),
+					$trigger,
+					'success',
+					array(),
+					array(),
+					'Skipped: Sunday'
+				)
+			);
 			return true;
 		}
 
@@ -269,7 +298,7 @@ class Petstablished_Sync {
 				if ( $status === 'errors' ) {
 					$this->stats['errors'][] = 'Pet ID ' . ( $pet_data['id'] ?? 'unknown' );
 				} else {
-					$this->stats[ $status ]++;
+					++$this->stats[ $status ];
 				}
 			}
 
@@ -285,20 +314,22 @@ class Petstablished_Sync {
 			$ended   = time();
 			$outcome = ( empty( $this->stats['errors'] ) && $result['complete'] ) ? 'success' : 'partial';
 
-			Petstablished_Sync_Log::record( Petstablished_Sync_Log::build_entry(
-				$started,
-				$ended,
-				$trigger,
-				$outcome,
-				array(
-					'created'   => $this->stats['created'],
-					'updated'   => $this->stats['updated'],
-					'unchanged' => $this->stats['unchanged'],
-					'removed'   => $this->stats['removed'],
-					'errors'    => count( $this->stats['errors'] ),
-				),
-				$this->stats['errors']
-			) );
+			Petstablished_Sync_Log::record(
+				Petstablished_Sync_Log::build_entry(
+					$started,
+					$ended,
+					$trigger,
+					$outcome,
+					array(
+						'created'   => $this->stats['created'],
+						'updated'   => $this->stats['updated'],
+						'unchanged' => $this->stats['unchanged'],
+						'removed'   => $this->stats['removed'],
+						'errors'    => count( $this->stats['errors'] ),
+					),
+					$this->stats['errors']
+				)
+			);
 
 			update_option( 'petstablished_last_sync', $ended );
 			update_option( 'petstablished_last_sync_stats', $this->stats );
@@ -373,7 +404,7 @@ class Petstablished_Sync {
 			}
 
 			$total_pages = max( 1, $page['total_pages'] );
-			$current_page++;
+			++$current_page;
 		}
 
 		return array(
@@ -395,12 +426,15 @@ class Petstablished_Sync {
 	 * @return array|WP_Error { collection: array[], total_pages: int } or error.
 	 */
 	private function fetch_page( string $public_key, int $page ): array|WP_Error {
-		$url = add_query_arg( array(
-			'public_key'        => $public_key,
-			'search[animal]'    => 'Cat,Dog',
-			'pagination[limit]' => 100,
-			'pagination[page]'  => $page,
-		), self::API_BASE );
+		$url = add_query_arg(
+			array(
+				'public_key'        => $public_key,
+				'search[animal]'    => 'Cat,Dog',
+				'pagination[limit]' => 100,
+				'pagination[page]'  => $page,
+			),
+			self::API_BASE
+		);
 
 		$error = new WP_Error( 'fetch_failed', sprintf( 'Page %d: fetch failed', $page ) );
 
@@ -451,13 +485,15 @@ class Petstablished_Sync {
 		$api_hash = $this->compute_api_hash( $data );
 
 		// Find existing pet by Petstablished ID.
-		$existing = get_posts( array(
-			'post_type'   => 'vcps_pet',
-			'post_status' => 'any',
-			'meta_key'    => '_pet_ps_id',
-			'meta_value'  => $ps_id,
-			'numberposts' => 1,
-		) );
+		$existing = get_posts(
+			array(
+				'post_type'   => 'vcps_pet',
+				'post_status' => 'any',
+				'meta_key'    => '_pet_ps_id',
+				'meta_value'  => $ps_id,
+				'numberposts' => 1,
+			)
+		);
 
 		$post_id = $existing ? $existing[0]->ID : 0;
 
@@ -568,11 +604,11 @@ class Petstablished_Sync {
 		$keys = array_merge( $keys, array_keys( $config['attribute_map'] ?? array() ) );
 
 		// Read straight from the snapshot by Pet_Hydrator compute_* methods:
-		//   images          → compute_image() / compute_gallery()
-		//   name            → compute_gallery() (image alt text)
-		//   id              → compute_bonded_pair_names() (own PS id)
-		//   date_aquired,
-		//   created_at      → compute_is_new() (intake date)
+		// images          → compute_image() / compute_gallery()
+		// name            → compute_gallery() (image alt text)
+		// id              → compute_bonded_pair_names() (own PS id)
+		// date_aquired,
+		// created_at      → compute_is_new() (intake date)
 		// (group_id, grouped_pet_ids, siblings_names are already api_fields.)
 		$computed_sources = array( 'id', 'name', 'images', 'date_aquired', 'created_at' );
 
@@ -603,16 +639,20 @@ class Petstablished_Sync {
 	 * @return string[] Consumed API keys.
 	 */
 	public static function get_consumed_api_keys(): array {
-		return array_values( array_unique( array_merge(
-			self::get_retained_api_keys(),              // stored + displayed
-			array_keys( self::TAXONOMY_SOURCE_MAP ),    // taxonomy term sources
-			array(
-				'description',                  // → post_content
-				'dont_show_in_public_search',   // → post_status (draft)
-				'secondary_breed',              // → appended pet_breed term
+		return array_values(
+			array_unique(
+				array_merge(
+					self::get_retained_api_keys(),              // stored + displayed
+					array_keys( self::TAXONOMY_SOURCE_MAP ),    // taxonomy term sources
+					array(
+						'description',                  // → post_content
+						'dont_show_in_public_search',   // → post_status (draft)
+						'secondary_breed',              // → appended pet_breed term
+					)
+					// name + secondary_color are already in the retained set.
+				)
 			)
-			// name + secondary_color are already in the retained set.
-		) ) );
+		);
 	}
 
 	/**
@@ -706,10 +746,10 @@ class Petstablished_Sync {
 	 * attributes are correctly cleared.
 	 */
 	private function update_attribute_terms( int $post_id, array $data ): void {
-		$config     = \Petstablished\Core\Config::get_path( 'entities', 'entities.vcps_pet', [] );
-		$attr_map   = $config['attribute_map'] ?? [];
-		$truthy     = $config['attribute_truthy_values'] ?? [ 'yes', 'Yes', '1', 'true' ];
-		$truthy_lc  = array_map( 'strtolower', $truthy );
+		$config    = \Petstablished\Core\Config::get_path( 'entities', 'entities.vcps_pet', [] );
+		$attr_map  = $config['attribute_map'] ?? [];
+		$truthy    = $config['attribute_truthy_values'] ?? [ 'yes', 'Yes', '1', 'true' ];
+		$truthy_lc = array_map( 'strtolower', $truthy );
 
 		$terms = [];
 		foreach ( $attr_map as $api_key => $term_slug ) {
@@ -777,21 +817,25 @@ class Petstablished_Sync {
 		$api_ids = array_column( $api_pets, 'id' );
 		$removed = 0;
 
-		$local_pets = get_posts( array(
-			'post_type'   => 'vcps_pet',
-			'post_status' => 'publish',
-			'numberposts' => -1,
-			'fields'      => 'ids',
-		) );
+		$local_pets = get_posts(
+			array(
+				'post_type'   => 'vcps_pet',
+				'post_status' => 'publish',
+				'numberposts' => -1,
+				'fields'      => 'ids',
+			)
+		);
 
 		foreach ( $local_pets as $post_id ) {
 			$ps_id = get_post_meta( $post_id, '_pet_ps_id', true );
 			if ( $ps_id && ! in_array( (int) $ps_id, $api_ids, true ) ) {
-				wp_update_post( array(
-					'ID'          => $post_id,
-					'post_status' => 'draft',
-				) );
-				$removed++;
+				wp_update_post(
+					array(
+						'ID'          => $post_id,
+						'post_status' => 'draft',
+					)
+				);
+				++$removed;
 			}
 		}
 

@@ -10,15 +10,12 @@
  * reactive favorites signal. Event delegation on the grid handles
  * unfavorite clicks and bonded pair popover toggles.
  *
- * @package Petstablished_Sync
+ * @package
  * @since 4.3.0
  */
 
 import { store, getContext, getElement } from '@wordpress/interactivity';
-import {
-	doToggleFavorite,
-	doToggleComparison,
-} from '../store.js';
+import { doToggleFavorite } from '../store.js';
 import { announce, storage, executeAbility } from '../utils.js';
 
 const getGlobalState = () => store( 'petsync' ).state;
@@ -64,15 +61,22 @@ let stateGeneration = 0;
  * vectors even if pet data is attacker-controlled. */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const HEART_PATH = 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z';
+const HEART_PATH =
+	'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z';
 
 function el( tag, className, attrs ) {
 	const node = document.createElement( tag );
-	if ( className ) node.className = className;
+	if ( className ) {
+		node.className = className;
+	}
 	if ( attrs ) {
 		for ( const [ k, v ] of Object.entries( attrs ) ) {
 			if ( k.startsWith( 'data-' ) ) {
-				node.dataset[ k.slice( 5 ).replace( /-([a-z])/g, ( _, c ) => c.toUpperCase() ) ] = v;
+				node.dataset[
+					k
+						.slice( 5 )
+						.replace( /-([a-z])/g, ( _, c ) => c.toUpperCase() )
+				] = v;
 			} else {
 				node.setAttribute( k, v );
 			}
@@ -98,9 +102,12 @@ function createHeartSvg() {
 /**
  * Sanitize a URL for use in href/src attributes.
  * Only allows http, https, and mailto protocols.
+ * @param url
  */
 function safeUrl( url ) {
-	if ( ! url ) return '#';
+	if ( ! url ) {
+		return '#';
+	}
 	try {
 		const parsed = new URL( url, window.location.origin );
 		if ( [ 'http:', 'https:', 'mailto:' ].includes( parsed.protocol ) ) {
@@ -108,16 +115,21 @@ function safeUrl( url ) {
 		}
 	} catch ( e ) {
 		// Relative URLs are fine.
-		if ( /^\/[^/]/.test( url ) ) return url;
+		if ( /^\/[^/]/.test( url ) ) {
+			return url;
+		}
 	}
 	return '#';
 }
 
 function buildCardElement( pet ) {
-	const meta = [ pet.breed, pet.age, pet.sex ].filter( Boolean ).join( ' \u00b7 ' );
+	const meta = [ pet.breed, pet.age, pet.sex ]
+		.filter( Boolean )
+		.join( ' \u00b7 ' );
 	const partners = pet.bonded_pair_names || pet.bondedPartners || [];
 	const isNew = pet.is_new || pet.isNew || false;
-	const specialNeeds = pet.special_needs === 'yes' || pet.specialNeeds === true;
+	const specialNeeds =
+		pet.special_needs === 'yes' || pet.specialNeeds === true;
 	const isBondedPair = pet.is_bonded_pair || pet.isBondedPair || false;
 	const name = pet.name || '';
 	const url = safeUrl( pet.url );
@@ -125,17 +137,25 @@ function buildCardElement( pet ) {
 	const size = pet.size || '';
 
 	// Card root.
-	const card = el( 'article', 'pet-favorites-modal__card', { 'data-pet-id': pet.id } );
+	const card = el( 'article', 'pet-favorites-modal__card', {
+		'data-pet-id': pet.id,
+	} );
 
 	// Image link.
-	const imageLink = el( 'a', 'pet-favorites-modal__card-link js-card-nav', { href: url } );
+	const imageLink = el( 'a', 'pet-favorites-modal__card-link js-card-nav', {
+		href: url,
+	} );
 	if ( image ) {
 		const img = el( 'img', 'pet-favorites-modal__card-image', {
-			src: image, alt: name, loading: 'lazy',
+			src: image,
+			alt: name,
+			loading: 'lazy',
 		} );
 		imageLink.appendChild( img );
 	} else {
-		imageLink.appendChild( el( 'div', 'pet-favorites-modal__card-placeholder' ) );
+		imageLink.appendChild(
+			el( 'div', 'pet-favorites-modal__card-placeholder' )
+		);
 	}
 	card.appendChild( imageLink );
 
@@ -167,30 +187,47 @@ function buildCardElement( pet ) {
 	const badgesDiv = el( 'div', 'pet-favorites-modal__card-badges' );
 
 	if ( isNew ) {
-		const badge = el( 'span', 'pet-favorites-modal__badge pet-favorites-modal__badge--new' );
+		const badge = el(
+			'span',
+			'pet-favorites-modal__badge pet-favorites-modal__badge--new'
+		);
 		badge.textContent = 'New';
 		badgesDiv.appendChild( badge );
 	}
 
 	if ( specialNeeds ) {
-		const badge = el( 'span', 'pet-favorites-modal__badge pet-favorites-modal__badge--special' );
+		const badge = el(
+			'span',
+			'pet-favorites-modal__badge pet-favorites-modal__badge--special'
+		);
 		badge.textContent = 'Special Needs';
 		badgesDiv.appendChild( badge );
 	}
 
 	if ( isBondedPair && partners.length ) {
-		const anchor = el( 'span', 'pet-favorites-modal__badge-popover-anchor' );
+		const anchor = el(
+			'span',
+			'pet-favorites-modal__badge-popover-anchor'
+		);
 
-		const toggle = el( 'button', 'pet-favorites-modal__badge pet-favorites-modal__badge--bonded js-bonded-toggle', {
-			type: 'button', 'aria-expanded': 'false',
-		} );
+		const toggle = el(
+			'button',
+			'pet-favorites-modal__badge pet-favorites-modal__badge--bonded js-bonded-toggle',
+			{
+				type: 'button',
+				'aria-expanded': 'false',
+			}
+		);
 		toggle.textContent = 'Bonded Pair';
 		anchor.appendChild( toggle );
 
 		const popover = el( 'div', 'pet-favorites-modal__bonded-popover', {
-			hidden: '', role: 'tooltip',
+			hidden: '',
+			role: 'tooltip',
 		} );
-		popover.appendChild( el( 'div', 'pet-favorites-modal__bonded-popover-arrow' ) );
+		popover.appendChild(
+			el( 'div', 'pet-favorites-modal__bonded-popover-arrow' )
+		);
 
 		const label = el( 'p', 'pet-favorites-modal__bonded-popover-label' );
 		label.textContent = 'Must adopt together with:';
@@ -221,12 +258,16 @@ function buildCardElement( pet ) {
 
 	// Actions.
 	const actionsDiv = el( 'div', 'pet-favorites-modal__card-actions' );
-	const unfavBtn = el( 'button', 'pet-favorites-modal__card-unfavorite js-unfavorite', {
-		type: 'button',
-		'data-pet-id': pet.id,
-		'data-pet-name': name,
-		'aria-label': `Remove ${ name } from favorites`,
-	} );
+	const unfavBtn = el(
+		'button',
+		'pet-favorites-modal__card-unfavorite js-unfavorite',
+		{
+			type: 'button',
+			'data-pet-id': pet.id,
+			'data-pet-name': name,
+			'aria-label': `Remove ${ name } from favorites`,
+		}
+	);
 	unfavBtn.appendChild( createHeartSvg() );
 	actionsDiv.appendChild( unfavBtn );
 	content.appendChild( actionsDiv );
@@ -255,7 +296,9 @@ const inFlightUnfavorites = new Set();
 
 function bindGridDelegation( grid ) {
 	// Re-bind if the grid element changed (e.g. after router navigation).
-	if ( boundGrid === grid ) return;
+	if ( boundGrid === grid ) {
+		return;
+	}
 	boundGrid = grid;
 
 	grid.addEventListener( 'click', ( e ) => {
@@ -267,7 +310,9 @@ function bindGridDelegation( grid ) {
 			const petName = unfavBtn.dataset.petName || '';
 
 			// Prevent double-tap while async operation is in flight.
-			if ( ! petId || inFlightUnfavorites.has( petId ) ) return;
+			if ( ! petId || inFlightUnfavorites.has( petId ) ) {
+				return;
+			}
 			inFlightUnfavorites.add( petId );
 			unfavBtn.disabled = true;
 
@@ -282,19 +327,24 @@ function bindGridDelegation( grid ) {
 				if ( result.done ) {
 					inFlightUnfavorites.delete( petId );
 					// Move focus to next card, previous card, or close button.
-					const nextBtn = nextCard?.querySelector( '.js-unfavorite' )
-						|| prevCard?.querySelector( '.js-unfavorite' );
+					const nextBtn =
+						nextCard?.querySelector( '.js-unfavorite' ) ||
+						prevCard?.querySelector( '.js-unfavorite' );
 					if ( nextBtn ) {
 						nextBtn.focus();
 					} else {
-						const closeBtn = document.querySelector( '.pet-favorites-modal__close' );
-						if ( closeBtn ) closeBtn.focus();
+						const closeBtn = document.querySelector(
+							'.pet-favorites-modal__close'
+						);
+						if ( closeBtn ) {
+							closeBtn.focus();
+						}
 					}
 					return;
 				}
 				Promise.resolve( result.value ).then(
-					v => step( gen.next( v ) ),
-					err => {
+					( v ) => step( gen.next( v ) ),
+					( err ) => {
 						inFlightUnfavorites.delete( petId );
 						unfavBtn.disabled = false;
 						step( gen.throw( err ) );
@@ -309,9 +359,15 @@ function bindGridDelegation( grid ) {
 		const toggle = e.target.closest( '.js-bonded-toggle' );
 		if ( toggle ) {
 			e.stopPropagation();
-			const anchor = toggle.closest( '.pet-favorites-modal__badge-popover-anchor' );
-			const popover = anchor?.querySelector( '.pet-favorites-modal__bonded-popover' );
-			if ( ! popover ) return;
+			const anchor = toggle.closest(
+				'.pet-favorites-modal__badge-popover-anchor'
+			);
+			const popover = anchor?.querySelector(
+				'.pet-favorites-modal__bonded-popover'
+			);
+			if ( ! popover ) {
+				return;
+			}
 
 			const wasOpen = ! popover.hidden;
 			popover.hidden = wasOpen;
@@ -323,7 +379,10 @@ function bindGridDelegation( grid ) {
 
 			if ( ! wasOpen ) {
 				requestAnimationFrame( () => {
-					popover.scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
+					popover.scrollIntoView( {
+						behavior: 'smooth',
+						block: 'nearest',
+					} );
 				} );
 				const close = () => {
 					popover.hidden = true;
@@ -350,7 +409,9 @@ function bindGridDelegation( grid ) {
 		}
 
 		// ── Bonded partner link — close modal on navigation ──
-		const bondedLink = e.target.closest( '.pet-favorites-modal__bonded-popover-link' );
+		const bondedLink = e.target.closest(
+			'.pet-favorites-modal__bonded-popover-link'
+		);
 		if ( bondedLink ) {
 			const ctx = getContext();
 			ctx.isOpen = false;
@@ -378,7 +439,9 @@ function resetModalState( modalState ) {
 const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 	state: {
 		get triggerFill() {
-			return getGlobalState().favorites.length > 0 ? 'currentColor' : 'none';
+			return getGlobalState().favorites.length > 0
+				? 'currentColor'
+				: 'none';
 		},
 
 		// Clear-all confirmation — fully state-driven.
@@ -387,8 +450,8 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 
 		get clearButtonText() {
 			return state.clearConfirming
-				? ( state._clearConfirmLabel || 'Tap again to confirm' )
-				: ( state._clearDefaultLabel || 'Clear all favorites' );
+				? state._clearConfirmLabel || 'Tap again to confirm'
+				: state._clearDefaultLabel || 'Clear all favorites';
 		},
 	},
 
@@ -401,14 +464,22 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 				overflowLock.lock();
 				actions.refreshFavorites();
 				requestAnimationFrame( () => {
-					const close = document.querySelector( '.pet-favorites-modal__close' );
-					if ( close ) close.focus();
+					const close = document.querySelector(
+						'.pet-favorites-modal__close'
+					);
+					if ( close ) {
+						close.focus();
+					}
 				} );
 			} else {
 				overflowLock.unlock();
 				resetModalState( state );
-				const trigger = document.querySelector( '.pet-favorites-modal__trigger' );
-				if ( trigger ) trigger.focus();
+				const trigger = document.querySelector(
+					'.pet-favorites-modal__trigger'
+				);
+				if ( trigger ) {
+					trigger.focus();
+				}
 			}
 		},
 
@@ -417,8 +488,12 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 			ctx.isOpen = false;
 			overflowLock.unlock();
 			resetModalState( state );
-			const trigger = document.querySelector( '.pet-favorites-modal__trigger' );
-			if ( trigger ) trigger.focus();
+			const trigger = document.querySelector(
+				'.pet-favorites-modal__trigger'
+			);
+			if ( trigger ) {
+				trigger.focus();
+			}
 		},
 
 		closeAndNavigate() {
@@ -429,7 +504,11 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 		},
 
 		handleOverlayClick( event ) {
-			if ( event.target.classList.contains( 'pet-favorites-modal__overlay' ) ) {
+			if (
+				event.target.classList.contains(
+					'pet-favorites-modal__overlay'
+				)
+			) {
 				actions.closeModal();
 			}
 		},
@@ -444,18 +523,24 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 			// Don't refresh while a clear is in-flight — the server may
 			// not have processed the clear yet, so get-favorites would
 			// return stale data.
-			if ( isRefreshing || clearInFlight ) return;
+			if ( isRefreshing || clearInFlight ) {
+				return;
+			}
 			isRefreshing = true;
 
 			const gen = stateGeneration;
 
 			try {
 				const result = yield executeAbility(
-					'petsync/get-favorites', null, { method: 'GET' }
+					'petsync/get-favorites',
+					null,
+					{ method: 'GET' }
 				);
 
 				// Abort if a clear happened while we were waiting.
-				if ( gen !== stateGeneration || clearInFlight ) return;
+				if ( gen !== stateGeneration || clearInFlight ) {
+					return;
+				}
 
 				getGlobalState().favorites = result.favorites;
 
@@ -464,7 +549,9 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 				}
 
 				const gs = getGlobalState();
-				const validFavorites = [ ...gs.favorites ].filter( id => !! ( gs.pets[ id ] || gs.pets[ String( id ) ] ) );
+				const validFavorites = [ ...gs.favorites ].filter(
+					( id ) => !! ( gs.pets[ id ] || gs.pets[ String( id ) ] )
+				);
 				if ( validFavorites.length !== gs.favorites.length ) {
 					gs.favorites = validFavorites;
 				}
@@ -489,10 +576,14 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 
 			// Read i18n labels from the button's data attributes on first use.
 			if ( ! state._clearConfirmLabel ) {
-				const btn = document.querySelector( '.pet-favorites-modal__clear-btn' );
+				const btn = document.querySelector(
+					'.pet-favorites-modal__clear-btn'
+				);
 				if ( btn ) {
-					state._clearConfirmLabel = btn.dataset.confirmText || 'Tap again to confirm';
-					state._clearDefaultLabel = btn.dataset.defaultText || 'Clear all favorites';
+					state._clearConfirmLabel =
+						btn.dataset.confirmText || 'Tap again to confirm';
+					state._clearDefaultLabel =
+						btn.dataset.defaultText || 'Clear all favorites';
 				}
 			}
 
@@ -504,7 +595,9 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 
 		*clearAllFavorites() {
 			const oldFavorites = [ ...getGlobalState().favorites ];
-			if ( ! oldFavorites.length ) return;
+			if ( ! oldFavorites.length ) {
+				return;
+			}
 
 			// Block refreshFavorites from running until the server confirms.
 			clearInFlight = true;
@@ -513,9 +606,13 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 			// Optimistic update + immediate localStorage persist.
 			getGlobalState().favorites = [];
 			storage.set( 'favorites', [] );
-			oldFavorites.forEach( id => {
-				const pet = getGlobalState().pets[ id ] || getGlobalState().pets[ String( id ) ];
-				if ( pet ) pet.favorited = false;
+			oldFavorites.forEach( ( id ) => {
+				const pet =
+					getGlobalState().pets[ id ] ||
+					getGlobalState().pets[ String( id ) ];
+				if ( pet ) {
+					pet.favorited = false;
+				}
 			} );
 			announce( 'All favorites cleared' );
 
@@ -535,11 +632,17 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 				console.error( 'Failed to clear favorites:', error );
 				getGlobalState().favorites = oldFavorites;
 				storage.set( 'favorites', oldFavorites );
-				oldFavorites.forEach( id => {
-					const pet = getGlobalState().pets[ id ] || getGlobalState().pets[ String( id ) ];
-					if ( pet ) pet.favorited = true;
+				oldFavorites.forEach( ( id ) => {
+					const pet =
+						getGlobalState().pets[ id ] ||
+						getGlobalState().pets[ String( id ) ];
+					if ( pet ) {
+						pet.favorited = true;
+					}
 				} );
-				getGlobalActions().notify( 'Failed to clear favorites — they\'ve been restored' );
+				getGlobalActions().notify(
+					"Failed to clear favorites — they've been restored"
+				);
 			} finally {
 				clearInFlight = false;
 			}
@@ -611,27 +714,29 @@ const { state, actions, callbacks } = store( 'petsync/favorites-modal', {
 			// ({ ...proxy }) is unreliable because the proxy's ownKeys trap
 			// may not return properties that haven't been subscribed to.
 			const desiredPets = favoriteIds
-				.map( id => {
+				.map( ( id ) => {
 					const p = petsCache[ id ] || petsCache[ String( id ) ];
-					if ( ! p ) return null;
+					if ( ! p ) {
+						return null;
+					}
 					return {
-						id:               p.id,
-						name:             p.name,
-						url:              p.url,
-						image:            p.image,
-						breed:            p.breed,
-						age:              p.age,
-						sex:              p.sex,
-						size:             p.size,
-						special_needs:    p.special_needs,
-						is_new:           p.is_new,
-						is_bonded_pair:   p.is_bonded_pair,
+						id: p.id,
+						name: p.name,
+						url: p.url,
+						image: p.image,
+						breed: p.breed,
+						age: p.age,
+						sex: p.sex,
+						size: p.size,
+						special_needs: p.special_needs,
+						is_new: p.is_new,
+						is_bonded_pair: p.is_bonded_pair,
 						bonded_pair_names: p.bonded_pair_names,
 						// Legacy key variants (some data sources use camelCase).
-						isNew:            p.isNew,
-						specialNeeds:     p.specialNeeds,
-						isBondedPair:     p.isBondedPair,
-						bondedPartners:   p.bondedPartners,
+						isNew: p.isNew,
+						specialNeeds: p.specialNeeds,
+						isBondedPair: p.isBondedPair,
+						bondedPartners: p.bondedPartners,
 					};
 				} )
 				.filter( Boolean );

@@ -36,8 +36,12 @@ class Petstablished_Sync_Log {
 
 		// Defensive: if a pathological entry has bloated the log past 256 KB,
 		// trim oldest entries until it fits. Won't fire under normal use.
-		while ( count( $log ) > 1 && strlen( serialize( $log ) ) > self::MAX_OPTION_BYTES ) {
+		$entries = count( $log );
+		$bytes   = strlen( serialize( $log ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- measuring the exact stored size.
+		while ( $entries > 1 && $bytes > self::MAX_OPTION_BYTES ) {
 			array_pop( $log );
+			--$entries;
+			$bytes = strlen( serialize( $log ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
 		}
 
 		if ( false === get_option( self::OPTION_NAME, false ) ) {

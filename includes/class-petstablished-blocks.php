@@ -162,10 +162,10 @@ class Petstablished_Blocks {
 			// Cache the stats result per-request to avoid duplicate calls
 			// when multiple stats bindings are on the same page.
 			static $stats_cache = [];
-			$cache_key = $status;
+			$cache_key          = $status;
 
 			if ( ! isset( $stats_cache[ $cache_key ] ) ) {
-				$result = $ability->execute( [ 'status' => $status ] );
+				$result                    = $ability->execute( [ 'status' => $status ] );
 				$stats_cache[ $cache_key ] = is_wp_error( $result ) ? [] : $result;
 			}
 
@@ -337,9 +337,13 @@ class Petstablished_Blocks {
 			true
 		);
 
-		wp_localize_script( self::NAMESPACE . '-binding-helper', 'petstablishedEditor', array(
-			'bindingKeys' => $this->get_binding_keys(),
-		) );
+		wp_localize_script(
+			self::NAMESPACE . '-binding-helper',
+			'petstablishedEditor',
+			array(
+				'bindingKeys' => $this->get_binding_keys(),
+			)
+		);
 	}
 
 	private function get_binding_keys(): array {
@@ -357,25 +361,25 @@ class Petstablished_Blocks {
 
 		// API-sourced display fields (read from stored JSON).
 		$api_fields = array(
-			'weight'              => 'Weight',
-			'adoption_fee'        => 'Adoption Fee (raw)',
-			'numerical_age'       => 'Age (human readable)',
-			'youtube_url'         => 'YouTube URL',
-			'adoption_form_url'   => 'Adoption Application URL',
-			'microchip_id'        => 'Microchip ID',
+			'weight'               => 'Weight',
+			'adoption_fee'         => 'Adoption Fee (raw)',
+			'numerical_age'        => 'Age (human readable)',
+			'youtube_url'          => 'YouTube URL',
+			'adoption_form_url'    => 'Adoption Application URL',
+			'microchip_id'         => 'Microchip ID',
 			'special_needs_detail' => 'Special Needs Description',
-			'coat_pattern'        => 'Coat Pattern',
-			'secondary_color'     => 'Secondary Color',
-			'tertiary_color'      => 'Tertiary Color',
-			'ok_with_dogs'        => 'Good with Dogs (tristate)',
-			'ok_with_cats'        => 'Good with Cats (tristate)',
-			'ok_with_kids'        => 'Good with Kids (tristate)',
-			'shots_current'       => 'Shots Current (tristate)',
-			'spayed_neutered'     => 'Spayed/Neutered (tristate)',
-			'housebroken'         => 'Housebroken (tristate)',
-			'special_needs'       => 'Has Special Needs (tristate)',
-			'hypoallergenic'      => 'Hypoallergenic (tristate)',
-			'declawed'            => 'Declawed (tristate)',
+			'coat_pattern'         => 'Coat Pattern',
+			'secondary_color'      => 'Secondary Color',
+			'tertiary_color'       => 'Tertiary Color',
+			'ok_with_dogs'         => 'Good with Dogs (tristate)',
+			'ok_with_cats'         => 'Good with Cats (tristate)',
+			'ok_with_kids'         => 'Good with Kids (tristate)',
+			'shots_current'        => 'Shots Current (tristate)',
+			'spayed_neutered'      => 'Spayed/Neutered (tristate)',
+			'housebroken'          => 'Housebroken (tristate)',
+			'special_needs'        => 'Has Special Needs (tristate)',
+			'hypoallergenic'       => 'Hypoallergenic (tristate)',
+			'declawed'             => 'Declawed (tristate)',
 		);
 
 		foreach ( $api_fields as $key => $desc ) {
@@ -407,7 +411,7 @@ class Petstablished_Blocks {
 			'bonded_pair_names'      => 'Bonded Pair Partner Names',
 			'special_needs_summary'  => 'Special Needs Summary Label',
 		);
-		
+
 		foreach ( $computed as $key => $desc ) {
 			$keys[] = array(
 				'key'    => $key,

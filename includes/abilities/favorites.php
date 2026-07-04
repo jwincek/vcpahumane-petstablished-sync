@@ -49,7 +49,10 @@ function toggle( array $input ): array {
 	 */
 	do_action( 'petstablished_favorite_toggled', $id, $favorited, $favorites );
 
-	return [ 'favorited' => $favorited, 'favorites' => $favorites ];
+	return [
+		'favorited' => $favorited,
+		'favorites' => $favorites,
+	];
 }
 
 /**
@@ -81,15 +84,20 @@ function get_favorites( array $input = [] ): array {
 	$pets      = [];
 
 	if ( $favorites ) {
-		$posts = get_posts( [
-			'post_type'      => 'vcps_pet',
-			'post_status'    => 'publish',
-			'post__in'       => $favorites,
-			'posts_per_page' => count( $favorites ),
-			'orderby'        => 'post__in',
-		] );
-		$pets = Pet_Hydrator::hydrate_many( $posts, 'summary' );
+		$posts = get_posts(
+			[
+				'post_type'      => 'vcps_pet',
+				'post_status'    => 'publish',
+				'post__in'       => $favorites,
+				'posts_per_page' => count( $favorites ),
+				'orderby'        => 'post__in',
+			]
+		);
+		$pets  = Pet_Hydrator::hydrate_many( $posts, 'summary' );
 	}
 
-	return [ 'favorites' => $favorites, 'pets' => $pets ];
+	return [
+		'favorites' => $favorites,
+		'pets'      => $pets,
+	];
 }

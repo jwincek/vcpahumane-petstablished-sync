@@ -8,11 +8,16 @@
  * - Imports from utils.js instead of store.js
  * - Improved search highlighting via data-wp-watch + rAF
  *
- * @package Petstablished_Sync
+ * @package
  * @since 3.0.0
  */
 
-import { store, getContext, getElement, withSyncEvent } from '@wordpress/interactivity';
+import {
+	store,
+	getContext,
+	getElement,
+	withSyncEvent,
+} from '@wordpress/interactivity';
 import { doToggleFavorite, doToggleComparison } from '../store.js';
 import { announce } from '../utils.js';
 
@@ -35,17 +40,6 @@ const parseFiltersFromUrl = () => {
 	return { filters, compat };
 };
 
-const updateUrlFilters = ( filters, prefix = 'filter_' ) => {
-	const url = new URL( window.location.href );
-	Array.from( url.searchParams.keys() )
-		.filter( key => key.startsWith( prefix ) )
-		.forEach( key => url.searchParams.delete( key ) );
-	Object.entries( filters || {} ).forEach( ( [ key, value ] ) => {
-		if ( value ) url.searchParams.set( prefix + key, value );
-	} );
-	window.history.replaceState( null, '', url.toString() );
-};
-
 /**
  * Build a URL from current context filters for router navigation.
  *
@@ -58,21 +52,28 @@ const updateUrlFilters = ( filters, prefix = 'filter_' ) => {
  *
  * @param {Object} ctx  Grid context.
  * @param {number} page Page number.
- * @returns {string} Fully-qualified URL.
+ * @return {string} Fully-qualified URL.
  */
 const buildFilterUrl = ( ctx, page = 1 ) => {
-	const url = new URL( ctx.archiveUrl || window.location.pathname, window.location.origin );
+	const url = new URL(
+		ctx.archiveUrl || window.location.pathname,
+		window.location.origin
+	);
 
 	// Taxonomy filters.
 	const filters = ctx.filters || {};
 	Object.entries( filters ).forEach( ( [ key, value ] ) => {
-		if ( value ) url.searchParams.set( 'filter_' + key, value );
+		if ( value ) {
+			url.searchParams.set( 'filter_' + key, value );
+		}
 	} );
 
 	// Compatibility filters.
 	const compat = ctx.compatFilters || {};
 	Object.entries( compat ).forEach( ( [ key, value ] ) => {
-		if ( value ) url.searchParams.set( 'compat_' + key, '1' );
+		if ( value ) {
+			url.searchParams.set( 'compat_' + key, '1' );
+		}
 	} );
 
 	// Search.
@@ -105,9 +106,9 @@ let navCounter = 0;
  * Perform router navigation with stale-nav guard.
  * Adopted from the shelter plugin's doNavigate pattern.
  *
- * @param {Object} ctx     Grid context.
- * @param {string} href    Target URL (optional — builds from ctx if omitted).
- * @param {number} [page]  Page number if building URL from ctx.
+ * @param {Object} ctx    Grid context.
+ * @param {string} href   Target URL (optional — builds from ctx if omitted).
+ * @param {number} [page] Page number if building URL from ctx.
  */
 function* doNavigate( ctx, href, page ) {
 	const myNavId = ++navCounter;
@@ -152,20 +153,29 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 
 		get isFavorited() {
 			const ctx = getContext();
-			return ctx.petId ? getGlobalState().favorites.includes( ctx.petId ) : false;
+			return ctx.petId
+				? getGlobalState().favorites.includes( ctx.petId )
+				: false;
 		},
 
 		get isInComparison() {
 			const ctx = getContext();
-			return ctx.petId ? getGlobalState().comparison.includes( ctx.petId ) : false;
+			return ctx.petId
+				? getGlobalState().comparison.includes( ctx.petId )
+				: false;
 		},
 
 		get isCompareDisabled() {
 			const ctx = getContext();
 			const petId = ctx.petId;
-			if ( ! petId ) return false;
-			return ! getGlobalState().comparison.includes( petId )
-				&& getGlobalState().comparison.length >= getGlobalState().comparisonMax;
+			if ( ! petId ) {
+				return false;
+			}
+			return (
+				! getGlobalState().comparison.includes( petId ) &&
+				getGlobalState().comparison.length >=
+					getGlobalState().comparisonMax
+			);
 		},
 
 		/**
@@ -189,19 +199,27 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 
 			if ( ctx.filters ) {
 				for ( const value of Object.values( ctx.filters ) ) {
-					if ( value ) return true;
+					if ( value ) {
+						return true;
+					}
 				}
 			}
 
 			if ( ctx.compatFilters ) {
 				for ( const value of Object.values( ctx.compatFilters ) ) {
-					if ( value ) return true;
+					if ( value ) {
+						return true;
+					}
 				}
 			}
 
-			if ( ctx.searchQuery?.trim() ) return true;
+			if ( ctx.searchQuery?.trim() ) {
+				return true;
+			}
 
-			if ( ctx.sort ) return true;
+			if ( ctx.sort ) {
+				return true;
+			}
 
 			return false;
 		},
@@ -216,13 +234,17 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 
 			if ( ctx.filters ) {
 				for ( const value of Object.values( ctx.filters ) ) {
-					if ( value ) count++;
+					if ( value ) {
+						count++;
+					}
 				}
 			}
 
 			if ( ctx.compatFilters ) {
 				for ( const value of Object.values( ctx.compatFilters ) ) {
-					if ( value ) count++;
+					if ( value ) {
+						count++;
+					}
 				}
 			}
 
@@ -246,8 +268,12 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 		get resultsText() {
 			if ( state.showFavoritesOnly ) {
 				const inView = state.favoritesInViewCount;
-				if ( inView === 0 ) return 'No favorites match your current filters';
-				return inView === 1 ? 'Showing 1 favorite' : `Showing ${ inView } favorites`;
+				if ( inView === 0 ) {
+					return 'No favorites match your current filters';
+				}
+				return inView === 1
+					? 'Showing 1 favorite'
+					: `Showing ${ inView } favorites`;
 			}
 
 			const count = state.visibleCount;
@@ -264,7 +290,9 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			// via doNavigate. The favorites toggle is client-side only.
 			if ( state.showFavoritesOnly ) {
 				const ctx = getContext();
-				return ctx.petId ? getGlobalState().favorites.includes( ctx.petId ) : true;
+				return ctx.petId
+					? getGlobalState().favorites.includes( ctx.petId )
+					: true;
 			}
 			return true;
 		},
@@ -276,9 +304,11 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 		get favoritesInViewCount() {
 			const ctx = getContext();
 			const allFavs = getGlobalState().favorites;
-			const viewIds = ctx.petIds?.map( p => p.id ?? p ) ?? [];
-			if ( ! viewIds.length ) return allFavs.length;
-			return allFavs.filter( id => viewIds.includes( id ) ).length;
+			const viewIds = ctx.petIds?.map( ( p ) => p.id ?? p ) ?? [];
+			if ( ! viewIds.length ) {
+				return allFavs.length;
+			}
+			return allFavs.filter( ( id ) => viewIds.includes( id ) ).length;
 		},
 
 		get favoritesFilterText() {
@@ -286,11 +316,17 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			const total = getGlobalState().favorites.length;
 
 			if ( state.showFavoritesOnly ) {
-				if ( inView === 0 ) return 'No favorites match filters';
-				return inView === 1 ? 'Showing 1 favorite' : `Showing ${ inView } favorites`;
+				if ( inView === 0 ) {
+					return 'No favorites match filters';
+				}
+				return inView === 1
+					? 'Showing 1 favorite'
+					: `Showing ${ inView } favorites`;
 			}
 
-			if ( total === 0 ) return '♥ Favorites';
+			if ( total === 0 ) {
+				return '♥ Favorites';
+			}
 
 			// Show "2 of 5 saved" when filters reduce the visible set,
 			// or just "5 saved" when viewing all pets.
@@ -299,7 +335,6 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			}
 			return `♥ ${ total } saved`;
 		},
-
 	},
 
 	actions: {
@@ -312,7 +347,11 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 				if ( inView === 0 ) {
 					announce( 'No favorites match your current filters' );
 				} else {
-					announce( inView === 1 ? 'Showing 1 favorite' : `Showing ${ inView } favorites` );
+					announce(
+						inView === 1
+							? 'Showing 1 favorite'
+							: `Showing ${ inView } favorites`
+					);
 				}
 			} else {
 				announce( 'Showing all pets' );
@@ -342,6 +381,7 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 		 * Sets bondedExpanded in the per-card context.
 		 * Registers a one-time document click listener to close
 		 * the popover when clicking outside.
+		 * @param event
 		 */
 		toggleBondedInfo( event ) {
 			event.stopPropagation();
@@ -374,7 +414,9 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 
 			const { ref } = getElement();
 			const href = ref?.getAttribute( 'href' ) || event.target?.href;
-			if ( ! href ) return;
+			if ( ! href ) {
+				return;
+			}
 
 			const ctx = getContext();
 			yield* doNavigate( ctx, href );
@@ -386,7 +428,9 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 		*prefetchPage() {
 			const { ref } = getElement();
 			const href = ref?.getAttribute( 'href' );
-			if ( ! href ) return;
+			if ( ! href ) {
+				return;
+			}
 
 			try {
 				const { actions: routerActions } = yield import(
@@ -409,7 +453,11 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 				ctx.filters[ filterKey ] = select.value;
 			}
 
-			announce( select.value ? `Filtered by ${ filterKey }` : `${ filterKey } filter cleared` );
+			announce(
+				select.value
+					? `Filtered by ${ filterKey }`
+					: `${ filterKey } filter cleared`
+			);
 
 			// Server-side navigate to get fresh results and updated counts.
 			yield* doNavigate( ctx, null, 1 );
@@ -420,9 +468,11 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 		},
 
 		*handleCompatFilterChange( event ) {
-			const ctx = getContext();
 			const el = event.target.closest( '[data-compat-key]' );
-			if ( ! el ) return;
+			if ( ! el ) {
+				return;
+			}
+			const ctx = getContext();
 
 			const filterKey = el.dataset.compatKey;
 			const isCheckbox = el.type === 'checkbox';
@@ -431,11 +481,16 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 				: el.getAttribute( 'aria-pressed' ) === 'true';
 
 			if ( ctx.compatFilters ) {
-				ctx.compatFilters[ filterKey ] = isCheckbox ? el.checked : ! isChecked;
+				ctx.compatFilters[ filterKey ] = isCheckbox
+					? el.checked
+					: ! isChecked;
 			}
 
 			if ( ! isCheckbox ) {
-				el.setAttribute( 'aria-pressed', ctx.compatFilters[ filterKey ] ? 'true' : 'false' );
+				el.setAttribute(
+					'aria-pressed',
+					ctx.compatFilters[ filterKey ] ? 'true' : 'false'
+				);
 			}
 
 			announce(
@@ -465,18 +520,27 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 
 		*submitSearch() {
 			const ctx = getContext();
-			announce( ctx.searchQuery ? `Searching for "${ ctx.searchQuery }"` : 'Search cleared' );
+			announce(
+				ctx.searchQuery
+					? `Searching for "${ ctx.searchQuery }"`
+					: 'Search cleared'
+			);
 			yield* doNavigate( ctx, null, 1 );
 		},
 
 		/**
 		 * Submit search on Enter key.
+		 * @param event
 		 */
 		*handleSearchKeydown( event ) {
 			if ( event.key === 'Enter' ) {
 				event.preventDefault();
 				const ctx = getContext();
-				announce( ctx.searchQuery ? `Searching for "${ ctx.searchQuery }"` : 'Search cleared' );
+				announce(
+					ctx.searchQuery
+						? `Searching for "${ ctx.searchQuery }"`
+						: 'Search cleared'
+				);
 				yield* doNavigate( ctx, null, 1 );
 			}
 		},
@@ -510,7 +574,9 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			} else if ( type === 'search' ) {
 				ctx.searchQuery = '';
 				const searchInput = document.getElementById( 'pet-search' );
-				if ( searchInput ) searchInput.value = '';
+				if ( searchInput ) {
+					searchInput.value = '';
+				}
 			}
 
 			announce( 'Filter removed' );
@@ -526,10 +592,14 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			ctx.sort = '';
 
 			if ( ctx.filters ) {
-				Object.keys( ctx.filters ).forEach( key => ( ctx.filters[ key ] = '' ) );
+				Object.keys( ctx.filters ).forEach(
+					( key ) => ( ctx.filters[ key ] = '' )
+				);
 			}
 			if ( ctx.compatFilters ) {
-				Object.keys( ctx.compatFilters ).forEach( key => ( ctx.compatFilters[ key ] = false ) );
+				Object.keys( ctx.compatFilters ).forEach(
+					( key ) => ( ctx.compatFilters[ key ] = false )
+				);
 			}
 
 			announce( 'All filters cleared' );
@@ -544,7 +614,9 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			const ctx = getContext();
 			ctx.sort = event.target.value;
 
-			announce( event.target.value ? 'Sort updated' : 'Sort reset to default' );
+			announce(
+				event.target.value ? 'Sort updated' : 'Sort reset to default'
+			);
 
 			// Server-side navigate to get re-ordered results.
 			yield* doNavigate( ctx, null, 1 );
@@ -564,7 +636,8 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 		init() {
 			const ctx = getContext();
 
-			const { filters: urlFilters, compat: urlCompat } = parseFiltersFromUrl();
+			const { filters: urlFilters, compat: urlCompat } =
+				parseFiltersFromUrl();
 
 			if ( ctx.filters && Object.keys( urlFilters ).length ) {
 				Object.assign( ctx.filters, urlFilters );
@@ -595,7 +668,9 @@ const { state, actions, callbacks } = store( 'petsync/grid', {
 			// filters are active. The HTML has open for desktop; we remove
 			// it here for mobile to keep the filter area compact.
 			if ( window.innerWidth <= 600 ) {
-				const compat = document.querySelector( '.pet-listing-grid__compat-details' );
+				const compat = document.querySelector(
+					'.pet-listing-grid__compat-details'
+				);
 				if ( compat && compat.dataset.hasActive !== '1' ) {
 					compat.removeAttribute( 'open' );
 				}

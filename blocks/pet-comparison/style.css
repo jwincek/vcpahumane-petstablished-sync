@@ -61,7 +61,7 @@
 .pet-comparison__action-btn--clear {
 	background: transparent;
 	color: var(--wp--preset--color--contrast, #1e1e1e);
-	border-color: currentColor;
+	border-color: currentcolor;
 	opacity: 0.6;
 }
 
@@ -442,7 +442,7 @@
 }
 
 .pet-comparison__card-attr--differs dt::after {
-	content: '';
+	content: "";
 	display: inline-block;
 	width: 5px;
 	height: 5px;
@@ -529,12 +529,14 @@
 
 /* === Responsive: Switch to table on larger screens === */
 @media (min-width: 768px) {
+
 	.pet-comparison__cards {
 		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
 @media (min-width: 900px) {
+
 	/* Hide cards, show table on desktop */
 	.pet-comparison__cards {
 		display: none;
@@ -547,6 +549,7 @@
 
 /* Two-column cards on larger tablets before switching to table */
 @media (min-width: 600px) and (max-width: 899px) {
+
 	.pet-comparison__cards {
 		grid-template-columns: repeat(2, 1fr);
 	}

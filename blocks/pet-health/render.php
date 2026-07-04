@@ -21,9 +21,11 @@ $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
 if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
-		$wrapper_attributes = get_block_wrapper_attributes( array(
-			'class' => 'pet-health pet-health--placeholder',
-		) );
+		$wrapper_attributes = get_block_wrapper_attributes(
+			array(
+				'class' => 'pet-health pet-health--placeholder',
+			)
+		);
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-health__placeholder">
@@ -54,29 +56,29 @@ $is_cat      = ( $animal_slug === 'cat' );
 // 'cat_only' fields are suppressed for non-cat animals.
 $health_defs = array(
 	array(
-		'toggle'   => 'showSpayedNeutered',
-		'label'    => __( 'Spayed/Neutered', 'vcpahumane-pet-sync' ),
-		'key'      => 'spayed_neutered',
+		'toggle' => 'showSpayedNeutered',
+		'label'  => __( 'Spayed/Neutered', 'vcpahumane-pet-sync' ),
+		'key'    => 'spayed_neutered',
 	),
 	array(
-		'toggle'   => 'showVaccinations',
-		'label'    => __( 'Vaccinations Current', 'vcpahumane-pet-sync' ),
-		'key'      => 'shots_current',
+		'toggle' => 'showVaccinations',
+		'label'  => __( 'Vaccinations Current', 'vcpahumane-pet-sync' ),
+		'key'    => 'shots_current',
 	),
 	array(
-		'toggle'   => 'showHousebroken',
-		'label'    => __( 'House Trained', 'vcpahumane-pet-sync' ),
-		'key'      => 'housebroken',
+		'toggle' => 'showHousebroken',
+		'label'  => __( 'House Trained', 'vcpahumane-pet-sync' ),
+		'key'    => 'housebroken',
 	),
 	array(
-		'toggle'   => 'showSpecialNeeds',
-		'label'    => __( 'Special Needs', 'vcpahumane-pet-sync' ),
-		'key'      => 'special_needs',
+		'toggle' => 'showSpecialNeeds',
+		'label'  => __( 'Special Needs', 'vcpahumane-pet-sync' ),
+		'key'    => 'special_needs',
 	),
 	array(
-		'toggle'   => 'showHypoallergenic',
-		'label'    => __( 'Hypoallergenic', 'vcpahumane-pet-sync' ),
-		'key'      => 'hypoallergenic',
+		'toggle' => 'showHypoallergenic',
+		'label'  => __( 'Hypoallergenic', 'vcpahumane-pet-sync' ),
+		'key'    => 'hypoallergenic',
 	),
 	array(
 		'toggle'   => 'showDeclawed',
@@ -141,9 +143,30 @@ if ( empty( $items ) ) {
 
 // Status icons — filled circle variants for health indicators.
 $status_icons = array(
-	'yes'     => array( 'name' => 'check-circle', 'attrs' => array( 'width' => 18, 'height' => 18, 'stroke-width' => 2.5 ) ),
-	'no'      => array( 'name' => 'x-circle',     'attrs' => array( 'width' => 18, 'height' => 18, 'stroke-width' => 2.5 ) ),
-	'unknown' => array( 'name' => 'help-circle', 'attrs' => array( 'width' => 18, 'height' => 18, 'stroke-width' => 2.5 ) ),
+	'yes'     => array(
+		'name'  => 'check-circle',
+		'attrs' => array(
+			'width'        => 18,
+			'height'       => 18,
+			'stroke-width' => 2.5,
+		),
+	),
+	'no'      => array(
+		'name'  => 'x-circle',
+		'attrs' => array(
+			'width'        => 18,
+			'height'       => 18,
+			'stroke-width' => 2.5,
+		),
+	),
+	'unknown' => array(
+		'name'  => 'help-circle',
+		'attrs' => array(
+			'width'        => 18,
+			'height'       => 18,
+			'stroke-width' => 2.5,
+		),
+	),
 );
 
 $status_labels = array(
@@ -152,9 +175,11 @@ $status_labels = array(
 	'unknown' => __( 'Unknown', 'vcpahumane-pet-sync' ),
 );
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class' => 'pet-health',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'pet-health',
+	)
+);
 ?>
 <ul <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?> role="list">
 	<?php foreach ( $items as $item ) : ?>

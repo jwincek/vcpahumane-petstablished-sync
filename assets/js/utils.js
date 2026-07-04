@@ -5,7 +5,7 @@
  * to break the dependency chain — block stores import from here instead
  * of importing the entire global store.
  *
- * @package Petstablished_Sync
+ * @package
  * @since 3.0.0
  */
 
@@ -16,7 +16,7 @@ import { getConfig } from '@wordpress/interactivity';
 /**
  * Get shared configuration.
  *
- * @returns {Object} Configuration object from wp_interactivity_config().
+ * @return {Object} Configuration object from wp_interactivity_config().
  */
 export function getSharedConfig() {
 	return getConfig( 'petsync' ) || {};
@@ -35,10 +35,17 @@ export const storage = {
 	},
 	set( key, value ) {
 		try {
-			localStorage.setItem( `petstablished_${ key }`, JSON.stringify( value ) );
+			localStorage.setItem(
+				`petstablished_${ key }`,
+				JSON.stringify( value )
+			);
 			// Also set cookie for server-side access.
-			const expires = new Date( Date.now() + 30 * 24 * 60 * 60 * 1000 ).toUTCString();
-			document.cookie = `pet_${ key }=${ encodeURIComponent( JSON.stringify( value ) ) };expires=${ expires };path=/`;
+			const expires = new Date(
+				Date.now() + 30 * 24 * 60 * 60 * 1000
+			).toUTCString();
+			document.cookie = `pet_${ key }=${ encodeURIComponent(
+				JSON.stringify( value )
+			) };expires=${ expires };path=/`;
 		} catch {
 			// Storage unavailable.
 		}
@@ -88,15 +95,19 @@ export function announce( message, priority = 'polite' ) {
  * - GET input is passed as a URL-encoded `input` query parameter
  * - Endpoint path ends in /run
  *
- * @param {string}  abilityName  Namespaced ability, e.g. 'petsync/toggle-favorite'.
- * @param {Object}  [input]      Input data matching the ability's input_schema.
- * @param {Object}  [options]    Override method ('GET'|'POST'|'DELETE') — auto-detected if omitted.
- * @returns {Promise<any>}       The ability's output.
+ * @param {string} abilityName Namespaced ability, e.g. 'petsync/toggle-favorite'.
+ * @param {Object} [input]     Input data matching the ability's input_schema.
+ * @param {Object} [options]   Override method ('GET'|'POST'|'DELETE') — auto-detected if omitted.
+ * @return {Promise<any>}       The ability's output.
  */
-export async function executeAbility( abilityName, input = null, options = {} ) {
+export async function executeAbility(
+	abilityName,
+	input = null,
+	options = {}
+) {
 	const config = getSharedConfig();
 	const restUrl = config.restUrl || '/wp-json/';
-	let   url    = `${ restUrl }petsync/v1/${ abilityName }/run`;
+	let url = `${ restUrl }petsync/v1/${ abilityName }/run`;
 	const method = options.method || ( input !== null ? 'POST' : 'GET' );
 
 	const fetchOptions = {
@@ -133,11 +144,11 @@ export async function executeAbility( abilityName, input = null, options = {} ) 
  *
  * @param {Function} fn    Function to debounce.
  * @param {number}   delay Delay in milliseconds.
- * @returns {Function} Debounced function.
+ * @return {Function} Debounced function.
  */
 export function debounce( fn, delay = 300 ) {
 	let timeoutId;
-	return function( ...args ) {
+	return function ( ...args ) {
 		clearTimeout( timeoutId );
 		timeoutId = setTimeout( () => fn.apply( this, args ), delay );
 	};
@@ -150,7 +161,7 @@ export function debounce( fn, delay = 300 ) {
  * execCommand('copy') approach for HTTP dev environments.
  *
  * @param {string} text Text to copy.
- * @returns {Promise<boolean>} Whether the copy succeeded.
+ * @return {Promise<boolean>} Whether the copy succeeded.
  */
 export async function copyToClipboard( text ) {
 	if ( navigator.clipboard ) {
@@ -189,12 +200,14 @@ export function escapeHtml( str ) {
  *
  * @param {string} text  The text to search within.
  * @param {string} query The search query to highlight.
- * @returns {string} HTML string with matches wrapped in <mark>.
+ * @return {string} HTML string with matches wrapped in <mark>.
  */
 export function highlightText( text, query ) {
-	if ( ! text || ! query ) return escapeHtml( text || '' );
+	if ( ! text || ! query ) {
+		return escapeHtml( text || '' );
+	}
 
-	const escapedText  = escapeHtml( text );
+	const escapedText = escapeHtml( text );
 	const escapedQuery = query.replace( /[.*+?^${}()|[\]\\]/g, '\\$&' );
 	return escapedText.replace(
 		new RegExp( `(${ escapedQuery })`, 'gi' ),

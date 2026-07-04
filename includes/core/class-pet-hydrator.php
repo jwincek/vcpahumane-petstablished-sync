@@ -65,7 +65,7 @@ class Pet_Hydrator {
 		update_postmeta_cache( [ $post_id ] );
 		update_object_term_cache( [ $post_id ], 'vcps_pet' );
 
-		$entity = self::hydrate( $post, $profile );
+		$entity                    = self::hydrate( $post, $profile );
 		self::$cache[ $cache_key ] = $entity;
 
 		return $entity;
@@ -114,7 +114,7 @@ class Pet_Hydrator {
 
 		// API fields — read from stored API JSON snapshot.
 		// One JSON decode per pet, cached for the request.
-		$api_data  = self::get_api_data( $id );
+		$api_data   = self::get_api_data( $id );
 		$api_fields = $config['api_fields'] ?? [];
 		foreach ( $api_fields as $field_name => $field_config ) {
 			if ( $include_fields && ! in_array( $field_name, $include_fields, true ) ) {
@@ -124,7 +124,7 @@ class Pet_Hydrator {
 			if ( null === $api_key ) {
 				continue; // Computed api_field (like primary_image_url), skip.
 			}
-			$raw = $api_data[ $api_key ] ?? $field_config['default'] ?? '';
+			$raw                   = $api_data[ $api_key ] ?? $field_config['default'] ?? '';
 			$entity[ $field_name ] = self::cast_api_value( $raw, $field_config );
 		}
 
@@ -163,8 +163,8 @@ class Pet_Hydrator {
 			return self::$api_data_cache[ $id ];
 		}
 
-		$json = get_post_meta( $id, '_pet_api_response', true );
-		$data = $json ? ( json_decode( $json, true ) ?: [] ) : [];
+		$json                        = get_post_meta( $id, '_pet_api_response', true );
+		$data                        = $json ? ( json_decode( $json, true ) ?: [] ) : [];
 		self::$api_data_cache[ $id ] = $data;
 
 		return $data;
@@ -230,10 +230,13 @@ class Pet_Hydrator {
 		if ( ! is_array( $raw ) || empty( $raw ) ) {
 			return [];
 		}
-		return array_map( fn( $img ) => [
-			'url' => $img['image']['url'] ?? '',
-			'alt' => '',
-		], $raw );
+		return array_map(
+			fn( $img ) => [
+				'url' => $img['image']['url'] ?? '',
+				'alt' => '',
+			],
+			$raw
+		);
 	}
 
 	/**
@@ -264,10 +267,10 @@ class Pet_Hydrator {
 		// calls now hit the WP object cache, zero database queries.
 		$entities = [];
 		foreach ( $posts as $post ) {
-			$entity    = self::hydrate( $post, $profile );
-			$cache_key = $post->ID . ':' . $profile;
+			$entity                    = self::hydrate( $post, $profile );
+			$cache_key                 = $post->ID . ':' . $profile;
 			self::$cache[ $cache_key ] = $entity;
-			$entities[] = $entity;
+			$entities[]                = $entity;
 		}
 
 		return $entities;
@@ -378,18 +381,20 @@ class Pet_Hydrator {
 	}
 
 	private static function compute_tagline( array $entity ): string {
-		$parts = array_filter( [
-			$entity['animal'] ?? '',
-			$entity['breed'] ?? '',
-			$entity['age'] ?? '',
-			$entity['sex'] ?? '',
-			$entity['size'] ?? '',
-		] );
+		$parts = array_filter(
+			[
+				$entity['animal'] ?? '',
+				$entity['breed'] ?? '',
+				$entity['age'] ?? '',
+				$entity['sex'] ?? '',
+				$entity['size'] ?? '',
+			]
+		);
 		return implode( ' · ', $parts );
 	}
 
 	private static function compute_compatibility( array $entity ): string {
-		$items = [];
+		$items  = [];
 		$checks = [
 			'ok_with_dogs' => __( 'dogs', 'vcpahumane-pet-sync' ),
 			'ok_with_cats' => __( 'cats', 'vcpahumane-pet-sync' ),
@@ -414,14 +419,17 @@ class Pet_Hydrator {
 
 	private static function compute_gallery( int $id ): array {
 		$api_data = self::get_api_data( $id );
-		$images = $api_data['images'] ?? [];
+		$images   = $api_data['images'] ?? [];
 		if ( empty( $images ) || ! is_array( $images ) ) {
 			return [];
 		}
-		return array_map( fn( $img ) => [
-			'url' => $img['image']['url'] ?? '',
-			'alt' => $api_data['name'] ?? '',
-		], $images );
+		return array_map(
+			fn( $img ) => [
+				'url' => $img['image']['url'] ?? '',
+				'alt' => $api_data['name'] ?? '',
+			],
+			$images
+		);
 	}
 
 	/**
@@ -453,8 +461,8 @@ class Pet_Hydrator {
 			return [];
 		}
 
-		$ps_ids     = $api_data['grouped_pet_ids'] ?? [];
-		$own_ps_id  = (int) ( $api_data['id'] ?? 0 );
+		$ps_ids    = $api_data['grouped_pet_ids'] ?? [];
+		$own_ps_id = (int) ( $api_data['id'] ?? 0 );
 
 		$partners = [];
 		if ( is_array( $ps_ids ) ) {
@@ -464,14 +472,16 @@ class Pet_Hydrator {
 					continue;
 				}
 
-				$local = get_posts( [
-					'post_type'   => 'vcps_pet',
-					'post_status' => 'publish',
-					'meta_key'    => '_pet_ps_id',
-					'meta_value'  => (string) $ps_id,
-					'numberposts' => 1,
-					'fields'      => 'ids',
-				] );
+				$local = get_posts(
+					[
+						'post_type'   => 'vcps_pet',
+						'post_status' => 'publish',
+						'meta_key'    => '_pet_ps_id',
+						'meta_value'  => (string) $ps_id,
+						'numberposts' => 1,
+						'fields'      => 'ids',
+					]
+				);
 
 				if ( ! empty( $local ) ) {
 					$partner_id = $local[0];
@@ -614,7 +624,7 @@ class Pet_Hydrator {
 	 */
 	public static function clear_cache( ?int $post_id = null ): void {
 		if ( null === $post_id ) {
-			self::$cache = [];
+			self::$cache          = [];
 			self::$api_data_cache = [];
 		} else {
 			foreach ( array_keys( self::$cache ) as $key ) {

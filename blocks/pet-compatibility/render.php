@@ -19,9 +19,11 @@ $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
 if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
-		$wrapper_attributes = get_block_wrapper_attributes( array(
-			'class' => 'pet-compat pet-compat--placeholder',
-		) );
+		$wrapper_attributes = get_block_wrapper_attributes(
+			array(
+				'class' => 'pet-compat pet-compat--placeholder',
+			)
+		);
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-compat__placeholder">
@@ -46,25 +48,25 @@ $archive_url = get_post_type_archive_link( 'vcps_pet' );
 // compat_* URL filter parameter for archive links.
 $compat_defs = array(
 	array(
-		'toggle'    => 'showDogs',
-		'label'     => __( 'Dogs', 'vcpahumane-pet-sync' ),
-		'key'       => 'ok_with_dogs',
-		'icon'      => 'dog',
-		'filter'    => 'compat_goodWithDogs',
+		'toggle' => 'showDogs',
+		'label'  => __( 'Dogs', 'vcpahumane-pet-sync' ),
+		'key'    => 'ok_with_dogs',
+		'icon'   => 'dog',
+		'filter' => 'compat_goodWithDogs',
 	),
 	array(
-		'toggle'    => 'showCats',
-		'label'     => __( 'Cats', 'vcpahumane-pet-sync' ),
-		'key'       => 'ok_with_cats',
-		'icon'      => 'cat',
-		'filter'    => 'compat_goodWithCats',
+		'toggle' => 'showCats',
+		'label'  => __( 'Cats', 'vcpahumane-pet-sync' ),
+		'key'    => 'ok_with_cats',
+		'icon'   => 'cat',
+		'filter' => 'compat_goodWithCats',
 	),
 	array(
-		'toggle'    => 'showKids',
-		'label'     => __( 'Children', 'vcpahumane-pet-sync' ),
-		'key'       => 'ok_with_kids',
-		'icon'      => 'child',
-		'filter'    => 'compat_goodWithKids',
+		'toggle' => 'showKids',
+		'label'  => __( 'Children', 'vcpahumane-pet-sync' ),
+		'key'    => 'ok_with_kids',
+		'icon'   => 'child',
+		'filter' => 'compat_goodWithKids',
 	),
 );
 
@@ -107,9 +109,30 @@ $status_labels = array(
 
 // Status icons.
 $status_icons = array(
-	'yes'     => array( 'name' => 'check', 'attrs' => array( 'width' => 16, 'height' => 16, 'stroke-width' => 3 ) ),
-	'no'      => array( 'name' => 'x',     'attrs' => array( 'width' => 16, 'height' => 16, 'stroke-width' => 3 ) ),
-	'unknown' => array( 'name' => 'minus', 'attrs' => array( 'width' => 16, 'height' => 16, 'stroke-width' => 3 ) ),
+	'yes'     => array(
+		'name'  => 'check',
+		'attrs' => array(
+			'width'        => 16,
+			'height'       => 16,
+			'stroke-width' => 3,
+		),
+	),
+	'no'      => array(
+		'name'  => 'x',
+		'attrs' => array(
+			'width'        => 16,
+			'height'       => 16,
+			'stroke-width' => 3,
+		),
+	),
+	'unknown' => array(
+		'name'  => 'minus',
+		'attrs' => array(
+			'width'        => 16,
+			'height'       => 16,
+			'stroke-width' => 3,
+		),
+	),
 );
 
 $display_style = $attributes['displayStyle'] ?? 'cards';
@@ -117,28 +140,39 @@ $display_style = $attributes['displayStyle'] ?? 'cards';
 // Heading auto-switch: use the positive heading ("Plays nicely with") when
 // every visible item is "yes". Fall back to the neutral heading ("Good with")
 // if any item is "no" or "unknown".
-$all_positive        = ! array_filter( $items, fn( $i ) => $i['status'] !== 'yes' );
-$positive_heading    = $attributes['positiveHeadingText'] ?? __( 'Plays nicely with', 'vcpahumane-pet-sync' );
-$neutral_heading     = $attributes['headingText'] ?? __( 'Good with', 'vcpahumane-pet-sync' );
-$heading_text        = $all_positive ? $positive_heading : $neutral_heading;
+$all_positive     = ! array_filter( $items, fn( $i ) => $i['status'] !== 'yes' );
+$positive_heading = $attributes['positiveHeadingText'] ?? __( 'Plays nicely with', 'vcpahumane-pet-sync' );
+$neutral_heading  = $attributes['headingText'] ?? __( 'Good with', 'vcpahumane-pet-sync' );
+$heading_text     = $all_positive ? $positive_heading : $neutral_heading;
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class' => 'pet-compat pet-compat--' . sanitize_html_class( $display_style ),
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'pet-compat pet-compat--' . sanitize_html_class( $display_style ),
+	)
+);
 ?>
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<p class="pet-compat__heading"><?php echo esc_html( $heading_text ); ?></p>
 	<ul class="pet-compat__list" role="list">
-	<?php foreach ( $items as $item ) :
+	<?php
+	foreach ( $items as $item ) :
 		$icon_data   = $status_icons[ $item['status'] ];
 		$status_text = $status_labels[ $item['status'] ];
-	?>
+		?>
 		<li class="pet-compat__item pet-compat__item--<?php echo esc_attr( $item['status'] ); ?>">
 			<?php if ( $item['link'] ) : ?>
 			<a href="<?php echo esc_url( $item['link'] ); ?>" class="pet-compat__link">
 			<?php endif; ?>
 				<span class="pet-compat__icon" aria-hidden="true">
-					<?php Petstablished_Icons::render( $item['icon'], array( 'width' => 20, 'height' => 20 ) ); ?>
+					<?php
+					Petstablished_Icons::render(
+						$item['icon'],
+						array(
+							'width'  => 20,
+							'height' => 20,
+						)
+					);
+					?>
 				</span>
 				<span class="pet-compat__label"><?php echo esc_html( $item['label'] ); ?></span>
 				<span class="pet-compat__status-badge">

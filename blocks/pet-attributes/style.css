@@ -91,6 +91,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-attributes__link {
 		transition: none;
 	}

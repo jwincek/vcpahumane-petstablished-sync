@@ -108,7 +108,7 @@
 }
 
 .pet-listing-grid__search-submit svg {
-	stroke: currentColor;
+	stroke: currentcolor;
 	stroke-width: 2.5;
 	fill: none;
 }
@@ -216,7 +216,7 @@
 }
 
 .pet-listing-grid__compat-summary::marker {
-	content: '';
+	content: "";
 }
 
 .pet-listing-grid__compat-summary-icon {
@@ -244,6 +244,7 @@
 /* Desktop: details is always open (HTML attribute), hide the summary
  * since the toggle is unnecessary when there's room to show everything. */
 @media (min-width: 601px) {
+
 	.pet-listing-grid__compat-details {
 		border-top: 1px solid var(--wp--preset--color--border, #e0e0e0);
 		padding-top: var(--wp--preset--spacing--10, 0.375rem);
@@ -444,7 +445,7 @@
 }
 
 .pet-listing-grid__favorites-tooltip::before {
-	content: '';
+	content: "";
 	position: absolute;
 	bottom: 100%;
 	left: 50%;
@@ -628,12 +629,12 @@
 	background: var(--wp--preset--color--base, #fff);
 	border-radius: var(--wp--custom--border-radius, 8px);
 	overflow: visible;
-	box-shadow: var(--wp--custom--shadow--small, 0 1px 3px rgba(0,0,0,0.1));
+	box-shadow: var(--wp--custom--shadow--small, 0 1px 3px rgba(0, 0, 0, 0.1));
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .pet-listing-grid__card:hover {
-	box-shadow: var(--wp--custom--shadow--medium, 0 4px 12px rgba(0,0,0,0.15));
+	box-shadow: var(--wp--custom--shadow--medium, 0 4px 12px rgba(0, 0, 0, 0.15));
 	transform: translateY(-2px);
 }
 
@@ -681,14 +682,29 @@
 	color: #fff;
 }
 
-.pet-listing-grid__card-badge.badge--cat { background: #9c27b0; }
-.pet-listing-grid__card-badge.badge--dog { background: #2196f3; }
-.pet-listing-grid__card-badge.badge--rabbit { background: #4caf50; }
-.pet-listing-grid__card-badge.badge--bird { background: #ff9800; }
-.pet-listing-grid__card-badge.badge--new { 
-	background: var(--wp--preset--color--vivid-green-cyan, #00a32a); 
+.pet-listing-grid__card-badge.badge--cat {
+	background: #9c27b0;
 }
-.pet-listing-grid__card-badge.badge--age { background: #607d8b; }
+
+.pet-listing-grid__card-badge.badge--dog {
+	background: #2196f3;
+}
+
+.pet-listing-grid__card-badge.badge--rabbit {
+	background: #4caf50;
+}
+
+.pet-listing-grid__card-badge.badge--bird {
+	background: #ff9800;
+}
+
+.pet-listing-grid__card-badge.badge--new {
+	background: var(--wp--preset--color--vivid-green-cyan, #00a32a);
+}
+
+.pet-listing-grid__card-badge.badge--age {
+	background: #607d8b;
+}
 
 /* Favorite indicator on image */
 .pet-listing-grid__card-fav-indicator {
@@ -876,11 +892,20 @@
 }
 
 @keyframes petGridPopoverReveal {
-	from { opacity: 0; transform: translateY(4px); }
-	to { opacity: 1; transform: translateY(0); }
+
+	from {
+		opacity: 0;
+		transform: translateY(4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 /* Search Highlight */
+
 /* Card Actions */
 .pet-listing-grid__card-actions {
 	display: flex;
@@ -1130,12 +1155,14 @@
 
 /* Responsive */
 @media (max-width: 900px) {
+
 	.pet-listing-grid__grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
 @media (max-width: 600px) {
+
 	/* Tighter vertical spacing on mobile — get to pet cards faster */
 	.pet-listing-grid {
 		gap: var(--wp--preset--spacing--20, 0.5rem);
@@ -1237,7 +1264,7 @@
 		width: 100%;
 		flex-direction: column;
 		align-items: stretch;
-		margin-bottom: .5rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.pet-listing-grid__filter-select {
@@ -1276,6 +1303,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-listing-grid__card,
 	.pet-listing-grid__card-image {
 		transition: none;
@@ -1284,7 +1312,7 @@
 	.pet-listing-grid__card:hover {
 		transform: none;
 	}
-	
+
 	.pet-listing-grid__card:hover .pet-listing-grid__card-image {
 		transform: none;
 	}

@@ -30,9 +30,11 @@ if ( ! $fee ) {
 	return;
 }
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class' => 'pet-adoption-cta__fee-row',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'pet-adoption-cta__fee-row',
+	)
+);
 ?>
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<p class="pet-adoption-cta__fee-label"><?php esc_html_e( 'Adoption Fee:', 'vcpahumane-pet-sync' ); ?></p>

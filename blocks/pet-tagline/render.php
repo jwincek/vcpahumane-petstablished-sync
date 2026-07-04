@@ -32,11 +32,31 @@ $separator   = $attributes['separator'] ?? ' · ';
 // Tagline fields — ordered by what adopters scan first.
 // Each maps to a taxonomy for the filter link.
 $tagline_fields = array(
-	array( 'key' => 'animal', 'taxonomy' => 'pet_animal', 'filter' => 'filter_animal' ),
-	array( 'key' => 'breed',  'taxonomy' => 'pet_breed',  'filter' => 'filter_breed' ),
-	array( 'key' => 'age',    'taxonomy' => 'pet_age',    'filter' => 'filter_age' ),
-	array( 'key' => 'sex',    'taxonomy' => 'pet_sex',    'filter' => 'filter_sex' ),
-	array( 'key' => 'size',   'taxonomy' => 'pet_size',   'filter' => 'filter_size' ),
+	array(
+		'key'      => 'animal',
+		'taxonomy' => 'pet_animal',
+		'filter'   => 'filter_animal',
+	),
+	array(
+		'key'      => 'breed',
+		'taxonomy' => 'pet_breed',
+		'filter'   => 'filter_breed',
+	),
+	array(
+		'key'      => 'age',
+		'taxonomy' => 'pet_age',
+		'filter'   => 'filter_age',
+	),
+	array(
+		'key'      => 'sex',
+		'taxonomy' => 'pet_sex',
+		'filter'   => 'filter_sex',
+	),
+	array(
+		'key'      => 'size',
+		'taxonomy' => 'pet_size',
+		'filter'   => 'filter_size',
+	),
 );
 
 $items = array();
@@ -64,9 +84,11 @@ if ( empty( $items ) ) {
 	return;
 }
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class' => 'pet-details__tagline',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'pet-details__tagline',
+	)
+);
 ?>
 <p <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<?php

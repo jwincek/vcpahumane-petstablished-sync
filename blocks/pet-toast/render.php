@@ -22,14 +22,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Empty and hidden until client-side state provides a message; the
 // aria-live region announces the text change to screen readers, so the
 // store's toast helper must not also announce() when this block exists.
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'                => 'pet-toast',
-	'data-wp-interactive'  => 'petsync',
-	'data-wp-bind--hidden' => 'state.noNotification',
-	'data-wp-text'         => 'state.notification',
-	'role'                 => 'status',
-	'aria-live'            => 'polite',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'                => 'pet-toast',
+		'data-wp-interactive'  => 'petsync',
+		'data-wp-bind--hidden' => 'state.noNotification',
+		'data-wp-text'         => 'state.notification',
+		'role'                 => 'status',
+		'aria-live'            => 'polite',
+	)
+);
 
 // `hidden` is best-effort initial state: get_block_wrapper_attributes()
 // drops it from its array input, and server directive processing strips

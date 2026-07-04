@@ -19,6 +19,8 @@
  * @since   1.0.0
  */
 
+// phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- fluent query-builder API uses camelCase method names by design.
+
 declare( strict_types = 1 );
 
 namespace Petstablished\Core;
@@ -29,14 +31,14 @@ class Query {
 
 	private string $post_type;
 	private string $meta_prefix = '_';
-	private array  $taxonomies  = [];
-	private array  $tax_query   = [];
-	private array  $meta_query  = [];
+	private array $taxonomies   = [];
+	private array $tax_query    = [];
+	private array $meta_query   = [];
 	private string $orderby     = 'date';
 	private string $order       = 'DESC';
 	private ?string $search     = null;
 	private ?array $post__in    = null;
-	private array  $extra_args  = [];
+	private array $extra_args   = [];
 
 	/**
 	 * Start a new query for a post type.
@@ -44,11 +46,11 @@ class Query {
 	 * Reads meta prefix and taxonomy mappings from entity config.
 	 */
 	public static function for( string $post_type ): self {
-		$query = new self();
+		$query            = new self();
 		$query->post_type = $post_type;
 
 		$entity_config = Config::get_item( 'entities', 'entities', [] );
-		$config = $entity_config[ $post_type ] ?? [];
+		$config        = $entity_config[ $post_type ] ?? [];
 
 		$query->meta_prefix = $config['meta_prefix'] ?? '_';
 
@@ -211,9 +213,9 @@ class Query {
 	 * Get just the post IDs (no hydration).
 	 */
 	public function ids(): array {
-		$args                    = $this->build_args( 1, -1 );
-		$args['fields']          = 'ids';
-		$args['no_found_rows']   = true;
+		$args                  = $this->build_args( 1, -1 );
+		$args['fields']        = 'ids';
+		$args['no_found_rows'] = true;
 
 		$this->maybe_add_search_filter( $args );
 		$result = ( new WP_Query( $args ) )->posts;
@@ -258,9 +260,9 @@ class Query {
 			$like = '%' . $wpdb->esc_like( $term ) . '%';
 
 			if ( ! empty( $breed_ids ) ) {
-				$id_list = implode( ',', array_map( 'intval', $breed_ids ) );
+				$id_list           = implode( ',', array_map( 'intval', $breed_ids ) );
 				$clauses['where'] .= $wpdb->prepare(
-					" AND ({$wpdb->posts}.post_title LIKE %s OR {$wpdb->posts}.ID IN ({$id_list}))",
+					" AND ({$wpdb->posts}.post_title LIKE %s OR {$wpdb->posts}.ID IN ({$id_list}))", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $id_list is an intval()-mapped, imploded ID list.
 					$like
 				);
 			} else {
@@ -311,13 +313,13 @@ class Query {
 		$clone = clone $this;
 
 		if ( isset( $this->taxonomies[ $field ] ) ) {
-			$taxonomy = $this->taxonomies[ $field ];
+			$taxonomy         = $this->taxonomies[ $field ];
 			$clone->tax_query = array_filter(
 				$clone->tax_query,
 				fn( $clause ) => ( $clause['taxonomy'] ?? '' ) !== $taxonomy
 			);
 		} else {
-			$meta_key = $this->meta_prefix . $field;
+			$meta_key          = $this->meta_prefix . $field;
 			$clone->meta_query = array_filter(
 				$clone->meta_query,
 				fn( $clause ) => ( $clause['key'] ?? '' ) !== $meta_key
@@ -363,12 +365,14 @@ class Query {
 
 			// Find breed term IDs matching the search.
 			$breed_taxonomy = $this->taxonomies['breed'] ?? 'pet_breed';
-			$matching_terms = get_terms( [
-				'taxonomy'   => $breed_taxonomy,
-				'name__like' => $search_term,
-				'fields'     => 'ids',
-				'hide_empty' => true,
-			] );
+			$matching_terms = get_terms(
+				[
+					'taxonomy'   => $breed_taxonomy,
+					'name__like' => $search_term,
+					'fields'     => 'ids',
+					'hide_empty' => true,
+				]
+			);
 			$breed_post_ids = [];
 			if ( ! is_wp_error( $matching_terms ) && ! empty( $matching_terms ) ) {
 				$breed_post_ids = get_objects_in_term( $matching_terms, $breed_taxonomy );

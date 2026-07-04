@@ -47,11 +47,15 @@ class Petstablished_Admin {
 	}
 
 	public function register_settings(): void {
-		register_setting( self::PAGE_SLUG, self::OPTION_NAME, array(
-			'type'              => 'array',
-			'sanitize_callback' => array( $this, 'sanitize_settings' ),
-			'default'           => self::get_defaults(),
-		) );
+		register_setting(
+			self::PAGE_SLUG,
+			self::OPTION_NAME,
+			array(
+				'type'              => 'array',
+				'sanitize_callback' => array( $this, 'sanitize_settings' ),
+				'default'           => self::get_defaults(),
+			)
+		);
 
 		// API Settings Section.
 		add_settings_section(
@@ -114,13 +118,13 @@ class Petstablished_Admin {
 	}
 
 	public function sanitize_settings( $input ): array {
-		$sanitized = array();
-		$sanitized['public_key']    = sanitize_text_field( $input['public_key'] ?? '' );
-		$sanitized['auto_sync']     = ! empty( $input['auto_sync'] );
-		$sanitized['sync_interval'] = in_array( $input['sync_interval'] ?? '', self::allowed_intervals(), true )
+		$sanitized                             = array();
+		$sanitized['public_key']               = sanitize_text_field( $input['public_key'] ?? '' );
+		$sanitized['auto_sync']                = ! empty( $input['auto_sync'] );
+		$sanitized['sync_interval']            = in_array( $input['sync_interval'] ?? '', self::allowed_intervals(), true )
 			? $input['sync_interval'] : self::SCHEDULE_6PM_SKIP_SUNDAY;
-		$sanitized['batch_size']    = absint( $input['batch_size'] ?? 10 );
-		$sanitized['batch_size']    = max( 1, min( 50, $sanitized['batch_size'] ) );
+		$sanitized['batch_size']               = absint( $input['batch_size'] ?? 10 );
+		$sanitized['batch_size']               = max( 1, min( 50, $sanitized['batch_size'] ) );
 		$sanitized['delete_data_on_uninstall'] = ! empty( $input['delete_data_on_uninstall'] );
 
 		// Reschedule cron if auto_sync or interval changed.
@@ -204,7 +208,7 @@ class Petstablished_Admin {
 	}
 
 	public function render_sync_interval_field(): void {
-		$settings = self::get_settings();
+		$settings  = self::get_settings();
 		$intervals = array(
 			self::SCHEDULE_6PM_SKIP_SUNDAY => __( 'Daily at 6pm (skip Sundays)', 'vcpahumane-pet-sync' ),
 			'hourly'                       => __( 'Hourly', 'vcpahumane-pet-sync' ),
@@ -532,24 +536,26 @@ class Petstablished_Admin {
 					<tbody>
 						<?php foreach ( $entries as $entry ) : ?>
 							<?php
-							$id       = (string) ( $entry['id'] ?? '' );
-							$started  = (int) ( $entry['started'] ?? 0 );
-							$ended    = (int) ( $entry['ended'] ?? $started );
-							$duration = (int) ( $entry['duration'] ?? max( 0, $ended - $started ) );
-							$trigger  = (string) ( $entry['trigger'] ?? 'manual' );
-							$outcome  = (string) ( $entry['outcome'] ?? 'success' );
-							$stats    = is_array( $entry['stats'] ?? null ) ? $entry['stats'] : array();
-							$errors   = is_array( $entry['errors'] ?? null ) ? $entry['errors'] : array();
-							$note     = isset( $entry['note'] ) ? (string) $entry['note'] : '';
+							$id        = (string) ( $entry['id'] ?? '' );
+							$started   = (int) ( $entry['started'] ?? 0 );
+							$ended     = (int) ( $entry['ended'] ?? $started );
+							$duration  = (int) ( $entry['duration'] ?? max( 0, $ended - $started ) );
+							$trigger   = (string) ( $entry['trigger'] ?? 'manual' );
+							$outcome   = (string) ( $entry['outcome'] ?? 'success' );
+							$stats     = is_array( $entry['stats'] ?? null ) ? $entry['stats'] : array();
+							$errors    = is_array( $entry['errors'] ?? null ) ? $entry['errors'] : array();
+							$note      = isset( $entry['note'] ) ? (string) $entry['note'] : '';
 							$detail_id = 'ps-detail-' . sanitize_html_class( $id );
 							?>
 							<tr>
 								<td class="col-when">
 									<?php echo esc_html( wp_date( 'M j, Y g:i a', $started ) ); ?>
-									<br><small><?php
+									<br><small>
+									<?php
 										/* translators: %d: duration in seconds. */
 										printf( esc_html__( '%ds', 'vcpahumane-pet-sync' ), (int) $duration );
-									?></small>
+									?>
+									</small>
 								</td>
 								<td class="col-trigger">
 									<span class="ps-badge ps-badge-trigger-<?php echo esc_attr( $trigger ); ?>">
@@ -587,10 +593,12 @@ class Petstablished_Admin {
 										<dt><?php esc_html_e( 'Ended', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo esc_html( wp_date( 'F j, Y g:i:s a', $ended ) ); ?></dd>
 										<dt><?php esc_html_e( 'Duration', 'vcpahumane-pet-sync' ); ?></dt>
-										<dd><?php
+										<dd>
+										<?php
 											/* translators: %d: duration in seconds. */
 											printf( esc_html__( '%d seconds', 'vcpahumane-pet-sync' ), (int) $duration );
-										?></dd>
+										?>
+										</dd>
 										<dt><?php esc_html_e( 'Created', 'vcpahumane-pet-sync' ); ?></dt>
 										<dd><?php echo (int) ( $stats['created'] ?? 0 ); ?></dd>
 										<dt><?php esc_html_e( 'Updated', 'vcpahumane-pet-sync' ); ?></dt>
@@ -654,7 +662,7 @@ class Petstablished_Admin {
 			return;
 		}
 
-		$status  = sanitize_text_field( $_GET['petstablished_sync'] );
+		$status  = sanitize_text_field( wp_unslash( $_GET['petstablished_sync'] ) );
 		$message = '';
 		$type    = 'success';
 

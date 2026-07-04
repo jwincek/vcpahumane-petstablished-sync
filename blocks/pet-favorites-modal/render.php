@@ -49,13 +49,15 @@ wp_enqueue_script_module( 'petstablished-favorites-modal' );
 // Hydrate favorited pets for initial server render.
 $favorite_pets = array();
 if ( $favorites ) {
-	$posts = get_posts( array(
-		'post_type'      => 'vcps_pet',
-		'post_status'    => 'publish',
-		'post__in'       => $favorites,
-		'posts_per_page' => $fav_count,
-		'orderby'        => 'post__in',
-	) );
+	$posts = get_posts(
+		array(
+			'post_type'      => 'vcps_pet',
+			'post_status'    => 'publish',
+			'post__in'       => $favorites,
+			'posts_per_page' => $fav_count,
+			'orderby'        => 'post__in',
+		)
+	);
 
 	foreach ( $posts as $post ) {
 		$pet = \Petstablished\Core\Pet_Hydrator::hydrate( $post, 'summary' );
@@ -74,9 +76,12 @@ if ( $favorites ) {
 	foreach ( $pets_cache as $id => $data ) {
 		$pets_for_state[ (string) $id ] = $data;
 	}
-	wp_interactivity_state( 'petsync', array(
-		'pets' => $pets_for_state,
-	) );
+	wp_interactivity_state(
+		'petsync',
+		array(
+			'pets' => $pets_for_state,
+		)
+	);
 }
 
 $context = array(
@@ -84,18 +89,22 @@ $context = array(
 	'showCompare' => $show_compare,
 );
 
-$router_region = wp_json_encode( array(
-	'id'       => 'pet-favorites-modal',
-	'attachTo' => 'body',
-) );
+$router_region = wp_json_encode(
+	array(
+		'id'       => 'pet-favorites-modal',
+		'attachTo' => 'body',
+	)
+);
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'                 => 'pet-favorites-modal pet-favorites-modal--' . $position,
-	'data-wp-interactive'   => 'petsync/favorites-modal',
-	'data-wp-router-region' => $router_region,
-	'data-wp-context'       => wp_json_encode( $context ),
-	'data-wp-init'          => 'callbacks.init',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'                 => 'pet-favorites-modal pet-favorites-modal--' . $position,
+		'data-wp-interactive'   => 'petsync/favorites-modal',
+		'data-wp-router-region' => $router_region,
+		'data-wp-context'       => wp_json_encode( $context ),
+		'data-wp-init'          => 'callbacks.init',
+	)
+);
 ?>
 
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
@@ -205,7 +214,7 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 						$meta_parts = array_filter( array( $pet['breed'] ?? '', $pet['age'] ?? '', $pet['sex'] ?? '' ) );
 						$meta_text  = implode( ' · ', $meta_parts );
 						$partners   = $pet['bonded_pair_names'] ?? array();
-					?>
+						?>
 						<article class="pet-favorites-modal__card" data-pet-id="<?php echo esc_attr( $pet['id'] ); ?>">
 							<a href="<?php echo esc_url( $pet['url'] ); ?>" class="pet-favorites-modal__card-link js-card-nav">
 								<?php if ( ! empty( $pet['image'] ) ) : ?>
@@ -217,7 +226,16 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 									>
 								<?php else : ?>
 									<div class="pet-favorites-modal__card-placeholder">
-										<?php Petstablished_Icons::render( 'paw', array( 'width' => 32, 'height' => 32, 'stroke-width' => 1 ) ); ?>
+										<?php
+										Petstablished_Icons::render(
+											'paw',
+											array(
+												'width'  => 32,
+												'height' => 32,
+												'stroke-width' => 1,
+											)
+										);
+										?>
 									</div>
 								<?php endif; ?>
 							</a>

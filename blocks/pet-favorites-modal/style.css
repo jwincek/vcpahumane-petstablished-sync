@@ -86,9 +86,18 @@
 }
 
 @keyframes pet-favorites-badge-pulse {
-	0%   { transform: scale(0.6); }
-	50%  { transform: scale(1.2); }
-	100% { transform: scale(1); }
+
+	0% {
+		transform: scale(0.6);
+	}
+
+	50% {
+		transform: scale(1.2);
+	}
+
+	100% {
+		transform: scale(1);
+	}
 }
 
 
@@ -114,6 +123,7 @@
 }
 
 @media (min-width: 782px) {
+
 	.pet-favorites-modal__overlay {
 		align-items: center;
 	}
@@ -141,6 +151,7 @@
 }
 
 @media (min-width: 782px) {
+
 	.pet-favorites-modal__panel {
 		max-height: 75vh;
 		border-radius: 16px;
@@ -273,6 +284,7 @@
 }
 
 @media (min-width: 480px) {
+
 	.pet-favorites-modal__grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
@@ -509,8 +521,16 @@
 }
 
 @keyframes petModalPopoverReveal {
-	from { opacity: 0; transform: translateY(4px); }
-	to { opacity: 1; transform: translateY(0); }
+
+	from {
+		opacity: 0;
+		transform: translateY(4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 

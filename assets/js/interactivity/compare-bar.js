@@ -9,7 +9,7 @@
  * server renders real HTML with correct initial state, and the client
  * bindings update reactively when comparison state changes.
  *
- * @package Petstablished_Sync
+ * @package
  * @since 4.2.0
  */
 
@@ -29,7 +29,10 @@ const { state, actions, callbacks } = store( 'petsync/compare-bar', {
 		},
 
 		get isFull() {
-			return getGlobalState().comparison.length >= getGlobalState().comparisonMax;
+			return (
+				getGlobalState().comparison.length >=
+				getGlobalState().comparisonMax
+			);
 		},
 
 		get canCompare() {
@@ -46,14 +49,18 @@ const { state, actions, callbacks } = store( 'petsync/compare-bar', {
 		 */
 		get slotPet() {
 			const ctx = getContext();
-			if ( typeof ctx.slotIndex !== 'number' ) return null;
+			if ( typeof ctx.slotIndex !== 'number' ) {
+				return null;
+			}
 			const petId = getGlobalState().comparison[ ctx.slotIndex ];
 			return petId ? getGlobalState().pets[ petId ] : null;
 		},
 
 		get slotHasPet() {
 			const ctx = getContext();
-			if ( typeof ctx.slotIndex !== 'number' ) return false;
+			if ( typeof ctx.slotIndex !== 'number' ) {
+				return false;
+			}
 			return ctx.slotIndex < getGlobalState().comparison.length;
 		},
 
@@ -82,20 +89,27 @@ const { state, actions, callbacks } = store( 'petsync/compare-bar', {
 		*removeFromSlot() {
 			const ctx = getContext();
 			const petId = getGlobalState().comparison[ ctx.slotIndex ];
-			if ( ! petId ) return;
+			if ( ! petId ) {
+				return;
+			}
 
 			// Optimistic update.
-			getGlobalState().comparison = getGlobalState().comparison.filter( id => id !== petId );
+			getGlobalState().comparison = getGlobalState().comparison.filter(
+				( id ) => id !== petId
+			);
 			if ( getGlobalState().pets[ petId ] ) {
 				getGlobalState().pets[ petId ].compared = false;
 			}
 			announce( 'Removed from comparison' );
 
 			try {
-				const result = yield executeAbility( 'petsync/update-comparison', {
-					action: 'remove',
-					id: petId,
-				} );
+				const result = yield executeAbility(
+					'petsync/update-comparison',
+					{
+						action: 'remove',
+						id: petId,
+					}
+				);
 				getGlobalState().comparison = result.ids;
 				storage.set( 'comparison', getGlobalState().comparison );
 			} catch {
@@ -119,12 +133,17 @@ const { state, actions, callbacks } = store( 'petsync/compare-bar', {
 			}
 
 			const ctx = getContext();
-			const archiveUrl = ctx.archiveUrl
-				|| document.querySelector( '[data-pets-archive-url]' )?.dataset.petsArchiveUrl
-				|| '/pets/';
+			const archiveUrl =
+				ctx.archiveUrl ||
+				document.querySelector( '[data-pets-archive-url]' )?.dataset
+					.petsArchiveUrl ||
+				'/pets/';
 
 			const url = new URL( archiveUrl, window.location.origin );
-			url.searchParams.set( 'compare', getGlobalState().comparison.join( ',' ) );
+			url.searchParams.set(
+				'compare',
+				getGlobalState().comparison.join( ',' )
+			);
 
 			// If we're on a single pet page, pass its URL so the comparison
 			// page can offer a "Continue viewing [Pet]" link back.

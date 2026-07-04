@@ -66,13 +66,15 @@ function vcps_uninstall_site(): bool {
 	}
 
 	// Pets. wp_delete_post() also removes post meta and term relationships.
-	$pet_ids = get_posts( array(
-		'post_type'      => 'vcps_pet',
-		'post_status'    => 'any',
-		'posts_per_page' => -1,
-		'fields'         => 'ids',
-		'no_found_rows'  => true,
-	) );
+	$pet_ids = get_posts(
+		array(
+			'post_type'      => 'vcps_pet',
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		)
+	);
 
 	foreach ( $pet_ids as $pet_id ) {
 		wp_delete_post( $pet_id, true );
@@ -96,11 +98,13 @@ function vcps_uninstall_site(): bool {
 	foreach ( $taxonomies as $taxonomy ) {
 		register_taxonomy( $taxonomy, 'vcps_pet' );
 
-		$term_ids = get_terms( array(
-			'taxonomy'   => $taxonomy,
-			'hide_empty' => false,
-			'fields'     => 'ids',
-		) );
+		$term_ids = get_terms(
+			array(
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => false,
+				'fields'     => 'ids',
+			)
+		);
 
 		if ( ! is_wp_error( $term_ids ) ) {
 			foreach ( $term_ids as $term_id ) {
@@ -115,20 +119,22 @@ function vcps_uninstall_site(): bool {
 	// plugin's wp_theme term (see
 	// Petstablished_Templates::get_customized_template()); inert without
 	// the plugin.
-	$template_ids = get_posts( array(
-		'post_type'      => array( 'wp_template', 'wp_template_part' ),
-		'post_status'    => 'any',
-		'posts_per_page' => -1,
-		'fields'         => 'ids',
-		'no_found_rows'  => true,
-		'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+	$template_ids = get_posts(
+		array(
+			'post_type'      => array( 'wp_template', 'wp_template_part' ),
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 			array(
 				'taxonomy' => 'wp_theme',
 				'field'    => 'name',
 				'terms'    => 'vcpahumane-pet-sync',
 			),
-		),
-	) );
+			),
+		)
+	);
 
 	foreach ( $template_ids as $template_id ) {
 		wp_delete_post( $template_id, true );
@@ -150,7 +156,12 @@ function vcps_uninstall_site(): bool {
 $vcps_delete_user_meta = false;
 
 if ( is_multisite() ) {
-	$vcps_site_ids = get_sites( array( 'fields' => 'ids', 'number' => 0 ) );
+	$vcps_site_ids = get_sites(
+		array(
+			'fields' => 'ids',
+			'number' => 0,
+		)
+	);
 	foreach ( $vcps_site_ids as $vcps_site_id ) {
 		switch_to_blog( (int) $vcps_site_id );
 		$vcps_delete_user_meta = vcps_uninstall_site() || $vcps_delete_user_meta;

@@ -34,19 +34,22 @@ class CPT_Registry {
 		$post_types = Config::get_item( 'post-types', 'post_types', [] );
 
 		foreach ( $post_types as $slug => $config ) {
-			register_post_type( $slug, [
-				'labels'        => self::build_labels( $config['labels'] ),
-				'public'        => $config['public'] ?? false,
-				'show_ui'       => $config['show_ui'] ?? true,
-				'show_in_menu'  => $config['show_in_menu'] ?? true,
-				'show_in_rest'  => $config['show_in_rest'] ?? true,
-				'has_archive'   => $config['has_archive'] ?? false,
-				'rewrite'       => $config['rewrite'] ?? false,
-				'menu_icon'     => $config['menu_icon'] ?? 'dashicons-admin-post',
-				'menu_position' => $config['menu_position'] ?? null,
-				'supports'      => $config['supports'] ?? [ 'title', 'editor' ],
-				'hierarchical'  => $config['hierarchical'] ?? false,
-			] );
+			register_post_type(
+				$slug,
+				[
+					'labels'        => self::build_labels( $config['labels'] ),
+					'public'        => $config['public'] ?? false,
+					'show_ui'       => $config['show_ui'] ?? true,
+					'show_in_menu'  => $config['show_in_menu'] ?? true,
+					'show_in_rest'  => $config['show_in_rest'] ?? true,
+					'has_archive'   => $config['has_archive'] ?? false,
+					'rewrite'       => $config['rewrite'] ?? false,
+					'menu_icon'     => $config['menu_icon'] ?? 'dashicons-admin-post',
+					'menu_position' => $config['menu_position'] ?? null,
+					'supports'      => $config['supports'] ?? [ 'title', 'editor' ],
+					'hierarchical'  => $config['hierarchical'] ?? false,
+				]
+			);
 		}
 	}
 
@@ -57,15 +60,19 @@ class CPT_Registry {
 		$taxonomies = Config::get_item( 'taxonomies', 'taxonomies', [] );
 
 		foreach ( $taxonomies as $slug => $config ) {
-			register_taxonomy( $slug, $config['post_types'] ?? [], [
-				'labels'            => self::build_labels( $config['labels'] ),
-				'public'            => $config['public'] ?? true,
-				'show_ui'           => $config['show_ui'] ?? true,
-				'show_in_rest'      => $config['show_in_rest'] ?? true,
-				'hierarchical'      => $config['hierarchical'] ?? false,
-				'rewrite'           => $config['rewrite'] ?? [ 'slug' => $slug ],
-				'show_admin_column' => $config['show_admin_column'] ?? false,
-			] );
+			register_taxonomy(
+				$slug,
+				$config['post_types'] ?? [],
+				[
+					'labels'            => self::build_labels( $config['labels'] ),
+					'public'            => $config['public'] ?? true,
+					'show_ui'           => $config['show_ui'] ?? true,
+					'show_in_rest'      => $config['show_in_rest'] ?? true,
+					'hierarchical'      => $config['hierarchical'] ?? false,
+					'rewrite'           => $config['rewrite'] ?? [ 'slug' => $slug ],
+					'show_admin_column' => $config['show_admin_column'] ?? false,
+				]
+			);
 
 			// Create default terms if specified.
 			if ( ! empty( $config['default_terms'] ) ) {
@@ -94,14 +101,18 @@ class CPT_Registry {
 			foreach ( $config['fields'] ?? [] as $field => $field_config ) {
 				$type = self::map_type( $field_config['type'] ?? 'string' );
 
-				register_post_meta( $post_type, $prefix . $field, [
-					'type'              => $type,
-					'description'       => $field_config['description'] ?? '',
-					'single'            => true,
-					'show_in_rest'      => $field_config['show_in_rest'] ?? true,
-					'sanitize_callback' => self::get_sanitizer( $field_config['type'] ?? 'string' ),
-					'auth_callback'     => fn() => current_user_can( 'edit_posts' ),
-				] );
+				register_post_meta(
+					$post_type,
+					$prefix . $field,
+					[
+						'type'              => $type,
+						'description'       => $field_config['description'] ?? '',
+						'single'            => true,
+						'show_in_rest'      => $field_config['show_in_rest'] ?? true,
+						'sanitize_callback' => self::get_sanitizer( $field_config['type'] ?? 'string' ),
+						'auth_callback'     => fn() => current_user_can( 'edit_posts' ),
+					]
+				);
 			}
 		}
 	}

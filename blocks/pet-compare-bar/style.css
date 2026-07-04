@@ -15,6 +15,7 @@
 	transition: transform 0.3s ease, opacity 0.3s ease;
 	opacity: 0;
 	pointer-events: none;
+
 	/* Reset — aside is structural only, children own all visuals. */
 	background: transparent;
 	border: none;
@@ -23,11 +24,11 @@
 }
 
 /* The wp-components stylesheet (loaded on the front end for logged-in
-   users by some plugins) ships a broad [role=region] { position:
-   relative } rule. It ties with .pet-compare-bar on specificity, so
-   whichever loads last wins — and this file loads early when WP links
-   it instead of inlining it. The doubled class outranks the attribute
-   selector regardless of load order. */
+	users by some plugins) ships a broad [role=region] { position:
+	relative } rule. It ties with .pet-compare-bar on specificity, so
+	whichever loads last wins — and this file loads early when WP links
+	it instead of inlining it. The doubled class outranks the attribute
+	selector regardless of load order. */
 .pet-compare-bar.pet-compare-bar {
 	position: fixed;
 }
@@ -64,8 +65,8 @@
 }
 
 /* ============================================
-   COLLAPSED PILL
-   ============================================ */
+	COLLAPSED PILL
+	============================================ */
 
 .pet-compare-bar__pill {
 	display: none;
@@ -122,8 +123,8 @@
 }
 
 /* ============================================
-   EXPANDED BAR
-   ============================================ */
+	EXPANDED BAR
+	============================================ */
 
 /* Inner container */
 .pet-compare-bar__inner {
@@ -372,13 +373,14 @@
 }
 
 /* Toast notifications moved to the standalone petsync/pet-toast block —
-   a toast inside this aside was invisible whenever the bar was hidden. */
+	a toast inside this aside was invisible whenever the bar was hidden. */
 
 /* ============================================
-   MOBILE ADJUSTMENTS
-   ============================================ */
+	MOBILE ADJUSTMENTS
+	============================================ */
 
 @media (max-width: 480px) {
+
 	.pet-compare-bar__pill {
 		padding: 6px 10px;
 		font-size: 0.75rem;
@@ -398,7 +400,7 @@
 		width: 40px;
 		height: 40px;
 	}
-	
+
 	.pet-compare-bar__remove {
 		width: 18px;
 		height: 18px;
@@ -410,7 +412,7 @@
 		width: 8px;
 		height: 8px;
 	}
-	
+
 	.pet-compare-bar__pet-name {
 		max-width: 44px;
 		font-size: 0.625rem;

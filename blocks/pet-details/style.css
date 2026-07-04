@@ -10,9 +10,9 @@
 }
 
 /* Backward compatibility alias */
-.pet-single { 
-	--pet-single-radius: var(--pet-details-radius); 
-	--pet-single-gap: var(--pet-details-gap); 
+.pet-single {
+	--pet-single-radius: var(--pet-details-radius);
+	--pet-single-gap: var(--pet-details-gap);
 }
 
 /* Editor Preview Placeholder */
@@ -33,11 +33,32 @@
 	color: var(--wp--preset--color--contrast, #1e1e1e);
 }
 
-.pet-details__placeholder-icon { opacity: 0.5; }
-.pet-details__placeholder-title { margin: 0.75rem 0 0.25rem; font-weight: 600; }
-.pet-details__placeholder-text { margin: 0; opacity: 0.7; font-size: 0.875em; }
-.pet-details__placeholder-hint { margin: 0.5rem 0 0; font-size: 0.75em; opacity: 0.5; }
-.pet-details__placeholder-hint code { background: rgba(0,0,0,0.06); padding: 0.125em 0.375em; border-radius: 3px; }
+.pet-details__placeholder-icon {
+	opacity: 0.5;
+}
+
+.pet-details__placeholder-title {
+	margin: 0.75rem 0 0.25rem;
+	font-weight: 600;
+}
+
+.pet-details__placeholder-text {
+	margin: 0;
+	opacity: 0.7;
+	font-size: 0.875em;
+}
+
+.pet-details__placeholder-hint {
+	margin: 0.5rem 0 0;
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.pet-details__placeholder-hint code {
+	background: rgba(0, 0, 0, 0.06);
+	padding: 0.125em 0.375em;
+	border-radius: 3px;
+}
 
 /* Main Content Grid - Two Column Layout */
 .pet-details__content {
@@ -47,7 +68,9 @@
 }
 
 /* Navigation */
-.pet-details__nav { margin-bottom: 1.5rem; }
+.pet-details__nav {
+	margin-bottom: 1.5rem;
+}
 
 .pet-details__back {
 	display: inline-flex;
@@ -59,7 +82,9 @@
 	font-weight: 500;
 }
 
-.pet-details__back:hover { text-decoration: underline; }
+.pet-details__back:hover {
+	text-decoration: underline;
+}
 
 /* Breadcrumb trail — rendered by the pet-breadcrumb SSR block as a <nav> */
 .pet-details__breadcrumb {
@@ -160,7 +185,9 @@ a.pet-details__breadcrumb-item:hover {
 	transition: transform 0.2s ease;
 }
 
-.pet-details__main-image:hover { transform: scale(1.02); }
+.pet-details__main-image:hover {
+	transform: scale(1.02);
+}
 
 .pet-details__status {
 	position: absolute;
@@ -175,9 +202,20 @@ a.pet-details__breadcrumb-item:hover {
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-.pet-details__status--available { background: #10b981; color: #fff; }
-.pet-details__status--pending { background: #f59e0b; color: #fff; }
-.pet-details__status--adopted { background: #6366f1; color: #fff; }
+.pet-details__status--available {
+	background: #10b981;
+	color: #fff;
+}
+
+.pet-details__status--pending {
+	background: #f59e0b;
+	color: #fff;
+}
+
+.pet-details__status--adopted {
+	background: #6366f1;
+	color: #fff;
+}
 
 .pet-details__actions {
 	position: absolute;
@@ -203,9 +241,20 @@ a.pet-details__breadcrumb-item:hover {
 	transition: all 0.15s ease;
 }
 
-.pet-details__action-btn:hover { background: #fff; transform: scale(1.05); }
-.pet-details__action-btn--favorite.is-active { color: #ef4444; background: #fef2f2; }
-.pet-details__action-btn--compare.is-active { color: var(--wp--preset--color--primary, #2271b1); background: #eff6ff; }
+.pet-details__action-btn:hover {
+	background: #fff;
+	transform: scale(1.05);
+}
+
+.pet-details__action-btn--favorite.is-active {
+	color: #ef4444;
+	background: #fef2f2;
+}
+
+.pet-details__action-btn--compare.is-active {
+	color: var(--wp--preset--color--primary, #2271b1);
+	background: #eff6ff;
+}
 
 .pet-details__image-counter {
 	position: absolute;
@@ -237,9 +286,17 @@ a.pet-details__breadcrumb-item:hover {
 	transition: opacity 0.2s ease;
 }
 
-.pet-details__main-image-wrap:hover .pet-details__image-nav { opacity: 1; }
-.pet-details__image-nav--prev { left: 1rem; }
-.pet-details__image-nav--next { right: 1rem; }
+.pet-details__main-image-wrap:hover .pet-details__image-nav {
+	opacity: 1;
+}
+
+.pet-details__image-nav--prev {
+	left: 1rem;
+}
+
+.pet-details__image-nav--next {
+	right: 1rem;
+}
 
 .pet-details__thumbnails {
 	display: flex;
@@ -260,8 +317,15 @@ a.pet-details__breadcrumb-item:hover {
 	background: none;
 }
 
-.pet-details__thumb img { width: 100%; height: 100%; object-fit: cover; }
-.pet-details__thumb.is-active { border-color: var(--wp--preset--color--primary, #2271b1); }
+.pet-details__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.pet-details__thumb.is-active {
+	border-color: var(--wp--preset--color--primary, #2271b1);
+}
 
 .pet-details__no-image {
 	display: flex;
@@ -301,7 +365,9 @@ a.pet-details__breadcrumb-item:hover {
 	color: var(--wp--preset--color--contrast-2, #666);
 }
 
-.pet-details__section { padding-top: 0.5rem; }
+.pet-details__section {
+	padding-top: 0.5rem;
+}
 
 .pet-details__section-title {
 	margin: 0 0 0.875rem;
@@ -331,13 +397,19 @@ a.pet-details__breadcrumb-item:hover {
 	max-width: 75ch;
 }
 
-.pet-details__story p:first-child { margin-top: 0; }
-.pet-details__story p:last-child { margin-bottom: 0; }
+.pet-details__story p:first-child {
+	margin-top: 0;
+}
+
+.pet-details__story p:last-child {
+	margin-bottom: 0;
+}
 
 /* Lightbox: owned by pet-gallery block (see blocks/pet-gallery/style.css) */
 
 /* RESPONSIVE */
 @media (min-width: 768px) {
+
 	.pet-details__content {
 		grid-template-columns: 1fr 1fr;
 		align-items: start;
@@ -348,15 +420,34 @@ a.pet-details__breadcrumb-item:hover {
 		align-items: start;
 	}
 
-	.pet-details__name { font-size: 2rem; }
-	.pet-details__thumb { width: 72px; height: 72px; }
+	.pet-details__name {
+		font-size: 2rem;
+	}
+
+	.pet-details__thumb {
+		width: 72px;
+		height: 72px;
+	}
 }
 
 @media (min-width: 1024px) {
-	.pet-details { --pet-details-gap: 3rem; }
-	.pet-details__content { grid-template-columns: 1.2fr 1fr; }
-	.pet-details__grid { grid-template-columns: 1.2fr 1fr; }
-	.pet-details__thumb { width: 80px; height: 80px; }
+
+	.pet-details {
+		--pet-details-gap: 3rem;
+	}
+
+	.pet-details__content {
+		grid-template-columns: 1.2fr 1fr;
+	}
+
+	.pet-details__grid {
+		grid-template-columns: 1.2fr 1fr;
+	}
+
+	.pet-details__thumb {
+		width: 80px;
+		height: 80px;
+	}
 }
 
 /*
@@ -370,6 +461,7 @@ a.pet-details__breadcrumb-item:hover {
  * and any fixed site header. Themes can override via custom property.
  */
 @media (min-width: 782px) {
+
 	.pet-details__gallery-col {
 		position: -webkit-sticky;
 		position: sticky;
@@ -380,15 +472,19 @@ a.pet-details__breadcrumb-item:hover {
 
 /* Admin bar offset — WP adds .admin-bar to <body> when logged in */
 @media (min-width: 782px) {
+
 	.admin-bar .pet-details__gallery-col {
 		--sticky-offset: calc(32px + 1rem);
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-details__main-image,
 	.pet-details__action-btn,
-	.pet-details__adopt-btn { transition: none; }
+	.pet-details__adopt-btn {
+		transition: none;
+	}
 }
 
 /* Loading State for Router Navigation */
@@ -397,7 +493,7 @@ a.pet-details__breadcrumb-item:hover {
 }
 
 .pet-details.is-loading::before {
-	content: '';
+	content: "";
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -410,8 +506,14 @@ a.pet-details__breadcrumb-item:hover {
 }
 
 @keyframes loading-bar {
-	0% { background-position: 200% 0; }
-	100% { background-position: -200% 0; }
+
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
 }
 
 /* === Section Styling === */
@@ -513,7 +615,7 @@ a.pet-details__breadcrumb-item:hover {
 }
 
 .pet-details .pet-fact:not(:last-child)::after {
-	content: '·';
+	content: "·";
 	margin-left: 1rem;
 	color: var(--wp--preset--color--contrast-3, #ccc);
 }
@@ -546,7 +648,7 @@ a.pet-details__breadcrumb-item:hover {
 .pet-details .wp-block-button.pet-details-button .wp-block-button__link {
 	background: transparent;
 	color: var(--wp--preset--color--primary, #2271b1);
-	border: 2px solid currentColor;
+	border: 2px solid currentcolor;
 	padding: 0.75rem 1.25rem;
 	font-weight: 500;
 }
@@ -583,9 +685,20 @@ a.pet-details__breadcrumb-item:hover {
 	border-radius: 2rem;
 }
 
-.pet-details__status--available { background: #10b981; color: #fff; }
-.pet-details__status--pending { background: #f59e0b; color: #fff; }
-.pet-details__status--adopted { background: #6366f1; color: #fff; }
+.pet-details__status--available {
+	background: #10b981;
+	color: #fff;
+}
+
+.pet-details__status--pending {
+	background: #f59e0b;
+	color: #fff;
+}
+
+.pet-details__status--adopted {
+	background: #6366f1;
+	color: #fff;
+}
 
 /* === Story Section === */
 .pet-details__story {
@@ -604,5 +717,10 @@ a.pet-details__breadcrumb-item:hover {
 	max-width: 75ch;
 }
 
-.pet-details__story-content p:first-child { margin-top: 0; }
-.pet-details__story-content p:last-child { margin-bottom: 0; }
+.pet-details__story-content p:first-child {
+	margin-top: 0;
+}
+
+.pet-details__story-content p:last-child {
+	margin-bottom: 0;
+}

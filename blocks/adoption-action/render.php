@@ -49,7 +49,15 @@ if ( $form_mode === 'pdf' ) {
 					class="pet-adoption-cta__action-btn"
 					download
 				>
-					<?php Petstablished_Icons::render( 'download', array( 'width' => 18, 'height' => 18 ) ); ?>
+					<?php
+					Petstablished_Icons::render(
+						'download',
+						array(
+							'width'  => 18,
+							'height' => 18,
+						)
+					);
+					?>
 					<span><?php echo esc_html( $pdf_text ); ?></span>
 				</a>
 				<span class="pet-adoption-cta__file-meta">
@@ -78,7 +86,15 @@ if ( $form_mode === 'pdf' ) {
 				class="pet-adoption-cta__action-btn"
 			>
 				<span><?php echo esc_html( $page_text ); ?></span>
-				<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'arrow-right',
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				);
+				?>
 			</a>
 			<?php
 			$action_html = ob_get_clean();
@@ -99,7 +115,15 @@ if ( $form_mode === 'pdf' ) {
 			rel="noopener noreferrer"
 		>
 			<span><?php echo esc_html( $button_text ); ?></span>
-			<?php Petstablished_Icons::render( 'external-link', array( 'width' => 18, 'height' => 18 ) ); ?>
+			<?php
+			Petstablished_Icons::render(
+				'external-link',
+				array(
+					'width'  => 18,
+					'height' => 18,
+				)
+			);
+			?>
 		</a>
 		<?php
 		$action_html = ob_get_clean();
@@ -110,9 +134,11 @@ if ( ! $has_action ) {
 	return;
 }
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class' => 'pet-adoption-cta__actions',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'pet-adoption-cta__actions',
+	)
+);
 ?>
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<?php echo $action_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above with proper escaping. ?>

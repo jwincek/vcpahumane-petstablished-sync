@@ -287,28 +287,31 @@
 }
 
 @media (max-width: 600px) {
+
 	.pet-gallery__grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
-	
+
 	.pet-gallery__lightbox-nav--prev {
 		left: var(--wp--preset--spacing--20, 0.5rem);
 	}
-	
+
 	.pet-gallery__lightbox-nav--next {
 		right: var(--wp--preset--spacing--20, 0.5rem);
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-gallery__trigger img {
 		transition: none;
 	}
-	
+
 	.pet-gallery__trigger:hover img {
 		transform: none;
 	}
 }
+
 /* Featured image as lightbox trigger — reset button chrome, full coverage */
 .pet-gallery__featured-trigger {
 	display: block;

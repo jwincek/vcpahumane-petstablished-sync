@@ -24,13 +24,24 @@ $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
 if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
-		$wrapper_attributes = get_block_wrapper_attributes( array(
-			'class' => 'pet-actions pet-actions--placeholder',
-		) );
+		$wrapper_attributes = get_block_wrapper_attributes(
+			array(
+				'class' => 'pet-actions pet-actions--placeholder',
+			)
+		);
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-actions__placeholder">
-				<?php Petstablished_Icons::render( 'heart', array( 'width' => 24, 'height' => 24, 'stroke-width' => 1.5 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'heart',
+					array(
+						'width'        => 24,
+						'height'       => 24,
+						'stroke-width' => 1.5,
+					)
+				);
+				?>
 				<p><?php esc_html_e( 'Pet Actions', 'vcpahumane-pet-sync' ); ?></p>
 				<small><?php esc_html_e( 'Favorite, compare, and share buttons. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
 			</div>
@@ -60,12 +71,14 @@ if ( ! $show_favorite && ! $show_compare && ! $show_share ) {
 }
 
 // Share URLs for social links.
-$share_url     = rawurlencode( $pet_url );
-$share_title   = rawurlencode( sprintf(
+$share_url   = rawurlencode( $pet_url );
+$share_title = rawurlencode(
+	sprintf(
 	/* translators: %s: pet name */
-	__( 'Meet %s — Available for Adoption', 'vcpahumane-pet-sync' ),
-	$pet_name
-) );
+		__( 'Meet %s — Available for Adoption', 'vcpahumane-pet-sync' ),
+		$pet_name
+	)
+);
 $share_links = array(
 	'facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . $share_url,
 	'x'        => 'https://x.com/intent/tweet?url=' . $share_url . '&text=' . $share_title,
@@ -81,10 +94,12 @@ $display_mode = $attributes['displayMode'] ?? 'inline';
 $display_class = 'pet-actions--display-' . $label_display;
 $mode_class    = 'pet-actions--' . $display_mode;
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'               => 'pet-actions ' . $display_class . ' ' . $mode_class,
-	'data-wp-interactive' => 'petsync',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'               => 'pet-actions ' . $display_class . ' ' . $mode_class,
+		'data-wp-interactive' => 'petsync',
+	)
+);
 ?>
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 
@@ -97,18 +112,26 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		data-wp-bind--aria-label="state.favoriteLabel"
 		data-wp-class--is-active="state.isFavorited"
 		aria-pressed="<?php echo $is_favorited ? 'true' : 'false'; ?>"
-		aria-label="<?php echo esc_attr( sprintf(
-			$is_favorited
+		aria-label="
+		<?php
+		echo esc_attr(
+			sprintf(
+				$is_favorited
 				? /* translators: %s: pet name */ __( 'Unfavorite %s', 'vcpahumane-pet-sync' )
 				: /* translators: %s: pet name */ __( 'Favorite %s', 'vcpahumane-pet-sync' ),
-			$pet_name
-		) ); ?>"
+				$pet_name
+			)
+		);
+		?>
+		"
 	>
 		<?php echo Petstablished_Icons::get_heart_interactive(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG. */ ?>
 		<span class="pet-actions__label" data-wp-text="state.favoriteButtonText">
-			<?php echo $is_favorited
+			<?php
+			echo $is_favorited
 				? esc_html__( 'Unfavorite', 'vcpahumane-pet-sync' )
-				: esc_html__( 'Favorite', 'vcpahumane-pet-sync' ); ?>
+				: esc_html__( 'Favorite', 'vcpahumane-pet-sync' );
+			?>
 		</span>
 	</button>
 	<?php endif; ?>
@@ -123,13 +146,27 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		data-wp-bind--disabled="state.isCompareDisabled"
 		data-wp-class--is-active="state.isInComparison"
 		aria-pressed="false"
-		aria-label="<?php echo esc_attr( sprintf(
+		aria-label="
+		<?php
+		echo esc_attr(
+			sprintf(
 			/* translators: %s: pet name */
-			__( 'Add %s to comparison', 'vcpahumane-pet-sync' ),
-			$pet_name
-		) ); ?>"
+				__( 'Add %s to comparison', 'vcpahumane-pet-sync' ),
+				$pet_name
+			)
+		);
+		?>
+		"
 	>
-		<?php Petstablished_Icons::render( 'compare', array( 'width' => 20, 'height' => 20 ) ); ?>
+		<?php
+		Petstablished_Icons::render(
+			'compare',
+			array(
+				'width'  => 20,
+				'height' => 20,
+			)
+		);
+		?>
 		<span class="pet-actions__label" data-wp-text="state.compareButtonText">
 			<?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?>
 		</span>
@@ -145,13 +182,27 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 			data-wp-bind--aria-expanded="state.isShareMenuOpen"
 			aria-expanded="false"
 			aria-haspopup="true"
-			aria-label="<?php echo esc_attr( sprintf(
+			aria-label="
+			<?php
+			echo esc_attr(
+				sprintf(
 				/* translators: %s: pet name */
-				__( 'Share %s', 'vcpahumane-pet-sync' ),
-				$pet_name
-			) ); ?>"
+					__( 'Share %s', 'vcpahumane-pet-sync' ),
+					$pet_name
+				)
+			);
+			?>
+			"
 		>
-			<?php Petstablished_Icons::render( 'share', array( 'width' => 20, 'height' => 20 ) ); ?>
+			<?php
+			Petstablished_Icons::render(
+				'share',
+				array(
+					'width'  => 20,
+					'height' => 20,
+				)
+			);
+			?>
 			<span class="pet-actions__label"><?php esc_html_e( 'Share', 'vcpahumane-pet-sync' ); ?></span>
 		</button>
 
@@ -173,7 +224,15 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				role="menuitem"
 				hidden
 			>
-				<?php Petstablished_Icons::render( 'share', array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'share',
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				);
+				?>
 				<span><?php esc_html_e( 'Share via…', 'vcpahumane-pet-sync' ); ?></span>
 			</button>
 
@@ -185,7 +244,15 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				data-wp-class--is-copied="state.isLinkCopied"
 				role="menuitem"
 			>
-				<?php Petstablished_Icons::render( 'link', array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'link',
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				);
+				?>
 				<span data-wp-text="state.copyButtonText">
 					<?php esc_html_e( 'Copy link', 'vcpahumane-pet-sync' ); ?>
 				</span>
@@ -201,7 +268,15 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				rel="noopener noreferrer"
 				role="menuitem"
 			>
-				<?php Petstablished_Icons::render( 'facebook', array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'facebook',
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				);
+				?>
 				<span>Facebook</span>
 			</a>
 
@@ -212,7 +287,15 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				rel="noopener noreferrer"
 				role="menuitem"
 			>
-				<?php Petstablished_Icons::render( 'x-twitter', array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'x-twitter',
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				);
+				?>
 				<span>X</span>
 			</a>
 
@@ -221,7 +304,15 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 				class="pet-actions__share-item pet-actions__share-item--email"
 				role="menuitem"
 			>
-				<?php Petstablished_Icons::render( 'mail', array( 'width' => 18, 'height' => 18 ) ); ?>
+				<?php
+				Petstablished_Icons::render(
+					'mail',
+					array(
+						'width'  => 18,
+						'height' => 18,
+					)
+				);
+				?>
 				<span><?php esc_html_e( 'Email', 'vcpahumane-pet-sync' ); ?></span>
 			</a>
 		</div>

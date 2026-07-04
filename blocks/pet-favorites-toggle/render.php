@@ -15,10 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 $show_count = $attributes['showCount'] ?? true;
 $favorites  = Petstablished_Helpers::get_favorites();
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'               => 'pet-favorites-toggle',
-	'data-wp-interactive' => 'petsync',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'               => 'pet-favorites-toggle',
+		'data-wp-interactive' => 'petsync',
+	)
+);
 ?>
 
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
@@ -28,10 +30,16 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		data-wp-on--click="actions.openFavoritesModal"
 		aria-label="<?php esc_attr_e( 'View favorites', 'vcpahumane-pet-sync' ); ?>"
 	>
-		<?php echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
-			array( 'width' => 20, 'height' => 20, 'class' => 'pet-favorites-toggle__icon' ), 
-			"petsync::state.favoritesCount > 0 ? 'currentColor' : 'none'" 
-		); ?>
+		<?php
+		echo Petstablished_Icons::get_heart_interactive( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static, plugin-controlled SVG.
+			array(
+				'width'  => 20,
+				'height' => 20,
+				'class'  => 'pet-favorites-toggle__icon',
+			),
+			"petsync::state.favoritesCount > 0 ? 'currentColor' : 'none'"
+		);
+		?>
 
 		<span class="pet-favorites-toggle__label">
 			<?php esc_html_e( 'Favorites', 'vcpahumane-pet-sync' ); ?>

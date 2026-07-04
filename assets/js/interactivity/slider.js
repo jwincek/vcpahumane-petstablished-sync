@@ -3,7 +3,7 @@
  *
  * v3.0.0: generators for async pet actions, imports from store.js
  *
- * @package Petstablished_Sync
+ * @package
  * @since 3.0.0
  */
 
@@ -20,7 +20,9 @@ class SliderAutoplay {
 		this.timerId = null;
 		this.isPaused = false;
 		this.isDestroyed = false;
-		this.prefersReducedMotion = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+		this.prefersReducedMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)'
+		).matches;
 
 		this.tick = this.tick.bind( this );
 		this.pause = this.pause.bind( this );
@@ -38,15 +40,24 @@ class SliderAutoplay {
 		this.hoverTarget.addEventListener( 'mouseleave', this.resume );
 		this.hoverTarget.addEventListener( 'focusin', this.pause );
 		this.hoverTarget.addEventListener( 'focusout', this.resume );
-		document.addEventListener( 'visibilitychange', this.handleVisibilityChange );
+		document.addEventListener(
+			'visibilitychange',
+			this.handleVisibilityChange
+		);
 	}
 
 	handleVisibilityChange() {
-		document.hidden ? this.pause() : this.resume();
+		if ( document.hidden ) {
+			this.pause();
+		} else {
+			this.resume();
+		}
 	}
 
 	start() {
-		if ( this.isDestroyed || this.prefersReducedMotion ) return;
+		if ( this.isDestroyed || this.prefersReducedMotion ) {
+			return;
+		}
 		this.stop();
 		this.timerId = setInterval( this.tick, this.speed );
 	}
@@ -64,31 +75,49 @@ class SliderAutoplay {
 	}
 
 	resume() {
-		if ( this.hoverTarget.contains( document.activeElement ) || document.hidden ) return;
+		if (
+			this.hoverTarget.contains(
+				this.hoverTarget.ownerDocument.activeElement
+			) ||
+			document.hidden
+		) {
+			return;
+		}
 		this.isPaused = false;
 		this.slider.classList.remove( 'is-paused' );
 	}
 
 	reset() {
-		if ( this.isDestroyed || this.prefersReducedMotion ) return;
+		if ( this.isDestroyed || this.prefersReducedMotion ) {
+			return;
+		}
 		this.stop();
 		this.start();
 	}
 
 	tick() {
-		if ( this.isPaused || this.isDestroyed ) return;
-		this.slider.dispatchEvent( new CustomEvent( 'petstablished-autoplay-tick' ) );
+		if ( this.isPaused || this.isDestroyed ) {
+			return;
+		}
+		this.slider.dispatchEvent(
+			new CustomEvent( 'petstablished-autoplay-tick' )
+		);
 	}
 
 	destroy() {
-		if ( this.isDestroyed ) return;
+		if ( this.isDestroyed ) {
+			return;
+		}
 		this.isDestroyed = true;
 		this.stop();
 		this.hoverTarget.removeEventListener( 'mouseenter', this.pause );
 		this.hoverTarget.removeEventListener( 'mouseleave', this.resume );
 		this.hoverTarget.removeEventListener( 'focusin', this.pause );
 		this.hoverTarget.removeEventListener( 'focusout', this.resume );
-		document.removeEventListener( 'visibilitychange', this.handleVisibilityChange );
+		document.removeEventListener(
+			'visibilitychange',
+			this.handleVisibilityChange
+		);
 		delete this.slider._autoplay;
 	}
 }
@@ -102,15 +131,27 @@ const { state, actions } = store( 'petsync/slider', {
 			return ( ctx.pets || [] )[ ctx.currentIndex || 0 ] || null;
 		},
 
-		get currentPetId() { return state.currentPet?.id || null; },
-		get currentPetName() { return state.currentPet?.name || ''; },
-		get currentPetUrl() { return state.currentPet?.url || ''; },
-		get currentPetImage() { return state.currentPet?.image || ''; },
+		get currentPetId() {
+			return state.currentPet?.id || null;
+		},
+		get currentPetName() {
+			return state.currentPet?.name || '';
+		},
+		get currentPetUrl() {
+			return state.currentPet?.url || '';
+		},
+		get currentPetImage() {
+			return state.currentPet?.image || '';
+		},
 
 		get currentPetMeta() {
 			const pet = state.currentPet;
-			if ( ! pet ) return '';
-			return [ pet.breed, pet.age, pet.sex ].filter( Boolean ).join( ' · ' );
+			if ( ! pet ) {
+				return '';
+			}
+			return [ pet.breed, pet.age, pet.sex ]
+				.filter( Boolean )
+				.join( ' · ' );
 		},
 
 		get currentNumber() {
@@ -150,38 +191,50 @@ const { state, actions } = store( 'petsync/slider', {
 
 		get isFavorited() {
 			const ctx = getContext();
-			return ctx.petId ? globalState.favorites.includes( ctx.petId ) : false;
+			return ctx.petId
+				? globalState.favorites.includes( ctx.petId )
+				: false;
 		},
 
 		get isInComparison() {
 			const ctx = getContext();
-			return ctx.petId ? globalState.comparison.includes( ctx.petId ) : false;
+			return ctx.petId
+				? globalState.comparison.includes( ctx.petId )
+				: false;
 		},
 
 		get isCompareDisabled() {
 			const ctx = getContext();
 			const petId = ctx.petId;
-			if ( ! petId ) return false;
-			return ! globalState.comparison.includes( petId )
-				&& globalState.comparison.length >= globalState.comparisonMax;
+			if ( ! petId ) {
+				return false;
+			}
+			return (
+				! globalState.comparison.includes( petId ) &&
+				globalState.comparison.length >= globalState.comparisonMax
+			);
 		},
 	},
 
 	actions: {
 		next() {
 			const ctx = getContext();
-			const el = getElement();
 			const pets = ctx.pets || [];
-			if ( pets.length <= 1 ) return;
+			if ( pets.length <= 1 ) {
+				return;
+			}
+			const el = getElement();
 			ctx.currentIndex = ( ( ctx.currentIndex || 0 ) + 1 ) % pets.length;
 			el.ref?._autoplay?.reset();
 		},
 
 		prev() {
 			const ctx = getContext();
-			const el = getElement();
 			const pets = ctx.pets || [];
-			if ( pets.length <= 1 ) return;
+			if ( pets.length <= 1 ) {
+				return;
+			}
+			const el = getElement();
 			const len = pets.length;
 			ctx.currentIndex = ( ( ctx.currentIndex || 0 ) - 1 + len ) % len;
 			el.ref?._autoplay?.reset();
@@ -196,17 +249,27 @@ const { state, actions } = store( 'petsync/slider', {
 			}
 		},
 
-		pause() { getElement().ref?._autoplay?.pause(); },
-		resume() { getElement().ref?._autoplay?.resume(); },
+		pause() {
+			getElement().ref?._autoplay?.pause();
+		},
+		resume() {
+			getElement().ref?._autoplay?.resume();
+		},
 
 		// Card-mode: petId already in context.
-		toggleFavorite() { globalActions.toggleFavorite(); },
-		toggleComparison() { globalActions.toggleComparison(); },
+		toggleFavorite() {
+			globalActions.toggleFavorite();
+		},
+		toggleComparison() {
+			globalActions.toggleComparison();
+		},
 
 		// Current-slide mode: temporarily set context to active slide's pet.
 		*toggleCurrentPetFavorite() {
 			const petId = state.currentPetId;
-			if ( ! petId ) return;
+			if ( ! petId ) {
+				return;
+			}
 
 			const ctx = getContext();
 			const originalPetId = ctx.petId;
@@ -225,7 +288,9 @@ const { state, actions } = store( 'petsync/slider', {
 
 		*toggleCurrentPetComparison() {
 			const petId = state.currentPetId;
-			if ( ! petId ) return;
+			if ( ! petId ) {
+				return;
+			}
 
 			const ctx = getContext();
 			const originalPetId = ctx.petId;
@@ -249,10 +314,16 @@ const { state, actions } = store( 'petsync/slider', {
 
 		handleTouchEnd( event ) {
 			const ctx = getContext();
-			if ( typeof ctx.touchStartX !== 'number' ) return;
+			if ( typeof ctx.touchStartX !== 'number' ) {
+				return;
+			}
 			const diff = ctx.touchStartX - event.changedTouches[ 0 ].clientX;
 			if ( Math.abs( diff ) > 50 ) {
-				diff > 0 ? actions.next() : actions.prev();
+				if ( diff > 0 ) {
+					actions.next();
+				} else {
+					actions.prev();
+				}
 			}
 			ctx.touchStartX = null;
 		},
@@ -263,15 +334,18 @@ const { state, actions } = store( 'petsync/slider', {
 			const el = getElement();
 			const ctx = getContext();
 
-			if ( typeof ctx.currentIndex !== 'number' ) ctx.currentIndex = 0;
+			if ( typeof ctx.currentIndex !== 'number' ) {
+				ctx.currentIndex = 0;
+			}
 			ctx._prevIndex = ctx.currentIndex;
 
 			if ( ctx.autoplay && ! el.ref._autoplay ) {
 				// Only pause when hovering over the card track or hero image,
 				// not the surrounding header, nav buttons, or dots.
-				const hoverEl = el.ref.querySelector( '.pet-slider__track' )
-					|| el.ref.querySelector( '.pet-slider__hero-image-wrap' )
-					|| el.ref;
+				const hoverEl =
+					el.ref.querySelector( '.pet-slider__track' ) ||
+					el.ref.querySelector( '.pet-slider__hero-image-wrap' ) ||
+					el.ref;
 				el.ref._autoplay = new SliderAutoplay( el.ref, {
 					speed: ctx.autoplaySpeed || 5000,
 					hoverTarget: hoverEl,
@@ -283,8 +357,11 @@ const { state, actions } = store( 'petsync/slider', {
 				// where getContext() is not available.
 				const pets = ctx.pets || [];
 				el.ref.addEventListener( 'petstablished-autoplay-tick', () => {
-					if ( pets.length <= 1 ) return;
-					ctx.currentIndex = ( ( ctx.currentIndex || 0 ) + 1 ) % pets.length;
+					if ( pets.length <= 1 ) {
+						return;
+					}
+					ctx.currentIndex =
+						( ( ctx.currentIndex || 0 ) + 1 ) % pets.length;
 					el.ref._autoplay?.reset();
 				} );
 			}
@@ -303,16 +380,24 @@ const { state, actions } = store( 'petsync/slider', {
 			const ctx = getContext();
 			const index = ctx.currentIndex || 0;
 			const viewport = el.ref;
-			if ( ! viewport ) return;
+			if ( ! viewport ) {
+				return;
+			}
 
 			const slides = viewport.querySelectorAll( '.pet-slider__slide' );
 			const target = slides[ index ];
-			if ( ! target ) return;
+			if ( ! target ) {
+				return;
+			}
 
 			// Use scrollTo for precise positioning that respects the track padding.
-			const trackPadding = parseFloat(
-				getComputedStyle( viewport.querySelector( '.pet-slider__track' ) || viewport ).paddingLeft
-			) || 0;
+			const trackPadding =
+				parseFloat(
+					getComputedStyle(
+						viewport.querySelector( '.pet-slider__track' ) ||
+							viewport
+					).paddingLeft
+				) || 0;
 
 			viewport.scrollTo( {
 				left: target.offsetLeft - trackPadding,
@@ -330,7 +415,9 @@ const { state, actions } = store( 'petsync/slider', {
 			const index = ctx.currentIndex || 0;
 
 			// Only fire on actual index changes.
-			if ( ctx._prevIndex === index ) return;
+			if ( ctx._prevIndex === index ) {
+				return;
+			}
 			ctx._prevIndex = index;
 
 			ctx.isTransitioning = true;

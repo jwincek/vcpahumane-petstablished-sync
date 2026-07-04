@@ -50,38 +50,42 @@ class Petstablished_REST {
 			// Route: petsync/v1/petsync/toggle-favorite/run
 			$route = $ability_name . '/run';
 
-			register_rest_route( 'petsync/v1', $route, [
+			register_rest_route(
+				'petsync/v1',
+				$route,
 				[
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => [ __CLASS__, 'handle_execute' ],
-					'permission_callback' => [ __CLASS__, 'check_permission' ],
-					'args'                => [
-						'_ability' => [
-							'type'    => 'string',
-							'default' => $ability_name,
-						],
-						'input'   => [
-							'required' => false,
-							'default'  => null,
+					[
+						'methods'             => \WP_REST_Server::CREATABLE,
+						'callback'            => [ __CLASS__, 'handle_execute' ],
+						'permission_callback' => [ __CLASS__, 'check_permission' ],
+						'args'                => [
+							'_ability' => [
+								'type'    => 'string',
+								'default' => $ability_name,
+							],
+							'input'    => [
+								'required' => false,
+								'default'  => null,
+							],
 						],
 					],
-				],
-				[
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => [ __CLASS__, 'handle_execute' ],
-					'permission_callback' => [ __CLASS__, 'check_permission' ],
-					'args'                => [
-						'_ability' => [
-							'type'    => 'string',
-							'default' => $ability_name,
-						],
-						'input'   => [
-							'required' => false,
-							'default'  => null,
+					[
+						'methods'             => \WP_REST_Server::READABLE,
+						'callback'            => [ __CLASS__, 'handle_execute' ],
+						'permission_callback' => [ __CLASS__, 'check_permission' ],
+						'args'                => [
+							'_ability' => [
+								'type'    => 'string',
+								'default' => $ability_name,
+							],
+							'input'    => [
+								'required' => false,
+								'default'  => null,
+							],
 						],
 					],
-				],
-			] );
+				]
+			);
 		}
 	}
 

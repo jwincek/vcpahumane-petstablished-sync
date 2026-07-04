@@ -21,9 +21,11 @@ $is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
 if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 	if ( $is_editor ) {
-		$wrapper_attributes = get_block_wrapper_attributes( array(
-			'class' => 'pet-attributes pet-attributes--placeholder',
-		) );
+		$wrapper_attributes = get_block_wrapper_attributes(
+			array(
+				'class' => 'pet-attributes pet-attributes--placeholder',
+			)
+		);
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-attributes__placeholder">
@@ -64,25 +66,59 @@ $icon_map = array(
 // Most map directly; age uses the 'age' taxonomy key but the entity
 // field is 'numerical_age'. The filter param matches the taxonomy key.
 $filter_key_map = array(
-	'breed'   => 'breed',
-	'age'     => 'age',
-	'sex'     => 'sex',
-	'size'    => 'size',
-	'color'   => 'color',
-	'coat'    => 'coat',
+	'breed' => 'breed',
+	'age'   => 'age',
+	'sex'   => 'sex',
+	'size'  => 'size',
+	'color' => 'color',
+	'coat'  => 'coat',
 );
 
 // Build attribute list — each entry references an entity field key.
 // Only attributes whose toggle is enabled are included.
 $attr_defs = array(
-	array( 'toggle' => 'showBreed',       'label' => __( 'Breed', 'vcpahumane-pet-sync' ),        'key' => 'breed' ),
-	array( 'toggle' => 'showAge',         'label' => __( 'Age', 'vcpahumane-pet-sync' ),          'key' => 'numerical_age', 'fallback' => 'age', 'taxonomy_key' => 'age' ),
-	array( 'toggle' => 'showSex',         'label' => __( 'Sex', 'vcpahumane-pet-sync' ),          'key' => 'sex' ),
-	array( 'toggle' => 'showSize',        'label' => __( 'Size', 'vcpahumane-pet-sync' ),         'key' => 'size' ),
-	array( 'toggle' => 'showColor',       'label' => __( 'Color', 'vcpahumane-pet-sync' ),        'key' => 'color' ),
-	array( 'toggle' => 'showCoat',        'label' => __( 'Coat', 'vcpahumane-pet-sync' ),         'key' => 'coat' ),
-	array( 'toggle' => 'showCoatPattern', 'label' => __( 'Coat Pattern', 'vcpahumane-pet-sync' ), 'key' => 'coat_pattern' ),
-	array( 'toggle' => 'showWeight',      'label' => __( 'Weight', 'vcpahumane-pet-sync' ),       'key' => 'weight' ),
+	array(
+		'toggle' => 'showBreed',
+		'label'  => __( 'Breed', 'vcpahumane-pet-sync' ),
+		'key'    => 'breed',
+	),
+	array(
+		'toggle'       => 'showAge',
+		'label'        => __( 'Age', 'vcpahumane-pet-sync' ),
+		'key'          => 'numerical_age',
+		'fallback'     => 'age',
+		'taxonomy_key' => 'age',
+	),
+	array(
+		'toggle' => 'showSex',
+		'label'  => __( 'Sex', 'vcpahumane-pet-sync' ),
+		'key'    => 'sex',
+	),
+	array(
+		'toggle' => 'showSize',
+		'label'  => __( 'Size', 'vcpahumane-pet-sync' ),
+		'key'    => 'size',
+	),
+	array(
+		'toggle' => 'showColor',
+		'label'  => __( 'Color', 'vcpahumane-pet-sync' ),
+		'key'    => 'color',
+	),
+	array(
+		'toggle' => 'showCoat',
+		'label'  => __( 'Coat', 'vcpahumane-pet-sync' ),
+		'key'    => 'coat',
+	),
+	array(
+		'toggle' => 'showCoatPattern',
+		'label'  => __( 'Coat Pattern', 'vcpahumane-pet-sync' ),
+		'key'    => 'coat_pattern',
+	),
+	array(
+		'toggle' => 'showWeight',
+		'label'  => __( 'Weight', 'vcpahumane-pet-sync' ),
+		'key'    => 'weight',
+	),
 );
 
 $items = array();
@@ -102,7 +138,7 @@ foreach ( $attr_defs as $def ) {
 	$attr_key = $def['taxonomy_key'] ?? $def['key'];
 
 	// Build taxonomy archive link if a taxonomy exists for this attribute.
-	$link = '';
+	$link          = '';
 	$taxonomy_slug = $taxonomy_map[ $attr_key ] ?? '';
 	$filter_key    = $filter_key_map[ $attr_key ] ?? '';
 
@@ -126,16 +162,28 @@ if ( empty( $items ) ) {
 	return;
 }
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class' => 'pet-attributes',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => 'pet-attributes',
+	)
+);
 ?>
 <dl <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<?php foreach ( $items as $item ) : ?>
 		<div class="pet-attributes__item">
 			<dt class="pet-attributes__label">
 				<?php if ( $item['icon'] ) : ?>
-					<?php Petstablished_Icons::render( $item['icon'], array( 'width' => 14, 'height' => 14, 'stroke-width' => 2, 'class' => 'pet-attributes__icon' ) ); ?>
+					<?php
+					Petstablished_Icons::render(
+						$item['icon'],
+						array(
+							'width'        => 14,
+							'height'       => 14,
+							'stroke-width' => 2,
+							'class'        => 'pet-attributes__icon',
+						)
+					);
+					?>
 				<?php endif; ?>
 				<?php echo esc_html( $item['label'] ); ?>
 			</dt>

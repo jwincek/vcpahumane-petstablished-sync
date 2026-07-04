@@ -39,7 +39,7 @@ class Petstablished_Icons {
 
 		// === Animals ===
 
-		'dog' => array(
+		'dog'               => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5',
@@ -48,7 +48,7 @@ class Petstablished_Icons {
 			),
 		),
 
-		'cat' => array(
+		'cat'               => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3.1-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5z',
@@ -58,10 +58,14 @@ class Petstablished_Icons {
 
 		// Seated toddler — large head, small body sitting down.
 		// Universally recognized as "child" from signage (changing rooms, car seats).
-		'child' => array(
+		'child'             => array(
 			'viewBox' => '0 0 24 24',
 			'circles' => array(
-				array( 'cx' => 12, 'cy' => 4, 'r' => 3 ), // head — proportionally large
+				array(
+					'cx' => 12,
+					'cy' => 4,
+					'r'  => 3,
+				), // head — proportionally large
 			),
 			'paths'   => array(
 				'M12 9c-2 0-3.5 1.5-3.5 3.5V15h7v-2.5C15.5 10.5 14 9 12 9z', // torso sitting
@@ -72,7 +76,7 @@ class Petstablished_Icons {
 		),
 
 		// Pet paw placeholder (for missing images).
-		'paw' => array(
+		'paw'               => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5M14 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.96-1.45-2.344-2.5',
@@ -83,62 +87,112 @@ class Petstablished_Icons {
 
 		// === Actions ===
 
-		'heart' => array(
+		'heart'             => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
 			),
 		),
 
-		'heart-special' => array(
+		'heart-special'     => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7 7-7z',
 			),
 		),
 
-		'share' => array(
+		'share'             => array(
 			'viewBox' => '0 0 24 24',
 			'circles' => array(
-				array( 'cx' => 18, 'cy' => 5,  'r' => 3, 'fill' => 'currentColor' ),
-				array( 'cx' => 6,  'cy' => 12, 'r' => 3, 'fill' => 'currentColor' ),
-				array( 'cx' => 18, 'cy' => 19, 'r' => 3, 'fill' => 'currentColor' ),
+				array(
+					'cx'   => 18,
+					'cy'   => 5,
+					'r'    => 3,
+					'fill' => 'currentColor',
+				),
+				array(
+					'cx'   => 6,
+					'cy'   => 12,
+					'r'    => 3,
+					'fill' => 'currentColor',
+				),
+				array(
+					'cx'   => 18,
+					'cy'   => 19,
+					'r'    => 3,
+					'fill' => 'currentColor',
+				),
 			),
-			'lines' => array(
-				array( 'x1' => '8.59', 'y1' => '13.51', 'x2' => '15.42', 'y2' => '17.49' ),
-				array( 'x1' => '15.41', 'y1' => '6.51', 'x2' => '8.59', 'y2' => '10.49' ),
+			'lines'   => array(
+				array(
+					'x1' => '8.59',
+					'y1' => '13.51',
+					'x2' => '15.42',
+					'y2' => '17.49',
+				),
+				array(
+					'x1' => '15.41',
+					'y1' => '6.51',
+					'x2' => '8.59',
+					'y2' => '10.49',
+				),
 			),
 		),
 
-		'compare' => array(
+		'compare'           => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M16 3h5v5M8 3H3v5M3 16v5h5M21 16v5h-5',
 			),
 		),
 
-		'compare-grid' => array(
+		'compare-grid'      => array(
 			'viewBox' => '0 0 24 24',
 			'rects'   => array(
-				array( 'x' => 3, 'y' => 3, 'width' => 7, 'height' => 7 ),
-				array( 'x' => 14, 'y' => 3, 'width' => 7, 'height' => 7 ),
-				array( 'x' => 3, 'y' => 14, 'width' => 7, 'height' => 7 ),
-				array( 'x' => 14, 'y' => 14, 'width' => 7, 'height' => 7 ),
+				array(
+					'x'      => 3,
+					'y'      => 3,
+					'width'  => 7,
+					'height' => 7,
+				),
+				array(
+					'x'      => 14,
+					'y'      => 3,
+					'width'  => 7,
+					'height' => 7,
+				),
+				array(
+					'x'      => 3,
+					'y'      => 14,
+					'width'  => 7,
+					'height' => 7,
+				),
+				array(
+					'x'      => 14,
+					'y'      => 14,
+					'width'  => 7,
+					'height' => 7,
+				),
 			),
 		),
 
-		'external-link' => array(
+		'external-link'     => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6',
 				'M15 3h6v6', // polyline
 			),
 			'lines'   => array(
-				array( 'x1' => '10', 'y1' => '14', 'x2' => '21', 'y2' => '3' ),
+				array(
+					'x1' => '10',
+					'y1' => '14',
+					'x2' => '21',
+					'y2' => '3',
+				),
 			),
 		),
 
-		'download' => array(
+		'download'          => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4',
@@ -147,7 +201,7 @@ class Petstablished_Icons {
 			),
 		),
 
-		'trash' => array(
+		'trash'             => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M3 6h18', // polyline points="3 6 5 6 21 6"
@@ -157,35 +211,35 @@ class Petstablished_Icons {
 
 		// === Navigation ===
 
-		'chevron-left' => array(
+		'chevron-left'      => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M15 18l-6-6 6-6',
 			),
 		),
 
-		'chevron-right' => array(
+		'chevron-right'     => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M9 18l6-6-6-6',
 			),
 		),
 
-		'chevron-down' => array(
+		'chevron-down'      => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M6 9l6 6 6-6',
 			),
 		),
 
-		'chevron-up' => array(
+		'chevron-up'        => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M18 15l-6-6-6 6',
 			),
 		),
 
-		'arrow-left' => array(
+		'arrow-left'        => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M19 12H5', // line
@@ -193,7 +247,7 @@ class Petstablished_Icons {
 			),
 		),
 
-		'arrow-right' => array(
+		'arrow-right'       => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M5 12h14',
@@ -201,9 +255,9 @@ class Petstablished_Icons {
 			),
 		),
 
-		'back' => array(
-			'viewBox' => '0 0 24 24',
-			'paths'   => array(
+		'back'              => array(
+			'viewBox'   => '0 0 24 24',
+			'paths'     => array(
 				'M19 12H5',
 			),
 			'polylines' => array(
@@ -213,14 +267,14 @@ class Petstablished_Icons {
 
 		// === Status Indicators ===
 
-		'check' => array(
+		'check'             => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M20 6L9 17l-5-5', // polyline
 			),
 		),
 
-		'check-circle' => array(
+		'check-circle'      => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M22 11.08V12a10 10 0 1 1-5.93-9.14',
@@ -228,69 +282,119 @@ class Petstablished_Icons {
 			),
 		),
 
-		'x' => array(
+		'x'                 => array(
 			'viewBox' => '0 0 24 24',
 			'lines'   => array(
-				array( 'x1' => '18', 'y1' => '6', 'x2' => '6', 'y2' => '18' ),
-				array( 'x1' => '6', 'y1' => '6', 'x2' => '18', 'y2' => '18' ),
+				array(
+					'x1' => '18',
+					'y1' => '6',
+					'x2' => '6',
+					'y2' => '18',
+				),
+				array(
+					'x1' => '6',
+					'y1' => '6',
+					'x2' => '18',
+					'y2' => '18',
+				),
 			),
 		),
 
-		'x-circle' => array(
-			'viewBox' => '0 0 24 24',
-			'paths'   => array(
-				'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', // circle centered at 12,12 r=10
-			),
-			'lines'   => array(
-				array( 'x1' => '15', 'y1' => '9', 'x2' => '9', 'y2' => '15' ),
-				array( 'x1' => '9', 'y1' => '9', 'x2' => '15', 'y2' => '15' ),
-			),
-		),
-
-		'minus' => array(
-			'viewBox' => '0 0 24 24',
-			'lines'   => array(
-				array( 'x1' => '5', 'y1' => '12', 'x2' => '19', 'y2' => '12' ),
-			),
-		),
-
-		'info' => array(
+		'x-circle'          => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', // circle centered at 12,12 r=10
 			),
 			'lines'   => array(
-				array( 'x1' => '12', 'y1' => '16', 'x2' => '12', 'y2' => '12' ),
-				array( 'x1' => '12', 'y1' => '8', 'x2' => '12.01', 'y2' => '8' ),
+				array(
+					'x1' => '15',
+					'y1' => '9',
+					'x2' => '9',
+					'y2' => '15',
+				),
+				array(
+					'x1' => '9',
+					'y1' => '9',
+					'x2' => '15',
+					'y2' => '15',
+				),
 			),
 		),
 
-		'help-circle' => array(
+		'minus'             => array(
+			'viewBox' => '0 0 24 24',
+			'lines'   => array(
+				array(
+					'x1' => '5',
+					'y1' => '12',
+					'x2' => '19',
+					'y2' => '12',
+				),
+			),
+		),
+
+		'info'              => array(
+			'viewBox' => '0 0 24 24',
+			'paths'   => array(
+				'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', // circle centered at 12,12 r=10
+			),
+			'lines'   => array(
+				array(
+					'x1' => '12',
+					'y1' => '16',
+					'x2' => '12',
+					'y2' => '12',
+				),
+				array(
+					'x1' => '12',
+					'y1' => '8',
+					'x2' => '12.01',
+					'y2' => '8',
+				),
+			),
+		),
+
+		'help-circle'       => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z', // circle centered at 12,12 r=10
 				'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3', // question mark curve
 			),
 			'lines'   => array(
-				array( 'x1' => '12', 'y1' => '17', 'x2' => '12.01', 'y2' => '17' ), // dot
+				array(
+					'x1' => '12',
+					'y1' => '17',
+					'x2' => '12.01',
+					'y2' => '17',
+				), // dot
 			),
 		),
 
 		// === UI Elements ===
 
-		'expand' => array(
+		'expand'            => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M15 3h6v6', // polyline
 				'M9 21H3v-6', // polyline
 			),
 			'lines'   => array(
-				array( 'x1' => '21', 'y1' => '3', 'x2' => '14', 'y2' => '10' ),
-				array( 'x1' => '3', 'y1' => '21', 'x2' => '10', 'y2' => '14' ),
+				array(
+					'x1' => '21',
+					'y1' => '3',
+					'x2' => '14',
+					'y2' => '10',
+				),
+				array(
+					'x1' => '3',
+					'y1' => '21',
+					'x2' => '10',
+					'y2' => '14',
+				),
 			),
 		),
 
-		'search' => array(
+		'search'            => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M21 21l-5.2-5.2', // handle
@@ -309,7 +413,7 @@ class Petstablished_Icons {
 
 		// === Health & Compatibility ===
 
-		'syringe' => array(
+		'syringe'           => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'm18 2 4 4M7.5 21.5 3 17l10-10 4 4-10 10zM15 6l-2-2m-4 4-2-2m-4 4-2-2',
@@ -317,7 +421,7 @@ class Petstablished_Icons {
 		),
 
 		// Shield with checkmark — health/vaccination protection.
-		'shield-check' => array(
+		'shield-check'      => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', // shield
@@ -325,7 +429,7 @@ class Petstablished_Icons {
 			),
 		),
 
-		'house' => array(
+		'house'             => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
@@ -334,21 +438,21 @@ class Petstablished_Icons {
 		),
 
 		// Social / utility icons for share dropdown.
-		'facebook' => array(
+		'facebook'          => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z',
 			),
 		),
 
-		'x-twitter' => array(
+		'x-twitter'         => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M4 4l7.2 10.2L4 20h2l5.6-4.5L16 20h4l-7.6-10.7L19.2 4H17.2l-5.2 4.2L8 4z',
 			),
 		),
 
-		'mail' => array(
+		'mail'              => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z',
@@ -356,7 +460,7 @@ class Petstablished_Icons {
 			),
 		),
 
-		'link' => array(
+		'link'              => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71',
@@ -366,41 +470,49 @@ class Petstablished_Icons {
 
 		// === Pet Attribute Icons ===
 
-		'clock' => array(
+		'clock'             => array(
 			'viewBox' => '0 0 24 24',
 			'circles' => array(
-				array( 'cx' => 12, 'cy' => 12, 'r' => 10 ),
+				array(
+					'cx' => 12,
+					'cy' => 12,
+					'r'  => 10,
+				),
 			),
 			'paths'   => array(
 				'M12 6v6l4 2',
 			),
 		),
 
-		'user' => array(
+		'user'              => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2',
 			),
 			'circles' => array(
-				array( 'cx' => 12, 'cy' => 7, 'r' => 4 ),
+				array(
+					'cx' => 12,
+					'cy' => 7,
+					'r'  => 4,
+				),
 			),
 		),
 
-		'maximize' => array(
+		'maximize'          => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7',
 			),
 		),
 
-		'droplet' => array(
+		'droplet'           => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z',
 			),
 		),
 
-		'wind' => array(
+		'wind'              => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2',
@@ -409,7 +521,7 @@ class Petstablished_Icons {
 			),
 		),
 
-		'layers' => array(
+		'layers'            => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M12 2L2 7l10 5 10-5-10-5z',
@@ -418,7 +530,7 @@ class Petstablished_Icons {
 			),
 		),
 
-		'scale' => array(
+		'scale'             => array(
 			'viewBox' => '0 0 24 24',
 			'paths'   => array(
 				'M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z',
@@ -452,7 +564,7 @@ class Petstablished_Icons {
 			return '';
 		}
 
-		$icon = self::ICONS[ $name ];
+		$icon      = self::ICONS[ $name ];
 		$svg_attrs = self::build_attributes( $icon['viewBox'], $attrs );
 
 		$inner_html = '';
@@ -467,7 +579,7 @@ class Petstablished_Icons {
 		// Render circles.
 		if ( ! empty( $icon['circles'] ) ) {
 			foreach ( $icon['circles'] as $circle ) {
-				$fill = isset( $circle['fill'] ) ? esc_attr( $circle['fill'] ) : null;
+				$fill        = isset( $circle['fill'] ) ? esc_attr( $circle['fill'] ) : null;
 				$inner_html .= sprintf(
 					'<circle cx="%s" cy="%s" r="%s"%s/>',
 					esc_attr( $circle['cx'] ),
@@ -541,13 +653,13 @@ class Petstablished_Icons {
 	/**
 	 * Build SVG attribute string.
 	 *
-	 * @param string $viewBox Icon viewBox.
+	 * @param string $view_box Icon viewBox.
 	 * @param array  $attrs   Custom attributes to merge with defaults.
 	 * @return string Attribute string.
 	 */
-	private static function build_attributes( string $viewBox, array $attrs ): string {
-		$merged = array_merge( self::DEFAULTS, $attrs );
-		$merged['viewBox'] = $viewBox;
+	private static function build_attributes( string $view_box, array $attrs ): string {
+		$merged            = array_merge( self::DEFAULTS, $attrs );
+		$merged['viewBox'] = $view_box;
 
 		// Handle class merging.
 		if ( isset( $attrs['class'] ) && ! empty( $attrs['class'] ) ) {

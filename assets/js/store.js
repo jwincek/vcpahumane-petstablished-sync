@@ -14,11 +14,16 @@
  * Favorites are now a standalone modal, not a grid filter mode.
  * Router-based navigation for comparison actions.
  *
- * @package Petstablished_Sync
+ * @package
  * @since 4.2.0
  */
 
-import { store, getContext, getConfig, getElement } from '@wordpress/interactivity';
+import {
+	store,
+	getContext,
+	getConfig,
+	getElement,
+} from '@wordpress/interactivity';
 import { storage, announce, executeAbility, copyToClipboard } from './utils.js';
 
 /**
@@ -28,18 +33,29 @@ import { storage, announce, executeAbility, copyToClipboard } from './utils.js';
 const getPetIdFromContext = () => {
 	try {
 		const ctx = getContext();
-		if ( ctx?.petId ) return { petId: ctx.petId, petName: ctx.petName };
+		if ( ctx?.petId ) {
+			return { petId: ctx.petId, petName: ctx.petName };
+		}
 	} catch {}
 	try {
 		const el = getElement();
 		if ( el?.ref ) {
-			const petId = el.ref.dataset?.petId || el.ref.closest( '[data-pet-id]' )?.dataset?.petId;
-			if ( petId ) return { petId: parseInt( petId, 10 ), petName: null };
+			const petId =
+				el.ref.dataset?.petId ||
+				el.ref.closest( '[data-pet-id]' )?.dataset?.petId;
+			if ( petId ) {
+				return { petId: parseInt( petId, 10 ), petName: null };
+			}
 			const contextEl = el.ref.closest( '[data-wp-context]' );
 			if ( contextEl ) {
 				try {
 					const ctxData = JSON.parse( contextEl.dataset.wpContext );
-					if ( ctxData?.petId ) return { petId: ctxData.petId, petName: ctxData.petName };
+					if ( ctxData?.petId ) {
+						return {
+							petId: ctxData.petId,
+							petName: ctxData.petName,
+						};
+					}
 				} catch {}
 			}
 		}
@@ -53,31 +69,15 @@ const getPetIdFromContext = () => {
 const getArchiveUrl = () => {
 	try {
 		const ctx = getContext();
-		if ( ctx?.archiveUrl ) return ctx.archiveUrl;
+		if ( ctx?.archiveUrl ) {
+			return ctx.archiveUrl;
+		}
 	} catch {}
-	return document.querySelector( '[data-pets-archive-url]' )?.dataset.petsArchiveUrl
-		|| '/pets/';
+	return (
+		document.querySelector( '[data-pets-archive-url]' )?.dataset
+			.petsArchiveUrl || '/pets/'
+	);
 };
-
-/**
- * Helper: perform client-side navigation via the interactivity-router.
- * Falls back to window.location.href if the router is unavailable.
- *
- * @param {string}  url              Target URL.
- * @param {Object}  [options]        Router navigate options.
- * @param {boolean} [options.replace] Replace current history entry.
- */
-function* routerNavigate( url, options = {} ) {
-	try {
-		const { actions: routerActions } = yield import(
-			'@wordpress/interactivity-router'
-		);
-		yield routerActions.navigate( url, { force: false, ...options } );
-	} catch {
-		window.location.href = url;
-	}
-}
-
 
 /* =========================================================================
  * Shared helper generators
@@ -106,7 +106,9 @@ function showToast( message ) {
 		announce( message );
 	}
 	clearTimeout( toastTimer );
-	toastTimer = setTimeout( () => { s.notification = null; }, 3000 );
+	toastTimer = setTimeout( () => {
+		s.notification = null;
+	}, 3000 );
 }
 
 /**
@@ -116,30 +118,42 @@ function showToast( message ) {
  * @param {string|null} petName Pet display name (for announcements).
  */
 function* doToggleFavorite( petId, petName ) {
-	if ( ! petId ) return;
+	if ( ! petId ) {
+		return;
+	}
 	const s = store( 'petsync' ).state;
 	const config = getConfig( 'petsync' );
 	const wasIn = s.favorites.includes( petId );
 
 	// Optimistic update.
 	s.favorites = wasIn
-		? s.favorites.filter( id => id !== petId )
+		? s.favorites.filter( ( id ) => id !== petId )
 		: [ ...s.favorites, petId ];
-	if ( s.pets[ petId ] ) s.pets[ petId ].favorited = ! wasIn;
+	if ( s.pets[ petId ] ) {
+		s.pets[ petId ].favorited = ! wasIn;
+	}
 
 	const name = petName || s.pets[ petId ]?.name || 'Pet';
-	showToast( wasIn ? `${ name } removed from favorites` : `${ name } added to favorites` );
+	showToast(
+		wasIn
+			? `${ name } removed from favorites`
+			: `${ name } added to favorites`
+	);
 
 	try {
-		const result = yield executeAbility( 'petsync/toggle-favorite', { id: petId } );
+		const result = yield executeAbility( 'petsync/toggle-favorite', {
+			id: petId,
+		} );
 		s.favorites = result.favorites;
 		storage.set( 'favorites', s.favorites );
 	} catch ( error ) {
 		// Rollback state and localStorage.
 		s.favorites = wasIn
 			? [ ...s.favorites, petId ]
-			: s.favorites.filter( id => id !== petId );
-		if ( s.pets[ petId ] ) s.pets[ petId ].favorited = wasIn;
+			: s.favorites.filter( ( id ) => id !== petId );
+		if ( s.pets[ petId ] ) {
+			s.pets[ petId ].favorited = wasIn;
+		}
 		storage.set( 'favorites', s.favorites );
 		console.error( 'Failed to toggle favorite:', error );
 		showToast( config.i18n?.error || 'Failed to update favorites' );
@@ -153,29 +167,39 @@ function* doToggleFavorite( petId, petName ) {
  * @param {string|null} petName Pet display name (for announcements).
  */
 function* doToggleComparison( petId, petName ) {
-	if ( ! petId ) return;
+	if ( ! petId ) {
+		return;
+	}
 	const s = store( 'petsync' ).state;
 	const config = getConfig( 'petsync' );
 	const wasIn = s.comparison.includes( petId );
 
 	if ( ! wasIn && s.comparison.length >= s.comparisonMax ) {
-		showToast( config.i18n?.compareFull || 'Comparison is full. Remove a pet first.' );
+		showToast(
+			config.i18n?.compareFull ||
+				'Comparison is full. Remove a pet first.'
+		);
 		return;
 	}
 
 	s.comparison = wasIn
-		? s.comparison.filter( id => id !== petId )
+		? s.comparison.filter( ( id ) => id !== petId )
 		: [ ...s.comparison, petId ];
-	if ( s.pets[ petId ] ) s.pets[ petId ].compared = ! wasIn;
+	if ( s.pets[ petId ] ) {
+		s.pets[ petId ].compared = ! wasIn;
+	}
 
 	const name = petName || s.pets[ petId ]?.name || 'Pet';
-	showToast( wasIn
-		? `${ name } removed from comparison`
-		: `${ name } added to comparison (${ s.comparison.length }/${ s.comparisonMax })` );
+	showToast(
+		wasIn
+			? `${ name } removed from comparison`
+			: `${ name } added to comparison (${ s.comparison.length }/${ s.comparisonMax })`
+	);
 
 	try {
 		const result = yield executeAbility( 'petsync/update-comparison', {
-			action: wasIn ? 'remove' : 'add', id: petId,
+			action: wasIn ? 'remove' : 'add',
+			id: petId,
 		} );
 		s.comparison = result.ids;
 		s.comparisonMax = result.max;
@@ -183,20 +207,20 @@ function* doToggleComparison( petId, petName ) {
 	} catch ( error ) {
 		s.comparison = wasIn
 			? [ ...s.comparison, petId ]
-			: s.comparison.filter( id => id !== petId );
-		if ( s.pets[ petId ] ) s.pets[ petId ].compared = wasIn;
+			: s.comparison.filter( ( id ) => id !== petId );
+		if ( s.pets[ petId ] ) {
+			s.pets[ petId ].compared = wasIn;
+		}
 		console.error( 'Failed to update comparison:', error );
 		showToast( config.i18n?.error || 'Failed to update comparison' );
 	}
 }
-
 
 /* =========================================================================
  * Store definition
  * ========================================================================= */
 
 const { state, actions, callbacks } = store( 'petsync', {
-
 	/* -----------------------------------------------------------------
 	 * STATE
 	 * ----------------------------------------------------------------- */
@@ -216,13 +240,27 @@ const { state, actions, callbacks } = store( 'petsync', {
 
 		/* --- Derived: favorites & comparison counts --- */
 
-		get favoritesCount() { return state.favorites.length; },
-		get comparisonCount() { return state.comparison.length; },
-		get isCompareBarHidden() { return state.comparison.length === 0; },
-		get isCompareBarVisible() { return state.comparison.length > 0; },
-		get noNotification() { return ! state.notification; },
-		get isCompareBarExpanded() { return state._compareBarExpanded ?? true; },
-		get canAddToComparison() { return state.comparison.length < state.comparisonMax; },
+		get favoritesCount() {
+			return state.favorites.length;
+		},
+		get comparisonCount() {
+			return state.comparison.length;
+		},
+		get isCompareBarHidden() {
+			return state.comparison.length === 0;
+		},
+		get isCompareBarVisible() {
+			return state.comparison.length > 0;
+		},
+		get noNotification() {
+			return ! state.notification;
+		},
+		get isCompareBarExpanded() {
+			return state._compareBarExpanded ?? true;
+		},
+		get canAddToComparison() {
+			return state.comparison.length < state.comparisonMax;
+		},
 
 		get isFavorited() {
 			const { petId } = getPetIdFromContext();
@@ -234,15 +272,22 @@ const { state, actions, callbacks } = store( 'petsync', {
 		},
 		get isCompareDisabled() {
 			const { petId } = getPetIdFromContext();
-			if ( ! petId ) return true;
-			return ! state.comparison.includes( petId ) && state.comparison.length >= state.comparisonMax;
+			if ( ! petId ) {
+				return true;
+			}
+			return (
+				! state.comparison.includes( petId ) &&
+				state.comparison.length >= state.comparisonMax
+			);
 		},
 		get currentPet() {
 			const { petId } = getPetIdFromContext();
 			return petId ? state.pets[ petId ] : null;
 		},
 		get comparedPets() {
-			return state.comparison.map( id => state.pets[ id ] ).filter( Boolean );
+			return state.comparison
+				.map( ( id ) => state.pets[ id ] )
+				.filter( Boolean );
 		},
 
 		/* --- Derived: accessible labels (pet-card / pet-actions) --- */
@@ -265,10 +310,14 @@ const { state, actions, callbacks } = store( 'petsync', {
 		/* --- Derived: button text (pet-actions) --- */
 
 		get favoriteButtonText() {
-			return state.isFavorited ? state._i18n?.unfavorite || 'Unfavorite' : state._i18n?.favorite || 'Favorite';
+			return state.isFavorited
+				? state._i18n?.unfavorite || 'Unfavorite'
+				: state._i18n?.favorite || 'Favorite';
 		},
 		get compareButtonText() {
-			return state.isInComparison ? state._i18n?.comparing || 'Comparing' : state._i18n?.compare || 'Compare';
+			return state.isInComparison
+				? state._i18n?.comparing || 'Comparing'
+				: state._i18n?.compare || 'Compare';
 		},
 
 		/* --- Derived: share dropdown (pet-actions) --- */
@@ -286,19 +335,17 @@ const { state, actions, callbacks } = store( 'petsync', {
 		},
 		get copyButtonText() {
 			const ctx = getContext();
-			return ( ctx._linkCopied )
+			return ctx._linkCopied
 				? state._i18n?.copied || 'Copied!'
 				: state._i18n?.copyLink || 'Copy link';
 		},
 	},
-
 
 	/* -----------------------------------------------------------------
 	 * ACTIONS
 	 * ----------------------------------------------------------------- */
 
 	actions: {
-
 		/* === Favorites === */
 
 		/**
@@ -320,12 +367,13 @@ const { state, actions, callbacks } = store( 'petsync', {
 		 * Finds the favorites modal trigger and clicks it.
 		 */
 		openFavoritesModal() {
-			const trigger = document.querySelector( '.pet-favorites-modal__trigger' );
+			const trigger = document.querySelector(
+				'.pet-favorites-modal__trigger'
+			);
 			if ( trigger ) {
 				trigger.click();
 			}
 		},
-
 
 		/* === Comparison === */
 
@@ -336,55 +384,92 @@ const { state, actions, callbacks } = store( 'petsync', {
 
 		*removeFromComparison() {
 			const { petId, petName: ctxPetName } = getPetIdFromContext();
-			if ( ! petId ) return;
-			state.comparison = state.comparison.filter( id => id !== petId );
-			if ( state.pets[ petId ] ) state.pets[ petId ].compared = false;
+			if ( ! petId ) {
+				return;
+			}
+			state.comparison = state.comparison.filter(
+				( id ) => id !== petId
+			);
+			if ( state.pets[ petId ] ) {
+				state.pets[ petId ].compared = false;
+			}
 			const petName = ctxPetName || state.pets[ petId ]?.name || 'Pet';
 			announce( `${ petName } removed from comparison` );
 
 			try {
-				const result = yield executeAbility( 'petsync/update-comparison', { action: 'remove', id: petId } );
+				const result = yield executeAbility(
+					'petsync/update-comparison',
+					{ action: 'remove', id: petId }
+				);
 				state.comparison = result.ids;
 				storage.set( 'comparison', state.comparison );
 			} catch ( error ) {
 				state.comparison = [ ...state.comparison, petId ];
-				if ( state.pets[ petId ] ) state.pets[ petId ].compared = true;
+				if ( state.pets[ petId ] ) {
+					state.pets[ petId ].compared = true;
+				}
 				console.error( 'Failed to remove from comparison:', error );
 			}
 		},
 
 		*clearComparison() {
 			const oldComparison = [ ...state.comparison ];
-			oldComparison.forEach( id => { if ( state.pets[ id ] ) state.pets[ id ].compared = false; } );
+			oldComparison.forEach( ( id ) => {
+				if ( state.pets[ id ] ) {
+					state.pets[ id ].compared = false;
+				}
+			} );
 			state.comparison = [];
 			announce( 'Comparison cleared' );
 
 			try {
-				yield executeAbility( 'petsync/update-comparison', { action: 'clear' } );
+				yield executeAbility( 'petsync/update-comparison', {
+					action: 'clear',
+				} );
 				storage.set( 'comparison', [] );
 			} catch ( error ) {
 				state.comparison = oldComparison;
-				oldComparison.forEach( id => { if ( state.pets[ id ] ) state.pets[ id ].compared = true; } );
+				oldComparison.forEach( ( id ) => {
+					if ( state.pets[ id ] ) {
+						state.pets[ id ].compared = true;
+					}
+				} );
 				console.error( 'Failed to clear comparison:', error );
 			}
 		},
 
 		*viewComparison() {
-			if ( state.comparison.length < 2 ) { announce( 'Add at least 2 pets to compare' ); return; }
+			if ( state.comparison.length < 2 ) {
+				announce( 'Add at least 2 pets to compare' );
+				return;
+			}
 			const archiveUrl = getArchiveUrl();
 			const compareUrl = new URL( archiveUrl, window.location.origin );
-			compareUrl.searchParams.set( 'compare', state.comparison.join( ',' ) );
+			compareUrl.searchParams.set(
+				'compare',
+				state.comparison.join( ',' )
+			);
 			// Hard reload — the comparison block is outside the grid's
 			// router region, so router navigation can't render it.
 			window.location.href = compareUrl.toString();
 		},
 
 		*shareComparison() {
-			if ( state.comparison.length < 2 ) { announce( 'Add at least 2 pets to share' ); return; }
+			if ( state.comparison.length < 2 ) {
+				announce( 'Add at least 2 pets to share' );
+				return;
+			}
 			try {
-				const result = yield executeAbility( 'petsync/get-comparison', null, { method: 'GET' } );
+				const result = yield executeAbility(
+					'petsync/get-comparison',
+					null,
+					{ method: 'GET' }
+				);
 				if ( navigator.share ) {
-					yield navigator.share( { title: 'Compare Pets', url: result.shareUrl } );
+					yield navigator.share( {
+						title: 'Compare Pets',
+						url: result.shareUrl,
+					} );
 				} else {
 					const copied = yield copyToClipboard( result.shareUrl );
 					if ( copied ) {
@@ -392,33 +477,40 @@ const { state, actions, callbacks } = store( 'petsync', {
 					}
 				}
 			} catch ( error ) {
-				if ( error.name !== 'AbortError' ) console.error( 'Share failed:', error );
+				if ( error.name !== 'AbortError' ) {
+					console.error( 'Share failed:', error );
+				}
 			}
 		},
-
-
 
 		/* === Pet cache & misc === */
 
 		cachePet( pet ) {
-			if ( ! pet?.id ) return;
+			if ( ! pet?.id ) {
+				return;
+			}
 			state.pets[ pet.id ] = {
-				...state.pets[ pet.id ], ...pet,
+				...state.pets[ pet.id ],
+				...pet,
 				favorited: state.favorites.includes( pet.id ),
 				compared: state.comparison.includes( pet.id ),
 			};
 		},
 
 		cachePets( pets ) {
-			if ( ! Array.isArray( pets ) ) return;
-			pets.forEach( pet => actions.cachePet( pet ) );
+			if ( ! Array.isArray( pets ) ) {
+				return;
+			}
+			pets.forEach( ( pet ) => actions.cachePet( pet ) );
 		},
 
 		notify( message ) {
 			showToast( message );
 		},
 
-		clearNotification() { state.notification = null; },
+		clearNotification() {
+			state.notification = null;
+		},
 
 		/* === Share dropdown === */
 
@@ -438,7 +530,9 @@ const { state, actions, callbacks } = store( 'petsync', {
 
 		closeShareMenuOnOutsideClick( event ) {
 			const ctx = getContext();
-			if ( ! ( ctx._shareMenuOpen ?? false ) ) return;
+			if ( ! ( ctx._shareMenuOpen ?? false ) ) {
+				return;
+			}
 			const { ref } = getElement();
 			const wrapper = ref?.closest( '.pet-actions__share-wrapper' );
 			if ( wrapper && ! wrapper.contains( event.target ) ) {
@@ -460,10 +554,12 @@ const { state, actions, callbacks } = store( 'petsync', {
 			const petName = ctx.petName || 'this pet';
 			ctx._shareMenuOpen = false;
 			if ( navigator.share ) {
-				navigator.share( {
-					title: petName,
-					url: petUrl,
-				} ).catch( () => {} );
+				navigator
+					.share( {
+						title: petName,
+						url: petUrl,
+					} )
+					.catch( () => {} );
 			}
 		},
 
@@ -471,20 +567,25 @@ const { state, actions, callbacks } = store( 'petsync', {
 			const ctx = getContext();
 			const petUrl = ctx.petUrl || window.location.href;
 			if ( navigator.clipboard ) {
-				navigator.clipboard.writeText( petUrl ).then( () => {
-					ctx._linkCopied = true;
-					announce( state._i18n?.copiedAnnounce || 'Link copied to clipboard' );
-					// Reset after 2 seconds.
-					setTimeout( () => {
-						ctx._linkCopied = false;
-					}, 2000 );
-				} ).catch( () => {
-					announce( state._i18n?.error || 'Failed to copy link' );
-				} );
+				navigator.clipboard
+					.writeText( petUrl )
+					.then( () => {
+						ctx._linkCopied = true;
+						announce(
+							state._i18n?.copiedAnnounce ||
+								'Link copied to clipboard'
+						);
+						// Reset after 2 seconds.
+						setTimeout( () => {
+							ctx._linkCopied = false;
+						}, 2000 );
+					} )
+					.catch( () => {
+						announce( state._i18n?.error || 'Failed to copy link' );
+					} );
 			}
 		},
 	},
-
 
 	/* -----------------------------------------------------------------
 	 * CALLBACKS
@@ -497,11 +598,15 @@ const { state, actions, callbacks } = store( 'petsync', {
 		initGlobalState() {
 			if ( state.favorites.length === 0 ) {
 				const stored = storage.get( 'favorites', [] );
-				if ( stored.length > 0 ) state.favorites = stored;
+				if ( stored.length > 0 ) {
+					state.favorites = stored;
+				}
 			}
 			if ( state.comparison.length === 0 ) {
 				const stored = storage.get( 'comparison', [] );
-				if ( stored.length > 0 ) state.comparison = stored;
+				if ( stored.length > 0 ) {
+					state.comparison = stored;
+				}
 			}
 		},
 
@@ -512,14 +617,30 @@ const { state, actions, callbacks } = store( 'petsync', {
 			const ctx = getContext();
 			if ( ctx.petId ) {
 				actions.cachePet( {
-					id: ctx.petId, name: ctx.petName, image: ctx.petImage,
-					thumb: ctx.petThumb, url: ctx.petUrl, status: ctx.petStatus,
-					breed: ctx.petBreed, animal: ctx.petAnimal, age: ctx.petAge,
-					sex: ctx.petSex, size: ctx.petSize,
+					id: ctx.petId,
+					name: ctx.petName,
+					image: ctx.petImage,
+					thumb: ctx.petThumb,
+					url: ctx.petUrl,
+					status: ctx.petStatus,
+					breed: ctx.petBreed,
+					animal: ctx.petAnimal,
+					age: ctx.petAge,
+					sex: ctx.petSex,
+					size: ctx.petSize,
 				} );
 			}
 		},
 	},
 } );
 
-export { state, actions, callbacks, storage, announce, executeAbility, doToggleFavorite, doToggleComparison };
+export {
+	state,
+	actions,
+	callbacks,
+	storage,
+	announce,
+	executeAbility,
+	doToggleFavorite,
+	doToggleComparison,
+};

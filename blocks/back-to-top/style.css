@@ -70,6 +70,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.back-to-top,
 	.back-to-top__button {
 		transition: none;

@@ -312,6 +312,7 @@
 
 /* === Reduced motion === */
 @media (prefers-reduced-motion: reduce) {
+
 	.pet-compat__link {
 		transition: none;
 	}

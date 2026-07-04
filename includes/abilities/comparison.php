@@ -64,14 +64,16 @@ function update( array $input ): array {
 	// only updates the response headers, not $_COOKIE).
 	$pets = [];
 	if ( $ids ) {
-		$posts = get_posts( [
-			'post_type'      => 'vcps_pet',
-			'post_status'    => 'publish',
-			'post__in'       => $ids,
-			'posts_per_page' => count( $ids ),
-			'orderby'        => 'post__in',
-		] );
-		$pets = Pet_Hydrator::hydrate_many( $posts );
+		$posts = get_posts(
+			[
+				'post_type'      => 'vcps_pet',
+				'post_status'    => 'publish',
+				'post__in'       => $ids,
+				'posts_per_page' => count( $ids ),
+				'orderby'        => 'post__in',
+			]
+		);
+		$pets  = Pet_Hydrator::hydrate_many( $posts );
 	}
 
 	return [
@@ -93,14 +95,16 @@ function get_comparison( array $input = [] ): array {
 	$pets = [];
 
 	if ( $ids ) {
-		$posts = get_posts( [
-			'post_type'      => 'vcps_pet',
-			'post_status'    => 'publish',
-			'post__in'       => $ids,
-			'posts_per_page' => count( $ids ),
-			'orderby'        => 'post__in',
-		] );
-		$pets = Pet_Hydrator::hydrate_many( $posts );
+		$posts = get_posts(
+			[
+				'post_type'      => 'vcps_pet',
+				'post_status'    => 'publish',
+				'post__in'       => $ids,
+				'posts_per_page' => count( $ids ),
+				'orderby'        => 'post__in',
+			]
+		);
+		$pets  = Pet_Hydrator::hydrate_many( $posts );
 	}
 
 	return [

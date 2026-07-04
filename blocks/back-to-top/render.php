@@ -17,13 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 $position  = $attributes['position'] ?? 'bottom-left';
 $threshold = $attributes['threshold'] ?? 400;
 
-$wrapper_attributes = get_block_wrapper_attributes( array(
-	'class'               => 'back-to-top back-to-top--' . $position,
-	'data-wp-interactive' => 'petsync/back-to-top',
-	'data-wp-context'     => wp_json_encode( array( 'threshold' => $threshold ) ),
-	'data-wp-class--is-visible' => 'state.isVisible',
-	'data-wp-init'        => 'callbacks.init',
-) );
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'                     => 'back-to-top back-to-top--' . $position,
+		'data-wp-interactive'       => 'petsync/back-to-top',
+		'data-wp-context'           => wp_json_encode( array( 'threshold' => $threshold ) ),
+		'data-wp-class--is-visible' => 'state.isVisible',
+		'data-wp-init'              => 'callbacks.init',
+	)
+);
 ?>
 <div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 	<a
@@ -32,6 +34,14 @@ $wrapper_attributes = get_block_wrapper_attributes( array(
 		data-wp-on--click="actions.scrollToTop"
 		aria-label="<?php esc_attr_e( 'Back to top', 'vcpahumane-pet-sync' ); ?>"
 	>
-		<?php Petstablished_Icons::render( 'chevron-up', array( 'width' => 20, 'height' => 20 ) ); ?>
+		<?php
+		Petstablished_Icons::render(
+			'chevron-up',
+			array(
+				'width'  => 20,
+				'height' => 20,
+			)
+		);
+		?>
 	</a>
 </div>
