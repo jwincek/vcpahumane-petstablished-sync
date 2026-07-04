@@ -128,7 +128,7 @@ const { state, actions, callbacks } = store( 'petsync/compare-bar', {
 
 			// If we're on a single pet page, pass its URL so the comparison
 			// page can offer a "Continue viewing [Pet]" link back.
-			if ( document.body.classList.contains( 'single-pet' ) ) {
+			if ( document.body.classList.contains( 'single-vcps_pet' ) ) {
 				url.searchParams.set( 'from', window.location.href );
 			}
 
