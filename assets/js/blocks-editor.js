@@ -10,7 +10,7 @@
 ( function( wp ) {
 	const { registerBlockType } = wp.blocks;
 	const { useBlockProps, InspectorControls, InnerBlocks, MediaUpload, MediaUploadCheck } = wp.blockEditor;
-	const { PanelBody, ToggleControl, SelectControl, RangeControl, TextControl, Button } = wp.components;
+	const { PanelBody, ToggleControl, SelectControl, RangeControl, TextControl, Button, ComboboxControl } = wp.components;
 	const { createElement: el } = wp.element;
 	const { __ } = wp.i18n;
 	const ServerSideRender = wp.serverSideRender;
@@ -230,47 +230,15 @@
 			badgeType: { type: 'string', default: 'animal' },
 		},
 		edit: function( props ) {
-			const { attributes, setAttributes } = props;
 			const blockProps = useBlockProps();
 
+			// Inspector controls live in blocks/pet-listing-grid/editor.js
+			// (Display Settings / Filter Settings / Compatibility Filters);
+			// adding panels here would duplicate them.
 			return el( 'div', blockProps,
-				el( InspectorControls, {},
-					el( PanelBody, { title: __( 'Layout', 'vcpahumane-pet-sync' ) },
-						el( RangeControl, {
-							label: __( 'Columns', 'vcpahumane-pet-sync' ),
-							value: attributes.columns,
-							onChange: ( val ) => setAttributes( { columns: val } ),
-							min: 1,
-							max: 4,
-						}),
-						el( SelectControl, {
-							label: __( 'Badge Display', 'vcpahumane-pet-sync' ),
-							value: attributes.badgeType,
-							options: [
-								{ label: __( 'Animal Type (Cat, Dog)', 'vcpahumane-pet-sync' ), value: 'animal' },
-								{ label: __( 'Age (Puppy, Adult)', 'vcpahumane-pet-sync' ), value: 'age' },
-								{ label: __( 'New Arrivals Only', 'vcpahumane-pet-sync' ), value: 'new' },
-								{ label: __( 'No Badge', 'vcpahumane-pet-sync' ), value: 'none' },
-							],
-							onChange: ( val ) => setAttributes( { badgeType: val } ),
-						})
-					),
-					el( PanelBody, { title: __( 'Features', 'vcpahumane-pet-sync' ), initialOpen: false },
-						el( ToggleControl, {
-							label: __( 'Show Filters', 'vcpahumane-pet-sync' ),
-							checked: attributes.showFilters,
-							onChange: ( val ) => setAttributes( { showFilters: val } ),
-						}),
-						el( ToggleControl, {
-							label: __( 'Show Results Count', 'vcpahumane-pet-sync' ),
-							checked: attributes.showResultsCount,
-							onChange: ( val ) => setAttributes( { showResultsCount: val } ),
-						})
-					)
-				),
 				el( ServerSideRender, {
 					block: 'petsync/pet-listing-grid',
-					attributes: attributes,
+					attributes: props.attributes,
 				})
 			);
 		},
@@ -1185,7 +1153,9 @@
 				} )
 			);
 		},
-		save: () => null,
+		// InnerBlocks content must round-trip through editor saves; a null
+		// save would drop the card's inner blocks from saved templates.
+		save: () => el( InnerBlocks.Content ),
 	} );
 
 	// Back to Top — floating scroll-to-top button.
@@ -1308,27 +1278,50 @@
 		save: () => null,
 	} );
 
-	// Pet Adoption Action — application button (Petstablished link or PDF download).
-	// Lives inside petsync/pet-adoption-cta as a child block.
+	// Pet Adoption Action — application button (Petstablished link, internal
+	// page link, or PDF download). Lives inside petsync/pet-adoption-cta as a
+	// child block.
 	registerBlockType( 'petsync/adoption-action', {
 		title: __( 'Pet Adoption Action', 'vcpahumane-pet-sync' ),
-		description: __( 'Adoption application button — links to Petstablished form or provides a PDF download.', 'vcpahumane-pet-sync' ),
+		description: __( 'Adoption application button — links to Petstablished form, an internal page, or provides a PDF download.', 'vcpahumane-pet-sync' ),
 		category: 'petsync',
 		icon: 'download',
-		keywords: [ 'pet', 'adoption', 'button', 'apply', 'pdf' ],
+		keywords: [ 'pet', 'adoption', 'button', 'apply', 'pdf', 'page' ],
 		ancestor: [ 'petsync/pet-adoption-cta' ],
 		usesContext: [ 'postId', 'postType' ],
 		supports: { html: false, reusable: false },
 		attributes: {
-			formMode: { type: 'string', default: 'petstablished', enum: [ 'petstablished', 'pdf' ] },
+			formMode: { type: 'string', default: 'petstablished', enum: [ 'petstablished', 'pdf', 'page' ] },
 			pdfAttachmentId: { type: 'integer', default: 0 },
 			pdfButtonText: { type: 'string', default: 'Download Adoption Application' },
 			buttonText: { type: 'string', default: 'Start Adoption Application' },
+			pageId: { type: 'integer', default: 0 },
+			pageButtonText: { type: 'string', default: 'View Adoption Resources' },
 		},
 		edit: function( props ) {
 			const { attributes, setAttributes } = props;
 			const blockProps = useBlockProps( { className: 'pet-adoption-action-editor' } );
 			const isPdf = attributes.formMode === 'pdf';
+			const isPage = attributes.formMode === 'page';
+
+			// Fetched unconditionally (rules of hooks); resolves lazily so
+			// non-page modes don't pay for it until the panel needs it.
+			const pages = wp.data.useSelect( function( select ) {
+				return select( 'core' ).getEntityRecords( 'postType', 'page', {
+					per_page: -1,
+					status: 'publish',
+					orderby: 'title',
+					order: 'asc',
+					_fields: 'id,title',
+				} );
+			}, [] );
+
+			const pageOptions = ( pages || [] ).map( function( page ) {
+				return {
+					value: String( page.id ),
+					label: page.title?.rendered || __( '(no title)', 'vcpahumane-pet-sync' ),
+				};
+			} );
 
 			return el( 'div', blockProps,
 				el( InspectorControls, {},
@@ -1339,14 +1332,28 @@
 							options: [
 								{ label: __( 'Petstablished (link to adoption form)', 'vcpahumane-pet-sync' ), value: 'petstablished' },
 								{ label: __( 'PDF Download', 'vcpahumane-pet-sync' ), value: 'pdf' },
+								{ label: __( 'Internal Page (e.g. Adoption Resources)', 'vcpahumane-pet-sync' ), value: 'page' },
 							],
 							onChange: ( val ) => setAttributes( { formMode: val } ),
 						} ),
-						! isPdf && el( TextControl, {
+						! isPdf && ! isPage && el( TextControl, {
 							label: __( 'Button Text', 'vcpahumane-pet-sync' ),
 							value: attributes.buttonText,
 							onChange: ( val ) => setAttributes( { buttonText: val } ),
 						} ),
+						isPage && el( 'div', {},
+							el( ComboboxControl, {
+								label: __( 'Page', 'vcpahumane-pet-sync' ),
+								value: attributes.pageId ? String( attributes.pageId ) : '',
+								options: pageOptions,
+								onChange: ( val ) => setAttributes( { pageId: parseInt( val, 10 ) || 0 } ),
+							} ),
+							el( TextControl, {
+								label: __( 'Button Text', 'vcpahumane-pet-sync' ),
+								value: attributes.pageButtonText,
+								onChange: ( val ) => setAttributes( { pageButtonText: val } ),
+							} ),
+						),
 						isPdf && el( 'div', {},
 							el( MediaUploadCheck, {},
 								el( MediaUpload, {
@@ -1372,12 +1379,15 @@
 						),
 					),
 				),
-				isPdf && ! attributes.pdfAttachmentId
+				( isPdf && ! attributes.pdfAttachmentId ) || ( isPage && ! attributes.pageId )
 					? el( 'div', { className: 'pet-adoption-cta-preview__empty-state' },
-						el( 'p', {}, __( 'No PDF selected — choose a file in the Application Mode panel.', 'vcpahumane-pet-sync' ) )
+						el( 'p', {}, isPdf
+							? __( 'No PDF selected — choose a file in the Application Mode panel.', 'vcpahumane-pet-sync' )
+							: __( 'No page selected — choose one in the Application Mode panel.', 'vcpahumane-pet-sync' )
+						)
 					  )
 					: el( 'button', { className: 'pet-adoption-cta__action-btn', disabled: true },
-						isPdf ? attributes.pdfButtonText : attributes.buttonText
+						isPdf ? attributes.pdfButtonText : ( isPage ? attributes.pageButtonText : attributes.buttonText )
 					  )
 			);
 		},

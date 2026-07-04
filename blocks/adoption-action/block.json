@@ -5,8 +5,8 @@
 	"version": "1.0.0",
 	"title": "Pet Adoption Action",
 	"category": "petsync",
-	"description": "Adoption application button — links to Petstablished form or provides a PDF download.",
-	"keywords": ["pet", "adoption", "button", "apply", "pdf", "form"],
+	"description": "Adoption application button — links to Petstablished form, an internal page, or provides a PDF download.",
+	"keywords": ["pet", "adoption", "button", "apply", "pdf", "form", "page"],
 	"ancestor": ["petsync/pet-adoption-cta"],
 	"textdomain": "vcpahumane-pet-sync",
 	"usesContext": ["postId", "postType"],
@@ -14,11 +14,19 @@
 		"formMode": {
 			"type": "string",
 			"default": "petstablished",
-			"enum": ["petstablished", "pdf"]
+			"enum": ["petstablished", "pdf", "page"]
 		},
 		"pdfAttachmentId": {
 			"type": "integer",
 			"default": 0
+		},
+		"pageId": {
+			"type": "integer",
+			"default": 0
+		},
+		"pageButtonText": {
+			"type": "string",
+			"default": "View Adoption Resources"
 		},
 		"pdfButtonText": {
 			"type": "string",

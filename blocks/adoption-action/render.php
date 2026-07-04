@@ -2,9 +2,10 @@
 /**
  * Pet Adoption Action Block — Button or PDF download
  *
- * Renders the adoption application action for a pet. Supports two modes:
+ * Renders the adoption application action for a pet. Supports three modes:
  *   - petstablished: links to the Petstablished adoption form URL (per-pet, from API)
  *   - pdf: renders a download link for an editor-selected PDF from the media library
+ *   - page: links to an editor-selected internal page (e.g. Adoption Resources)
  *
  * @package Petstablished_Sync
  * @since 1.0.0
@@ -56,6 +57,29 @@ if ( $form_mode === 'pdf' ) {
 					<span class="pet-adoption-cta__file-size">(<?php echo esc_html( $pdf_filesize ); ?>)</span>
 				</span>
 			</div>
+			<?php
+			$action_html = ob_get_clean();
+		}
+	}
+} elseif ( $form_mode === 'page' ) {
+	$page_id = (int) ( $attributes['pageId'] ?? 0 );
+	$page    = $page_id ? get_post( $page_id ) : null;
+
+	if ( $page && 'publish' === $page->post_status ) {
+		$page_url  = get_permalink( $page );
+		$page_text = $attributes['pageButtonText'] ?? __( 'View Adoption Resources', 'vcpahumane-pet-sync' );
+
+		if ( $page_url ) {
+			$has_action = true;
+			ob_start();
+			?>
+			<a
+				href="<?php echo esc_url( $page_url ); ?>"
+				class="pet-adoption-cta__action-btn"
+			>
+				<span><?php echo esc_html( $page_text ); ?></span>
+				<?php Petstablished_Icons::render( 'arrow-right', array( 'width' => 18, 'height' => 18 ) ); ?>
+			</a>
 			<?php
 			$action_html = ob_get_clean();
 		}

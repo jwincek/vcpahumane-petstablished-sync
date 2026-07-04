@@ -296,7 +296,7 @@ class Petstablished_Blocks {
 		wp_enqueue_script(
 			self::NAMESPACE . '-blocks-editor',
 			PETSTABLISHED_SYNC_URL . 'assets/js/blocks-editor.js',
-			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render', 'wp-data', 'wp-core-data' ),
 			PETSTABLISHED_SYNC_VERSION,
 			true
 		);
