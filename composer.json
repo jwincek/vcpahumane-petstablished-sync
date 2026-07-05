@@ -1,5 +1,5 @@
 {
-	"name": "vcpahumane/pet-sync",
+	"name": "jwincek/shelter-pet-sync",
 	"description": "Sync adoptable pets from Petstablished into WordPress using the Abilities API, Block Bindings, and Interactivity API.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",

@@ -51,10 +51,10 @@ if ( ! $has_valid_pet ) {
 				)
 			);
 			?>
-			<p class="pet-details__placeholder-title"><?php esc_html_e( 'Pet Details', 'vcpahumane-pet-sync' ); ?></p>
-			<p class="pet-details__placeholder-text"><?php esc_html_e( 'Add inner blocks and bind them to pet data using the block bindings panel.', 'vcpahumane-pet-sync' ); ?></p>
+			<p class="pet-details__placeholder-title"><?php esc_html_e( 'Pet Details', 'shelter-pet-sync' ); ?></p>
+			<p class="pet-details__placeholder-text"><?php esc_html_e( 'Add inner blocks and bind them to pet data using the block bindings panel.', 'shelter-pet-sync' ); ?></p>
 			<p class="pet-details__placeholder-hint">
-				<?php esc_html_e( 'Source:', 'vcpahumane-pet-sync' ); ?> <code>petsync/pet-data</code>
+				<?php esc_html_e( 'Source:', 'shelter-pet-sync' ); ?> <code>petsync/pet-data</code>
 			</p>
 		</div>
 	</article>

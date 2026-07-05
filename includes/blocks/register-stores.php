@@ -58,14 +58,14 @@ function register_stores(): void {
 			'isCompareBarVisible'  => $has_comparison,
 			// Button text for pet-actions (used by derived state getters).
 			'_i18n'                => [
-				'favorite'       => __( 'Favorite', 'vcpahumane-pet-sync' ),
-				'unfavorite'     => __( 'Unfavorite', 'vcpahumane-pet-sync' ),
-				'compare'        => __( 'Compare', 'vcpahumane-pet-sync' ),
-				'comparing'      => __( 'Comparing', 'vcpahumane-pet-sync' ),
-				'share'          => __( 'Share', 'vcpahumane-pet-sync' ),
-				'copyLink'       => __( 'Copy link', 'vcpahumane-pet-sync' ),
-				'copied'         => __( 'Copied!', 'vcpahumane-pet-sync' ),
-				'copiedAnnounce' => __( 'Link copied to clipboard', 'vcpahumane-pet-sync' ),
+				'favorite'       => __( 'Favorite', 'shelter-pet-sync' ),
+				'unfavorite'     => __( 'Unfavorite', 'shelter-pet-sync' ),
+				'compare'        => __( 'Compare', 'shelter-pet-sync' ),
+				'comparing'      => __( 'Comparing', 'shelter-pet-sync' ),
+				'share'          => __( 'Share', 'shelter-pet-sync' ),
+				'copyLink'       => __( 'Copy link', 'shelter-pet-sync' ),
+				'copied'         => __( 'Copied!', 'shelter-pet-sync' ),
+				'copiedAnnounce' => __( 'Link copied to clipboard', 'shelter-pet-sync' ),
 			],
 		]
 	);
@@ -172,15 +172,15 @@ function register_script_modules(): void {
  */
 function get_i18n_strings(): array {
 	return [
-		'added'             => __( 'Added to favorites', 'vcpahumane-pet-sync' ),
-		'removed'           => __( 'Removed from favorites', 'vcpahumane-pet-sync' ),
-		'compareAdd'        => __( 'Added to comparison', 'vcpahumane-pet-sync' ),
-		'compareRemove'     => __( 'Removed from comparison', 'vcpahumane-pet-sync' ),
-		'compareFull'       => __( 'Comparison is full (max 4)', 'vcpahumane-pet-sync' ),
-		'copied'            => __( 'Link copied!', 'vcpahumane-pet-sync' ),
-		'loading'           => __( 'Loading...', 'vcpahumane-pet-sync' ),
-		'error'             => __( 'Something went wrong', 'vcpahumane-pet-sync' ),
-		'noResults'         => __( 'No pets match your filters.', 'vcpahumane-pet-sync' ),
-		'searchPlaceholder' => __( 'Search by name or breed…', 'vcpahumane-pet-sync' ),
+		'added'             => __( 'Added to favorites', 'shelter-pet-sync' ),
+		'removed'           => __( 'Removed from favorites', 'shelter-pet-sync' ),
+		'compareAdd'        => __( 'Added to comparison', 'shelter-pet-sync' ),
+		'compareRemove'     => __( 'Removed from comparison', 'shelter-pet-sync' ),
+		'compareFull'       => __( 'Comparison is full (max 4)', 'shelter-pet-sync' ),
+		'copied'            => __( 'Link copied!', 'shelter-pet-sync' ),
+		'loading'           => __( 'Loading...', 'shelter-pet-sync' ),
+		'error'             => __( 'Something went wrong', 'shelter-pet-sync' ),
+		'noResults'         => __( 'No pets match your filters.', 'shelter-pet-sync' ),
+		'searchPlaceholder' => __( 'Search by name or breed…', 'shelter-pet-sync' ),
 	];
 }

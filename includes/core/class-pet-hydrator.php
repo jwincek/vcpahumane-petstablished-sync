@@ -309,8 +309,8 @@ class Pet_Hydrator {
 			'url' => get_permalink( $id ),
 			'tagline' => self::compute_tagline( $entity ),
 			'compatibility' => self::compute_compatibility( $entity ),
-			'story_title' => sprintf( /* translators: %s: pet name */ __( 'Meet %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
-			'adoption_title' => sprintf( /* translators: %s: pet name */ __( 'Adopt %s', 'vcpahumane-pet-sync' ), $entity['name'] ?? '' ),
+			'story_title' => sprintf( /* translators: %s: pet name */ __( 'Meet %s', 'shelter-pet-sync' ), $entity['name'] ?? '' ),
+			'adoption_title' => sprintf( /* translators: %s: pet name */ __( 'Adopt %s', 'shelter-pet-sync' ), $entity['name'] ?? '' ),
 			'adoption_fee_formatted' => self::compute_formatted_fee( $entity ),
 			'has_adoption_info' => ! empty( $entity['adoption_fee'] ) || ! empty( $entity['adoption_form_url'] ),
 			'gallery' => self::compute_gallery( $id ),
@@ -396,9 +396,9 @@ class Pet_Hydrator {
 	private static function compute_compatibility( array $entity ): string {
 		$items  = [];
 		$checks = [
-			'ok_with_dogs' => __( 'dogs', 'vcpahumane-pet-sync' ),
-			'ok_with_cats' => __( 'cats', 'vcpahumane-pet-sync' ),
-			'ok_with_kids' => __( 'kids', 'vcpahumane-pet-sync' ),
+			'ok_with_dogs' => __( 'dogs', 'shelter-pet-sync' ),
+			'ok_with_cats' => __( 'cats', 'shelter-pet-sync' ),
+			'ok_with_kids' => __( 'kids', 'shelter-pet-sync' ),
 		];
 
 		foreach ( $checks as $key => $label ) {
@@ -408,7 +408,7 @@ class Pet_Hydrator {
 		}
 
 		return $items
-			? sprintf( /* translators: %s: comma-separated compatibility list */ __( 'Good with %s', 'vcpahumane-pet-sync' ), implode( ', ', $items ) )
+			? sprintf( /* translators: %s: comma-separated compatibility list */ __( 'Good with %s', 'shelter-pet-sync' ), implode( ', ', $items ) )
 			: '';
 	}
 
@@ -530,10 +530,10 @@ class Pet_Hydrator {
 
 		$detail = trim( $entity['special_needs_detail'] ?? '' );
 		if ( $detail ) {
-			return sprintf( /* translators: %s: special needs detail */ __( 'Special Needs: %s', 'vcpahumane-pet-sync' ), $detail );
+			return sprintf( /* translators: %s: special needs detail */ __( 'Special Needs: %s', 'shelter-pet-sync' ), $detail );
 		}
 
-		return __( 'Special Needs', 'vcpahumane-pet-sync' );
+		return __( 'Special Needs', 'shelter-pet-sync' );
 	}
 
 	/**

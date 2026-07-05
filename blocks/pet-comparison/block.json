@@ -12,7 +12,7 @@
 		"comparison",
 		"side by side"
 	],
-	"textdomain": "vcpahumane-pet-sync",
+	"textdomain": "shelter-pet-sync",
 	"attributes": {
 		"showImage": {
 			"type": "boolean",

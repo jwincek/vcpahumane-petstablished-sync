@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Pet Sync for Petstablished
+ * Plugin Name: Shelter Pet Sync
  * Description: Sync adoptable pets from Petstablished with WordPress 6.9 Abilities API, Block Bindings, and Interactivity API.
  * Version: 1.0.0
  * Requires at least: 6.9
@@ -8,7 +8,7 @@
  * Author: Jerome Wincek
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: vcpahumane-pet-sync
+ * Text Domain: shelter-pet-sync
  *
  * @package Petstablished_Sync
  */
@@ -189,8 +189,8 @@ function petstablished_sync_init(): void {
 			wp_register_ability_category(
 				'pets',
 				[
-					'label'       => __( 'Pets', 'vcpahumane-pet-sync' ),
-					'description' => __( 'Pet adoption data operations.', 'vcpahumane-pet-sync' ),
+					'label'       => __( 'Pets', 'shelter-pet-sync' ),
+					'description' => __( 'Pet adoption data operations.', 'shelter-pet-sync' ),
 				]
 			);
 		}

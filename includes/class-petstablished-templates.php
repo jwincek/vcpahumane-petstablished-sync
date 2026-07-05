@@ -98,7 +98,7 @@ class Petstablished_Templates {
 				array(
 					'taxonomy' => 'wp_theme',
 					'field'    => 'name',
-					'terms'    => 'vcpahumane-pet-sync',
+					'terms'    => 'shelter-pet-sync',
 				),
 				),
 			)
@@ -116,13 +116,13 @@ class Petstablished_Templates {
 	private function get_plugin_templates(): array {
 		return array(
 			'archive-vcps_pet' => array(
-				'title'       => __( 'Pet Archive', 'vcpahumane-pet-sync' ),
-				'description' => __( 'Displays the pet adoption listings.', 'vcpahumane-pet-sync' ),
+				'title'       => __( 'Pet Archive', 'shelter-pet-sync' ),
+				'description' => __( 'Displays the pet adoption listings.', 'shelter-pet-sync' ),
 				'post_types'  => array( 'vcps_pet' ),
 			),
 			'single-vcps_pet'  => array(
-				'title'       => __( 'Single Pet', 'vcpahumane-pet-sync' ),
-				'description' => __( 'Displays a single adoptable pet.', 'vcpahumane-pet-sync' ),
+				'title'       => __( 'Single Pet', 'shelter-pet-sync' ),
+				'description' => __( 'Displays a single adoptable pet.', 'shelter-pet-sync' ),
 				'post_types'  => array( 'vcps_pet' ),
 			),
 		);
@@ -131,8 +131,8 @@ class Petstablished_Templates {
 	private function get_plugin_template_parts(): array {
 		return array(
 			'pet-floating-ui' => array(
-				'title'       => __( 'Pet Floating UI', 'vcpahumane-pet-sync' ),
-				'description' => __( 'Favorites modal and compare bar — shared across pet templates.', 'vcpahumane-pet-sync' ),
+				'title'       => __( 'Pet Floating UI', 'shelter-pet-sync' ),
+				'description' => __( 'Favorites modal and compare bar — shared across pet templates.', 'shelter-pet-sync' ),
 				'area'        => 'uncategorized',
 			),
 		);
@@ -144,8 +144,8 @@ class Petstablished_Templates {
 		$content = file_exists( $file ) ? file_get_contents( $file ) : '';
 
 		$template                 = new WP_Block_Template();
-		$template->id             = 'vcpahumane-pet-sync//' . $slug;
-		$template->theme          = 'vcpahumane-pet-sync';
+		$template->id             = 'shelter-pet-sync//' . $slug;
+		$template->theme          = 'shelter-pet-sync';
 		$template->slug           = $slug;
 		$template->source         = 'plugin';
 		$template->type           = $type;

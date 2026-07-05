@@ -29,8 +29,8 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-attributes__placeholder">
-				<p><?php esc_html_e( 'Pet Attributes', 'vcpahumane-pet-sync' ); ?></p>
-				<small><?php esc_html_e( 'Breed, age, size, and more. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
+				<p><?php esc_html_e( 'Pet Attributes', 'shelter-pet-sync' ); ?></p>
+				<small><?php esc_html_e( 'Breed, age, size, and more. Requires pet context.', 'shelter-pet-sync' ); ?></small>
 			</div>
 		</div>
 		<?php
@@ -79,44 +79,44 @@ $filter_key_map = array(
 $attr_defs = array(
 	array(
 		'toggle' => 'showBreed',
-		'label'  => __( 'Breed', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Breed', 'shelter-pet-sync' ),
 		'key'    => 'breed',
 	),
 	array(
 		'toggle'       => 'showAge',
-		'label'        => __( 'Age', 'vcpahumane-pet-sync' ),
+		'label'        => __( 'Age', 'shelter-pet-sync' ),
 		'key'          => 'numerical_age',
 		'fallback'     => 'age',
 		'taxonomy_key' => 'age',
 	),
 	array(
 		'toggle' => 'showSex',
-		'label'  => __( 'Sex', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Sex', 'shelter-pet-sync' ),
 		'key'    => 'sex',
 	),
 	array(
 		'toggle' => 'showSize',
-		'label'  => __( 'Size', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Size', 'shelter-pet-sync' ),
 		'key'    => 'size',
 	),
 	array(
 		'toggle' => 'showColor',
-		'label'  => __( 'Color', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Color', 'shelter-pet-sync' ),
 		'key'    => 'color',
 	),
 	array(
 		'toggle' => 'showCoat',
-		'label'  => __( 'Coat', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Coat', 'shelter-pet-sync' ),
 		'key'    => 'coat',
 	),
 	array(
 		'toggle' => 'showCoatPattern',
-		'label'  => __( 'Coat Pattern', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Coat Pattern', 'shelter-pet-sync' ),
 		'key'    => 'coat_pattern',
 	),
 	array(
 		'toggle' => 'showWeight',
-		'label'  => __( 'Weight', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Weight', 'shelter-pet-sync' ),
 		'key'    => 'weight',
 	),
 );

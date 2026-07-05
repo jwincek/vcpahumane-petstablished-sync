@@ -29,8 +29,8 @@ if ( ! $post_id || 'vcps_pet' !== get_post_type( $post_id ) ) {
 		?>
 		<div <?php echo $wrapper_attributes; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns escaped HTML. */ ?>>
 			<div class="pet-health__placeholder">
-				<p><?php esc_html_e( 'Pet Health', 'vcpahumane-pet-sync' ); ?></p>
-				<small><?php esc_html_e( 'Vaccinations, spay/neuter, and more. Requires pet context.', 'vcpahumane-pet-sync' ); ?></small>
+				<p><?php esc_html_e( 'Pet Health', 'shelter-pet-sync' ); ?></p>
+				<small><?php esc_html_e( 'Vaccinations, spay/neuter, and more. Requires pet context.', 'shelter-pet-sync' ); ?></small>
 			</div>
 		</div>
 		<?php
@@ -57,32 +57,32 @@ $is_cat      = ( $animal_slug === 'cat' );
 $health_defs = array(
 	array(
 		'toggle' => 'showSpayedNeutered',
-		'label'  => __( 'Spayed/Neutered', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Spayed/Neutered', 'shelter-pet-sync' ),
 		'key'    => 'spayed_neutered',
 	),
 	array(
 		'toggle' => 'showVaccinations',
-		'label'  => __( 'Vaccinations Current', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Vaccinations Current', 'shelter-pet-sync' ),
 		'key'    => 'shots_current',
 	),
 	array(
 		'toggle' => 'showHousebroken',
-		'label'  => __( 'House Trained', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'House Trained', 'shelter-pet-sync' ),
 		'key'    => 'housebroken',
 	),
 	array(
 		'toggle' => 'showSpecialNeeds',
-		'label'  => __( 'Special Needs', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Special Needs', 'shelter-pet-sync' ),
 		'key'    => 'special_needs',
 	),
 	array(
 		'toggle' => 'showHypoallergenic',
-		'label'  => __( 'Hypoallergenic', 'vcpahumane-pet-sync' ),
+		'label'  => __( 'Hypoallergenic', 'shelter-pet-sync' ),
 		'key'    => 'hypoallergenic',
 	),
 	array(
 		'toggle'   => 'showDeclawed',
-		'label'    => __( 'Declawed', 'vcpahumane-pet-sync' ),
+		'label'    => __( 'Declawed', 'shelter-pet-sync' ),
 		'key'      => 'declawed',
 		'cat_only' => true,
 	),
@@ -124,7 +124,7 @@ foreach ( $health_defs as $def ) {
 		if ( $detail ) {
 			$label = sprintf(
 				/* translators: 1: "Special Needs" label, 2: detail text (e.g. "FeLV+") */
-				__( '%1$s: %2$s', 'vcpahumane-pet-sync' ),
+				__( '%1$s: %2$s', 'shelter-pet-sync' ),
 				$label,
 				$detail
 			);
@@ -170,9 +170,9 @@ $status_icons = array(
 );
 
 $status_labels = array(
-	'yes'     => __( 'Yes', 'vcpahumane-pet-sync' ),
-	'no'      => __( 'No', 'vcpahumane-pet-sync' ),
-	'unknown' => __( 'Unknown', 'vcpahumane-pet-sync' ),
+	'yes'     => __( 'Yes', 'shelter-pet-sync' ),
+	'no'      => __( 'No', 'shelter-pet-sync' ),
+	'unknown' => __( 'Unknown', 'shelter-pet-sync' ),
 );
 
 $wrapper_attributes = get_block_wrapper_attributes(

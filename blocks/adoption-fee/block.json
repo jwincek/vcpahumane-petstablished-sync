@@ -8,7 +8,7 @@
 	"description": "Displays the adoption fee. Renders nothing automatically if no fee is set for the pet.",
 	"keywords": ["pet", "adoption", "fee", "price"],
 	"ancestor": ["petsync/pet-adoption-cta"],
-	"textdomain": "vcpahumane-pet-sync",
+	"textdomain": "shelter-pet-sync",
 	"usesContext": ["postId", "postType"],
 	"attributes": {},
 	"supports": {

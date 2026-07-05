@@ -104,7 +104,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 		'data-wp-init'               => 'callbacks.init',
 		'data-wp-watch'              => 'callbacks.watchAutoExpand',
 		'role'                       => 'region',
-		'aria-label'                 => __( 'Pet comparison', 'vcpahumane-pet-sync' ),
+		'aria-label'                 => __( 'Pet comparison', 'shelter-pet-sync' ),
 	)
 );
 ?>
@@ -115,7 +115,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 		type="button"
 		class="pet-compare-bar__pill"
 		data-wp-on--click="actions.expandBar"
-		aria-label="<?php esc_attr_e( 'Show comparison bar', 'vcpahumane-pet-sync' ); ?>"
+		aria-label="<?php esc_attr_e( 'Show comparison bar', 'shelter-pet-sync' ); ?>"
 	>
 		<?php
 		Petstablished_Icons::render(
@@ -126,7 +126,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 			)
 		);
 		?>
-		<span><?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?></span>
+		<span><?php esc_html_e( 'Compare', 'shelter-pet-sync' ); ?></span>
 		<span
 			class="pet-compare-bar__pill-count"
 			data-wp-text="petsync::state.comparisonCount"
@@ -137,14 +137,14 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	<div class="pet-compare-bar__inner">
 		<div class="pet-compare-bar__header">
 			<span class="pet-compare-bar__label">
-				<?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?>
+				<?php esc_html_e( 'Compare', 'shelter-pet-sync' ); ?>
 				(<span data-wp-text="petsync::state.comparisonCount"><?php echo (int) count( $comparison ); ?></span>/<?php echo (int) $max_compare; ?>)
 			</span>
 			<button
 				type="button"
 				class="pet-compare-bar__minimize"
 				data-wp-on--click="actions.toggleBar"
-				aria-label="<?php esc_attr_e( 'Minimize comparison bar', 'vcpahumane-pet-sync' ); ?>"
+				aria-label="<?php esc_attr_e( 'Minimize comparison bar', 'shelter-pet-sync' ); ?>"
 			>
 				<?php
 				Petstablished_Icons::render(
@@ -220,7 +220,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 							data-wp-on--click="actions.removeFromSlot"
 							data-wp-bind--aria-label="state.slotRemoveLabel"
 							data-wp-bind--hidden="!state.slotHasPet"
-							aria-label="<?php echo $pet ? esc_attr( sprintf( /* translators: %s: pet name */ __( 'Remove %s from comparison', 'vcpahumane-pet-sync' ), $pet['name'] ) ) : ''; ?>"
+							aria-label="<?php echo $pet ? esc_attr( sprintf( /* translators: %s: pet name */ __( 'Remove %s from comparison', 'shelter-pet-sync' ), $pet['name'] ) ) : ''; ?>"
 							<?php echo $pet ? '' : 'hidden'; ?>
 						>
 						<?php
@@ -238,7 +238,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 							class="screen-reader-text"
 							data-wp-bind--hidden="state.slotHasPet"
 							<?php echo $pet ? 'hidden' : ''; ?>
-						><?php esc_html_e( 'Empty slot', 'vcpahumane-pet-sync' ); ?></span>
+						><?php esc_html_e( 'Empty slot', 'shelter-pet-sync' ); ?></span>
 					</div>
 					<span
 						class="pet-compare-bar__pet-name"
@@ -257,7 +257,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 				data-wp-on--click="actions.viewComparison"
 				data-wp-bind--disabled="!state.canCompare"
 			>
-				<?php esc_html_e( 'Compare', 'vcpahumane-pet-sync' ); ?>
+				<?php esc_html_e( 'Compare', 'shelter-pet-sync' ); ?>
 			</button>
 
 			<button
@@ -265,7 +265,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 				class="pet-compare-bar__btn pet-compare-bar__btn--secondary"
 				data-wp-on--click="petsync::actions.shareComparison"
 				data-wp-bind--disabled="!state.canCompare"
-				title="<?php esc_attr_e( 'Copy share link', 'vcpahumane-pet-sync' ); ?>"
+				title="<?php esc_attr_e( 'Copy share link', 'shelter-pet-sync' ); ?>"
 			>
 				<?php
 				Petstablished_Icons::render(
@@ -276,7 +276,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 					)
 				);
 				?>
-				<span class="pet-compare-bar__btn-text"><?php esc_html_e( 'Share', 'vcpahumane-pet-sync' ); ?></span>
+				<span class="pet-compare-bar__btn-text"><?php esc_html_e( 'Share', 'shelter-pet-sync' ); ?></span>
 			</button>
 
 			<button
@@ -284,7 +284,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 				class="pet-compare-bar__btn pet-compare-bar__btn--text"
 				data-wp-on--click="actions.clearComparison"
 			>
-				<?php esc_html_e( 'Clear', 'vcpahumane-pet-sync' ); ?>
+				<?php esc_html_e( 'Clear', 'shelter-pet-sync' ); ?>
 			</button>
 		</div>
 	</div>

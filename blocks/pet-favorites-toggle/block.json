@@ -11,7 +11,7 @@
 		"favorites",
 		"filter"
 	],
-	"textdomain": "vcpahumane-pet-sync",
+	"textdomain": "shelter-pet-sync",
 	"attributes": {
 		"showCount": {
 			"type": "boolean",

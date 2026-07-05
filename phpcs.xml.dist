@@ -51,7 +51,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="vcpahumane-pet-sync"/>
+				<element value="shelter-pet-sync"/>
 			</property>
 		</properties>
 	</rule>
