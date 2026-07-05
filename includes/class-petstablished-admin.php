@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Petstablished_Admin {
 
-	public const OPTION_NAME   = 'petstablished_sync_settings';
+	public const OPTION_NAME   = 'petsync_settings';
 	public const PAGE_SLUG     = 'shelter-pet-sync';
 	public const LOG_PAGE_SLUG = 'shelter-pet-sync-log';
 
@@ -145,15 +145,15 @@ class Petstablished_Admin {
 	 * with the Sunday short-circuit handled by Petstablished_Sync::run_sync().
 	 */
 	public static function reschedule_cron( bool $auto_sync, string $interval ): void {
-		wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
+		wp_clear_scheduled_hook( 'petsync_scheduled_sync' );
 		if ( ! $auto_sync ) {
 			return;
 		}
 
 		if ( $interval === self::SCHEDULE_6PM_SKIP_SUNDAY ) {
-			wp_schedule_event( self::next_6pm_timestamp(), 'daily', 'petstablished_scheduled_sync' );
+			wp_schedule_event( self::next_6pm_timestamp(), 'daily', 'petsync_scheduled_sync' );
 		} else {
-			wp_schedule_event( time(), $interval, 'petstablished_scheduled_sync' );
+			wp_schedule_event( time(), $interval, 'petsync_scheduled_sync' );
 		}
 	}
 
@@ -239,10 +239,10 @@ class Petstablished_Admin {
 		}
 
 		$settings   = self::get_settings();
-		$last_sync  = get_option( 'petstablished_last_sync' );
-		$sync_stats = get_option( 'petstablished_last_sync_stats', array() );
-		$is_syncing = get_transient( 'petstablished_sync_in_progress' );
-		$next_cron  = $settings['auto_sync'] ? wp_next_scheduled( 'petstablished_scheduled_sync' ) : false;
+		$last_sync  = get_option( 'petsync_last_sync' );
+		$sync_stats = get_option( 'petsync_last_sync_stats', array() );
+		$is_syncing = get_transient( 'petsync_sync_in_progress' );
+		$next_cron  = $settings['auto_sync'] ? wp_next_scheduled( 'petsync_scheduled_sync' ) : false;
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Petstablished Sync', 'shelter-pet-sync' ); ?></h1>
@@ -346,8 +346,8 @@ class Petstablished_Admin {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 						body: new URLSearchParams({
-							action: 'petstablished_start_sync',
-							nonce: '<?php echo esc_js( wp_create_nonce( 'petstablished_sync' ) ); ?>'
+							action: 'petsync_start_sync',
+							nonce: '<?php echo esc_js( wp_create_nonce( 'petsync_sync' ) ); ?>'
 						})
 					});
 					const startData = await startRes.json();
@@ -385,8 +385,8 @@ class Petstablished_Admin {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 					body: new URLSearchParams({
-						action: 'petstablished_process_batch',
-						nonce: '<?php echo esc_js( wp_create_nonce( 'petstablished_sync' ) ); ?>',
+						action: 'petsync_process_batch',
+						nonce: '<?php echo esc_js( wp_create_nonce( 'petsync_sync' ) ); ?>',
 						offset: processed,
 						limit: batchSize
 					})
@@ -414,8 +414,8 @@ class Petstablished_Admin {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 					body: new URLSearchParams({
-						action: 'petstablished_finish_sync',
-						nonce: '<?php echo esc_js( wp_create_nonce( 'petstablished_sync' ) ); ?>'
+						action: 'petsync_finish_sync',
+						nonce: '<?php echo esc_js( wp_create_nonce( 'petsync_sync' ) ); ?>'
 					})
 				});
 				const data = await res.json();
@@ -658,11 +658,11 @@ class Petstablished_Admin {
 	}
 
 	public function display_notices(): void {
-		if ( ! isset( $_GET['petstablished_sync'] ) ) {
+		if ( ! isset( $_GET['petsync_sync'] ) ) {
 			return;
 		}
 
-		$status  = sanitize_text_field( wp_unslash( $_GET['petstablished_sync'] ) );
+		$status  = sanitize_text_field( wp_unslash( $_GET['petsync_sync'] ) );
 		$message = '';
 		$type    = 'success';
 

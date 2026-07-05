@@ -18,7 +18,7 @@ class Petstablished_Sync {
 
 	private const API_BASE = 'https://petstablished.com/api/v2/public/pets';
 
-	private const SESSION_TRANSIENT = 'petstablished_sync_session';
+	private const SESSION_TRANSIENT = 'petsync_sync_session';
 
 	private array $stats = array(
 		'created'   => 0,
@@ -31,16 +31,16 @@ class Petstablished_Sync {
 	public function __construct() {
 		// Register with accepted_args=0 so do_action's default empty-string arg
 		// doesn't override our $trigger default of 'cron'.
-		add_action( 'petstablished_scheduled_sync', array( $this, 'run_sync' ), 10, 0 );
-		add_action( 'wp_ajax_petstablished_start_sync', array( $this, 'ajax_start_sync' ) );
-		add_action( 'wp_ajax_petstablished_process_batch', array( $this, 'ajax_process_batch' ) );
-		add_action( 'wp_ajax_petstablished_finish_sync', array( $this, 'ajax_finish_sync' ) );
+		add_action( 'petsync_scheduled_sync', array( $this, 'run_sync' ), 10, 0 );
+		add_action( 'wp_ajax_petsync_start_sync', array( $this, 'ajax_start_sync' ) );
+		add_action( 'wp_ajax_petsync_process_batch', array( $this, 'ajax_process_batch' ) );
+		add_action( 'wp_ajax_petsync_finish_sync', array( $this, 'ajax_finish_sync' ) );
 	}
 
 	// === AJAX Handlers for JS-based sync ===
 
 	public function ajax_start_sync(): void {
-		check_ajax_referer( 'petstablished_sync', 'nonce' );
+		check_ajax_referer( 'petsync_sync', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'Unauthorized' );
@@ -64,13 +64,13 @@ class Petstablished_Sync {
 		$pets = $result['pets'];
 
 		// Store pets in transient for batch processing.
-		set_transient( 'petstablished_sync_pets', $pets, HOUR_IN_SECONDS );
-		set_transient( 'petstablished_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
+		set_transient( 'petsync_sync_pets', $pets, HOUR_IN_SECONDS );
+		set_transient( 'petsync_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
 
 		// When the fetch was incomplete, flag it so ajax_finish_sync skips
 		// stale-pet pruning — pets on the unfetched pages must not be drafted.
 		if ( ! $result['complete'] ) {
-			set_transient( 'petstablished_sync_incomplete', true, HOUR_IN_SECONDS );
+			set_transient( 'petsync_sync_incomplete', true, HOUR_IN_SECONDS );
 		}
 
 		// Initialize the server-side session aggregator. Stats accumulate here
@@ -102,7 +102,7 @@ class Petstablished_Sync {
 	}
 
 	public function ajax_process_batch(): void {
-		check_ajax_referer( 'petstablished_sync', 'nonce' );
+		check_ajax_referer( 'petsync_sync', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'Unauthorized' );
@@ -111,7 +111,7 @@ class Petstablished_Sync {
 		$offset = absint( $_POST['offset'] ?? 0 );
 		$limit  = absint( $_POST['limit'] ?? 10 );
 
-		$pets = get_transient( 'petstablished_sync_pets' );
+		$pets = get_transient( 'petsync_sync_pets' );
 
 		if ( ! $pets ) {
 			wp_send_json_error( 'Sync session expired. Please start again.' );
@@ -156,14 +156,14 @@ class Petstablished_Sync {
 	}
 
 	public function ajax_finish_sync(): void {
-		check_ajax_referer( 'petstablished_sync', 'nonce' );
+		check_ajax_referer( 'petsync_sync', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'Unauthorized' );
 		}
 
-		$pets       = get_transient( 'petstablished_sync_pets' );
-		$incomplete = (bool) get_transient( 'petstablished_sync_incomplete' );
+		$pets       = get_transient( 'petsync_sync_pets' );
+		$incomplete = (bool) get_transient( 'petsync_sync_incomplete' );
 		$removed    = 0;
 
 		// Only prune stale pets when the fetch was complete — otherwise pets on
@@ -201,7 +201,7 @@ class Petstablished_Sync {
 
 			// Preserve back-compat: keep writing last_sync_stats in its legacy shape.
 			update_option(
-				'petstablished_last_sync_stats',
+				'petsync_last_sync_stats',
 				array(
 					'created'   => $stats['created'],
 					'updated'   => $stats['updated'],
@@ -213,12 +213,12 @@ class Petstablished_Sync {
 		}
 
 		// Clean up.
-		delete_transient( 'petstablished_sync_pets' );
-		delete_transient( 'petstablished_sync_in_progress' );
-		delete_transient( 'petstablished_sync_incomplete' );
+		delete_transient( 'petsync_sync_pets' );
+		delete_transient( 'petsync_sync_in_progress' );
+		delete_transient( 'petsync_sync_incomplete' );
 		delete_transient( self::SESSION_TRANSIENT );
 
-		update_option( 'petstablished_last_sync', time() );
+		update_option( 'petsync_last_sync', time() );
 
 		wp_send_json_success(
 			array(
@@ -279,14 +279,14 @@ class Petstablished_Sync {
 			return false;
 		}
 
-		set_transient( 'petstablished_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
+		set_transient( 'petsync_sync_in_progress', true, 10 * MINUTE_IN_SECONDS );
 
 		try {
 			$result = $this->fetch_pets( $settings['public_key'] );
 
 			if ( is_wp_error( $result ) ) {
 				$message = $result->get_error_message();
-				delete_transient( 'petstablished_sync_in_progress' );
+				delete_transient( 'petsync_sync_in_progress' );
 				$this->record_error_run( $trigger, $message, $started );
 				return false;
 			}
@@ -331,13 +331,13 @@ class Petstablished_Sync {
 				)
 			);
 
-			update_option( 'petstablished_last_sync', $ended );
-			update_option( 'petstablished_last_sync_stats', $this->stats );
-			delete_transient( 'petstablished_sync_in_progress' );
+			update_option( 'petsync_last_sync', $ended );
+			update_option( 'petsync_last_sync_stats', $this->stats );
+			delete_transient( 'petsync_sync_in_progress' );
 
 			return true;
 		} catch ( \Throwable $e ) {
-			delete_transient( 'petstablished_sync_in_progress' );
+			delete_transient( 'petsync_sync_in_progress' );
 			$this->record_error_run( $trigger, 'Fatal: ' . $e->getMessage(), $started );
 			return false;
 		}

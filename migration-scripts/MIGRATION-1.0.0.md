@@ -112,7 +112,7 @@ reusable blocks (all stored there). If you use **block-based widgets** with pet
 blocks, also run it for `wp_options --include-columns=option_value` (dry-run
 first). The string `petstablished/` only occurs in block names/sources, so this
 is targeted (it does **not** match `petstablished.com/…` or the
-`petstablished_sync_settings` option).
+`petsync_settings` option).
 
 ## 6. Purge PII from stored API snapshots
 
@@ -152,7 +152,7 @@ wp maintenance-mode deactivate
 - In **Pets → Sync Settings**, run **Sync Now** once. The first sync re-processes
   every pet (hash basis changed) and should report mostly "updated", then future
   syncs settle to "unchanged". Confirm `wp cron event list` still shows
-  `petstablished_scheduled_sync` if auto-sync is enabled.
+  `petsync_scheduled_sync` if auto-sync is enabled.
 
 ---
 

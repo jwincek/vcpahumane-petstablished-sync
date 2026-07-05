@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Petstablished_Sync_Log {
 
-	public const OPTION_NAME = 'petstablished_sync_log';
+	public const OPTION_NAME = 'petsync_sync_log';
 	public const MAX_ENTRIES = 30;
 
 	private const MAX_ERROR_MESSAGES = 10;

@@ -56,7 +56,7 @@ function update( array $input ): array {
 	 * @param int[]  $ids      Updated comparison IDs.
 	 * @param int[]  $prev_ids Previous comparison IDs.
 	 */
-	do_action( 'petstablished_comparison_updated', $action, $ids, $prev_ids );
+	do_action( 'petsync_comparison_updated', $action, $ids, $prev_ids );
 
 	// Build the response using the known-good $ids rather than
 	// re-reading via get_comparison(), which can fall back to a

@@ -40,13 +40,21 @@ function vcps_uninstall_site(): bool {
 	global $wpdb;
 
 	// --- Ephemeral tier: always removed --------------------------------
-	wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
+	wp_clear_scheduled_hook( 'petsync_scheduled_sync' );
+	wp_clear_scheduled_hook( 'petstablished_scheduled_sync' ); // legacy pre-1.0 hook name
 
-	delete_transient( 'petstablished_sync_in_progress' );
-	delete_transient( 'petstablished_sync_incomplete' );
-	delete_transient( 'petstablished_sync_pets' );
+	delete_transient( 'petsync_sync_in_progress' );
+	delete_transient( 'petsync_sync_incomplete' );
+	delete_transient( 'petsync_sync_pets' );
 
 	// Suffixed transients (e.g. paged sync snapshots) — no wildcard API.
+	$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->prepare(
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+			$wpdb->esc_like( '_transient_petsync_' ) . '%',
+			$wpdb->esc_like( '_transient_timeout_petsync_' ) . '%'
+		)
+	);
 	$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->prepare(
 			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
@@ -60,7 +68,7 @@ function vcps_uninstall_site(): bool {
 	flush_rewrite_rules( false );
 
 	// --- Destructive tier: opt-in via Sync Settings ---------------------
-	$settings = get_option( 'petstablished_sync_settings', array() );
+	$settings = get_option( 'petsync_settings', array() );
 	if ( empty( $settings['delete_data_on_uninstall'] ) ) {
 		return false;
 	}
@@ -146,9 +154,15 @@ function vcps_uninstall_site(): bool {
 	}
 
 	// Options (including the settings that held the opt-in itself).
+	delete_option( 'petsync_settings' );
+	delete_option( 'petsync_last_sync' );
+	delete_option( 'petsync_last_sync_stats' );
+	delete_option( 'petsync_sync_log' );
+	// Legacy pre-1.0 option names, in case the rename migration never ran.
 	delete_option( 'petstablished_sync_settings' );
 	delete_option( 'petstablished_last_sync' );
 	delete_option( 'petstablished_last_sync_stats' );
+	delete_option( 'petstablished_sync_log' );
 
 	return true;
 }

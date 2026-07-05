@@ -85,7 +85,7 @@ function get_adoption_stats( array $input = [] ): array {
 	);
 
 	// Last sync time.
-	$last_sync = get_option( 'petstablished_last_sync', '' );
+	$last_sync = get_option( 'petsync_last_sync', '' );
 
 	return [
 		'available_count'      => $total_available,

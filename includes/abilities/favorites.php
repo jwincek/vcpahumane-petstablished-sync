@@ -47,7 +47,7 @@ function toggle( array $input ): array {
 	 * @param bool  $favorited Whether the pet was added (true) or removed (false).
 	 * @param int[] $favorites Updated favorites list.
 	 */
-	do_action( 'petstablished_favorite_toggled', $id, $favorited, $favorites );
+	do_action( 'petsync_favorite_toggled', $id, $favorited, $favorites );
 
 	return [
 		'favorited' => $favorited,
@@ -69,7 +69,7 @@ function clear_all( array $input = [] ): array {
 	 *
 	 * @since 1.0.0
 	 */
-	do_action( 'petstablished_favorites_cleared' );
+	do_action( 'petsync_favorites_cleared' );
 
 	return [ 'favorites' => [] ];
 }

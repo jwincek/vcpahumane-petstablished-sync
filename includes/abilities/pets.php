@@ -60,7 +60,7 @@ function get( array $input ): array|WP_Error {
 	 * @param array    $pet  Hydrated pet data.
 	 * @param \WP_Post $post The post object.
 	 */
-	do_action( 'petstablished_pet_retrieved', $pet, $post );
+	do_action( 'petsync_pet_retrieved', $pet, $post );
 
 	return $pet;
 }
@@ -144,7 +144,7 @@ function list_pets( array $input = [] ): array {
 	 * @param array $result Paginated result with items, total, total_pages, page.
 	 * @param array $input  The filter input.
 	 */
-	do_action( 'petstablished_pets_listed', $result, $input );
+	do_action( 'petsync_pets_listed', $result, $input );
 
 	return [
 		'pets'       => $result['items'],
@@ -220,7 +220,7 @@ function filter_pets( array $input = [] ): array {
 	 * @param int   $total Total matching pets.
 	 * @param array $input The filter input.
 	 */
-	do_action( 'petstablished_pets_filtered', $total, $input );
+	do_action( 'petsync_pets_filtered', $total, $input );
 
 	return [
 		'pets'       => $pets,

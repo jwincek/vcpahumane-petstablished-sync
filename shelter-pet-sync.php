@@ -76,7 +76,7 @@ register_activation_hook(
 		// Schedule cron sync. Route through the shared helper so the 6pm-anchor
 		// and Sunday-skip semantics apply identically at activation and settings save.
 		$settings = Petstablished_Admin::get_settings();
-		if ( ! wp_next_scheduled( 'petstablished_scheduled_sync' ) ) {
+		if ( ! wp_next_scheduled( 'petsync_scheduled_sync' ) ) {
 			Petstablished_Admin::reschedule_cron( $settings['auto_sync'], $settings['sync_interval'] );
 		}
 	}
@@ -88,7 +88,7 @@ register_activation_hook(
 register_deactivation_hook(
 	__FILE__,
 	function (): void {
-		wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
+		wp_clear_scheduled_hook( 'petsync_scheduled_sync' );
 
 		// Flush rewrite rules to remove our custom rules cleanly.
 		flush_rewrite_rules();
@@ -212,3 +212,36 @@ function petstablished_sync_init(): void {
 	new Petstablished_Sync();
 }
 add_action( 'plugins_loaded', 'petstablished_sync_init' );
+
+/**
+ * One-time migration from the legacy petstablished_* option and cron
+ * names to the neutral petsync_* names (pre-multi-provider cleanup).
+ * Idempotent: runs only while the old settings exist and the new ones
+ * don't, then removes the old rows.
+ */
+function petsync_maybe_migrate_option_names(): void {
+	if ( get_option( 'petsync_settings' ) !== false || get_option( 'petstablished_sync_settings' ) === false ) {
+		return;
+	}
+
+	$map = array(
+		'petstablished_sync_settings'   => 'petsync_settings',
+		'petstablished_last_sync'       => 'petsync_last_sync',
+		'petstablished_last_sync_stats' => 'petsync_last_sync_stats',
+		'petstablished_sync_log'        => 'petsync_sync_log',
+	);
+
+	foreach ( $map as $old => $new ) {
+		$value = get_option( $old, null );
+		if ( null !== $value ) {
+			add_option( $new, $value, '', 'petsync_sync_log' === $new ? false : true );
+			delete_option( $old );
+		}
+	}
+
+	// Move the scheduled sync to the renamed hook.
+	wp_clear_scheduled_hook( 'petstablished_scheduled_sync' );
+	$settings = Petstablished_Admin::get_settings();
+	Petstablished_Admin::reschedule_cron( (bool) $settings['auto_sync'], $settings['sync_interval'] );
+}
+add_action( 'init', 'petsync_maybe_migrate_option_names', 5 );
