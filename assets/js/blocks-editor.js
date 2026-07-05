@@ -253,10 +253,7 @@
 					el(
 						PanelBody,
 						{
-							title: __(
-								'Display Options',
-								'shelter-pet-sync'
-							),
+							title: __( 'Display Options', 'shelter-pet-sync' ),
 						},
 						el( ToggleControl, {
 							label: __(
@@ -372,17 +369,11 @@
 							value: attributes.layout,
 							options: [
 								{
-									label: __(
-										'Sidebar',
-										'shelter-pet-sync'
-									),
+									label: __( 'Sidebar', 'shelter-pet-sync' ),
 									value: 'sidebar',
 								},
 								{
-									label: __(
-										'Stacked',
-										'shelter-pet-sync'
-									),
+									label: __( 'Stacked', 'shelter-pet-sync' ),
 									value: 'stacked',
 								},
 							],
@@ -409,10 +400,7 @@
 								setAttributes( { showStatus: val } ),
 						} ),
 						el( ToggleControl, {
-							label: __(
-								'Show Attributes',
-								'shelter-pet-sync'
-							),
+							label: __( 'Show Attributes', 'shelter-pet-sync' ),
 							checked: attributes.showAttributes,
 							onChange: ( val ) =>
 								setAttributes( { showAttributes: val } ),
@@ -427,19 +415,13 @@
 								setAttributes( { showCompatibility: val } ),
 						} ),
 						el( ToggleControl, {
-							label: __(
-								'Show Health Info',
-								'shelter-pet-sync'
-							),
+							label: __( 'Show Health Info', 'shelter-pet-sync' ),
 							checked: attributes.showHealth,
 							onChange: ( val ) =>
 								setAttributes( { showHealth: val } ),
 						} ),
 						el( ToggleControl, {
-							label: __(
-								'Show Description',
-								'shelter-pet-sync'
-							),
+							label: __( 'Show Description', 'shelter-pet-sync' ),
 							checked: attributes.showDescription,
 							onChange: ( val ) =>
 								setAttributes( { showDescription: val } ),
@@ -502,10 +484,7 @@
 							value: attributes.position,
 							options: [
 								{
-									label: __(
-										'Bottom',
-										'shelter-pet-sync'
-									),
+									label: __( 'Bottom', 'shelter-pet-sync' ),
 									value: 'bottom',
 								},
 								{
@@ -521,11 +500,7 @@
 				el(
 					'div',
 					{ className: 'petstablished-editor-placeholder' },
-					el(
-						'p',
-						{},
-						__( 'Pet Compare Bar', 'shelter-pet-sync' )
-					),
+					el( 'p', {}, __( 'Pet Compare Bar', 'shelter-pet-sync' ) ),
 					el(
 						'small',
 						{},
@@ -584,10 +559,7 @@
 									value: 'horizontal',
 								},
 								{
-									label: __(
-										'Vertical',
-										'shelter-pet-sync'
-									),
+									label: __( 'Vertical', 'shelter-pet-sync' ),
 									value: 'vertical',
 								},
 							],
@@ -747,10 +719,7 @@
 							value: attributes.displayMode,
 							options: [
 								{
-									label: __(
-										'Carousel',
-										'shelter-pet-sync'
-									),
+									label: __( 'Carousel', 'shelter-pet-sync' ),
 									value: 'carousel',
 								},
 								{
@@ -779,24 +748,15 @@
 							value: attributes.cardStyle,
 							options: [
 								{
-									label: __(
-										'Default',
-										'shelter-pet-sync'
-									),
+									label: __( 'Default', 'shelter-pet-sync' ),
 									value: 'default',
 								},
 								{
-									label: __(
-										'Minimal',
-										'shelter-pet-sync'
-									),
+									label: __( 'Minimal', 'shelter-pet-sync' ),
 									value: 'minimal',
 								},
 								{
-									label: __(
-										'Overlay',
-										'shelter-pet-sync'
-									),
+									label: __( 'Overlay', 'shelter-pet-sync' ),
 									value: 'overlay',
 								},
 							],
@@ -876,10 +836,7 @@
 								} )
 							),
 						el( RangeControl, {
-							label: __(
-								'Number of Pets',
-								'shelter-pet-sync'
-							),
+							label: __( 'Number of Pets', 'shelter-pet-sync' ),
 							value: attributes.count,
 							onChange: ( val ) =>
 								setAttributes( { count: val } ),
@@ -891,10 +848,7 @@
 							value: attributes.orderBy,
 							options: [
 								{
-									label: __(
-										'Random',
-										'shelter-pet-sync'
-									),
+									label: __( 'Random', 'shelter-pet-sync' ),
 									value: 'random',
 								},
 								{
@@ -975,10 +929,7 @@
 								setAttributes( { showQuickActions: val } ),
 						} ),
 						el( ToggleControl, {
-							label: __(
-								'Link to Archive',
-								'shelter-pet-sync'
-							),
+							label: __( 'Link to Archive', 'shelter-pet-sync' ),
 							checked: attributes.linkToArchive,
 							onChange: ( val ) =>
 								setAttributes( { linkToArchive: val } ),
@@ -1160,25 +1111,16 @@
 					el(
 						PanelBody,
 						{
-							title: __(
-								'Gallery Settings',
-								'shelter-pet-sync'
-							),
+							title: __( 'Gallery Settings', 'shelter-pet-sync' ),
 						},
 						el( ToggleControl, {
-							label: __(
-								'Show Thumbnails',
-								'shelter-pet-sync'
-							),
+							label: __( 'Show Thumbnails', 'shelter-pet-sync' ),
 							checked: attributes.showThumbnails,
 							onChange: ( val ) =>
 								setAttributes( { showThumbnails: val } ),
 						} ),
 						el( ToggleControl, {
-							label: __(
-								'Enable Lightbox',
-								'shelter-pet-sync'
-							),
+							label: __( 'Enable Lightbox', 'shelter-pet-sync' ),
 							checked: attributes.showLightbox,
 							onChange: ( val ) =>
 								setAttributes( { showLightbox: val } ),
@@ -1241,10 +1183,7 @@
 					el(
 						PanelBody,
 						{
-							title: __(
-								'Action Buttons',
-								'shelter-pet-sync'
-							),
+							title: __( 'Action Buttons', 'shelter-pet-sync' ),
 						},
 						el( ToggleControl, {
 							label: __(
@@ -1908,10 +1847,7 @@
 								setAttributes( { showSpayedNeutered: val } ),
 						} ),
 						el( ToggleControl, {
-							label: __(
-								'Show Housebroken',
-								'shelter-pet-sync'
-							),
+							label: __( 'Show Housebroken', 'shelter-pet-sync' ),
 							checked: attributes.showHousebroken,
 							onChange: ( val ) =>
 								setAttributes( { showHousebroken: val } ),
@@ -2431,10 +2367,7 @@
 					el(
 						PanelBody,
 						{
-							title: __(
-								'Application Mode',
-								'shelter-pet-sync'
-							),
+							title: __( 'Application Mode', 'shelter-pet-sync' ),
 						},
 						el( SelectControl, {
 							label: __( 'Form Mode', 'shelter-pet-sync' ),
@@ -2468,10 +2401,7 @@
 						! isPdf &&
 							! isPage &&
 							el( TextControl, {
-								label: __(
-									'Button Text',
-									'shelter-pet-sync'
-								),
+								label: __( 'Button Text', 'shelter-pet-sync' ),
 								value: attributes.buttonText,
 								onChange: ( val ) =>
 									setAttributes( { buttonText: val } ),
