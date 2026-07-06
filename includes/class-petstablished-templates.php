@@ -74,7 +74,21 @@ class Petstablished_Templates {
 			return $template;
 		}
 
-		return $this->build_template_object( $slug, $plugin_items[ $slug ], $template_type );
+		$result = $this->build_template_object( $slug, $plugin_items[ $slug ], $template_type );
+
+		// Echo back the requested theme namespace. The Site Editor injects
+		// the ACTIVE theme into template-part blocks on save (and core only
+		// renders parts whose theme matches the active theme), so lookups
+		// for our parts arrive as e.g. `{active-theme}//pet-floating-ui`.
+		// Answering with our own namespace would make the editor treat the
+		// part as missing because the returned ID differs from the request.
+		$requested_theme = count( $parts ) > 1 ? $parts[0] : null;
+		if ( $requested_theme && $requested_theme !== $result->theme ) {
+			$result->id    = $id;
+			$result->theme = $requested_theme;
+		}
+
+		return $result;
 	}
 
 	/**
